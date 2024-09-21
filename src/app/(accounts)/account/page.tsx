@@ -8,16 +8,16 @@ import { avatarImgs } from "@/contains/fakeData";
 import Image from "next/image";
 
 const AccountPage = () => {
-  return (
-    <div className={`nc-AccountPage `}>
-      <div className="space-y-10 sm:space-y-12">
-        {/* HEADING */}
-        <h2 className="text-2xl sm:text-3xl font-semibold">
-          Account infomation
-        </h2>
-        <div className="flex flex-col md:flex-row">
-          <div className="flex-shrink-0 flex items-start">
-            {/* AVATAR */}
+    return (
+        <div className={`nc-AccountPage `}>
+            <div className="space-y-10 sm:space-y-12">
+                {/* HEADING */}
+                <h2 className="text-2xl sm:text-3xl font-semibold">
+                    Account infomation
+                </h2>
+                <div className="flex flex-col md:flex-row">
+                    {/*  <div className="flex-shrink-0 flex items-start">
+             AVATAR
             <div className="relative rounded-full overflow-hidden flex">
               <Image
                 src={avatarImgs[2]}
@@ -50,90 +50,91 @@ const AccountPage = () => {
                 className="absolute inset-0 opacity-0 cursor-pointer"
               />
             </div>
-          </div>
-          <div className="flex-grow mt-10 md:mt-0 md:pl-16 max-w-3xl space-y-6">
-            <div>
-              <Label>Full name</Label>
-              <Input className="mt-1.5" defaultValue="Enrico Cole" />
-            </div>
+          </div>*/}
+                    <div className="flex-grow mt-10 md:mt-0 md:pl-16 max-w-3xl space-y-6">
+                        <div>
+                            <Label>Full name</Label>
+                            <Input className="mt-1.5" defaultValue="Enrico Cole" />
+                        </div>
 
-            {/* ---- */}
+                        {/* ---- */}
 
-            {/* ---- */}
-            <div>
-              <Label>Email</Label>
-              <div className="mt-1.5 flex">
+                        {/* ---- */}
+                        <div>
+                            <Label>Email</Label>
+                            <div className="mt-1.5 flex">
                 <span className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
                   <i className="text-2xl las la-envelope"></i>
                 </span>
-                <Input
-                  className="!rounded-l-none"
-                  placeholder="example@email.com"
-                />
-              </div>
-            </div>
+                                <Input
+                                    className="!rounded-l-none"
+                                    placeholder="example@email.com"
+                                />
+                            </div>
+                        </div>
 
-            {/* ---- */}
-            <div className="max-w-lg">
-              <Label>Date of birth</Label>
-              <div className="mt-1.5 flex">
+                        {/* ---- */}
+                        <div className="max-w-lg">
+                            <Label>Date of birth</Label>
+                            <div className="mt-1.5 flex">
                 <span className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
                   <i className="text-2xl las la-calendar"></i>
                 </span>
-                <Input
-                  className="!rounded-l-none"
-                  type="date"
-                  defaultValue="1990-07-22"
-                />
-              </div>
-            </div>
-            {/* ---- */}
-            <div>
-              <Label>Addess</Label>
-              <div className="mt-1.5 flex">
+                                <Input
+                                    className="!rounded-l-none"
+                                    type="date"
+                                    defaultValue="1990-07-22"
+                                />
+                            </div>
+                        </div>
+                        {/* ---- */}
+                        <div>
+                            <Label>Addess</Label>
+                            <div className="mt-1.5 flex">
                 <span className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
                   <i className="text-2xl las la-map-signs"></i>
                 </span>
-                <Input
-                  className="!rounded-l-none"
-                  defaultValue="New york, USA"
-                />
-              </div>
-            </div>
+                                <Input
+                                    className="!rounded-l-none"
+                                    defaultValue="New york, USA"
+                                />
+                            </div>
+                        </div>
 
-            {/* ---- */}
-            <div>
+                        {/* ---- */}
+                        {/* account Gender 지웁니다. -송준한 */}
+                        {/* <div>
               <Label>Gender</Label>
               <Select className="mt-1.5">
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
               </Select>
-            </div>
+            </div>*/}
 
-            {/* ---- */}
-            <div>
-              <Label>Phone number</Label>
-              <div className="mt-1.5 flex">
+                        {/* ---- */}
+                        <div>
+                            <Label>Phone number</Label>
+                            <div className="mt-1.5 flex">
                 <span className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
                   <i className="text-2xl las la-phone-volume"></i>
                 </span>
-                <Input className="!rounded-l-none" defaultValue="003 888 232" />
-              </div>
+                                <Input className="!rounded-l-none" defaultValue="003 888 232" />
+                            </div>
+                        </div>
+                        {/* ---- */}
+                        <div>
+                            <Label>About you</Label>
+                            <Textarea className="mt-1.5" defaultValue="..." />
+                        </div>
+                        <div className="pt-2">
+                            <ButtonPrimary>Update account</ButtonPrimary>
+                        </div>
+                    </div>
+                </div>
             </div>
-            {/* ---- */}
-            <div>
-              <Label>About you</Label>
-              <Textarea className="mt-1.5" defaultValue="..." />
-            </div>
-            <div className="pt-2">
-              <ButtonPrimary>Update account</ButtonPrimary>
-            </div>
-          </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default AccountPage;
