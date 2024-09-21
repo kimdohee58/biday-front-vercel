@@ -1,0 +1,3 @@
+interface AddressModel {
+    id?: number;
+}

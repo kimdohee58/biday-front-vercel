@@ -1,0 +1,3 @@
+interface AccountModel {
+    id?: number;
+}
