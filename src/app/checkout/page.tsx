@@ -13,7 +13,7 @@ import ShippingAddress from "./ShippingAddress";
 import Image from "next/image";
 import Link from "next/link";
 
-const CheckoutPage = () => {
+export default function CheckoutPage(){
   const [tabActive, setTabActive] = useState<
     "ContactInfo" | "ShippingAddress" | "PaymentMethod"
   >("ShippingAddress");
@@ -344,5 +344,3 @@ const CheckoutPage = () => {
     </div>
   );
 };
-
-export default CheckoutPage;

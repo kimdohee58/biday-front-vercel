@@ -49,7 +49,7 @@ const pricings: PricingItem[] = [
   },
 ];
 
-const PageSubcription = ({}) => {
+export default function PageSubcription({}){
   const renderPricingItem = (pricing: PricingItem, index: number) => {
     return (
       <div
@@ -123,5 +123,3 @@ const PageSubcription = ({}) => {
     </div>
   );
 };
-
-export default PageSubcription;

@@ -1,3 +1,5 @@
+import {UserModel} from "@/model/UserModel";
+
 interface ChatClickModel {
     id?: number;
     button: ChatButtonModel;

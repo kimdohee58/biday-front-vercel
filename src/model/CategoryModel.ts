@@ -1,4 +1,5 @@
-interface CategoryModel {
+//src/model/CategoryModel.ts
+export interface CategoryModel {
     id: number;
     name: string;
     createdAt: Date;

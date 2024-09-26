@@ -7,5 +7,5 @@ interface BidModel {
     count: number;
     createdAt: Date;
     award: boolean;
-    paymentTemp: PaymentTempModel;
+    //paymentTemp: PaymentTempModel;
 }

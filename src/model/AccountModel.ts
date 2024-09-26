@@ -1,3 +1,4 @@
-interface AccountModel {
+//src/model/AccountModel.ts
+export interface AccountModel {
     id?: number;
 }

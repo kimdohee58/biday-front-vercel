@@ -1,4 +1,6 @@
-interface WishModel {
+import {UserModel} from "@/model/UserModel";
+
+export interface WishModel {
     id?: number;
     user: UserModel;
     product: ProductModel;

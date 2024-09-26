@@ -1,10 +1,12 @@
+//src/service/product/product.api.ts
 
-const link = 'http://localhost:8080/api/products'
+import {PRODUCTS} from "@/data/data";
+
+let url =  `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/products`
 
 export async function insertProduct(product: ProductModel): Promise<any | { status: number }> {
     try {
-
-        const response = await fetch(link, {
+        const response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type' : 'application/json'
@@ -22,9 +24,13 @@ export async function insertProduct(product: ProductModel): Promise<any | { stat
     }
 }
 
-export async function getProduct(id:number): Promise<any | {state: number}> {
+export async function getProduct(id?:number): Promise<any | {state: number}> {
     try {
-        const response = await fetch(link + "/" + id, {
+        // 삼항 연산자로 URL 결정 아이디가 있으면 뒤에 url/5 / 업승면 그냥 url
+        url = id? url + `/${id}` : url
+
+
+        const response = await fetch(`${url}/${id}`, {
             method: 'GET'
         });
 
@@ -41,7 +47,7 @@ export async function getProduct(id:number): Promise<any | {state: number}> {
 
 export async function getProductList() {
     try {
-        const response = await fetch(link, {
+        const response = await fetch(url, {
             method: 'GET'
         });
 
@@ -60,7 +66,7 @@ export async function getProductList() {
 export async function deleteProduct(id:number) {
     try {
 
-        const response = await fetch(link + "/" + id, {
+        const response = await fetch(`${url}/${id}`, {
             method: 'DELETE'
             // 토큰 필요
         });

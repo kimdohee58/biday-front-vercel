@@ -1,4 +1,6 @@
-interface FaqModel {
+import {UserModel} from "@/model/UserModel";
+
+export interface FaqModel {
     id: number;
     user: UserModel;
     title: string;

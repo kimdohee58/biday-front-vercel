@@ -1,9 +1,11 @@
+"use client"
 import Prices from "@/components/Prices";
 import { PRODUCTS } from "@/data/data";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
 import Image from "next/image";
 
-const AccountOrder = () => {
+export default function AccountOrder() {
+
   const renderProductItem = (product: any, index: number) => {
     const { image, name } = product;
     return (
@@ -41,10 +43,19 @@ const AccountOrder = () => {
 
             <div className="flex">
               <button
-                type="button"
-                className="font-medium text-indigo-600 dark:text-primary-500 "
+                  type="button"
+                  className="font-medium text-indigo-600 dark:text-primary-500 "
               >
-                Leave review
+                배송 추적
+              </button>
+            </div>
+
+            <div className="flex">
+              <button
+                  type="button"
+                  className="font-medium text-indigo-600 dark:text-primary-500 "
+              >
+                리뷰달기
               </button>
             </div>
           </div>
@@ -55,8 +66,9 @@ const AccountOrder = () => {
 
   const renderOrder = () => {
     return (
-      <div className="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden z-0">
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center p-4 sm:p-8 bg-slate-50 dark:bg-slate-500/5">
+        <div className="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden z-0">
+          <div
+              className="flex flex-col sm:flex-row sm:justify-between sm:items-center p-4 sm:p-8 bg-slate-50 dark:bg-slate-500/5">
           <div>
             <p className="text-lg font-semibold">#WU3746HGG12</p>
             <p className="text-slate-500 dark:text-slate-400 text-sm mt-1.5 sm:mt-2">
@@ -70,7 +82,7 @@ const AccountOrder = () => {
               sizeClass="py-2.5 px-4 sm:px-6"
               fontSize="text-sm font-medium"
             >
-              View Order
+              더 보기
             </ButtonSecondary>
           </div>
         </div>
@@ -84,11 +96,10 @@ const AccountOrder = () => {
   return (
     <div className="space-y-10 sm:space-y-12">
       {/* HEADING */}
-      <h2 className="text-2xl sm:text-3xl font-semibold">Order History</h2>
+      <h2 className="text-2xl sm:text-3xl font-semibold">주문내역</h2>
       {renderOrder()}
       {renderOrder()}
     </div>
   );
 };
 
-export default AccountOrder;

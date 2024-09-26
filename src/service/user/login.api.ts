@@ -1,15 +1,18 @@
+//src/service/user/login.api.ts
 export const handleLogin = async (username: string, password: string): Promise<Response> => {
     try {
-        const formData = new URLSearchParams();
-        formData.append('email', username);
-        formData.append('password', password);
+        // JSON 형태로 데이터를 준비
+        const body = JSON.stringify({
+            email: username,
+            password: password,
+        });
 
         const response = await fetch("http://localhost:8080/login", {
             method: "POST",
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
+                "Content-Type": "application/json",  // Content-Type을 JSON으로 설정
             },
-            body: formData.toString(),
+            body: body,  // JSON 데이터를 바디에 포함
         });
 
         if (response.ok) {

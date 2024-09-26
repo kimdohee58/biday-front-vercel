@@ -1,3 +1,4 @@
+//src/app/layout.tsx
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import "@/fonts/line-awesome-1.3.0/css/line-awesome.css";
@@ -6,12 +7,17 @@ import "rc-slider/assets/index.css";
 import Footer from "@/shared/Footer/Footer";
 import SiteHeader from "@/app/SiteHeader";
 import CommonClient from "./CommonClient";
+import ReactQueryProvider from "@/components/ReactQueryProvider";
+import {makeStore} from "@/lib/store";
+import {Provider} from "react-redux"; // ReactQueryProvider 경로 확인
 
 const poppins = Poppins({
   subsets: ["latin"],
   display: "swap",
   weight: ["300", "400", "500", "600", "700"],
 });
+
+const store = makeStore();
 
 
 export default function RootLayout({
@@ -26,11 +32,16 @@ export default function RootLayout({
       <body className="bg-white text-base dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200">
         <div>
           <SiteHeader />
+          <Provider store = {store}>
+          <ReactQueryProvider>
           {children}
-          <Footer />
+          </ReactQueryProvider>
+          </Provider>
+            <Footer />
         </div>
         <CommonClient />
       </body>
     </html>
   );
 }
+

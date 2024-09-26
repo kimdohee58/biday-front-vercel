@@ -46,7 +46,7 @@ const LIST_IMAGES_GALLERY_DEMO: (string | StaticImageData)[] = [
 ];
 const PRICE = 108;
 
-const ProductDetailPage2 = ({}) => {
+export default function ProductDetailPage2({}){
   const { sizes, variants, status, allOfSizes, image } = PRODUCTS[0];
   //
   const router = useRouter();
@@ -577,5 +577,3 @@ const ProductDetailPage2 = ({}) => {
     </div>
   );
 };
-
-export default ProductDetailPage2;

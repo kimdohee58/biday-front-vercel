@@ -10,6 +10,6 @@ interface AuctionModel {
     status: boolean;
     createdAt: Date;
     updatedAt: Date;
-    images: ImagesModel[]
+    //images: ImagesModel[]
     bid: BidModel;
 }

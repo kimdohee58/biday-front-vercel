@@ -3,7 +3,7 @@
 import React, { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie'; // js-cookie import
-import { handleLogin } from '@/app/service/users/login.api'; // 로그인 API
+import { handleLogin } from '@/service/user/login.api'; // 로그인 API
 import facebookSvg from "@/images/Facebook.svg";
 import twitterSvg from "@/images/Twitter.svg";
 import naverSvg from "@/images/naver.svg";
@@ -38,7 +38,7 @@ const loginSocials = [
   },
 ];
 
-const PageLogin = () => {
+export default function PageLogin(){
   // 상태 관리
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -55,23 +55,7 @@ const PageLogin = () => {
     }
   };
 
-  // 폼 제출 처리 함수
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
 
-    // 로그인 API 호출
-    handleLogin(email, password)
-        .then(token => {
-          // 로그인 성공 시 쿠키에 토큰 저장
-          Cookies.set('token', token, { expires: 7 });
-
-          // 홈 페이지로 리다이렉트
-          router.push('/');
-        })
-        .catch(err => {
-          setError('Failed to login');
-        });
-  };
 
   return (
       <div className={`nc-PageLogin`} data-nc-id="PageLogin">
@@ -111,7 +95,7 @@ const PageLogin = () => {
             </div>
 
             {/* 로그인 폼 */}
-            <form className="grid grid-cols-1 gap-6" onSubmit={handleSubmit}>
+           {/* <form className="grid grid-cols-1 gap-6" onSubmit={}>
               <label className="block">
               <span className="text-neutral-800 dark:text-neutral-200">
                 Email address
@@ -143,7 +127,7 @@ const PageLogin = () => {
               </label>
 
               <ButtonPrimary type="submit">Continue</ButtonPrimary>
-            </form>
+            </form>*/}
 
             {/* 에러 메시지 */}
             {error && <p className="text-red-500">{error}</p>}
@@ -159,5 +143,3 @@ const PageLogin = () => {
       </div>
   );
 };
-
-export default PageLogin;

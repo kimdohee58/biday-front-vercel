@@ -1,3 +1,5 @@
+import {UserModel} from "@/model/UserModel";
+
 interface NotificationModel {
     id: number;
     user: UserModel;

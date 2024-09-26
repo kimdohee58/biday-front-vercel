@@ -1,3 +1,4 @@
+//src/model/ProductModel.ts
 interface ProductModel {
     id: number;
     brand: string;
