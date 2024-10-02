@@ -1,8 +1,8 @@
-"use client"
 import Prices from "@/components/Prices";
 import { PRODUCTS } from "@/data/data";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
 import Image from "next/image";
+import { RootState } from "@/lib/store";
 
 export default function AccountOrder() {
 

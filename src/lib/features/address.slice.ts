@@ -1,38 +1,42 @@
 // src/lib/features/address.slice.ts
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '@/lib/store';
 
-// 초기 상태 정의
-const initialState: AddressModel = {
-    zipcode: '',
-    streetaddress: '',
-    detailaddress: '',
-    type: '',
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { AddressModel, initialAddress } from '@/model/AddressModel';
+import type { RootState } from '@/lib/store';
+
+// AddressState 인터페이스 정의
+interface AddressState {
+    addresses: AddressModel[];
+    selectedAddressId?: string;
+}
+
+const initialState: AddressState = {
+    addresses: [initialAddress],  // 초기값으로 빈 주소 목록을 사용
+    selectedAddressId: undefined,
 };
 
-// Slice 생성
 const addressSlice = createSlice({
     name: 'address',
     initialState,
     reducers: {
-        // 주소 등록
-        saveAddress: (state, action: PayloadAction<AddressModel>) => {
-            return { ...action.payload }; // 새로운 주소 정보 저장
+        setAddresses: (state, action: PayloadAction<AddressModel[]>) => {
+            state.addresses = action.payload;
         },
-        // 주소 초기화 (삭제)
-        clearAddress: (state) => {
-            return initialState; // 주소 정보 초기화
+        addAddress: (state, action: PayloadAction<AddressModel>) => {
+            state.addresses.push(action.payload);
         },
-        // 주소 수정
-        updateAddress: (state, action: PayloadAction<Partial<AddressModel>>) => {
-            return { ...state, ...action.payload }; // 수정된 정보 업데이트
+        removeAddress: (state, action: PayloadAction<string>) => {
+            state.addresses = state.addresses.filter(address => address.userId !== action.payload);
+        },
+        pickAddress: (state, action: PayloadAction<string>) => {
+            state.selectedAddressId = action.payload;
         },
     },
 });
 
-// 상태 선택자
-export const getAddress = (state: RootState) => state.address;
+export const { setAddresses, addAddress, removeAddress, pickAddress } = addressSlice.actions;
 
-// 액션 및 리듀서 내보내기
-export const { saveAddress, clearAddress, updateAddress } = addressSlice.actions;
+export const selectAddresses = (state: RootState) => state.address.addresses;
+export const selectPickedAddress = (state: RootState) => state.address.selectedAddressId;
+
 export default addressSlice.reducer;

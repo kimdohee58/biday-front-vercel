@@ -1,4 +1,5 @@
-interface BidModel {
+//src/model/BidModel.ts
+export interface BidModel {
     id?: number;
     auction: AuctionModel;
     userId: number;

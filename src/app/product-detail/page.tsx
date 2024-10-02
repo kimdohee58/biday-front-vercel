@@ -8,6 +8,7 @@ import BagIcon from "@/components/BagIcon";
 import NcInputNumber from "@/components/NcInputNumber";
 import { PRODUCTS } from "@/data/data";
 import Bids from "./Bids";
+import { RootState } from "@/lib/store";
 
 
 import {

@@ -1,8 +1,41 @@
 //src/model/UserModel.ts
 export interface UserModel {
-    id?: number;
+    id?: string;
+    oauthName?: string;
+    name?: string;
+    email?: string;
+    password?: string;
+    phoneNum?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+    status?: string;
+    totalRating?: number;
+}
+
+
+// initialUser 설정
+export const initialUser: UserModel = {
+    id: '',
+    oauthName: '',
+    name: '',
+    email: '',
+    password: '',
+    phoneNum: '',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    status: '',
+    totalRating: 0
+};
+
+
+
+/*
+//src/model/UserModel.ts
+export interface UserModel {
+    id?: string;
     oauthName?: string;
     name?: string;  // Optional로 변경
+    username?: string;
     email: string;
     password: string;
     phoneNum?: string;  // Optional로 변경
@@ -22,6 +55,7 @@ export const initialUser: UserModel={
     id:0,
     oauthName:'',
     name:'',
+    username: '',
     email:'',
     password:'',
     phoneNum:'',
@@ -35,3 +69,6 @@ export const initialUser: UserModel={
     totalRating:0
 }
 
+/!*생성자를 만들어야 한다. 이 녀석이 있어야 객체가 되고 저장소가 된다.
+*
+* 자바에서 초기화를 하는 이유는 뭐야? *!/*/

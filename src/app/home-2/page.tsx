@@ -10,6 +10,7 @@ import SectionHero3 from "@/components/SectionHero/SectionHero3";
 import SectionPromo1 from "@/components/SectionPromo1";
 import { SPORT_PRODUCTS } from "@/data/data";
 import SectionGridFeatureItems from "@/components/SectionGridFeatureItems";
+import { RootState } from "@/lib/store";
 
 export default function PageHome2() {
 

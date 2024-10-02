@@ -1,9 +1,11 @@
+//src/utils/cookie/cookie.api.ts
 import Cookies from 'js-cookie';
 
 // JWT 토큰을 쿠키와 로컬 스토리지에 저장하는 함수
 export const saveToken = (token: string, refreshToken?: string) => {
     // 1. 로컬 스토리지에 JWT 토큰 저장
     localStorage.setItem('token', token);
+
 
     // 2. 쿠키에 JWT 토큰 저장
     Cookies.set('token', token, {expires: 7}); // 7일 동안 유지
@@ -14,6 +16,8 @@ export const saveToken = (token: string, refreshToken?: string) => {
         localStorage.setItem('refreshToken', refreshToken);
     }
     console.log('JWT 토큰이 로컬 스토리지와 쿠키에 저장되었습니다.');
+    console.log('로컬 스토리지에 저장된 토큰:', localStorage.getItem('token'));
+    console.log('쿠키에 저장된 토큰:', getCookie('token'));
 };
 
 // JWT 토큰을 로컬 스토리지와 쿠키에서 삭제하는 함수 (로그아웃 시 사용)
@@ -29,6 +33,8 @@ export const clearToken = () => {
     document.cookie = 'refreshToken=; Max-Age=0; path=/;';
 
     console.log('JWT 토큰이 로컬 스토리지와 쿠키에서 삭제되었습니다.');
+    console.log('로컬 스토리지에 저장된 토큰:', localStorage.getItem('token'));
+    console.log('쿠키에 저장된 토큰:', getCookie('token'));
 };
 
 
@@ -47,6 +53,8 @@ export const getCookie = (name: string): string | null => {
         let c = ca[i];
         while (c.charAt(0) === ' ') c = c.substring(1, c.length);
         if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+
+
     }
     return null;
 };

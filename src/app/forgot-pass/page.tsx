@@ -2,6 +2,7 @@ import React from "react";
 import Input from "@/shared/Input/Input";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import Link from "next/link";
+import { RootState } from "@/lib/store";
 
 export default function PageForgotPass({}){
   return (

@@ -10,10 +10,11 @@ import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import Image from "next/image";
 import Link from "next/link";
 import useSignUpUser from "@/hooks/useSignInUser";
-import {insertUser} from "@/service/user/signUp.api";
+import {insertUser} from "@/service/user/user.api";
 import {UserModel} from "@/model/UserModel";
 import {signUpSchema} from "@/schema/userValidationSchema";
 import {FormControl, FormLabel} from "@chakra-ui/react";
+import {router} from "next/client";
 
 
 const loginSocials = [
@@ -41,10 +42,10 @@ export default function PageSignUp(){
     email: '',
     password: '',
     phoneNum: '',
-    zipcode: '',
-    streetAddress: '',
-    detailAddress: '',
-    addressType: ''
+    //zipcode: '',
+    //streetAddress: '',
+    //detailAddress: '',
+    //addressType: ''
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>{

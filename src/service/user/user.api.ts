@@ -1,6 +1,7 @@
 // src/service/user/user.api.ts
 import { UserModel } from "@/model/UserModel";
 
+// 전략 패턴을 사용을 해야 한다. 7번 리플라이 서비스 점 딜리트 이런 식으로
 // 공통 API URL 설정
 let url = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/users`;
 
@@ -11,7 +12,7 @@ async function apiRequest(
     // GET 메서드로 할당한 이유는
     // 조회를할 때 GET을 많이 사용을 하기 때문에 그래서 변경해야 할 때
     // 명시적으로 메서드를 변경을 하면 된다.
-    body?: any
+    body?:any
 ): Promise<any> {
     const headers = {
         "Content-Type": "application/json",
@@ -22,8 +23,11 @@ async function apiRequest(
             method,
             headers,
             body: body ? JSON.stringify(body) : undefined,
-
         });
+
+        console.log("url : " ,url)
+        console.log("endpoint : ", endpoint);
+        console.log("response : 응답 ",response)
 
         if (!response.ok) {
             throw new Error(`API 불러오는데 실패 : ${response.status}`);
@@ -40,6 +44,20 @@ async function apiRequest(
     }
 }
 
+
+// 회원 한 명의 정보를 가져오는 API
+export async function findUserById(id: string): Promise< UserModel | null> {
+    try {
+        const data = await apiRequest(`/findById/${id}`, "GET");  // 경로에 ID 추가
+        console.log("유저 정보 가져오기 성공:", data);
+        return data as { name: string; username: string };  // 반환 타입을 명시
+    } catch (error) {
+        console.error(`ID 불러오기 실패 : ${id}`, error);
+        return null;  // 오류 발생 시 null 반환
+    }
+}
+
+
 // 회원가입 API
 export async function insertUser(user: UserModel): Promise<any> {
     const body = {
@@ -47,10 +65,10 @@ export async function insertUser(user: UserModel): Promise<any> {
         email: user.email,
         password: user.password,
         phoneNum: user.phoneNum,
-        zipcode: user.zipcode,
-        streetAddress: user.streetAddress,
-        detailAddress: user.detailAddress,
-        type: user.addressType,
+        //zipcode: user.zipcode,
+        //streetAddress: user.streetAddress,
+        //detailAddress: user.detailAddress,
+        //type: user.addressType,
     };
 
     try {
@@ -62,11 +80,6 @@ export async function insertUser(user: UserModel): Promise<any> {
         return { status: false }; // 실패 시 false 반환
     }
 }
-
-// 로그인 API
-export const handleLogin = async (username: string, password: string): Promise<Response> => {
-    return apiRequest("/login", "POST", { email: username, password });
-};
 
 // 유저 삭제 API
 export async function deleteUser(id: number): Promise<void | { status: number }> {
@@ -85,10 +98,10 @@ export const updateUser = async (id: number, user: UserModel): Promise<Response>
         email: user.email,
         password: user.password,
         phoneNum: user.phoneNum,
-        zipcode: user.zipcode,
-        streetAddress: user.streetAddress,
-        detailAddress: user.detailAddress,
-        type: user.addressType,
+        //zipcode: user.zipcode,
+        //streetAddress: user.streetAddress,
+        //detailAddress: user.detailAddress,
+        //type: user.addressType,
     };
 
     return apiRequest(`/${id}`, "PUT", body);

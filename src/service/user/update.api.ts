@@ -1,3 +1,4 @@
+/*
 import { UserModel } from "@/model/UserModel";
 
 export const updateUser = async (id: number, user: UserModel): Promise<Response> => {
@@ -12,4 +13,4 @@ export const updateUser = async (id: number, user: UserModel): Promise<Response>
         throw new Error('Failed to update user');
     }
     return response;
-};1
+};1*/

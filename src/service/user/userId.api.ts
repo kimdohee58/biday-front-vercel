@@ -1,3 +1,4 @@
+/*
 import { UserModel } from "@/model/UserModel";
 
 const API_BASE_URL = 'http://211.188.54.218:8080/users';
@@ -9,3 +10,4 @@ export const getUserById = async (id: number): Promise<UserModel> => {
     }
     return await response.json();
 };
+*/

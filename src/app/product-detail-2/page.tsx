@@ -30,6 +30,7 @@ import ModalViewAllReviews from "../product-detail/ModalViewAllReviews";
 import ListingImageGallery from "@/components/listing-image-gallery/ListingImageGallery";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Route } from "next";
+import { RootState } from "@/lib/store";
 
 const LIST_IMAGES_GALLERY_DEMO: (string | StaticImageData)[] = [
   detail21JPG,

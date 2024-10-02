@@ -1,9 +1,7 @@
-//src.lib/store.ts
+//src/lib/store.ts
 import {configureStore} from '@reduxjs/toolkit';
-import userSlice from './features/user.slice';
+import userSlice from '@/lib/features/user.slice';
 import productSlice from "@/lib/features/product.slice";
-import {createWrapper} from "next-redux-wrapper";
-import {thunk} from "redux-thunk";
 import wishSlice from "@/lib/features/wish.slice";
 import accountSlice from "@/lib/features/account.slice";
 import addressSlice from "@/lib/features/address.slice";
@@ -12,34 +10,56 @@ import categorySlice from "@/lib/features/category.slice";
 import faqSlice from "@/lib/features/faq.slice";
 import loginHistorySlice from "@/lib/features/loginHistory.slice";
 import ratingSlice from "@/lib/features/rating.slice";
+import { persistReducer, persistStore } from 'redux-persist';
+import storage from 'redux-persist/lib/storage'; // 기본적으로 localStorage 사용
+import { combineReducers } from 'redux';
 
+// redux-persist 설정
+const persistConfig = {
+    key: 'root',  // persist의 기본 키 값
+    storage,      // localStorage 사용
+    whitelist: ['user'],  // user만 persist에 저장
+    // whitelist 는 state를 유지할 reduxer를 지정을 하는거다.
+    // blacklist 라고 하는 거는 그것만 제외하는거라고 함.
+};
+
+// 루트 리듀서 정의 (combineReducers 사용)
+const rootReducer = combineReducers({
+    user: userSlice,
+    product: productSlice,
+    wish: wishSlice,
+    account: accountSlice,
+    address: addressSlice,
+    brand: brandSlice,
+    category: categorySlice,
+    faq: faqSlice,
+    loginHistory: loginHistorySlice,
+    rating: ratingSlice,
+});
+
+// persistReducer로 루트 리듀서를 감싸줌
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+// 스토어 설정 함수
 export const makeStore = () => {
     return configureStore({
-        reducer: {
-            user: userSlice,
-            product: productSlice,
-            wish: wishSlice, // 여기서 'wish'로 등록
-            account: accountSlice,
-            address: addressSlice,
-            brand: brandSlice,
-            category: categorySlice,
-            faq: faqSlice,
-            loginHistory:loginHistorySlice,
-            rating:ratingSlice,
-        },
+        reducer: persistedReducer,
+        middleware: (getDefaultMiddleware) =>
+            getDefaultMiddleware({
+                serializableCheck: false,  // 직렬화 경고 무시
+                ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
+            }),
+        devTools: process.env.NODE_ENV !== 'production',  // DevTools 활성화 여부 설정 (production 환경에서는 비활성화)
     });
 };
-/*이 파일 자체는 컴포넌트가 아니라 Redux 스토어 설정 코드입니다.
-Redux 스토어는 애플리케이션의 전역 상태를 관리하기 위한 것이며,
-그 자체로는 서버 컴포넌트나 클라이언트 컴포넌트와는 상관이 없습니다.
-*/
 
-// Infer the type of makeStore
+// persistor 생성 (앱의 모든 상태를 저장하는 객체)
+export const persistor = persistStore(makeStore());
+console.log("persistor 확인 : ", persistor);
+// 타입 정의
 export type AppStore = ReturnType<typeof makeStore>;
-// Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<AppStore['getState']>;
 export type AppDispatch = AppStore['dispatch'];
-export const wrapper = createWrapper(makeStore);
 
 
 // 리덕스에서 /슬라이스를 사용하는 이유는 유저 슬라이스를 만들었잖아.
@@ -50,3 +70,4 @@ export const wrapper = createWrapper(makeStore);
 // 이미 에러가 나올거 다 아니깐,
 // 슬라이스는 어떤 페이지에서 슬라이스를 쓰는거잖아.
 // 유즈 클라이언트는 당연한거고 슬라이스는
+

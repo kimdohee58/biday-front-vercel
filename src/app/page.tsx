@@ -1,77 +1,49 @@
+//src/app/page.tsx
 "use client"
-import React, {useEffect, useState} from "react";
-import { PRODUCTS, SPORT_PRODUCTS } from "@/data/data";
-import ProductCard from "@/components/ProductCard";
-import {useDispatch, useSelector} from "react-redux";
-import {AppDispatch, RootState, wrapper} from "@/lib/store";
 
-// 모든 페이지에 유즈 클라이언트에 걸고,
+import React, {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {ProductModel} from "@/model/ProductModel";
+import {useProductList} from "@/hooks/useProductList";
 
 
 export default function PageHome() {
-    const dispatch = useDispatch();
+    const {data, isLoading} = useProductList(); // 상품 리스트 가져오는 훅
 
-    const limitedProducts = PRODUCTS.slice(0, 5);
+    if (isLoading) return <div>로딩. ..</div>
 
-    const { products, status } = useSelector((state: RootState) => state.product);
+    const products: ProductModel[] = data?.content || [];  // content 필드에서 상품 가져오기
 
-    // CSR에서 데이터를 가져오도록 설정 (백업용)
-    useEffect(() => {
-        if (status === 'idle') {
-            //dispatch(fetchProducts());
-        }
-    }, [status, dispatch]);
-
-    const tops = products.filter(product => product.category === '상의');
-    const bottoms = products.filter(product => product.category === '하의');
-    const shoes = products.filter(product => product.category === '신발');
-    const bags = products.filter(product => product.category === '가방');
-
-
+    const categories: { [key: string]: ProductModel[] } = {
+        상의: products.slice(0, 5),
+        하의: products.slice(0, 5),
+        신발: products.slice(0, 5),
+        가방: products.slice(0, 5),
+    };
 
     return (
         <main className="container mx-auto px-4 lg:px-8">
-            {/* 상의 목록 */}
-            <section>
-                <h2>상의</h2>
-                <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-x-6 gap-y-8 mt-8">
-                    {tops.map((product) => (
-                        <ProductCard key={product.id} data={product} />
-                    ))}
-                </div>
-            </section>
-
-            {/* 하의 목록 */}
-            <section>
-                <h2>하의</h2>
-                <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-x-6 gap-y-8 mt-8">
-                    {bottoms.map((product) => (
-                        <ProductCard key={product.id} data={product} />
-                    ))}
-                </div>
-            </section>
-
-            {/* 신발 목록 */}
-            <section>
-                <h2>신발</h2>
-                <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-x-6 gap-y-8 mt-8">
-                    {shoes.map((product) => (
-                        <ProductCard key={product.id} data={product} />
-                    ))}
-                </div>
-            </section>
-
-            {/* 가방 목록 */}
-            <section>
-                <h2>가방</h2>
-                <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-x-6 gap-y-8 mt-8">
-                    {bags.map((product) => (
-                        <ProductCard key={product.id} data={product} />
-                    ))}
-                </div>
-            </section>
+            {Object.keys(categories).map((category) => (
+                <section key={category}>
+                    <h2 className="text-xl font-bold my-4">{category}</h2>
+                    <div className="grid grid-cols-5 gap-4">
+                        {categories[category].map((product) => (
+                            <div key={product.id} className="border p-4">
+                                <div>{product.name}</div>
+                                <div>{product.price}원</div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            ))}
         </main>
     );
 }
 
-
+// 웹블럭스에서 안먹더라고, 그래서 페이지어블 다 빼버렸다.
+// 우리 더보기여서 그렇게 까지 힘들거없다.
+// 할 수 있지 할 숭 ㅣㅆ다.
+//
+// 페이지네이션 더보기만 있잖아. 무한스콜ㄹ처럼 있으니깐 훨신 쉽다. 사이즈만, 페이자만 이씅면 된다.
+// 셋이 합치고 올릴려고 했다.
+// 에이피아이 관련된거 다 바뀌는건가..?

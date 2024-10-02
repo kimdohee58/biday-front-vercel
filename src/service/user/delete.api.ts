@@ -1,3 +1,4 @@
+/*
 //src/service/user/delete.api.ts
 export async function deleteUser(id: number): Promise<void | { status: number }> {
 
@@ -16,3 +17,4 @@ export async function deleteUser(id: number): Promise<void | { status: number }>
         return { status: 500 };
     }
 }
+*/

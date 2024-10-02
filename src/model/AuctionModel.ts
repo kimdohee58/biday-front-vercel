@@ -1,4 +1,8 @@
-interface AuctionModel {
+//src/model/AuctionModel.ts
+import {ProductModel} from "@/model/ProductModel";
+import {BidModel} from "@/model/BidModel";
+
+export interface AuctionModel {
     id?: number;
     userId: number;
     product: ProductModel;

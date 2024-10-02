@@ -5,3 +5,11 @@ export interface BrandModel {
     createdAt: Date;
     updatedAt: Date;
 }
+
+
+export const initialBrand: BrandModel = {
+    id: 0,
+    name: '',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+};

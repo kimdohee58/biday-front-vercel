@@ -1,7 +1,7 @@
-"use client"
 import ProductCard from "@/components/ProductCard";
 import { PRODUCTS } from "@/data/data";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
+import { RootState } from "@/lib/store";
 
 export default function AccountSavelists  () {
   const renderSection1 = () => {

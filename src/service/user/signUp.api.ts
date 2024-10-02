@@ -1,3 +1,4 @@
+/*
 //src/service/user/signUp.api.ts
 import { UserModel } from "@/model/UserModel";
 
@@ -48,3 +49,4 @@ export async function insertUser(user: UserModel): Promise<any> {
     }
 
 }
+*/

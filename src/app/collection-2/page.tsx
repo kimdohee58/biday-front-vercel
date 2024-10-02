@@ -7,6 +7,7 @@ import ProductCard from "@/components/ProductCard";
 import { PRODUCTS } from "@/data/data";
 import SidebarFilters from "@/components/SidebarFilters";
 import Pagination from "@/shared/Pagination/Pagination";
+import { RootState } from "@/lib/store";
 
 export default function PageCollection2({}){
   const itemsPerPage = 20; // 한 페이지에 20개씩 (가로 5 , 세로 4개)

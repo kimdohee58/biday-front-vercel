@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from 'react';
+import { RootState } from "@/lib/store";
 
 
 const IndexPage = () => {

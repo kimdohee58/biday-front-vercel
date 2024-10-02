@@ -1,3 +1,5 @@
+import { UserModel } from "@/model/UserModel";
+import { WishModel } from "@/model/WishModel";
 
 const wish = 'http://localhost:8080/wish'
 

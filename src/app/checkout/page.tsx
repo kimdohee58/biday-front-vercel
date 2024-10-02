@@ -12,6 +12,7 @@ import PaymentMethod from "./PaymentMethod";
 import ShippingAddress from "./ShippingAddress";
 import Image from "next/image";
 import Link from "next/link";
+import { RootState } from "@/lib/store";
 
 export default function CheckoutPage(){
   const [tabActive, setTabActive] = useState<

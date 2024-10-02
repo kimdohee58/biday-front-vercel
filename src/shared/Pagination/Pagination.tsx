@@ -1,5 +1,7 @@
+"use client"
 //src/shared/Pagination/Pagination.tsx
 import {CustomLink} from "@/data/types";
+
 import React, {FC} from "react";
 import twFocusClass from "@/utils/twFocusClass";
 import Link from "next/link";

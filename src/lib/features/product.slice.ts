@@ -1,46 +1,29 @@
-//src/lib/features/product.slice.ts
+// src/lib/features/product.slice.ts
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { ProductModel } from '@/model/ProductModel';
 
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {Product} from "@/data/data";
-
-export const fetchProducts = createAsyncThunk('products/fetchProducts',async ()=>{
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/products`);
-    const data = await response.json();
-    console.log("API 데이터 성공 요청", data);
-    return data as Product[];
-})
 interface ProductState {
-    products: Product[];
-    status: 'idle' | 'loading' | 'succeeded' | 'failed';
-    error: string | null;
+    products: ProductModel[];
 }
 
 const initialState: ProductState = {
     products: [],
-    status: 'idle',
-    error: null,
 };
 
 const productSlice = createSlice({
-    name: 'product',
+    name: 'products',
     initialState,
     reducers: {
-        // 동기 작업이 필요하면 여기에 추가를 하라고 함.
-    },
-    extraReducers: (builder) => {
-        builder
-            .addCase(fetchProducts.pending, (state) => {
-                state.status = 'loading';
-            })
-            .addCase(fetchProducts.fulfilled, (state, action) => {
-                state.status = 'succeeded';
-                state.products = action.payload;
-            })
-            .addCase(fetchProducts.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.error.message || 'Failed to fetch products';
-            });
+        setProducts: (state, action: PayloadAction<ProductModel[]>) => {
+            state.products = action.payload;
+        },
     },
 });
 
+export const { setProducts } = productSlice.actions;
 export default productSlice.reducer;
+
+// 상품 데이터를 리덕스에 저장을 하는 이유 :
+// 리덕스는 전역 상태 관리를 담당하는 도구이다. 상품 데이터를 리덕스에 저장하면 다른 컴포넌트에서도 쉽게 상품 데이터를 접근할 수 있고,
+// 특히 상품을 한 번만 가져오면, 그 데이터를 여러 곳에서 사용할 수 있게 되는 장점이 있다.
+// 사용자가 페이지를 이동하더라도 상품 데이터를 다시 요청 하지 않아도 되고 리덕스에서 바로 데이터를 꺼내서 사용할 수 있다.

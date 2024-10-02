@@ -1,15 +1,13 @@
 //src/lib/features/account.slice.ts
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootState} from "@/lib/store";
-import {AccountModel} from "@/model/AccountModel";
+import {AccountModel, aacountState} from "@/model/AccountModel";
 
-const initialState: AccountModel = {
-    id: undefined, // 처음에는 ID가 없을 수 있으므로 undefined로 설정
-};
+
 
 const accountSlice = createSlice({
     name: 'account',
-    initialState,
+    initialState: aacountState,
     reducers: {
         // 유저 ID 저장
         saveAccountId: (state, action: PayloadAction<number>) => {

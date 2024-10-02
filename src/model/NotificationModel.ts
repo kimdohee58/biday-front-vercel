@@ -1,3 +1,4 @@
+//src/model/NotificationModel.ts
 import {UserModel} from "@/model/UserModel";
 
 interface NotificationModel {
@@ -9,3 +10,23 @@ interface NotificationModel {
     createdAt: Date;
     updatedAt: Date;
 }
+
+
+export const initialNotification: NotificationModel = {
+    id: 0,
+    user: {
+        id: 0,
+        email: '',
+        password: '',
+    },
+    type: {
+        id: 0,
+        name: '',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+    },
+    message: '',
+    status: false,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+};

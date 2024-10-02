@@ -6,6 +6,7 @@ import Textarea from "@/shared/Textarea/Textarea";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import BackgroundSection from "@/components/BackgroundSection/BackgroundSection";
 import SectionPromo1 from "@/components/SectionPromo1";
+import { RootState } from "@/lib/store";
 
 const info = [
   {

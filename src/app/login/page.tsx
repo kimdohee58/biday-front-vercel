@@ -1,26 +1,24 @@
+//src/app/login/page.tsx
 "use client";
 
 import React, { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import Cookies from 'js-cookie'; // js-cookie import
-import { handleLogin } from '@/service/user/login.api'; // 로그인 API
 import facebookSvg from "@/images/Facebook.svg";
 import twitterSvg from "@/images/Twitter.svg";
-import naverSvg from "@/images/naver.svg";
 import googleSvg from "@/images/Google.svg";
 import Input from "@/shared/Input/Input";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import Image from "next/image";
 import Link from "next/link";
+import {useLogin} from "@/hooks/useLogin";
 
 // 소셜 로그인 버튼 데이터
-
 const loginSocials = [
-  {
+  /*{
     name: "Continue with Naver",
     href: "#",
     icon: naverSvg,
-  },
+  },*/
   {
     name: "Continue with Facebook src/app/login/page.tsx",
     href: "#",
@@ -40,10 +38,12 @@ const loginSocials = [
 
 export default function PageLogin(){
   // 상태 관리
-  const [email, setEmail] = useState<string>('');
+  const [email, setEmail] = useState<string>('');  // 사용자 입력은 이메일로 받음
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
+  const { login } = useLogin();
+
+
 
   // 입력 값 변경 처리 함수
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,6 +55,18 @@ export default function PageLogin(){
     }
   };
 
+
+  // 로그인 폼 제출 처리 함수
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    try {
+      // 로그인 로직 실행
+      await login(email, password);
+    } catch (err) {
+      setError("Login failed. Please check your email or password.");  // 에러 상태 업데이트
+      console.log("실패다." , err)
+    }
+  };
 
 
   return (
@@ -95,7 +107,7 @@ export default function PageLogin(){
             </div>
 
             {/* 로그인 폼 */}
-           {/* <form className="grid grid-cols-1 gap-6" onSubmit={}>
+            <form className="grid grid-cols-1 gap-6" onSubmit={handleSubmit}>
               <label className="block">
               <span className="text-neutral-800 dark:text-neutral-200">
                 Email address
@@ -127,7 +139,7 @@ export default function PageLogin(){
               </label>
 
               <ButtonPrimary type="submit">Continue</ButtonPrimary>
-            </form>*/}
+            </form>
 
             {/* 에러 메시지 */}
             {error && <p className="text-red-500">{error}</p>}

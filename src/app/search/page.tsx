@@ -9,6 +9,7 @@ import Input from "@/shared/Input/Input";
 import ButtonCircle from "@/shared/Button/ButtonCircle";
 import ProductCard from "@/components/ProductCard";
 import { PRODUCTS } from "@/data/data";
+import { RootState } from "@/lib/store";
 
 export default function PageSearch({}){
     const itemsPerPage = 20; // 한 페이지에 20개씩 (가로 5 , 세로 4개)

@@ -1,6 +1,6 @@
-"use client"
 import React from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
+import { RootState } from "@/lib/store";
 
 export default function AccountBilling  (){
 
