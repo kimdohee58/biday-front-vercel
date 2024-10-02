@@ -1,4 +1,3 @@
-/*
 interface UsersModel {
     zipcode: string;
     streetaddress: string;
@@ -8,4 +7,4 @@ interface UsersModel {
     password: string;
     phoneNum: string;
     addressType: string;
-}*/
+}

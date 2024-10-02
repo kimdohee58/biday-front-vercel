@@ -8,7 +8,6 @@ import BagIcon from "@/components/BagIcon";
 import NcInputNumber from "@/components/NcInputNumber";
 import { PRODUCTS } from "@/data/data";
 import Bids from "./Bids";
-import { RootState } from "@/lib/store";
 
 
 import {
@@ -34,7 +33,7 @@ import AccordionInfo from "@/components/AccordionInfo";
 
 const LIST_IMAGES_DEMO = [detail1JPG, detail2JPG, detail3JPG];
 
-export default function ProductDetailPage()  {
+const ProductDetailPage = () => {
   const { variants, status, allOfSizes, image } = PRODUCTS[0];
   const [qualitySelected, setQualitySelected] = useState(1);
   const [isOpenModalViewAllReviews, setIsOpenModalViewAllReviews] =
@@ -107,10 +106,10 @@ export default function ProductDetailPage()  {
 
           <div className="flex items-center mt-5 space-x-4 sm:space-x-5">
             {/* <div className="flex text-xl font-semibold">$112.00</div> */}
-           {/* <Prices
+            <Prices
               contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold"
               price={"원가"}
-            />*/}
+            />
 
             <div className="h-7 border-l border-slate-300 dark:border-slate-700"></div>
 
@@ -255,3 +254,5 @@ export default function ProductDetailPage()  {
     </div>
   );
 };
+
+export default ProductDetailPage;

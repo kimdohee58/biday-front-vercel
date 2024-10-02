@@ -13,7 +13,7 @@ import {getUser} from "@/lib/features/user.slice";
 import {initialUser} from "@/model/UserModel";
 
 export default function AccountPage() {
-   // const user = useSelector(getUser); // Redux에 저장된 유저 정보 가져오기
+    // const user = useSelector(getUser); // Redux에 저장된 유저 정보 가져오기
     const user = useSelector((state: RootState) => state.user.user || initialUser);  // Redux에서 유저 정보 가져오기
     const dispatch = useDispatch(); // 그러면 여기에서 유즈이팩을 사용을 해서, 새로고침을 하더라도 정보가 안날아가게.
 

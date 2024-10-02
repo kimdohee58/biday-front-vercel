@@ -1,4 +1,3 @@
-//src/model/PaymentModel.ts
 export interface PaymentModel {
     paymentKey: string;
     type: string;

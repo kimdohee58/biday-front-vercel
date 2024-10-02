@@ -1,4 +1,4 @@
-interface PaymentFailureModel {
+export interface PaymentFailureModel {
     code: string;
     message: string;
 }

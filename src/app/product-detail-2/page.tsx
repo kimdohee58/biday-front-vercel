@@ -25,8 +25,6 @@ import NotifyAddTocart from "@/components/NotifyAddTocart";
 import Image, { StaticImageData } from "next/image";
 import LikeSaveBtns from "@/components/LikeSaveBtns";
 import AccordionInfo from "@/components/AccordionInfo";
-import Policy from "../product-detail/Policy";
-import ModalViewAllReviews from "../product-detail/ModalViewAllReviews";
 import ListingImageGallery from "@/components/listing-image-gallery/ListingImageGallery";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Route } from "next";
@@ -377,7 +375,6 @@ export default function ProductDetailPage2({}){
           </ul>
         </div>
         {/* ---------- 6 ----------  */}
-        <Policy />
       </div>
     );
   };
@@ -559,10 +556,6 @@ export default function ProductDetailPage2({}){
       </div>
 
       {/* MODAL VIEW ALL REVIEW */}
-      <ModalViewAllReviews
-        show={isOpenModalViewAllReviews}
-        onCloseModalViewAllReviews={() => setIsOpenModalViewAllReviews(false)}
-      />
 
       <Suspense>
         <ListingImageGallery

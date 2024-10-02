@@ -1,0 +1,83 @@
+금결원 응답값
+{
+    "rsp_code": "A0000",
+    "rsp_message": "",
+    "bank_tran_id": "F123456789U4BC34239Z",
+    "bank_tran_date": "20190910",
+    "bank_rsp_code": "000",
+//    "bank_rsp_message": "",
+    "bank_code_std": "097",
+    "bank_name": "오픈은행",
+    "account_num": "1101230000678",
+    "account_holder_name": "홍길동"
+}
+
+응답값 설명
+rsp_code   "A0000"   AN(5)   응답코드(API)
+bank_tran_id   "12345678901234567890"   AN(20)   거래고유번호(참가기관)
+bank_tran_date   "20160310"   N(8)   거래일자(참가기관)
+bank_code_tran   "098"   AN(3)   응답코드를 부여한 참가기관 표준코드
+bank_rsp_code   "000"   AN(3)   응답코드(참가기관)
+//bank_rsp_message   ""   AN(100)   응답메시지(참가기관)
+bank_code_std   "098"   AN(3)   개설기관.표준코드
+savings_bank_name   “오픈저축은행”   AH(20)   개별저축은행명
+account_num   "0001230000678"   AN(16)   계좌번호
+account_holder_name   "홍길동"   AH(20)   예금주 성명
+
+사용값
+    "bank_tran_id": "F123456789U4BC34239Z",
+    -> 16자 수 랜덤
+    "bank_tran_date": "20190910",  string toLocaleString()
+    "bank_rsp_code": "000",
+//    "bank_rsp_message": "",
+    "bank_code_std": "097",
+    "bank_name": "오픈은행",
+    "account_num": "1101230000678",
+    "account_holder_name": "홍길동"
+
+테이블                                         모델
+id                varchar notnull
+user_id         varchar notnull      userId
+bank_tran_id    varchar notnull      bankTranId
+bank_code       varchar notnull      bankCode
+bank_name      varchar notnull      bankName
+account_number varchar notnull      accountName
+account_name    varchar notnull      accountNum
+bank_rsp_code    varchar notnull      bankRspCode
+bank_tran_date   date                     bankTranDate
+created_at
+updated_at
+
+계좌 인증을후 리턴 값을 받는데
+1) 클라이언트측에서 1차 검증후 처리
+1-1)bank_rsp_code   "000"   AN(3)   응답코드 일 경우에만 서버단에 값을 넘겨줄건지
+or
+1-2)계좌인증 후 리턴 값이 있는 경우이면 바로 서버단에 값을 넘겨줄건지(실패값도?)
+
+1-2-2) 서버단에서 검증로직을 하여 bank_rsp_code   "000"   AN(3)   응답코드 일 경우에만 판매자 권한으로 업데이트
+        000 -> 정상
+
+       // 클라이언트에서 검증 -> 추후 가능하면 수정
+
+1-2-3) bank_rsp_code   "000"   AN(3)   응답코드 아니고 실패여도 저장하여 고객이 확인 하게?
+
+URI:/api/account/save
+Method : Post
+@RequestBody
+
+AccountModel {
+    private String userId;
+    private String bankTranId;
+    private String bankCode;
+    private String bankName;
+    private String accountNum;
+    private String accountName;
+    private String bankRspCode;
+    private LocalDate bankTranDate;
+}
+
+URI:/api/account/{userId}
+Method : Get
+@PathVariable
+
+// 계좌 조회

@@ -1,14 +1,15 @@
-import { UserModel } from "@/model/UserModel";
-import { WishModel } from "@/model/WishModel";
+import {WishModel} from "@/model/WishModel";
+import {UserModel} from "@/model/UserModel";
+import {ProductModel} from "@/model/ProductModel";
 
-const wish = 'http://localhost:8080/wish'
+const url = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/wish`
 
 export async function toggleWish(wish: WishModel, user: UserModel, product: ProductModel,): Promise<any | { status: number }> {
     try {
         const param = new URLSearchParams({
             "userId": (user.id?? '').toString(),
             "productId": (product.id?? '').toString()
-            })
+        })
 
         const response = await fetch(`http://localhost:8080/wish?${param}`, {
             method: 'GET',
