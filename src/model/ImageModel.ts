@@ -1,5 +1,3 @@
-import {ImageType} from ".prisma/client";
-
 export interface ImageModel {
     id?: string;
     originalName: string;
@@ -12,7 +10,7 @@ export interface ImageModel {
 
 }
 
-enum ImageType {
+export enum ImageType {
     AUCTION = "경매",
     PRODUCT = "상품",
     RATING = "평점",

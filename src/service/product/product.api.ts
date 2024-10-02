@@ -76,7 +76,7 @@ export async function fetchProductDetails(id: number): Promise<any> {
         const colorIds = products.map((item) => Object.keys(item)[0]);
 
         // 해당 상품 키값 뽑아서 키는 productId, value는 color인 배열로 만들기
-        //
+
 
         console.log("추출 키값 배열 확인", colorIds);
 

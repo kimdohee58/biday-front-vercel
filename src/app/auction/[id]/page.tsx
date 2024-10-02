@@ -30,6 +30,7 @@ import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {Route} from "next";
 import {ProductModel} from "@/model/ProductModel";
 import {AwardModel} from "@/model/AwardModel";
+import HighestBid from "@/app/auction/[id]/HigestBid";
 
 const LIST_IMAGES_GALLERY_DEMO: (string | StaticImageData)[] = [
     detail21JPG,
@@ -48,10 +49,8 @@ const LIST_IMAGES_GALLERY_DEMO: (string | StaticImageData)[] = [
 
 const PRICE = 108;
 
-interface HigestBidProps {
-}
 
-export default function AuctionDetailPage({params}: { params: { id: string | string[] }, product: ProductModel}) {
+export default function AuctionDetailPage({params}: { params: { id: string }, product: ProductModel}) {
 
     /**
      * 해당 auction 의 bid 도 불러와야 됨.
@@ -65,15 +64,8 @@ export default function AuctionDetailPage({params}: { params: { id: string | str
     const bidUrl = `${[process.env.NEXT_PUBLIC_API_SERVER_URL]}/api/bids/stream?auctionid=${Number(params.id)}`
 
     const [currentBid, setCurrentBid] = useState();
-    useEffect(() => {
-        const eventSource = new EventSource(bidUrl);
 
-        eventSource.onmessage = (event) => {
 
-        };
-    });
-
-    //
     const router = useRouter();
     const thisPathname = usePathname();
     const [variantActive, setVariantActive] = useState(0);
@@ -232,7 +224,7 @@ export default function AuctionDetailPage({params}: { params: { id: string | str
                         {/* ---------- 1 HEADING ----------  */}
                         <div className="flex items-center justify-between space-x-5">
                             <div className="flex text-2xl font-semibold">
-                                ${PRICE.toFixed(2)}
+                                {HighestBid(params.id)}원
                             </div>
                             <a
                                 href="#reviews"
