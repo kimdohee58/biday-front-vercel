@@ -1,6 +1,6 @@
 "use client";
 
-import React, {Suspense, useState} from "react";
+import React, {Suspense, useEffect, useState} from "react";
 import {
     NoSymbolIcon,
     ClockIcon,
@@ -29,6 +29,7 @@ import ListingImageGallery from "@/components/listing-image-gallery/ListingImage
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {Route} from "next";
 import {ProductModel} from "@/model/ProductModel";
+import {AwardModel} from "@/model/AwardModel";
 
 const LIST_IMAGES_GALLERY_DEMO: (string | StaticImageData)[] = [
     detail21JPG,
@@ -43,7 +44,12 @@ const LIST_IMAGES_GALLERY_DEMO: (string | StaticImageData)[] = [
     "https://images.pexels.com/photos/871494/pexels-photo-871494.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
     "https://images.pexels.com/photos/2850487/pexels-photo-2850487.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
 ];
+
+
 const PRICE = 108;
+
+interface HigestBidProps {
+}
 
 export default function AuctionDetailPage({params}: { params: { id: string | string[] }, product: ProductModel}) {
 
@@ -51,7 +57,37 @@ export default function AuctionDetailPage({params}: { params: { id: string | str
      * 해당 auction 의 bid 도 불러와야 됨.
      * auction bid 개수
      */
+
     const {sizes, variants, status, allOfSizes, image} = PRODUCTS[0];
+
+    const [message, setMessage] = useState();
+
+    const bidUrl = `${[process.env.NEXT_PUBLIC_API_SERVER_URL]}/api/bids/stream?auctionid=${Number(params.id)}`
+
+    const [currentBid, setCurrentBid] = useState();
+    useEffect(() => {
+        const eventSource = new EventSource(bidUrl);
+
+        eventSource.onmessage = (event:) => {
+        };
+    });
+
+    export interface AuctionModel {
+        id?: number;
+        userId: number;
+        product: ProductModel;
+        description: string;
+        startingBid: number;
+        currentBid: number;
+        startedAt: Date;
+        endedAt: Date;
+        status: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+        award: AwardModel;
+        size: string;
+    }
+
     //
     const router = useRouter();
     const thisPathname = usePathname();
