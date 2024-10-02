@@ -2,6 +2,7 @@ import {ProductDictionary, ProductModel} from "@/model/ProductModel";
 import {fetchAuctionList} from "@/service/auction/auction.api";
 import {fetchImage} from "@/service/image/image.api";
 import {ImageType} from ".prisma/client";
+import {keys} from "@amcharts/amcharts5/.internal/core/util/Object";
 
 const baseUrl = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/products`
 
@@ -59,7 +60,8 @@ export async function fetchProduct(id?:number) {
     }
 }
 
-export async function fetchProductDetails(id: number) {
+export async function fetchProductDetails(id: number): Promise<any> {
+
     // 옥션 api 호출
     // 이미지 api 호출
 
@@ -72,6 +74,9 @@ export async function fetchProductDetails(id: number) {
 
         // 프로덕트 색상에 따른 키값만 뽑기
         const colorIds = products.map((item) => Object.keys(item)[0]);
+
+        // 해당 상품 키값 뽑아서 키는 productId, value는 color인 배열로 만들기
+        //
 
         console.log("추출 키값 배열 확인", colorIds);
 
@@ -96,7 +101,10 @@ export async function fetchProductDetails(id: number) {
 
         console.log("image 객체 확인", image);
 
-        return {colorIds, };
+        /**
+         * 해당 상품, 컬러 다른 상품 라우트용 id, 컬러 다른 상품 color,
+         */
+        return {colorIds};
 
     } catch (error) {
         console.error("상품 상세 정보 로드 중 오류 발생: product.api.ts fetchProductDetails", error);

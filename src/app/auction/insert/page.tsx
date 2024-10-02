@@ -34,7 +34,7 @@ const Modal = ({isOpen, onClose, onSelectProduct, products}: ModalProps) => {
                         <li
                             key={product.id}
                             className="py-2 cursor-pointer hover:bg-grey-100"
-                            onClick={onSelectProduct(product)}
+                            // onClick={onSelectProduct(product)}
                             value={product.id}
                         >
                             {product.name}
@@ -55,7 +55,7 @@ export default function InsertAuction(productId?: number) {
     const [description, setDescription] = useState("");
     const [endDate, setEndDate] = useState();
     const [isOpen, setIsOpen] = useState(false);
-    const [duration, setDuration] = useState<Number>(3);
+    const [duration, setDuration] = useState<number>(3);
     const [files, setFiles] = useState<File[]>([])
 
     const {data: productList, isLoading, error} = useQuery({queryKey: ["products"], queryFn: fetchAllProducts});
@@ -84,7 +84,6 @@ export default function InsertAuction(productId?: number) {
     };
 
     const handleProductSelect = () => {
-        setSelectedProduct();
         closeModal();
     };
 
@@ -171,8 +170,8 @@ export default function InsertAuction(productId?: number) {
 
         const formData = new FormData();
         if (isFormValid) {
-            formData.append("productId", selectedProduct.id.toString());
-            formData.append("duration", duration.toString());
+            // formData.append("productId", selectedProduct.id.toString());
+            // formData.append("duration", duration.toString());
         }
 
     };
@@ -231,7 +230,7 @@ export default function InsertAuction(productId?: number) {
         <form onSubmit={handleSubmit} className="flex justify-center items-center h-screen mx-auto">
             <div className="w-3/4 items-center mt-10 mb-10 ml-10">
                 <div className="w-full mb-6">
-                    <Label htmlFor="product" className="block">
+                    <Label className="block">
                         상품:
                     </Label>
                     {renderSelectProductButton()}
@@ -243,7 +242,8 @@ export default function InsertAuction(productId?: number) {
                     </Label>
                     <span className="ml-2 rfont-light accent-gray-400">{getDuration(duration)}</span>
                     {durationSelectButton()}
-                    <input type="hidden" name="duration" value={duration}/>
+                    <input type="hidden" name="duration"/>
+                    {/* input value 설정 필요 */}
                 </div>
                 <div className="w-full mb-6">
                     <Label>
@@ -253,13 +253,13 @@ export default function InsertAuction(productId?: number) {
                 </div>
                 {renderDescription()}
 
-                <Modal
+                {/*<Modal
                     isOpen={isOpen}
                     onClose={closeModal}
                     onSelectProduct={handleProductSelect}
                     products={productList}
                 />
-
+*/}
                 <button type="submit"
                         className={`mt-4 py-2 px-4 rounded text-white ${isFormValid ? 'bg-blue-500 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'}`}
                         disabled={!isFormValid}>

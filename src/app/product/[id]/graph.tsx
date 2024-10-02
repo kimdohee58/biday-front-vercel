@@ -1,10 +1,11 @@
-/* Imports */
+/*
+/!* Imports *!/
 import am5index from "@amcharts/amcharts5/index";
 import am5xy from "@amcharts/amcharts5/xy";
 import * as am5 from "@amcharts/amcharts5";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 
-/* Chart code */
+/!* Chart code *!/
 // Create root element
 // https://www.amcharts.com/docs/v5/getting-started/#Root_element
 let root = am5.Root.new("chartdiv");
@@ -131,4 +132,4 @@ series.data.setAll(data);
 // Make stuff animate on load
 // https://www.amcharts.com/docs/v5/concepts/animations/
 series.appear(1000);
-chart.appear(1000, 100);
+chart.appear(1000, 100);*/

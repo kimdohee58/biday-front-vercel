@@ -68,25 +68,10 @@ export default function AuctionDetailPage({params}: { params: { id: string | str
     useEffect(() => {
         const eventSource = new EventSource(bidUrl);
 
-        eventSource.onmessage = (event:) => {
+        eventSource.onmessage = (event) => {
+
         };
     });
-
-    export interface AuctionModel {
-        id?: number;
-        userId: number;
-        product: ProductModel;
-        description: string;
-        startingBid: number;
-        currentBid: number;
-        startedAt: Date;
-        endedAt: Date;
-        status: boolean;
-        createdAt: Date;
-        updatedAt: Date;
-        award: AwardModel;
-        size: string;
-    }
 
     //
     const router = useRouter();

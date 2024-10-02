@@ -7,7 +7,7 @@ interface HighestBidProps {
     auctionId: string;
 }
 
-const HighestBid: React.FC<HighestBidProps> = ({auctionId}) => {
+const HighestBid = ({auctionId}: HighestBidProps) => {
     const [highestBid, setHighestBid] = useState<number>();
     const [error, setError] = useState<string | null>(null);
 
@@ -24,9 +24,20 @@ const HighestBid: React.FC<HighestBidProps> = ({auctionId}) => {
                     setHighestBid(currentBid);
                 }
             } catch (error) {
-
+                console.error();
             }
+
+            eventSource.onerror = () => {
+
+            };
+
+        };
+
+        return () => {
+            eventSource.close();
         };
 
     }, [auctionId]);
+
+
 };
