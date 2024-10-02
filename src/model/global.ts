@@ -1,5 +1,5 @@
 // global.d.ts
-interface NaverLogin {
+export interface NaverLogin {
     new (options: {
         clientId: string;
         callbackUrl: string;
@@ -14,7 +14,7 @@ interface NaverLogin {
     };
 }
 
-interface Window {
+export interface Window {
     naver: {
         LoginWithNaverId: NaverLogin;
     };

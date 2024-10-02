@@ -1,4 +1,4 @@
-interface RefundModel {
+export interface RefundModel {
     id?: number;
     payment: PaymentModel;
     amount: number;

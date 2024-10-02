@@ -1,4 +1,4 @@
-interface FaqModel {
+export interface FaqModel {
     id: number;
     user: UserModel;
     title: string;
