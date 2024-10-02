@@ -68,7 +68,6 @@ function generateDatas(count) {
     return data;
 }
 
-
 // Create axes
 // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
 let xAxis = chart.xAxes.push(am5xy.DateAxis.new(root, {

@@ -1,8 +1,7 @@
 "use client";
 
-let url = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/auction`
 import {AuctionModel} from "@/model/AuctionModel";
-import {useQuery, UseQueryResult} from "@tanstack/react-query";
+import {useRouter} from "next/navigation";
 
 
 /*export async function getAuction(id?:any){
@@ -25,23 +24,38 @@ import {useQuery, UseQueryResult} from "@tanstack/react-query";
 }*/
 
 
-export default function BidsTable({auctions} : {auctions: AuctionModel[]}) {
+export default function BidsTable({auctions}: { auctions: AuctionModel[] }) {
 
-   /* const {
-        data: auction,
-        isLoading,
-        isError,
-    }: UseQueryResult<AuctionModel> = useQuery<AuctionModel>({queryKey: [productId], queryFn: () => getAuction(productId)})
-
-
-    if (isLoading) {
-        return <div>Loading...</div>;
+    if (auctions === null || auctions.length === 0) {
+        return <div>현재 진행중인 경매가 없습니다.</div>
     }
-    if (isError) {
-        return <div>Error occurred while fetching auction data</div>;
-    }*/
 
-   /* const auctions: AuctionModel[] = auction ? [auction] : [];*/
+    const router = useRouter();
+
+    const getColor = (productName: string) => {
+        const parts = productName.split(`(`);
+        if (parts.length > 1) {
+            return parts[1].replace(')', '').trim();
+        }
+        return "";
+    };
+
+
+    /* const {
+         data: auction,
+         isLoading,
+         isError,
+     }: UseQueryResult<AuctionModel> = useQuery<AuctionModel>({queryKey: [productId], queryFn: () => getAuction(productId)})
+
+
+     if (isLoading) {
+         return <div>Loading...</div>;
+     }
+     if (isError) {
+         return <div>Error occurred while fetching auction data</div>;
+     }*/
+
+    /* const auctions: AuctionModel[] = auction ? [auction] : [];*/
 
     return (
         <div className="">
@@ -50,7 +64,10 @@ export default function BidsTable({auctions} : {auctions: AuctionModel[]}) {
                     className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 whitespace-nowrap">
                 <tr>
                     <th scope="col" className="px-6 py-3">
-                        상품명
+                        색상
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                        사이즈
                     </th>
                     <th scope="col" className="px-6 py-3">
                         판매자
@@ -66,13 +83,17 @@ export default function BidsTable({auctions} : {auctions: AuctionModel[]}) {
                 <tbody>
                 {auctions.map((auction) => (
                     <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
-                        key={auction.id}>
+                        key={auction.id}
+                        onClick={() => router.push(`/auction/${auction.id}`)}>
                         <th scope="row"
                             className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {auction.product.name}
+                            {getColor(auction.product.name)}
                         </th>
                         <td className="px-6 py-4">
-                            {auction.user.name}
+                            {auction.size}
+                        </td>
+                        <td className="px-6 py-4">
+                            {auction.userId}
                         </td>
                         <td className="px-6 py-4">
                             {auction.endedAt.toLocaleDateString()}

@@ -1,4 +1,4 @@
-interface BidModel {
+export interface BidModel {
     id?: number;
     auction: AuctionModel;
     userId: number;

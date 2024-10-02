@@ -12,38 +12,87 @@ import detail1JPG from "@/images/products/detail1.jpg";
 import Policy from "./Policy";
 import SectionPromo2 from "@/components/SectionPromo2";
 import Image from "next/image";
-import {useRouter} from "next/navigation";
 import {AuctionModel} from "@/model/AuctionModel";
-import BidsTable from "./BidsTable";
-import {getProduct} from "@/service/product/product.api";
+import {fetchProduct, fetchProductDetails} from "@/service/product/product.api";
 import {ProductModel} from "@/model/ProductModel";
-// import {useReducer} from "react";
+import {Route} from "@/routers/types";
+import {fetchImage} from "@/service/image/image.api";
+import {ImageModel} from "@/model/ImageModel";
 
-const LIST_IMAGES_DEMO = [detail1JPG];
-
-/*type Action = {
-    type: string;
-    data: {
-
-    }
-}*/
-
-/*function reducer(state, action: Action) {
-
-}*/
 
 export default async function ProductDetailPage({params}: { params: { id: string | string[]; }; }) {
-    // const [state, dispatch] = useReducer(reducer);
 
-    const router = useRouter();
+    const  {product: {id, brand, category, name, subName, price, color, description,  wishes}, image, auctions} = await fetchProductDetails(Number(params.id));
 
-    const product: ProductModel = await getProduct(Number(params.id));
-    const {id, brand, category, name, subName, price, color, description, auctions} = product;
+    if (id == 0) {
+        return <div>데이터를 불러오는 도중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.</div>;
+    }
 
-    const moveToInsertAuction = () => {
-        router.push(`/auction/insert?productId=${params.id}`);
+    const insertAuctionUrl = `/auction/insert?productId=${params.id}`;
+
+    const getColor = () => {
+        const parts = name.split("(");
+        if (parts.length > 1) {
+            return parts[1].replace(")","").trim();
+        }
+        return "";
     };
 
+    const renderAuctionTable = () => {
+        if (auctions == null || auctions.length == 0) {
+            return <div>현재 진행중인 경매가 없습니다.</div>;
+        }
+
+        return (
+            <div className="">
+                <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead
+                        className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 whitespace-nowrap">
+                    <tr>
+                        <th scope="col" className="px-6 py-3">
+                            색상
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                            사이즈
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                            판매자
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                            경매종료일
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                            최고입찰가
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {auctions.map((auction: AuctionModel) => (
+                        <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
+                            key={auction.id}>
+                            <th scope="row"
+                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                {getColor()}
+                            </th>
+                            <td className="px-6 py-4">
+                                {auction.size}
+                            </td>
+                            <td className="px-6 py-4">
+                                {auction.userId}
+                            </td>
+                            <td className="px-6 py-4">
+                                {auction.endedAt.toLocaleDateString()}
+                            </td>
+                            <td className="px-6 py-4">
+                                {auction.currentBid}
+                            </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+            </div>
+        );
+    };
 
    /* const renderStatus = () => {
         if (!status) {
@@ -114,7 +163,7 @@ export default async function ProductDetailPage({params}: { params: { id: string
                                 <StarIcon className="w-5 h-5 pb-[1px] text-yellow-400"/>
                                 <div className="ml-1.5 flex">
                   <span className="text-slate-600 dark:text-slate-400">
-                    142 wishes
+                    {wishes} wishes
                   </span>
                                 </div>
                             </a>
@@ -131,7 +180,7 @@ export default async function ProductDetailPage({params}: { params: { id: string
                 <div className="flex space-x-3.5">
                     <ButtonPrimary
                         className="flex-1 flex-shrink-0"
-                        onClick={moveToInsertAuction}
+                        href={insertAuctionUrl as Route}
                     >
                         <BagIcon className="hidden sm:inline-block w-5 h-5 mb-0.5"/>
                         <span className="ml-3">판매하기</span>
@@ -139,7 +188,7 @@ export default async function ProductDetailPage({params}: { params: { id: string
                 </div>
                 <hr className=" 2xl:!my-10 border-slate-200 dark:border-slate-700"></hr>
                 <div className="flex-1 items-center justify-center mt-5 space-x-3.5">
-                    <BidsTable auctions={auctions}/>
+                    {renderAuctionTable()}
                 </div>
 
                 {/* ---------- 5 ----------  */}
@@ -196,9 +245,9 @@ export default async function ProductDetailPage({params}: { params: { id: string
                                 <Image
                                     fill
                                     sizes="(max-width: 640px) 100vw, 33vw"
-                                    src={LIST_IMAGES_DEMO[0]}
+                                    src={image.uploadUrl}
                                     className="w-full rounded-2xl object-cover"
-                                    alt="product detail 1"
+                                    alt={`${name}`}
                                 />
                             </div>
                             {/*{renderStatus()}*/}

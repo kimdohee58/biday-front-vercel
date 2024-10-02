@@ -1,4 +1,4 @@
-interface WishModel {
+export interface WishModel {
     id?: number;
     user: UserModel;
     product: ProductModel;

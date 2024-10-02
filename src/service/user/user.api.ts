@@ -1,3 +1,4 @@
+import {UsersModel} from "@/model/Users.model";
 
 export async function insertUser(user: UsersModel): Promise<any> {
     try {
@@ -28,7 +29,7 @@ export async function insertUser(user: UsersModel): Promise<any> {
         }
 
         const data: any = await response.json();
-        console.log("데이터",data.status)
+        console.log("데이터", data.status)
 // 성공 시 status: true 추가
         return { ...data, status: true }; // 상태 값을 true로 반환
 

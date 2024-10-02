@@ -12,6 +12,7 @@ import Input from "@/shared/Input/Input";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import Image from "next/image";
 import Link from "next/link";
+import {saveUser} from "@/lib/features/user.slice";
 
 // 소셜 로그인 버튼 데이터
 
@@ -64,6 +65,7 @@ const PageLogin = () => {
         .then(token => {
           // 로그인 성공 시 쿠키에 토큰 저장
           Cookies.set('token', token, { expires: 7 });
+          saveUser(token);
 
           // 홈 페이지로 리다이렉트
           router.push('/');

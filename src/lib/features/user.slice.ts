@@ -1,37 +1,27 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import type { RootState } from '../../app/store'
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {initialUser, UserModel} from "@/model/UserModel";
+import type {RootState} from "../store";
 
-// Define a type for the slice state
-export interface CounterState {
-    value: number
-}
-
-// Define the initial state using that type
-const initialState: CounterState = {
-    value: 0
-}
-
-export const counterSlice = createSlice({
+export const userSlice = createSlice({
     name: 'user',
     // `createSlice` will infer the state type from the `initialState` argument
-    initialState,
+    initialState : initialUser,
     reducers: {
-        increment: state => {
-            state.value += 1
+        saveUser: (state, action) => {
+            return action.payload;
         },
-        decrement: state => {
-            state.value -= 1
+        clearUser: (state) => {
+            return initialUser;
         },
-        // Use the PayloadAction type to declare the contents of `action.payload`
-        incrementByAmount: (state, action: PayloadAction<number>) => {
-            state.value += action.payload
-        }
-    }
+    }, /*setter*/
+    extraReducers: (builder) => {
+
+    },
 })
 
-export const { increment, decrement, incrementByAmount } = counterSlice.actions
+export const getUser = (state: RootState) => state.user;
 
 // Other code such as selectors can use the imported `RootState` type
-export const selectCount = (state: RootState) => state.counter.value
+export const {saveUser, clearUser} = userSlice.actions;
 
-export default counterSlice.reducer
+export default userSlice.reducer;

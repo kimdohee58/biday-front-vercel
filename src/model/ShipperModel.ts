@@ -1,4 +1,4 @@
-interface ShipperModel {
+export interface ShipperModel {
     id?: number;
     payment: PaymentModel;
     carrier: string;

@@ -1,4 +1,4 @@
-interface PaymentModel {
+export interface PaymentModel {
     paymentKey: string;
     type: string;
     orderId: string;

@@ -1,3 +1,3 @@
-interface AddressModel {
+export interface AddressModel {
     id?: number;
 }

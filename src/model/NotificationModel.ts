@@ -1,4 +1,4 @@
-interface NotificationModel {
+export interface NotificationModel {
     id: number;
     user: UserModel;
     type: NotificationTypeModel;
