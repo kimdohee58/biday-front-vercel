@@ -26,7 +26,6 @@ export default function HighestBid(auctionId: string) {
 
                 console.log("highestBid", highestBid);
 
-
             } catch (error) {
                 console.error("SSE 데이터 파싱 중 오류 발생", error);
                 setError("SSE 데이터 파싱 중 오류 발생");
