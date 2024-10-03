@@ -1,6 +1,6 @@
-export interface UsersModel {
+interface UsersModel {
     zipcode: string;
-    streetddress: string;
+    streetaddress: string;
     detailaddress: string;
     name: string;
     email: string;

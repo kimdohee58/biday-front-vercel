@@ -1,3 +1,4 @@
+//src/data/types.ts
 import { Route } from "@/routers/types";
 
 export interface CustomLink {

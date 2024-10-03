@@ -1,4 +1,4 @@
-export interface AddressModel {
+interface AddressModel {
     zipcode: string ;
     streetaddress: string ;
     detailaddress: string ;

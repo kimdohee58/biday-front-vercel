@@ -1,4 +1,4 @@
-export interface BrandModel {
+interface BrandModel {
     id: number;
     name: string;
     createdAt: Date;

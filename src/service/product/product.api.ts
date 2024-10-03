@@ -26,7 +26,6 @@ export async function insertProduct(product: ProductModel): Promise<any | { stat
         return {status: 500}
     }
 }
-
 export async function fetchProduct(id?:number) {
     try {
 
@@ -57,6 +56,23 @@ export async function fetchProduct(id?:number) {
         console.error("상품 데이터 로드 중 오류 발생", error);
         throw new Error("상품 데이터 로드 실패");
 
+    }
+}
+
+export async function getProductList() {
+    try {
+        const response = await fetch(baseUrl, {
+            method: 'GET'
+        });
+
+        const data = await response.json();
+
+        console.log("+++++>" + JSON.stringify(data));
+
+        return data;
+    } catch (error) {
+        console.error("상품 리스트 로드 중 오류 발생", error);
+        return { status: 500 };
     }
 }
 

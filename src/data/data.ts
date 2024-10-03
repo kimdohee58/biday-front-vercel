@@ -1,3 +1,4 @@
+//src.data.data.ts
 import { productImgs } from "@/contains/fakeData";
 import productVariantImg2 from "@/images/products/v2.jpg";
 import productVariantImg3 from "@/images/products/v3.jpg";
@@ -363,3 +364,4 @@ export const SPORT_PRODUCTS: Product[] = [
     numberOfReviews: 98,
   },
 ];
+

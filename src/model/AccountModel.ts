@@ -1,11 +1,8 @@
+//src/model/AccountModel.ts
 export interface AccountModel {
-    id?: string;
-    userId: string;
-    banckTranId: string;
-    bankCode: string;
-    nackName: string;
-    accountNum: string;
-    accountName: string;
-    bankRspCode: string;
-    bankTranDate: Date;
+    id?: number;
 }
+
+export const aacountState: AccountModel = {
+    id: 0, // 처음에는 ID가 없을 수 있으므로 undefined로 설정
+};

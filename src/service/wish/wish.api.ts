@@ -9,7 +9,7 @@ export async function toggleWish(wish: WishModel, user: UserModel, product: Prod
         const param = new URLSearchParams({
             "userId": (user.id?? '').toString(),
             "productId": (product.id?? '').toString()
-            })
+        })
 
         const response = await fetch(`http://localhost:8080/wish?${param}`, {
             method: 'GET',

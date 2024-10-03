@@ -1,3 +1,5 @@
+//src/app/blog-single/page.tsx
+
 import React from "react";
 import Avatar from "@/shared/Avatar/Avatar";
 import Badge from "@/shared/Badge/Badge";
