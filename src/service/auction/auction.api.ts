@@ -79,7 +79,7 @@ export async function fetchAuctionList(id: number): Promise<any | { status: numb
 }
 
 // 경매 상세보기
-export async function fetchAuction(id?:number): Promise<any | {status:number}>{
+export async function fetchAuction(id?:number): Promise<AuctionModel>{
     let url = baseUrl;
     if (id) url = baseUrl + `/findById/${id}`;
 
@@ -90,12 +90,11 @@ export async function fetchAuction(id?:number): Promise<any | {status:number}>{
 
         const data = await response.json();
 
-        console.log("+++++>" + JSON.stringify(data));
-
         return data;
+
     } catch (error) {
         console.error("경매 데이터 로드 중 오류 발생", error);
-        return { status: 500 };
+        throw new Error("경매 데이터 로드 중 오류 발생");
     }
 }
 

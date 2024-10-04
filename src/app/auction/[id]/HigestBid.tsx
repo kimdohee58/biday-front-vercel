@@ -17,9 +17,9 @@ export default function HighestBid(auctionId: string) {
         eventSource.onmessage = (event: MessageEvent) => {
             console.log("메세지 탐");
             try {
-                const bidStreamModel: BidStreamModel[] = JSON.parse(event.data);
+                const bidStreamModel: BidStreamModel = JSON.parse(event.data);
                 console.log("bidStreamModel",bidStreamModel)
-                const currentBid = bidStreamModel[0].currentBid;
+                const currentBid = bidStreamModel.currentBid;
                 if (!!currentBid) {
                     setHighestBid(currentBid);
                 }
@@ -40,6 +40,7 @@ export default function HighestBid(auctionId: string) {
         };
 
         return () => {
+            console.log("SSE 연결 종료");
             eventSource.close();
         };
 

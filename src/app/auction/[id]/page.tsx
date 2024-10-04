@@ -1,11 +1,7 @@
 "use client";
 
-import React, {Suspense, useEffect, useState} from "react";
-import {
-    NoSymbolIcon,
-    ClockIcon,
-    SparklesIcon,
-} from "@heroicons/react/24/outline";
+import React, {Suspense, useState} from "react";
+import {ClockIcon, NoSymbolIcon, SparklesIcon,} from "@heroicons/react/24/outline";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
 import NcImage from "@/shared/NcImage/NcImage";
@@ -22,15 +18,18 @@ import toast from "react-hot-toast";
 import {StarIcon} from "@heroicons/react/24/solid";
 import SectionSliderProductCard from "@/components/SectionSliderProductCard";
 import NotifyAddTocart from "@/components/NotifyAddTocart";
-import Image, {StaticImageData} from "next/image";
+import {StaticImageData} from "next/image";
 import LikeSaveBtns from "@/components/LikeSaveBtns";
 import AccordionInfo from "@/components/AccordionInfo";
 import ListingImageGallery from "@/components/listing-image-gallery/ListingImageGallery";
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import {usePathname, useRouter} from "next/navigation";
 import {Route} from "next";
 import {ProductModel} from "@/model/ProductModel";
-import {AwardModel} from "@/model/AwardModel";
 import HighestBid from "@/app/auction/[id]/HigestBid";
+import {fetchAuction} from "@/service/auction/auction.api";
+import {useQuery} from "@tanstack/react-query";
+import {fetchImage} from "@/service/image/image.api";
+import {ImageType} from "@/model/ImageModel";
 
 const LIST_IMAGES_GALLERY_DEMO: (string | StaticImageData)[] = [
     detail21JPG,
@@ -56,6 +55,18 @@ export default function AuctionDetailPage({params}: { params: { id: string }, pr
      * 해당 auction 의 bid 도 불러와야 됨.
      * auction bid 개수
      */
+
+        // 옥셔션에서 불러올 것
+
+    const {data, isLoading, error} = useQuery({queryKey: ["auction"], queryFn: () => fetchAuction(Number(params.id))});
+
+    const auctionImage = useQuery({queryKey: ["image"], queryFn: () => fetchImage(params.id, ImageType.AUCTION)});
+
+    if (!!data) {
+        console.log(data.id);
+    }
+
+    // 이미지
 
     const {sizes, variants, status, allOfSizes, image} = PRODUCTS[0];
 
@@ -140,35 +151,6 @@ export default function AuctionDetailPage({params}: { params: { id: string }, pr
                     >
                         See sizing chart
                     </a>
-                </div>
-                <div className="grid grid-cols-4 gap-2 mt-3">
-                    {allOfSizes.map((size, index) => {
-                        const isActive = size === sizeSelected;
-                        const sizeOutStock = !sizes.includes(size);
-                        return (
-                            <div
-                                key={index}
-                                className={`relative h-10 sm:h-11 rounded-2xl border flex items-center justify-center 
-                text-sm sm:text-base uppercase font-semibold select-none overflow-hidden z-0 ${
-                                    sizeOutStock
-                                        ? "text-opacity-20 dark:text-opacity-20 cursor-not-allowed"
-                                        : "cursor-pointer"
-                                } ${
-                                    isActive
-                                        ? "bg-primary-6000 border-primary-6000 text-white hover:bg-primary-6000"
-                                        : "border-slate-300 dark:border-slate-600 text-slate-900 dark:text-slate-200 hover:bg-neutral-50 dark:hover:bg-neutral-700"
-                                }`}
-                                onClick={() => {
-                                    if (sizeOutStock) {
-                                        return;
-                                    }
-                                    setSizeSelected(size);
-                                }}
-                            >
-                                {size}
-                            </div>
-                        );
-                    })}
                 </div>
             </div>
         );

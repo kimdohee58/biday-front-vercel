@@ -1,8 +1,8 @@
 import {ProductDictionary, ProductModel} from "@/model/ProductModel";
 import {fetchAuctionList} from "@/service/auction/auction.api";
 import {fetchImage} from "@/service/image/image.api";
-import {ImageType} from ".prisma/client";
 import {keys} from "@amcharts/amcharts5/.internal/core/util/Object";
+import {ImageType} from "@/model/ImageModel";
 
 const baseUrl = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/products`
 
