@@ -1,4 +1,7 @@
-export const updateUser = async (id: number, user: UsersModel): Promise<Response> => {
+/*
+import { UserModel } from "@/model/UserModel";
+
+export const updateUser = async (id: number, user: UserModel): Promise<Response> => {
     const response = await fetch(`http://your-api-url/users/${id}`, {
         method: 'PUT',
         headers: {
@@ -10,4 +13,4 @@ export const updateUser = async (id: number, user: UsersModel): Promise<Response
         throw new Error('Failed to update user');
     }
     return response;
-};
+};1*/

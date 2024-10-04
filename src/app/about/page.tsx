@@ -7,8 +7,9 @@ import BackgroundSection from "@/components/BackgroundSection/BackgroundSection"
 import SectionHero from "./SectionHero";
 import SectionClientSay from "@/components/SectionClientSay/SectionClientSay";
 import SectionPromo3 from "@/components/SectionPromo3";
+import { RootState } from "@/lib/store";
 
-const PageAbout = ({}) => {
+export default function PageAbout  ({}){
   return (
     <div className={`nc-PageAbout overflow-hidden relative`}>
       {/* ======== BG GLASS ======== */}
@@ -36,4 +37,3 @@ const PageAbout = ({}) => {
   );
 };
 
-export default PageAbout;

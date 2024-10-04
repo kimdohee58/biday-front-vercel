@@ -218,25 +218,25 @@ const NavigationItem: FC<NavigationItemProps> = ({ menuItem }) => {
       <div className="h-20 flex-shrink-0 flex items-center">
         <Link
           className="inline-flex items-center text-sm lg:text-[15px] font-medium text-slate-700 dark:text-slate-300 py-2.5 px-4 xl:px-5 rounded-full hover:text-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-200 border border-rose-500"
-          href={"/"}
+          href={item.href}
         >
-          {/*{item.name}*/}
-          {/*{item.type && (*/}
-          {/*  <ChevronDownIcon*/}
-          {/*    className="ml-1 -mr-1 h-4 w-4 text-slate-400"*/}
-          {/*    aria-hidden="true"*/}
-          {/*  />*/}
-          {/*)}*/}
+          {item.name}
+          {item.type && (
+            <ChevronDownIcon
+              className="ml-1 -mr-1 h-4 w-4 text-slate-400"
+              aria-hidden="true"
+            />
+          )}
         </Link>
       </div>
     );
   };
 
   switch (menuItem.type) {
-    // case "dropdown":
-    //   return renderDropdownMenu(menuItem);
-    // case "megaMenu":
-    //   return renderMegaMenu(menuItem);
+     case "dropdown":
+       return renderDropdownMenu(menuItem);
+     case "megaMenu":
+       return renderMegaMenu(menuItem);
     default:
       return (
         <li className="menu-item flex-shrink-0">{renderMainItem(menuItem)}</li>

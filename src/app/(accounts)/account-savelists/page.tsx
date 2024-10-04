@@ -1,14 +1,15 @@
 import ProductCard from "@/components/ProductCard";
 import { PRODUCTS } from "@/data/data";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
+import { RootState } from "@/lib/store";
 
-const AccountSavelists = () => {
+export default function AccountSavelists  () {
   const renderSection1 = () => {
     return (
       <div className="space-y-10 sm:space-y-12">
         <div>
           <h2 className="text-2xl sm:text-3xl font-semibold">
-            List of saved products
+              장바구니
           </h2>
         </div>
 
@@ -27,4 +28,3 @@ const AccountSavelists = () => {
   return renderSection1();
 };
 
-export default AccountSavelists;

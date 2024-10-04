@@ -1,3 +1,4 @@
+//src/componets/ProductCard.tsx
 "use client";
 
 import React, { FC, useState } from "react";
