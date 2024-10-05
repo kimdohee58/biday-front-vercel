@@ -9,13 +9,53 @@ import {RootState} from "@/lib/store";
 import {useDispatch, useSelector} from "react-redux";
 import Postcode from "@/components/Postcode";
 import {addAddress, setAddresses} from "@/lib/features/address.slice";
-import {getUser} from "@/lib/features/user.slice";
+import {getToken, getUser, saveUser} from "@/lib/features/user.slice";
 import {initialUser} from "@/model/UserModel";
+import {updateUser} from "@/service/user/user.api";
 
 export default function AccountPage() {
-    // const user = useSelector(getUser); // Redux에 저장된 유저 정보 가져오기
-    const user = useSelector((state: RootState) => state.user.user || initialUser);  // Redux에서 유저 정보 가져오기
-    const dispatch = useDispatch(); // 그러면 여기에서 유즈이팩을 사용을 해서, 새로고침을 하더라도 정보가 안날아가게.
+    const user = useSelector((state: RootState) => state.user.user || initialUser);
+    const dispatch = useDispatch();
+
+    const [name, setName] = useState(user.name);
+    const [email, setEmail] = useState(user.email);
+    const [phoneNum, setPhoneNum] = useState(user.phoneNum);
+    const [selectedAddress, setSelectedAddress] = useState<string>(
+        user.addresses?.[0]?.address1 || ""
+    );    const [showPostcode, setShowPostcode] = useState(false);
+    const token = useSelector(getToken);  // Redux에서 token 가져오기
+
+    const handleUpdate = async () => {
+        const updatedUser = {
+            ...user,
+            name,
+            email,
+            phoneNum,
+            addresses: [
+                {
+                    address1: selectedAddress || "",  // 필수 입력값이므로 빈 문자열 처리
+                    address2: user.addresses?.[0]?.address2 || "",  // 기존 값 유지 또는 빈 문자열
+                    zipcode: user.addresses?.[0]?.zipcode || "",  // 기존 값 유지 또는 빈 문자열
+                    type: user.addresses?.[0]?.type || "home",  // 기본값 설정
+                    pick: user.addresses?.[0]?.pick || false,  // 기본값 설정
+                    userId: user.id || "",  // 유저 ID 유지
+                },
+            ],
+        };
+
+        try {
+            if (user.id && token) {  // token을 Redux에서 가져옴
+                await updateUser(user.id, updatedUser);  // 서버에 업데이트 요청
+                dispatch(saveUser({ user: updatedUser, token: token }));  // Redux 상태 업데이트
+                alert('회원 정보가 성공적으로 수정되었습니다.');
+            } else {
+                throw new Error("유저 ID 또는 토큰이 없습니다.");
+            }
+        } catch (error) {
+            console.error('회원 정보 수정 실패:', error);
+            alert('회원 정보 수정 중 오류가 발생했습니다.');
+        }
+    };
 
     // 유즈이팩트 내부의 코드를 특정한ㅇ 객체, 특정 페이지가 렌더링이 될 때 사용하는거다. 마운트 주기를 맞출려고 하는거다.
     // 데이터랑 컴포넌트의 마운팅을 맞추기 위해서 유즈이팩트를 사용을 하는거다.
@@ -27,25 +67,21 @@ export default function AccountPage() {
         }
     }, [user]);
 
-    const [showPostcode, setShowPostcode] = useState(false);
-    const [selectedAddress, setSelectedAddress] = useState<string>("");
 
     // 주소 선택 완료 후 처리하는 함수
     const handleAddressComplete = (data: any) => {
-        setSelectedAddress(data.address); // 주소 검색 결과에서 주소 선택
+        setSelectedAddress(data.address); // 주소 검색 결과에서 선택한 주소 저장
         setShowPostcode(false); // 주소 검색 창 닫기
 
-        dispatch(addAddress({ // 주소 추가 액션 호출
+        // 선택된 주소를 Redux에 저장할 수도 있음
+        dispatch(addAddress({
             address1: data.address,
             zipcode: data.zonecode,
             type: 'home',
             pick: false,
-            userId: user?.id || ''
+            userId: user.id || ''
         }));
     };
-
-
-
 
     return (
         <div className={`nc-AccountPage`}>

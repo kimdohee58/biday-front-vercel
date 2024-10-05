@@ -1,8 +1,8 @@
 //src/app/login/page.tsx
 "use client";
 
-import React, { useState, FormEvent } from 'react';
-import { useRouter } from 'next/navigation';
+import React, {useState, FormEvent} from 'react';
+import {useRouter} from 'next/navigation';
 import facebookSvg from "@/images/Facebook.svg";
 import twitterSvg from "@/images/Twitter.svg";
 import googleSvg from "@/images/Google.svg";
@@ -11,14 +11,16 @@ import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import Image from "next/image";
 import Link from "next/link";
 import {useLogin} from "@/hooks/useLogin";
+import btnG_official from "@/images/btnG_official.png";
+import { handleNaverInit } from '@/hooks/useNaverInit';
 
 // 소셜 로그인 버튼 데이터
 const loginSocials = [
-    /*{
-      name: "Continue with Naver",
-      href: "#",
-      icon: naverSvg,
-    },*/
+    {
+        name: "onNaverLogin",
+        href: "http://localhost:8080/oauth2/authorization/naver",
+        icon: btnG_official,
+    },
     {
         name: "Continue with Facebook src/app/login/page.tsx",
         href: "#",
@@ -36,18 +38,18 @@ const loginSocials = [
     },
 ];
 
-export default function PageLogin(){
+export default function PageLogin() {
     // 상태 관리
     const [email, setEmail] = useState<string>('');  // 사용자 입력은 이메일로 받음
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
-    const { login } = useLogin();
+    const {login} = useLogin();
 
-
+    handleNaverInit();
 
     // 입력 값 변경 처리 함수
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         if (name === 'email') {
             setEmail(value);
         } else if (name === 'password') {
@@ -64,7 +66,7 @@ export default function PageLogin(){
             await login(email, password);
         } catch (err) {
             setError("Login failed. Please check your email or password.");  // 에러 상태 업데이트
-            console.log("실패다." , err)
+            console.log("실패다.", err)
         }
     };
 
@@ -83,12 +85,15 @@ export default function PageLogin(){
                             <a
                                 key={index}
                                 href={item.href}
-                                className="flex w-full rounded-lg bg-primary-50 dark:bg-neutral-800 px-4 py-3 transform transition-transform sm:px-6 hover:translate-y-[-2px]"
+                                className="flex w-full rounded-lg bg-primary-50 dark:bg-neutral-700 px-4 py-3 transform transition-transform sm:px-6 hover:translate-y-[-2px]"
+                                id={item.name === "Continue with Naver" ? "naverIdLogin" : ""}
                             >
                                 <Image
                                     className="flex-shrink-0"
                                     src={item.icon}
                                     alt={item.name}
+                                    width={24} // 너비 조정
+                                    height={24} // 높이 조정
                                     sizes="40px"
                                 />
                                 <h3 className="flex-grow text-center text-sm font-medium text-neutral-700 dark:text-neutral-300 sm:text-sm">
@@ -100,10 +105,12 @@ export default function PageLogin(){
 
                     {/* OR */}
                     <div className="relative text-center">
-            <span className="relative z-10 inline-block px-4 font-medium text-sm bg-white dark:text-neutral-400 dark:bg-neutral-900">
+            <span
+                className="relative z-10 inline-block px-4 font-medium text-sm bg-white dark:text-neutral-400 dark:bg-neutral-900">
               OR
             </span>
-                        <div className="absolute left-0 w-full top-1/2 transform -translate-y-1/2 border border-neutral-100 dark:border-neutral-800"></div>
+                        <div
+                            className="absolute left-0 w-full top-1/2 transform -translate-y-1/2 border border-neutral-100 dark:border-neutral-800"></div>
                     </div>
 
                     {/* 로그인 폼 */}
@@ -148,6 +155,7 @@ export default function PageLogin(){
             New user? {` `}
                         <Link className="text-green-600" href="/signup">
               Create an account
+
             </Link>
           </span>
                 </div>

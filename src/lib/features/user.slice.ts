@@ -10,14 +10,9 @@ export interface UserState {
 }
 
 const initialState: UserState = {
-    //user : {},
-    user: initialUser, // 빈 객체 대신 initialUser로 초기화를 해야 함.
-    // 빈 객체를 사용을 하면 {} 내부에서 undefined 오류가 발생할 수 있다.
-    // 타입 안전성 : initialUser 로 초기값을 주면 해당 값이 UserModel 타입을 확실히 따르기 때문에,
-    // 예상치 못한 <타입>오류를 방지할 수 있다.
+    user: initialUser,
     token:null,
 };
-
 
 // saveUser 메서드(액션)는 유저 정보와 토큰을 한 번에 저장을 한다.
 const userSlice = createSlice({
@@ -25,18 +20,19 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         saveUser: (state, action: PayloadAction<{ user: UserModel, token: string }>) => {
-            state.user = action.payload.user; // 유저 정보 저장.
-            state.token = action.payload.token; // 토큰도 저장
+            state.user = action.payload.user;  // 유저 정보 저장
+            state.token = action.payload.token;  // 토큰 저장
         },
         clearUser: (state) => {
-            state.user = initialUser; // 유저 정보 초기화
-            state.token = null; // 로그아웃 시 토큰 제거
-        }
-    }
+            state.user = initialUser;  // 유저 정보 초기화
+            state.token = null;  // 토큰 초기화
+        },
+    },
 });
 
 export const getUser = (state: RootState) => state.user;
 export const {saveUser, clearUser} = userSlice.actions;
+export const getToken = (state: RootState) => state.user.token;
 export default userSlice.reducer;
 
 

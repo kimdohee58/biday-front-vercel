@@ -1,14 +1,13 @@
 // src/hooks/useLogin.ts
-"use client";
 
 import { useRouter } from 'next/navigation'; // next/navigation에서 useRouter 임포트
-import { saveToken } from '@/utils/cookie/cookie.api';
 import { useDispatch } from 'react-redux';
 import {saveUser, UserState} from '@/lib/features/user.slice';
 import { handleLogin } from '@/service/user/login.api';
 import {findUserById} from "@/service/user/user.api";
 import {initialUser, UserModel} from "@/model/UserModel";  // API 호출을 임포트
-import jwtDecode from 'jwt-decode';
+import { extractUserInfoFromToken } from '@/utils/jwt.utils';
+import {saveToken} from "@/utils/cookie/cookie.api";
 
 export const useLogin = () => {
     const dispatch = useDispatch();
@@ -22,16 +21,18 @@ export const useLogin = () => {
                 // Authorization 헤더에서 토큰 추출
                 const authorizationHeader = response.headers.get("Authorization");
 
+                console.log("authorizationHeader 들어오는 확인 하는 코드 :  ", authorizationHeader)
                 if (authorizationHeader) {
                     const token = authorizationHeader.split(" ")[1]; // Bearer {token} 형태이므로 토큰만 추출
-                    console.log("Access Token:", token);
 
                     // 토큰 저장 (쿠키 또는 로컬 스토리지)
                     saveToken(token);
 
+                    // jwt.utils.ts에서 작성한 함수 사용
+                    const { id, name, role } = extractUserInfoFromToken(token);
+                    console.log("페이로드 한 유저 정보 저장 jwt.utils.ts: ", id, name, role);
 
-                    // 토큰을 통해 유저 ID 추출
-                    // JWT 디코딩을 통해 ID 추출 필요
+                    // 토큰에서 유저 정보 추출 (userId,name,role)
                     const userId = extractUserIdFromToken(token);  // JWT 토큰에서 userId 추출
                     console.log("JWT 토큰에서 userId 쪼개기 : ", userId);
 
@@ -48,12 +49,12 @@ export const useLogin = () => {
                                 phoneNum: user.phoneNum,  // 백엔드에서 받은 phone
                                 status: user.status ? String(user.status) : '',  // boolean인 status를 문자열로 변환
                         };
-                        console.log("백엔드에서 받은 유저 정보 : ", user);
 
                         // Redux store에 유저 정보를 저장
                         dispatch(saveUser({ user: userData, token }));  // 유저 정보와 토큰을 Redux에 저장
                         console.log("유저 정보 Redux에 저장 완료:", userData);
                         console.log("유저 정보 토큰 리덕스에 저장 했는지 확인 : ", userData, token);
+                        console.log("이메일 있는지 확인 ;  ", userData.email); // 개발자 모드 콘솔에 user4@naver.com 값이 나와
                     }
 
                     // 로그인 성공 후 메인 페이지로 리다이렉트
@@ -63,18 +64,12 @@ export const useLogin = () => {
                 }
             }
         } catch (error) {
-            console.error("로그인 중 에러 발생:", error);
+            console.error("서버랑 연결이 안됨. userLogin.ts:", error);
         }
     };
 
     return { login };
 };
-
-//const jwtDecode = require('jwt-decode');
-//const token = "eyJhbGciOiJIUzUxMiJ9.eyJjYXRlZ29yeSI6ImFjY2VzcyIsImlkIjoiNjZmNjhkZjUxMGMzY2UwNzU3MjI4ZTVlIiwicm9sZSI6IlJPTEVfVVNFUiIsIm5hbWUiOiLtmY3quLjrj5kiLCJpYXQiOjE3Mjc3NDM4MTksImV4cCI6MTcyNzc0NDQxOX0.1OKnyKKKBNzPxpDjmnBmfkzhd64zwDLh3QS-4-lx8xXhWLoXG3WdW6mT3HMIAR6yrtzDzfRm7_zz3MiY_0AHcg";
-//const decoded = jwtDecode(token);
-//console.log("ㅁㄴㅇ라ㅣ;ㅓㅁㄴ이;ㅏ런아ㅣ;럼ㄴ아ㅣ;러ㅏㅣ;ㅁ라ㅓㅣ;ㅁㄴㅈㄹ", decoded);
-
 // JWT 토큰에서 유저 ID 추출 함수
 const extractUserIdFromToken = (token: string): string => {
     // JWT 토큰을 디코딩하여 payload에서 유저 ID를 추출하는 코드
@@ -120,7 +115,6 @@ const extractUserIdFromToken = (token: string): string => {
 // 무심하게 빠르게
 
 // 주영씨거 API, Service
-
 
 // 금욜날 프론트 되는거 합쳐서 테스트 해보자.
 

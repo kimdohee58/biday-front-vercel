@@ -1,11 +1,7 @@
 "use client";
 
 import React, {Suspense, useEffect, useState} from "react";
-import {
-    NoSymbolIcon,
-    ClockIcon,
-    SparklesIcon,
-} from "@heroicons/react/24/outline";
+import {ClockIcon, NoSymbolIcon, SparklesIcon,} from "@heroicons/react/24/outline";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
 import NcImage from "@/shared/NcImage/NcImage";
@@ -22,15 +18,20 @@ import toast from "react-hot-toast";
 import {StarIcon} from "@heroicons/react/24/solid";
 import SectionSliderProductCard from "@/components/SectionSliderProductCard";
 import NotifyAddTocart from "@/components/NotifyAddTocart";
-import Image, {StaticImageData} from "next/image";
+import {StaticImageData} from "next/image";
 import LikeSaveBtns from "@/components/LikeSaveBtns";
 import AccordionInfo from "@/components/AccordionInfo";
 import ListingImageGallery from "@/components/listing-image-gallery/ListingImageGallery";
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import {usePathname, useRouter} from "next/navigation";
 import {Route} from "next";
-import {ProductModel} from "@/model/ProductModel";
-import {AwardModel} from "@/model/AwardModel";
-import HighestBid from "@/app/auction/[id]/HigestBid";
+import {fetchAuction} from "@/service/auction/auction.api";
+import {useMutation, useQuery} from "@tanstack/react-query";
+import {fetchImage} from "@/service/image/image.api";
+import {ImageType} from "@/model/ImageModel";
+import {fetchProduct} from "@/service/product/product.api";
+import {BidModel, BidStreamModel} from "@/model/BidModel";
+import {saveBid} from "@/api/bid/bid.api";
+import {insertBid} from "@/service/bid/bid.api";
 
 const LIST_IMAGES_GALLERY_DEMO: (string | StaticImageData)[] = [
     detail21JPG,
@@ -50,20 +51,89 @@ const LIST_IMAGES_GALLERY_DEMO: (string | StaticImageData)[] = [
 const PRICE = 108;
 
 
-export default function AuctionDetailPage({params}: { params: { id: string }, product: ProductModel}) {
+
+export default function AuctionDetailPage({params}: { params: { id: string }}) {
+
 
     /**
      * 해당 auction 의 bid 도 불러와야 됨.
      * auction bid 개수
      */
 
+        // 옥셔션에서 불러올 것
+
+    const auctionInfo = useQuery({queryKey: ["auction"], queryFn: () => fetchAuction(Number(params.id))});
+
+    // const auctionImage = useQuery({queryKey: ["image"], queryFn: () => fetchImage(params.id, ImageType.AUCTION)});
+
+    // const product = useQuery({queryKey: ["product"], queryFn: () => fetchProduct()})
+
+    if (!!auctionInfo.data) {
+        console.log("불러온 옥션 id", auctionInfo.data.id);
+    }
+
+    // 이미지
+
     const {sizes, variants, status, allOfSizes, image} = PRODUCTS[0];
+
 
     const [message, setMessage] = useState();
 
     const bidUrl = `${[process.env.NEXT_PUBLIC_API_SERVER_URL]}/api/bids/stream?auctionid=${Number(params.id)}`
 
     const [currentBid, setCurrentBid] = useState();
+
+    const [highestBid, setHighestBid] = useState<number>();
+    const [adjustBid, setAdjustBid] = useState<number>();
+
+    const renderHighestBid = () => {
+
+        const url = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/bids/stream?auctionId=${Number(params.id)}`;
+        useEffect(() => {
+            console.log("useEffect 진입");
+
+            const eventSource = new EventSource(url);
+
+            eventSource.addEventListener("message", (event: MessageEvent) => {
+                console.log("입찰 데이터 수신 완료, 데이터:", event.data);
+                try {
+                    const bidStream: BidStreamModel = JSON.parse(event.data);
+                    setHighestBid(bidStream.currentBid);
+                    setAdjustBid(bidStream.currentBid + 4000);
+                    console.log("adjustBid", adjustBid);
+                } catch (error) {
+                    console.error("SSE 데이터 파싱 중 오류 발생", error);
+                }
+            });
+
+            eventSource.addEventListener("open", () => {
+                console.log("SSE 연결 완료");
+            });
+
+            eventSource.addEventListener("error", () => {
+                console.error("SSE 오류 발생");
+                if (eventSource.readyState === EventSource.CLOSED) {
+                    console.log("연결 종료");
+                }
+            });
+
+            return () => {
+                console.log("연결 종료")
+                eventSource.close();
+            };
+
+        }, [params.id]);
+
+        useEffect(() => {
+            if (highestBid !== undefined) {
+                console.log("최고입찰가 갱신", highestBid);
+            }
+        }, [highestBid]);
+
+        return <div>{highestBid}</div>;
+    }
+
+
 
 
     const router = useRouter();
@@ -104,7 +174,25 @@ export default function AuctionDetailPage({params}: { params: { id: string }, pr
         );
     };
 
-    const notifyAddTocart = () => {
+    const mutation = useMutation({
+        mutationFn: insertBid
+    });
+
+    const onClickBidButton = () => {
+        if (!adjustBid) {
+            return;
+        }
+
+        const currentBid = adjustBid;
+
+        const bidData: BidModel = {
+            auctionId: Number(params.id),
+            userId: "1", // 준한오빠한테 듣고 수정
+            currentBid: currentBid,
+        }
+
+        mutation.mutate(bidData);
+
         toast.custom(
             (t) => (
                 <NotifyAddTocart
@@ -140,35 +228,6 @@ export default function AuctionDetailPage({params}: { params: { id: string }, pr
                     >
                         See sizing chart
                     </a>
-                </div>
-                <div className="grid grid-cols-4 gap-2 mt-3">
-                    {allOfSizes.map((size, index) => {
-                        const isActive = size === sizeSelected;
-                        const sizeOutStock = !sizes.includes(size);
-                        return (
-                            <div
-                                key={index}
-                                className={`relative h-10 sm:h-11 rounded-2xl border flex items-center justify-center 
-                text-sm sm:text-base uppercase font-semibold select-none overflow-hidden z-0 ${
-                                    sizeOutStock
-                                        ? "text-opacity-20 dark:text-opacity-20 cursor-not-allowed"
-                                        : "cursor-pointer"
-                                } ${
-                                    isActive
-                                        ? "bg-primary-6000 border-primary-6000 text-white hover:bg-primary-6000"
-                                        : "border-slate-300 dark:border-slate-600 text-slate-900 dark:text-slate-200 hover:bg-neutral-50 dark:hover:bg-neutral-700"
-                                }`}
-                                onClick={() => {
-                                    if (sizeOutStock) {
-                                        return;
-                                    }
-                                    setSizeSelected(size);
-                                }}
-                            >
-                                {size}
-                            </div>
-                        );
-                    })}
                 </div>
             </div>
         );
@@ -224,10 +283,9 @@ export default function AuctionDetailPage({params}: { params: { id: string }, pr
                         {/* ---------- 1 HEADING ----------  */}
                         <div className="flex items-center justify-between space-x-5">
                             <div className="flex text-2xl font-semibold">
-                                {HighestBid(params.id)}원
+                                {renderHighestBid()}원
                             </div>
                             <a
-                                href="#reviews"
                                 className="flex items-center text-sm font-medium"
                             >
                                 <div className="">
@@ -236,8 +294,8 @@ export default function AuctionDetailPage({params}: { params: { id: string }, pr
                                 <span className="ml-1.5 flex">
                   <span>4.9 </span>
                   <span className="mx-1.5">·</span>
-                  <span className="text-slate-700 dark:text-slate-400 underline">
-                    142 reviews
+                  <span className="text-slate-700 dark:text-slate-400">
+                    {auctionInfo.data? `${auctionInfo.data.count} 입찰` : "진행중"}
                   </span>
                 </span>
                             </a>
@@ -253,42 +311,15 @@ export default function AuctionDetailPage({params}: { params: { id: string }, pr
                     <div className="flex space-x-3.5">
                         <div
                             className="flex items-center justify-center bg-slate-100/70 dark:bg-slate-800/70 px-2 py-3 sm:p-3.5 rounded-full">
-                            <NcInputNumber
-                                defaultValue={qualitySelected}
-                                onChange={setQualitySelected}
-                            />
+                            {adjustBid ? `${adjustBid}` : "15000"}
                         </div>
                         <ButtonPrimary
                             className="flex-1 flex-shrink-0"
-                            onClick={notifyAddTocart}
+                            onClick={onClickBidButton}
                         >
                             <BagIcon className="hidden sm:inline-block w-5 h-5 mb-0.5"/>
                             <span className="ml-3">입찰 참여</span>
                         </ButtonPrimary>
-                    </div>
-
-                    {/* SUM */}
-                    <div className="hidden sm:flex flex-col space-y-4 ">
-                        <div className="space-y-2.5">
-                            <div className="flex justify-between text-slate-600 dark:text-slate-300">
-                <span className="flex">
-                  <span>{`$${PRICE.toFixed(2)}  `}</span>
-                  <span className="mx-2">x</span>
-                  <span>{`${qualitySelected} `}</span>
-                </span>
-
-                                <span>{`$${(PRICE * qualitySelected).toFixed(2)}`}</span>
-                            </div>
-                            <div className="flex justify-between text-slate-600 dark:text-slate-300">
-                                <span>Tax estimate</span>
-                                <span>$0</span>
-                            </div>
-                        </div>
-                        <div className="border-b border-slate-200 dark:border-slate-700"></div>
-                        <div className="flex justify-between font-semibold">
-                            <span>Total</span>
-                            <span>{`$${(PRICE * qualitySelected).toFixed(2)}`}</span>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -343,81 +374,9 @@ export default function AuctionDetailPage({params}: { params: { id: string }, pr
                 <h2 className="text-2xl font-semibold">Product details</h2>
                 {/* <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div> */}
                 <div className="prose prose-sm sm:prose dark:prose-invert sm:max-w-4xl">
-                    <p>
-                        The patented eighteen-inch hardwood Arrowhead deck --- finely
-                        mortised in, makes this the strongest and most rigid canoe ever
-                        built. You cannot buy a canoe that will afford greater satisfaction.
-                    </p>
-                    <p>
-                        The St. Louis Meramec Canoe Company was founded by Alfred Wickett in
-                        1922. Wickett had previously worked for the Old Town Canoe Co from
-                        1900 to 1914. Manufacturing of the classic wooden canoes in Valley
-                        Park, Missouri ceased in 1978.
-                    </p>
-                    <ul>
-                        <li>Regular fit, mid-weight t-shirt</li>
-                        <li>Natural color, 100% premium combed organic cotton</li>
-                        <li>
-                            Quality cotton grown without the use of herbicides or pesticides -
-                            GOTS certified
-                        </li>
-                        <li>Soft touch water based printed in the USA</li>
-                    </ul>
+                    {auctionInfo.data?.description}
                 </div>
                 {/* ---------- 6 ----------  */}
-            </div>
-        );
-    };
-
-    const renderReviews = () => {
-        return (
-            <div id="reviews" className="scroll-mt-[150px]">
-                {/* HEADING */}
-                <h2 className="text-2xl font-semibold flex items-center">
-                    <StarIcon className="w-7 h-7 mb-0.5"/>
-                    <span className="ml-1.5"> 4,87 · 142 Reviews</span>
-                </h2>
-
-                {/* comment */}
-                <div className="mt-10">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-y-11 gap-x-28">
-                        <ReviewItem/>
-                        <ReviewItem
-                            data={{
-                                comment: `I love the charcoal heavyweight hoodie. Still looks new after plenty of washes. 
-                  If you’re unsure which hoodie to pick.`,
-                                date: "December 22, 2021",
-                                name: "Stiven Hokinhs",
-                                starPoint: 5,
-                            }}
-                        />
-                        <ReviewItem
-                            data={{
-                                comment: `The quality and sizing mentioned were accurate and really happy with the purchase. Such a cozy and comfortable hoodie. 
-                Now that it’s colder, my husband wears his all the time. I wear hoodies all the time. `,
-                                date: "August 15, 2022",
-                                name: "Gropishta keo",
-                                starPoint: 5,
-                            }}
-                        />
-                        <ReviewItem
-                            data={{
-                                comment: `Before buying this, I didn't really know how I would tell a "high quality" sweatshirt, but after opening, I was very impressed. 
-                The material is super soft and comfortable and the sweatshirt also has a good weight to it.`,
-                                date: "December 12, 2022",
-                                name: "Dahon Stiven",
-                                starPoint: 5,
-                            }}
-                        />
-                    </div>
-
-                    <ButtonSecondary
-                        onClick={() => setIsOpenModalViewAllReviews(true)}
-                        className="mt-10 border border-slate-300 dark:border-slate-700 "
-                    >
-                        Show me all 142 reviews
-                    </ButtonSecondary>
-                </div>
             </div>
         );
     };
@@ -533,10 +492,6 @@ export default function AuctionDetailPage({params}: { params: { id: string }, pr
 
             {/* OTHER SECTION */}
             <div className="container pb-24 lg:pb-28 pt-14 space-y-14">
-                <hr className="border-slate-200 dark:border-slate-700"/>
-
-                {renderReviews()}
-
                 <hr className="border-slate-200 dark:border-slate-700"/>
 
                 <SectionSliderProductCard
