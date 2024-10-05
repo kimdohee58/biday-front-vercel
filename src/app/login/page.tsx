@@ -18,7 +18,7 @@ import { handleNaverInit } from '@/hooks/useNaverInit';
 const loginSocials = [
     {
         name: "onNaverLogin",
-        href: "http://localhost:8080/oauth2/authorization/naver",
+        href: `${process.env.NEXT_PUBLIC_API_SERVER_URL}/oauth2/authorization/naver`,
         icon: btnG_official,
     },
     {

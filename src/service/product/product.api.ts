@@ -188,3 +188,37 @@ export async function fetchAllProducts(): Promise<ProductModel[]> {
         throw new Error("상품 전체 정보 로드 실패");
     }
 }
+
+// 하나 불러오기
+export async function fetchProductOne(id:number) {
+
+    try {
+
+        const url = baseUrl+`/findOne?id=${id}`;
+
+
+        const response = await fetch(url, {cache: "no-store"});
+
+        console.log("확인용",response.ok);
+
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log("지금 만든 최신 확인", data);
+            return data;
+
+        } else {
+            console.log("실패")
+            const data = await response.json();
+            console.log("실패인 경우", data);
+            return {...data, id: 0}
+
+        }
+
+
+    } catch (error) {
+        console.error("상품 데이터 로드 중 오류 발생", error);
+        throw new Error("상품 데이터 로드 실패");
+
+    }
+}

@@ -34,8 +34,6 @@ const notoSans = Noto_Sans_KR({
 
 const store = makeStore();
 
-const store = makeStore();
-
 export default function RootLayout({
                                        children,
                                        params,

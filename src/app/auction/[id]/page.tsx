@@ -28,7 +28,7 @@ import {fetchAuction} from "@/service/auction/auction.api";
 import {useMutation, useQuery} from "@tanstack/react-query";
 import {fetchImage} from "@/service/image/image.api";
 import {ImageType} from "@/model/ImageModel";
-import {fetchProduct} from "@/service/product/product.api";
+import {fetchProduct, fetchProductOne} from "@/service/product/product.api";
 import {BidModel, BidStreamModel} from "@/model/BidModel";
 import {saveBid} from "@/api/bid/bid.api";
 import {insertBid} from "@/service/bid/bid.api";
@@ -66,7 +66,7 @@ export default function AuctionDetailPage({params}: { params: { id: string }}) {
 
     // const auctionImage = useQuery({queryKey: ["image"], queryFn: () => fetchImage(params.id, ImageType.AUCTION)});
 
-    // const product = useQuery({queryKey: ["product"], queryFn: () => fetchProduct()})
+    const product = useQuery({queryKey: ["product"], queryFn: () => fetchProductOne(1)})
 
     if (!!auctionInfo.data) {
         console.log("불러온 옥션 id", auctionInfo.data.id);
@@ -185,9 +185,11 @@ export default function AuctionDetailPage({params}: { params: { id: string }}) {
 
         const currentBid = adjustBid;
 
-        const bidData: BidModel = {
+        const bidData = {
             auctionId: Number(params.id),
-            userId: "1", // 준한오빠한테 듣고 수정
+            userId: "66f68ebf2bd718301c69f1e5",
+            userName: "shull",
+            userRole: "ROLE_USER",
             currentBid: currentBid,
         }
 
