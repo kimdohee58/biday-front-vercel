@@ -112,6 +112,10 @@ export async function changepass(user: UserModel): Promise<Response> {
         password: user.password, // 기존 비밀번호
         newPassword : user.newPassword // 새로운 비밀번호
     };
+    console.log("asdflfdsjal  : email" , user.email)
+    console.log("asdflfdsjal  : password" , user.password)
+    console.log("asdflfdsjal  : new" , user.newPassword)
+    console.log("asldf;dsafjlks : " , body)
 
     try {
         const response = await apiRequest(`/changepass`, "PATCH", body);
@@ -140,7 +144,7 @@ export const logoutUser = async (): Promise<void> => {
     const tokenValue = refreshToken ? refreshToken.split('=')[1] : '';
 
     try {
-        const response = await fetch("http://localhost:8080/logout", {
+        const response = await fetch("http://localhost:8000/logout", {
             method: "POST",
             credentials: 'include',
             headers: {

@@ -12,13 +12,13 @@ import Image from "next/image";
 import Link from "next/link";
 import {useLogin} from "@/hooks/useLogin";
 import btnG_official from "@/images/btnG_official.png";
-import { handleNaverInit } from '@/hooks/useNaverInit';
+import {handleNaverCallback} from "@/hooks/useNaverInit";
 
 // 소셜 로그인 버튼 데이터
 const loginSocials = [
     {
-        name: "onNaverLogin",
-        href: "http://localhost:8080/oauth2/authorization/naver",
+        name: "Continue with Naver",
+        href: "http://localhost:8000/oauth2/authorization/naver",
         icon: btnG_official,
     },
     {
@@ -44,8 +44,8 @@ export default function PageLogin() {
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
     const {login} = useLogin();
+    handleNaverCallback(); // 네이버 로그인 초기화
 
-    handleNaverInit();
 
     // 입력 값 변경 처리 함수
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,7 +86,9 @@ export default function PageLogin() {
                                 key={index}
                                 href={item.href}
                                 className="flex w-full rounded-lg bg-primary-50 dark:bg-neutral-700 px-4 py-3 transform transition-transform sm:px-6 hover:translate-y-[-2px]"
+/*
                                 id={item.name === "Continue with Naver" ? "naverIdLogin" : ""}
+*/
                             >
                                 <Image
                                     className="flex-shrink-0"
