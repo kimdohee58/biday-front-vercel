@@ -84,6 +84,7 @@ const SidebarFilters = () => {
 
   //
 
+/*사이드 바 태크 카테코리 */
   // OK
   const renderTabsCategories = () => {
     return (
@@ -237,7 +238,7 @@ const SidebarFilters = () => {
 
   return (
     <div className="divide-y divide-slate-200 dark:divide-slate-700">
-      {renderTabsCategories()}
+      {/*{renderTabsCategories()}
       {renderTabsColor()}
       {renderTabsSize()}
       {renderTabsPriceRage()}
@@ -249,7 +250,7 @@ const SidebarFilters = () => {
           onChange={setIsIsOnSale}
         />
       </div>
-      {renderTabsSortOrder()}
+      {renderTabsSortOrder()}*/}
     </div>
   );
 };

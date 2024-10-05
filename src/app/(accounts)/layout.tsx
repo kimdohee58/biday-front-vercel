@@ -15,24 +15,24 @@ const pages: {
   link: Route;
 }[] = [
   {
-    name: "Account info",
+    name: "정보관리",
     link: "/account",
   },
   {
-    name: "Save lists",
+    name: "찜 관리",
     link: "/account-savelists",
   },
   {
-    name: " My order",
+    name: "주문 내역",
     link: "/account-order",
   },
   {
-    name: "Change password",
+    name: "비밀번호 변경",
     link: "/account-password",
   },
   {
-    name: "Change Billing",
-    link: "/account-billing",
+    name: "판매자 등록",
+    link: "/account-seller",
   },
 ];
 
@@ -44,12 +44,10 @@ const CommonLayout: FC<CommonLayoutProps> = ({ children }) => {
       <div className="mt-14 sm:mt-20">
         <div className="max-w-4xl mx-auto">
           <div className="max-w-2xl">
-            <h2 className="text-3xl xl:text-4xl font-semibold">Account</h2>
+            <h2 className="text-3xl xl:text-4xl font-semibold">마이 페이지</h2>
             <span className="block mt-4 text-neutral-500 dark:text-neutral-400 text-base sm:text-lg">
               <span className="text-slate-900 dark:text-slate-200 font-semibold">
-                Enrico Cole,
               </span>{" "}
-              ciseco@gmail.com · Los Angeles, CA
             </span>
           </div>
           <hr className="mt-10 border-slate-200 dark:border-slate-700"></hr>

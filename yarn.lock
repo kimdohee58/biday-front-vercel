@@ -7,6 +7,37 @@
   resolved "https://registry.yarnpkg.com/@alloc/quick-lru/-/quick-lru-5.2.0.tgz#7bf68b20c0a350f936915fcae06f58e32007ce30"
   integrity sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==
 
+"@amcharts/amcharts5@^5.10.5":
+  version "5.10.5"
+  resolved "https://registry.yarnpkg.com/@amcharts/amcharts5/-/amcharts5-5.10.5.tgz#86c795bb2bd8c54fa432777bc6d3f58f6b0eb691"
+  integrity sha512-R3ltwLBVMuBlfWX5edSFf/6edp7mGf8TJavdDA9ZYfCifJBB/0iKPApAosOGhLGvVBERHn5MCRBckVJpIQpkYw==
+  dependencies:
+    "@types/d3" "^7.0.0"
+    "@types/d3-chord" "^3.0.0"
+    "@types/d3-hierarchy" "3.1.1"
+    "@types/d3-sankey" "^0.11.1"
+    "@types/d3-shape" "^3.0.0"
+    "@types/geojson" "^7946.0.8"
+    "@types/polylabel" "^1.0.5"
+    "@types/svg-arc-to-cubic-bezier" "^3.2.0"
+    d3 "^7.0.0"
+    d3-chord "^3.0.0"
+    d3-force "^3.0.0"
+    d3-geo "^3.0.0"
+    d3-hierarchy "^3.0.0"
+    d3-sankey "^0.12.3"
+    d3-selection "^3.0.0"
+    d3-shape "^3.0.0"
+    d3-transition "^3.0.0"
+    d3-voronoi-treemap "^1.1.2"
+    flatpickr "^4.6.9"
+    markerjs2 "^2.29.4"
+    pdfmake "^0.2.2"
+    polylabel "^1.1.0"
+    seedrandom "^3.0.5"
+    svg-arc-to-cubic-bezier "^3.2.0"
+    tslib "^2.2.0"
+
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.24.7":
   version "7.24.7"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.24.7.tgz#882fd9e09e8ee324e496bd040401c6f046ef4465"

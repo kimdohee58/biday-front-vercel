@@ -1,3 +1,4 @@
+//src/app/cart/page.tsx
 import { NoSymbolIcon, CheckIcon } from "@heroicons/react/24/outline";
 import NcInputNumber from "@/components/NcInputNumber";
 import Prices from "@/components/Prices";
@@ -5,8 +6,9 @@ import { Product, PRODUCTS } from "@/data/data";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import Image from "next/image";
 import Link from "next/link";
+import { RootState } from "@/lib/store";
 
-const CartPage = () => {
+export default function CartPage(){
   const renderStatusSoldout = () => {
     return (
       <div className="rounded-full flex items-center justify-center px-2.5 py-1.5 text-xs text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
@@ -305,4 +307,3 @@ const CartPage = () => {
   );
 };
 
-export default CartPage;

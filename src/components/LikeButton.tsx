@@ -7,11 +7,12 @@ export interface LikeButtonProps {
   liked?: boolean;
 }
 
-const LikeButton: React.FC<LikeButtonProps> = ({
-  className = "",
-  liked = false,
-}) => {
+const LikeButton: React.FC<LikeButtonProps> = ({className = "", liked = false,}) => {
   const [isLiked, setIsLiked] = useState(liked);
+
+  const onClickWish = () => {
+
+  };
 
   // make random for demo
   useEffect(() => {

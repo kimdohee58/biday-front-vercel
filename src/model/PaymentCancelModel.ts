@@ -1,4 +1,4 @@
-interface PaymentCancelModel {
+export interface PaymentCancelModel {
     transactionKey: string;
     cancelReason: string;
     canceledAt: string;

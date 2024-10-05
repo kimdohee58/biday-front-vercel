@@ -1,4 +1,4 @@
-interface PaymentCardModel {
+export interface PaymentCardModel {
     issueName: string;
     issueCode: string;
     installmentPlanMonths: number;

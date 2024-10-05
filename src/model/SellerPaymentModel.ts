@@ -1,4 +1,4 @@
-interface SellerPaymentModel {
+export interface SellerPaymentModel {
     id?: number;
     payment: PaymentModel;
     transactionId: number;
