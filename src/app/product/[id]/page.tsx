@@ -18,6 +18,7 @@ import {ProductModel} from "@/model/ProductModel";
 import {Route} from "@/routers/types";
 import {fetchImage} from "@/service/image/image.api";
 import {ImageModel} from "@/model/ImageModel";
+import Link from "next/link";
 
 
 export default async function ProductDetailPage({params}: { params: { id: string | string[]; }; }) {
@@ -67,24 +68,26 @@ export default async function ProductDetailPage({params}: { params: { id: string
                     {auctions.map((auction: AuctionModel) => (
                         <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
                             key={auction.id}>
-                            <th scope="row"
-                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                {getColor()}
-                            </th>
-                            <td className="px-6 py-4">
-                                {auction.size}
-                            </td>
-                            <td className="px-6 py-4">
-                                {auction.userId}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                                {auction.endedAt && !isNaN(new Date(auction.endedAt).getTime())
-                                    ? new Date(auction.endedAt).toLocaleDateString()
-                                    : "N/A"}
-                            </td>
-                            <td className="px-6 py-4">
-                                {auction.currentBid}
-                            </td>
+                            <Link href={`/auction/${auction.id}`}>
+                                <th scope="row"
+                                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {getColor()}
+                                </th>
+                                <td className="px-6 py-4">
+                                    {auction.size}
+                                </td>
+                                <td className="px-6 py-4">
+                                    {auction.userId}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                    {auction.endedAt && !isNaN(new Date(auction.endedAt).getTime())
+                                        ? new Date(auction.endedAt).toLocaleDateString()
+                                        : "N/A"}
+                                </td>
+                                <td className="px-6 py-4">
+                                    {auction.currentBid}
+                                </td>
+                            </Link>
                         </tr>
                     ))}
                     </tbody>
@@ -93,46 +96,46 @@ export default async function ProductDetailPage({params}: { params: { id: string
         );
     };
 
-   /* const renderStatus = () => {
-        if (!status) {
-            return null;
-        }
-        const CLASSES =
-            "absolute top-3 left-3 px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-700 text-slate-900 dark:text-slate-300";
-        if (status === "New in") {
-            return (
-                <div className={CLASSES}>
-                    <SparklesIcon className="w-3.5 h-3.5"/>
-                    <span className="ml-1 leading-none">{status}</span>
-                </div>
-            );
-        }
-        if (status === "50% Discount") {
-            return (
-                <div className={CLASSES}>
-                    <IconDiscount className="w-3.5 h-3.5"/>
-                    <span className="ml-1 leading-none">{status}</span>
-                </div>
-            );
-        }
-        if (status === "Sold Out") {
-            return (
-                <div className={CLASSES}>
-                    <NoSymbolIcon className="w-3.5 h-3.5"/>
-                    <span className="ml-1 leading-none">{status}</span>
-                </div>
-            );
-        }
-        if (status === "limited edition") {
-            return (
-                <div className={CLASSES}>
-                    <ClockIcon className="w-3.5 h-3.5"/>
-                    <span className="ml-1 leading-none">{status}</span>
-                </div>
-            );
-        }
-        return null;
-    };*/
+    /* const renderStatus = () => {
+         if (!status) {
+             return null;
+         }
+         const CLASSES =
+             "absolute top-3 left-3 px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-700 text-slate-900 dark:text-slate-300";
+         if (status === "New in") {
+             return (
+                 <div className={CLASSES}>
+                     <SparklesIcon className="w-3.5 h-3.5"/>
+                     <span className="ml-1 leading-none">{status}</span>
+                 </div>
+             );
+         }
+         if (status === "50% Discount") {
+             return (
+                 <div className={CLASSES}>
+                     <IconDiscount className="w-3.5 h-3.5"/>
+                     <span className="ml-1 leading-none">{status}</span>
+                 </div>
+             );
+         }
+         if (status === "Sold Out") {
+             return (
+                 <div className={CLASSES}>
+                     <NoSymbolIcon className="w-3.5 h-3.5"/>
+                     <span className="ml-1 leading-none">{status}</span>
+                 </div>
+             );
+         }
+         if (status === "limited edition") {
+             return (
+                 <div className={CLASSES}>
+                     <ClockIcon className="w-3.5 h-3.5"/>
+                     <span className="ml-1 leading-none">{status}</span>
+                 </div>
+             );
+         }
+         return null;
+     };*/
 
     const renderSectionContent = () => {
         return (
