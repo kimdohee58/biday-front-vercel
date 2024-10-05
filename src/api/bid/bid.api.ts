@@ -4,13 +4,13 @@ import { api } from "../request";
 import { strategy } from "../api.strategy";
 
 // 입찰 저장 (POST 요청)
-const saveBid = async (bidData: Partial<BidModel>): Promise<BidModel> => {
+export const saveBid = async (bidData: BidModel)=> {
     const response = await strategy.POST(`${api.bid}`, bidData);
-    return response;
 };
 
 // 입찰 스트림 조회 (GET 요청 - SSE)
 const streamBid = async (auctionId: number): Promise<BidModel[]> => {
+
     const response = await fetch(`${api.bid}/stream?auctionId=${auctionId}`, {
         method: 'GET',
         headers: {

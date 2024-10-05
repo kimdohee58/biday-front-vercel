@@ -1,14 +1,24 @@
+import {BidModel} from "@/model/BidModel";
+import {useSelector} from "react-redux";
+import {getToken} from "@/lib/features/user.slice";
 
 const link = 'http://localhost:8080/api/bids'
 
+
 export async function insertBid(bid: BidModel): Promise<any | { status: number }> {
+
+    const token = useSelector(getToken);
+
+    const userinfo = bid.userId;
+
     try {
 
         const response = await fetch(link, {
                 method: 'POST',
                 headers: {
-                    'Content-Type' : 'application/json'
-                    // 토큰 필요
+                    'Content-Type': 'application/json',
+                    'UserInfo': `${userinfo}`,
+                    'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify(bid)
             }

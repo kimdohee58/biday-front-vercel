@@ -1,22 +1,23 @@
+//src/app/api/axiosInstance/axiosInstance.ts
 import axios from 'axios';
+import Cookies from 'js-cookie'; // 쿠키를 사용하기 위해 js-cookie 임포트
 
 // Axios 인스턴스 생성
 const axiosInstance = axios.create({
     baseURL: 'http://localhost:8080',  // 서버의 기본 URL 설정
+    withCredentials: true  // 쿠키를 포함하여 요청을 보내도록 설정
 });
 
-// 요청 인터셉터 설정 (로컬스토리지에서 토큰을 가져와 추가)
+// 요청 인터셉터 설정 (쿠키에서 토큰 가져오기)
 axiosInstance.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem('accessToken'); // 로컬스토리지에서 토큰을 가져오는 로직 이 코드 덕분에 모든 API 요청에 Authorization : Bearer {accessToken"이 헤더에 추가가 됩니다.
+        const token = Cookies.get('accessToken'); // 쿠키에서 토큰 가져옴.
         if (token) {
             config.headers['Authorization'] = `Bearer ${token}`;  // 헤더에 토큰 추가
         }
         return config;
     },
-    (error) => {
-        return Promise.reject(error);
-    }
+    (error) => Promise.reject(error)
 );
 
 
@@ -26,14 +27,26 @@ axiosInstance.interceptors.response.use(
         return response;
     },
     async (error) => {
-        if (error.response.status === 401) {
+        if (error.response && error.response.status === 401) {
             try {
-                const refreshToken = localStorage.getItem('refreshToken');
-                const response = await axios.post('/refresh', { refreshToken }); // 리프레시 토큰으로 새로운 액세스 토큰 발급
+                const refreshToken = Cookies.get('refreshToken'); // 쿠키에서 리프레시 토큰을 가져옴
+                if (!refreshToken) {
+                    throw new Error('리프래쉬 토큰이 유효하지 않습니다. axiosInstance.ts');
+                }
+
+                // 리프레시 토큰으로 새로운 액세스 토큰 발급 요청
+                const response = await axiosInstance.post('/refresh', { refreshToken });
                 const newAccessToken = response.data.accessToken;
 
-                localStorage.setItem('accessToken', newAccessToken);// 새로운 토큰을 로컬스토리지에 저장
-                error.config.headers['Authorization'] = `Bearer ${newAccessToken}`;  // 새로운 토큰으로 재요청
+                // 새로운 액세스 토큰을 쿠키에 저장
+                Cookies.set('accessToken', newAccessToken, {
+                    expires: 7,  // 7일 동안 유효
+                    secure: true,  // HTTPS에서만 전송
+                    sameSite: 'strict',  // CSRF 방지
+                });
+
+                // 기존 요청에 새로운 액세스 토큰으로 헤더를 갱신하여 재요청
+                error.config.headers['Authorization'] = `Bearer ${newAccessToken}`;
                 return axiosInstance(error.config); // 원래 요청을 다시 보냄
             } catch (refreshError) {
                 console.error('Token refresh failed:', refreshError);

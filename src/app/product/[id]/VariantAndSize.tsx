@@ -1,3 +1,4 @@
+/*
 'use client';
 
 import {useState} from "react";
@@ -57,4 +58,4 @@ export function Variant() {
 export function Size() {
     const [sizeSelected, setSizeSelected] = useState(sizes ? sizes[0] : "");
 
-}
+}*/

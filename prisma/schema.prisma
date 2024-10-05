@@ -13,19 +13,13 @@ datasource db {
   url      = env("DATABASE_URL_MongoDB")
 }
 
-enum ImageType {
-  AUCTION @map("경매")
-  PRODUCT @map("상품")
-  RATING @map("평점")
-}
-
 model Image {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   originalName String
   uploadName   String
   uploadPath   String
   uploadUrl    String
-  type         ImageType
+  type         String
   referencedId  String
   createdAt    DateTime @default(now())
 

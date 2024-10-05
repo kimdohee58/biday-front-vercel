@@ -55,7 +55,6 @@ export const makeStore = () => {
 
 // persistor 생성 (앱의 모든 상태를 저장하는 객체)
 export const persistor = persistStore(makeStore());
-console.log("persistor 확인 : ", persistor);
 // 타입 정의
 export type AppStore = ReturnType<typeof makeStore>;
 export type RootState = ReturnType<AppStore['getState']>;

@@ -26,11 +26,12 @@ export const initialProduct: ProductModel = {
     brand: '',
     category: '',
     name: '',
-    productCode: 0,
+    productCode: "",
     price: 0,
     color: '',
     description: '',
     createdAt: new Date(),
     updatedAt: new Date(),
-    auctions: [],  // 빈 배열로 초기화
+    wishes:0,
+    sizes: {} as SizeModel[],
 };

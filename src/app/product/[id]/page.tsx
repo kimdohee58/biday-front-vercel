@@ -22,16 +22,13 @@ import {ImageModel} from "@/model/ImageModel";
 
 export default async function ProductDetailPage({params}: { params: { id: string | string[]; }; }) {
 
-    const  {product: {id, brand, category, name, subName, price, color, description,  wishes}, image, auctions} = await fetchProductDetails(Number(params.id));
+    const {colorIds, product, size, auctions} = await fetchProductDetails(Number(params.id));
 
-    if (id == 0) {
-        return <div>데이터를 불러오는 도중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.</div>;
-    }
 
     const insertAuctionUrl = `/auction/insert?productId=${params.id}`;
 
     const getColor = () => {
-        const parts = name.split("(");
+        const parts = product.name.split("(");
         if (parts.length > 1) {
             return parts[1].replace(")","").trim();
         }
@@ -80,8 +77,10 @@ export default async function ProductDetailPage({params}: { params: { id: string
                             <td className="px-6 py-4">
                                 {auction.userId}
                             </td>
-                            <td className="px-6 py-4">
-                                {auction.endedAt.toLocaleDateString()}
+                            <td className="px-6 py-4 whitespace-nowrap">
+                                {auction.endedAt && !isNaN(new Date(auction.endedAt).getTime())
+                                    ? new Date(auction.endedAt).toLocaleDateString()
+                                    : "N/A"}
                             </td>
                             <td className="px-6 py-4">
                                 {auction.currentBid}
@@ -141,17 +140,17 @@ export default async function ProductDetailPage({params}: { params: { id: string
                 {/* ---------- 1 HEADING ----------  */}
                 <div>
                     <h2 className="text-2xl sm:text-3xl font-semibold">
-                        {name}
+                        {product.name}
                     </h2>
                     <h6 className="text-gray-300 text-left">
-                        {subName}
+                        {product.subName}
                     </h6>
 
                     <div className="flex items-center mt-5 space-x-4 sm:space-x-5">
                         {/* <div className="flex text-xl font-semibold">$112.00</div> */}
                         <Prices
                             contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold"
-                            price={price}
+                            price={product.price}
                         />
 
                         <div className="h-7 border-l border-slate-300 dark:border-slate-700"></div>
@@ -163,7 +162,7 @@ export default async function ProductDetailPage({params}: { params: { id: string
                                 <StarIcon className="w-5 h-5 pb-[1px] text-yellow-400"/>
                                 <div className="ml-1.5 flex">
                   <span className="text-slate-600 dark:text-slate-400">
-                    {wishes} wishes
+                    {product.wishes} wishes
                   </span>
                                 </div>
                             </a>
@@ -207,26 +206,7 @@ export default async function ProductDetailPage({params}: { params: { id: string
             <div className="">
                 <h2 className="text-2xl font-semibold">Product Details</h2>
                 <div className="prose prose-sm sm:prose dark:prose-invert sm:max-w-4xl mt-7">
-                    <p>
-                        The patented eighteen-inch hardwood Arrowhead deck --- finely
-                        mortised in, makes this the strongest and most rigid canoe ever
-                        built. You cannot buy a canoe that will afford greater satisfaction.
-                    </p>
-                    <p>
-                        The St. Louis Meramec Canoe Company was founded by Alfred Wickett in
-                        1922. Wickett had previously worked for the Old Town Canoe Co from
-                        1900 to 1914. Manufacturing of the classic wooden canoes in Valley
-                        Park, Missouri ceased in 1978.
-                    </p>
-                    <ul>
-                        <li>Regular fit, mid-weight t-shirt</li>
-                        <li>Natural color, 100% premium combed organic cotton</li>
-                        <li>
-                            Quality cotton grown without the use of herbicides or pesticides -
-                            GOTS certified
-                        </li>
-                        <li>Soft touch water based printed in the USA</li>
-                    </ul>
+                    {product.description}
                 </div>
             </div>
         );
@@ -245,9 +225,9 @@ export default async function ProductDetailPage({params}: { params: { id: string
                                 <Image
                                     fill
                                     sizes="(max-width: 640px) 100vw, 33vw"
-                                    src={image.uploadUrl}
+                                    src="/esafai/eListPrdImage523_1.jpg"
                                     className="w-full rounded-2xl object-cover"
-                                    alt={`${name}`}
+                                    alt={"test"}
                                 />
                             </div>
                             {/*{renderStatus()}*/}

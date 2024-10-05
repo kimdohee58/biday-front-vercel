@@ -1,4 +1,6 @@
-import {AuctionModel} from "@/model/AuctionModel";
+import {AuctionDetailModel, AuctionModel} from "@/model/AuctionModel";
+import {useSelector} from "react-redux";
+import {getToken} from "@/lib/features/user.slice";
 
 let baseUrl = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/auctions`
 
@@ -13,13 +15,16 @@ let baseUrl = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/auctions`
 
 // 경매 등록
 export async function insertAuction(auction: AuctionModel): Promise<any | { status: number }> {
+
+    const token = useSelector(getToken);
+
     try {
 
         const response = await fetch(baseUrl, {
             method: 'POST',
             headers: {
-                'Content-Type' : 'application/json'
-                // 토큰 필요
+                'Content-Type' : 'application/json',
+                'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify(auction)
             }
@@ -35,12 +40,16 @@ export async function insertAuction(auction: AuctionModel): Promise<any | { stat
 
 // 경매 삭제
 export async function deleteAuction(id:number) {
+    const token = useSelector(getToken);
 
     baseUrl = baseUrl += `/${id}`;
     try {
         const response = await fetch(baseUrl, {
-            method: 'DELETE'
-            // 토큰 필요
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            }
         });
 
         const data: any = await response.json();
@@ -79,16 +88,19 @@ export async function fetchAuctionList(id: number): Promise<any | { status: numb
 }
 
 // 경매 상세보기
-export async function fetchAuction(id?:number): Promise<AuctionModel>{
+export async function fetchAuction(id?:number): Promise<AuctionDetailModel>{
     let url = baseUrl;
-    if (id) url = baseUrl + `/findById/${id}`;
+    if (id) url = baseUrl + `/findById?id=${id}`;
 
     try {
         const response = await fetch(url, {
+            cache: "no-store",
             method: 'GET'
         });
 
         const data = await response.json();
+
+        console.log("옥션", data);
 
         return data;
 
