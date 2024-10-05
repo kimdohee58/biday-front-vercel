@@ -16,11 +16,9 @@ import { combineReducers } from 'redux';
 
 // redux-persist 설정
 const persistConfig = {
-    key: 'root',  // persist의 기본 키 값
+    key: 'root',
     storage,      // localStorage 사용
     whitelist: ['user'],  // user만 persist에 저장
-    // whitelist 는 state를 유지할 reduxer를 지정을 하는거다.
-    // blacklist 라고 하는 거는 그것만 제외하는거라고 함.
 };
 
 // 루트 리듀서 정의 (combineReducers 사용)
@@ -36,6 +34,7 @@ const rootReducer = combineReducers({
     loginHistory: loginHistorySlice,
     rating: ratingSlice,
 });
+
 
 // persistReducer로 루트 리듀서를 감싸줌
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -53,9 +52,8 @@ export const makeStore = () => {
     });
 };
 
-// persistor 생성 (앱의 모든 상태를 저장하는 객체)
-export const persistor = persistStore(makeStore());
-// 타입 정의
+export const store = makeStore();
+export const persistor = typeof window !== 'undefined' ? persistStore(store) : null;
 export type AppStore = ReturnType<typeof makeStore>;
 export type RootState = ReturnType<AppStore['getState']>;
 export type AppDispatch = AppStore['dispatch'];

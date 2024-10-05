@@ -1,24 +1,24 @@
-import {AuctionModel} from "@/model/AuctionModel";
-import {ImageModel} from "@/model/ImageModel";
+
+//src/model/product11.model.ts
+
+
 import {SizeModel} from "@/model/SizeModel";
 
 export interface ProductModel {
-    id?: number;
+    id: number;
     brand: string;
     category: string;
     name: string;
-    subName: string;
+    subName?: string;
     productCode: string;
     price: number;
     color: string;
     description: string;
     createdAt: Date;
     updatedAt: Date;
-    wishes: number;
-    image: ImageModel;
+    wishes:number;
     sizes: SizeModel[];
 }
-
 export type ProductDictionary = { [key: string]: ProductModel; };
 
 export const initialProduct: ProductModel = {

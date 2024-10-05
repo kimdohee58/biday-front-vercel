@@ -172,6 +172,8 @@ export async function fetchAllProducts(): Promise<ProductModel[]> {
             method: "GET",
         });
 
+        console.log("응답 객체 확인: ", response); // 응답 로그 확인
+
         if (response.ok) {
             const data = response.json();
             console.log("프로덕트 데이터 확인", data);

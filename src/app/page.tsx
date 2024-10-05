@@ -1,24 +1,44 @@
-//src/app/page.tsx
-"use client"
+"use client";
 
-import React, {useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import React, { useEffect, useState } from "react";
+import { fetchAllProducts } from "@/service/product/product.api";
 import {ProductModel} from "@/model/ProductModel";
-import {useProductList} from "@/hooks/useProductList";
-
 
 export default function PageHome() {
-    const {data, isLoading} = useProductList(); // 상품 리스트 가져오는 훅
+    const [products, setProducts] = useState<ProductModel[]>([]); // 상품 목록 상태 관리
+    const [isLoading, setIsLoading] = useState<boolean>(true); // 로딩 상태 관리
 
-    if (isLoading) return <div>로딩. ..</div>
+    // 상품 데이터를 로드하는 함수
+    const loadProducts = async () => {
+        try {
+            const productData = await fetchAllProducts(); // API 호출
+            const productsArray = Object.values(productData); // 객체 값을 배열로 변환
+            setProducts(productsArray); // 배열로 변환된 데이터 상태에 저장
+            setIsLoading(false); // 로딩 상태 해제
+        } catch (error) {
+            console.error("상품 데이터를 가져오는 중 에러: ", error);
+            setIsLoading(false); // 에러 발생 시 로딩 해제
+        }
+    };
 
-    const products: ProductModel[] = data?.content || [];  // content 필드에서 상품 가져오기
+    useEffect(() => {
+        loadProducts(); // 컴포넌트가 처음 렌더링될 때 상품 데이터를 로드
+    }, []);
 
+    // 로딩 중일 때 화면에 표시할 요소
+    if (isLoading) return <div>로딩 중...</div>;
+
+    // products 배열이 유효한지 확인
+    if (!products || products.length === 0) {
+        return <div>상품이 없습니다.</div>;
+    }
+
+    // 카테고리별 상품 분류
     const categories: { [key: string]: ProductModel[] } = {
         상의: products.slice(0, 5),
-        하의: products.slice(0, 5),
-        신발: products.slice(0, 5),
-        가방: products.slice(0, 5),
+        하의: products.slice(5, 10),
+        신발: products.slice(10, 15),
+        가방: products.slice(15, 20),
     };
 
     return (
@@ -39,11 +59,3 @@ export default function PageHome() {
         </main>
     );
 }
-
-// 웹블럭스에서 안먹더라고, 그래서 페이지어블 다 빼버렸다.
-// 우리 더보기여서 그렇게 까지 힘들거없다.
-// 할 수 있지 할 숭 ㅣㅆ다.
-//
-// 페이지네이션 더보기만 있잖아. 무한스콜ㄹ처럼 있으니깐 훨신 쉽다. 사이즈만, 페이자만 이씅면 된다.
-// 셋이 합치고 올릴려고 했다.
-// 에이피아이 관련된거 다 바뀌는건가..?
