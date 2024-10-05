@@ -19,3 +19,19 @@ export interface AuctionModel {
     award: AwardModel;
     size: string;
 }
+
+export interface AuctionDetailModel {
+    id:number;
+    user:string;
+    description: string;
+    currentBid: number;
+    award: AwardModel;
+    startedAt: Date;
+    endedAt: Date;
+    size: number;
+    count: number;
+    bidedAt: Date;
+    startingBid: number;
+    status: boolean;
+    updatedAt: Date;
+}

@@ -58,28 +58,20 @@ export async function deleteImage(id: number) {
 
 // 이미지 불러오기
 export async function fetchImage(id: string, type: ImageType): Promise<ImageModel[]> {
+    const url = `${process.env.NEXT_PUBLIC_API_CLIENT_URL}/api/images?id=${id}&type=${type}`;
 
     console.log("fetchImage 호출");
-    // 상품을 타입으로 referenceId 조회
-    // 타입이 옥션일수도, 프로덕트일수도
+
     try {
-        const image: ImageModel[] = await prisma.image.findMany({
-            where: {
-                AND: [
-                    {type: type},
-                    {referencedId: id}
-                ]
-            },
-            take: 3,
-            orderBy: {
-                id: 'desc',
-            }
+        const response = await fetch(url, {
+            method: "GET",
         });
 
-        // if (image.length === 0) {
-        //     console.log("존재하지 않는 이미지");
-        //     return [];
-        // }
+        if (!response.ok) {
+            throw new Error("이미지 로드 실패");
+        }
+
+        const image = await response.json();
 
         console.log("이미지 확인", image);
 

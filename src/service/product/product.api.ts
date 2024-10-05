@@ -1,11 +1,10 @@
+import {ProductDictionary, ProductModel} from "@/model/ProductModel";
 import {fetchAuctionList} from "@/service/auction/auction.api";
 import {fetchImage} from "@/service/image/image.api";
-import {ImageType} from ".prisma/client";
 import {keys} from "@amcharts/amcharts5/.internal/core/util/Object";
-import {ProductDictionary, ProductModel} from "@/model/ProductModel";
+import {ImageType} from "@/model/ImageModel";
 
 const baseUrl = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/products`
-
 
 export async function insertProduct(product: ProductModel): Promise<any | { status: number }> {
     try {
@@ -81,6 +80,7 @@ export async function fetchProductDetails(id: number): Promise<any> {
 
     // 옥션 api 호출
     // 이미지 api 호출
+    // 컬러 id들 (누르면 이동),
 
     try {
         const products: ProductDictionary[] = await fetchProduct(id);
@@ -97,6 +97,7 @@ export async function fetchProductDetails(id: number): Promise<any> {
 
         console.log("추출 키값 배열 확인", colorIds);
 
+        // product 정보
         const product = productDict[String(id)];
 
         console.log("product 객체 확인", productDict);
@@ -107,21 +108,28 @@ export async function fetchProductDetails(id: number): Promise<any> {
 
         console.log("sizes 배열 확인", sizes);
 
-        const auctions = await Promise.all(sizes.map((size) => {
+        const auctionArray = await Promise.all(sizes.map((size) => {
             console.log("사이즈 넘어오는지", size);
             return fetchAuctionList(size);
         }));
 
+        const auctions = auctionArray.flat(Infinity);
+
+        console.log("평탄화", auctions);
+
+        const size = product.sizes.map((size) => size.size);
+
+
         console.log("auctions 배열 확인", auctions);
 
-        //const image = await fetchImage(String(id), ImageType.PRODUCT);
+        // const image = await fetchImage(String(id), ImageType.PRODUCT);
 
-        //console.log("image 객체 확인", image);
+        // console.log("image 객체 확인", image);
 
         /**
          * 해당 상품, 컬러 다른 상품 라우트용 id, 컬러 다른 상품 color,
          */
-        return {colorIds};
+        return {colorIds, product, size, auctions};
 
     } catch (error) {
         console.error("상품 상세 정보 로드 중 오류 발생: product.api.ts fetchProductDetails", error);
@@ -167,11 +175,12 @@ export async function fetchAllProducts(): Promise<ProductModel[]> {
         console.log("응답 객체 확인: ", response); // 응답 로그 확인
 
         if (response.ok) {
-            const data = await response.json();
-            console.log("프로덕트 데이터 확인", data); // 데이터 확인
+            const data = response.json();
+            console.log("프로덕트 데이터 확인", data);
             return data;
         } else {
             throw new Error(`상품 전체 정보 로드 실패 status: ${response.status}`);
+
         }
 
     } catch (error) {

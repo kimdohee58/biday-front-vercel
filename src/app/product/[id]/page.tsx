@@ -18,20 +18,18 @@ import {ProductModel} from "@/model/ProductModel";
 import {Route} from "@/routers/types";
 import {fetchImage} from "@/service/image/image.api";
 import {ImageModel} from "@/model/ImageModel";
+import Link from "next/link";
 
 
 export default async function ProductDetailPage({params}: { params: { id: string | string[]; }; }) {
 
-    const  {product: {id, brand, category, name, subName, price, color, description,  wishes}, image, auctions} = await fetchProductDetails(Number(params.id));
+    const {colorIds, product, size, auctions} = await fetchProductDetails(Number(params.id));
 
-    if (id == 0) {
-        return <div>데이터를 불러오는 도중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.</div>;
-    }
 
     const insertAuctionUrl = `/auction/insert?productId=${params.id}`;
 
     const getColor = () => {
-        const parts = name.split("(");
+        const parts = product.name.split("(");
         if (parts.length > 1) {
             return parts[1].replace(")","").trim();
         }
@@ -70,22 +68,26 @@ export default async function ProductDetailPage({params}: { params: { id: string
                     {auctions.map((auction: AuctionModel) => (
                         <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
                             key={auction.id}>
-                            <th scope="row"
-                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                {getColor()}
-                            </th>
-                            <td className="px-6 py-4">
-                                {auction.size}
-                            </td>
-                            <td className="px-6 py-4">
-                                {auction.userId}
-                            </td>
-                            <td className="px-6 py-4">
-                                {auction.endedAt.toLocaleDateString()}
-                            </td>
-                            <td className="px-6 py-4">
-                                {auction.currentBid}
-                            </td>
+                            <Link href={`/auction/${auction.id}`}>
+                                <th scope="row"
+                                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {getColor()}
+                                </th>
+                                <td className="px-6 py-4">
+                                    {auction.size}
+                                </td>
+                                <td className="px-6 py-4">
+                                    {auction.userId}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                    {auction.endedAt && !isNaN(new Date(auction.endedAt).getTime())
+                                        ? new Date(auction.endedAt).toLocaleDateString()
+                                        : "N/A"}
+                                </td>
+                                <td className="px-6 py-4">
+                                    {auction.currentBid}
+                                </td>
+                            </Link>
                         </tr>
                     ))}
                     </tbody>
@@ -94,46 +96,46 @@ export default async function ProductDetailPage({params}: { params: { id: string
         );
     };
 
-   /* const renderStatus = () => {
-        if (!status) {
-            return null;
-        }
-        const CLASSES =
-            "absolute top-3 left-3 px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-700 text-slate-900 dark:text-slate-300";
-        if (status === "New in") {
-            return (
-                <div className={CLASSES}>
-                    <SparklesIcon className="w-3.5 h-3.5"/>
-                    <span className="ml-1 leading-none">{status}</span>
-                </div>
-            );
-        }
-        if (status === "50% Discount") {
-            return (
-                <div className={CLASSES}>
-                    <IconDiscount className="w-3.5 h-3.5"/>
-                    <span className="ml-1 leading-none">{status}</span>
-                </div>
-            );
-        }
-        if (status === "Sold Out") {
-            return (
-                <div className={CLASSES}>
-                    <NoSymbolIcon className="w-3.5 h-3.5"/>
-                    <span className="ml-1 leading-none">{status}</span>
-                </div>
-            );
-        }
-        if (status === "limited edition") {
-            return (
-                <div className={CLASSES}>
-                    <ClockIcon className="w-3.5 h-3.5"/>
-                    <span className="ml-1 leading-none">{status}</span>
-                </div>
-            );
-        }
-        return null;
-    };*/
+    /* const renderStatus = () => {
+         if (!status) {
+             return null;
+         }
+         const CLASSES =
+             "absolute top-3 left-3 px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-700 text-slate-900 dark:text-slate-300";
+         if (status === "New in") {
+             return (
+                 <div className={CLASSES}>
+                     <SparklesIcon className="w-3.5 h-3.5"/>
+                     <span className="ml-1 leading-none">{status}</span>
+                 </div>
+             );
+         }
+         if (status === "50% Discount") {
+             return (
+                 <div className={CLASSES}>
+                     <IconDiscount className="w-3.5 h-3.5"/>
+                     <span className="ml-1 leading-none">{status}</span>
+                 </div>
+             );
+         }
+         if (status === "Sold Out") {
+             return (
+                 <div className={CLASSES}>
+                     <NoSymbolIcon className="w-3.5 h-3.5"/>
+                     <span className="ml-1 leading-none">{status}</span>
+                 </div>
+             );
+         }
+         if (status === "limited edition") {
+             return (
+                 <div className={CLASSES}>
+                     <ClockIcon className="w-3.5 h-3.5"/>
+                     <span className="ml-1 leading-none">{status}</span>
+                 </div>
+             );
+         }
+         return null;
+     };*/
 
     const renderSectionContent = () => {
         return (
@@ -141,17 +143,17 @@ export default async function ProductDetailPage({params}: { params: { id: string
                 {/* ---------- 1 HEADING ----------  */}
                 <div>
                     <h2 className="text-2xl sm:text-3xl font-semibold">
-                        {name}
+                        {product.name}
                     </h2>
                     <h6 className="text-gray-300 text-left">
-                        {subName}
+                        {product.subName}
                     </h6>
 
                     <div className="flex items-center mt-5 space-x-4 sm:space-x-5">
                         {/* <div className="flex text-xl font-semibold">$112.00</div> */}
                         <Prices
                             contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold"
-                            price={price}
+                            price={product.price}
                         />
 
                         <div className="h-7 border-l border-slate-300 dark:border-slate-700"></div>
@@ -163,7 +165,7 @@ export default async function ProductDetailPage({params}: { params: { id: string
                                 <StarIcon className="w-5 h-5 pb-[1px] text-yellow-400"/>
                                 <div className="ml-1.5 flex">
                   <span className="text-slate-600 dark:text-slate-400">
-                    {wishes} wishes
+                    {product.wishes} wishes
                   </span>
                                 </div>
                             </a>
@@ -207,26 +209,7 @@ export default async function ProductDetailPage({params}: { params: { id: string
             <div className="">
                 <h2 className="text-2xl font-semibold">Product Details</h2>
                 <div className="prose prose-sm sm:prose dark:prose-invert sm:max-w-4xl mt-7">
-                    <p>
-                        The patented eighteen-inch hardwood Arrowhead deck --- finely
-                        mortised in, makes this the strongest and most rigid canoe ever
-                        built. You cannot buy a canoe that will afford greater satisfaction.
-                    </p>
-                    <p>
-                        The St. Louis Meramec Canoe Company was founded by Alfred Wickett in
-                        1922. Wickett had previously worked for the Old Town Canoe Co from
-                        1900 to 1914. Manufacturing of the classic wooden canoes in Valley
-                        Park, Missouri ceased in 1978.
-                    </p>
-                    <ul>
-                        <li>Regular fit, mid-weight t-shirt</li>
-                        <li>Natural color, 100% premium combed organic cotton</li>
-                        <li>
-                            Quality cotton grown without the use of herbicides or pesticides -
-                            GOTS certified
-                        </li>
-                        <li>Soft touch water based printed in the USA</li>
-                    </ul>
+                    {product.description}
                 </div>
             </div>
         );
@@ -245,9 +228,9 @@ export default async function ProductDetailPage({params}: { params: { id: string
                                 <Image
                                     fill
                                     sizes="(max-width: 640px) 100vw, 33vw"
-                                    src={image.uploadUrl}
+                                    src="/esafai/eListPrdImage523_1.jpg"
                                     className="w-full rounded-2xl object-cover"
-                                    alt={`${name}`}
+                                    alt={"test"}
                                 />
                             </div>
                             {/*{renderStatus()}*/}
