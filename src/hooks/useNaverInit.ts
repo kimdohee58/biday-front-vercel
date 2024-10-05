@@ -1,9 +1,7 @@
-"use client";
-
+//src/hooks/useNaverInit.ts
 import { useEffect } from 'react';
 
-
-const IndexPage = () => {
+export const handleNaverInit = () => {
     useEffect(() => {
         const naverLoginScript = document.createElement('script');
         naverLoginScript.src = 'https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js';
@@ -15,7 +13,7 @@ const IndexPage = () => {
                 clientId: 'RD1oMcYETTxoiJLIsYYS', // Naver 개발자 센터에서 받은 클라이언트 ID
                 callbackUrl: 'http://localhost:3000/auth/callback', // 인증 후 리다이렉트될 URL
                 isPopup: false, // 팝업을 사용할 경우 true로 설정
-                loginButton: { color: 'green', type: 1, height: 40 }
+                loginButton: { color: 'green', type: 1, height: 10 }
             });
             naverLogin.init();
         };
@@ -23,14 +21,5 @@ const IndexPage = () => {
         return () => {
             document.body.removeChild(naverLoginScript);
         };
-    }, []);
-
-    return (
-        <div>
-            <h1>Welcome to Naver Login Example</h1>
-            <div id="naverIdLogin"></div>
-        </div>
-    );
-};
-
-export default IndexPage;
+    }, [])
+}

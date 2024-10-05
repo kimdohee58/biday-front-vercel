@@ -1,10 +1,11 @@
-import {ProductDictionary, ProductModel} from "@/model/ProductModel";
 import {fetchAuctionList} from "@/service/auction/auction.api";
 import {fetchImage} from "@/service/image/image.api";
 import {ImageType} from ".prisma/client";
 import {keys} from "@amcharts/amcharts5/.internal/core/util/Object";
+import {ProductDictionary, ProductModel} from "@/model/ProductModel";
 
 const baseUrl = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/products`
+
 
 export async function insertProduct(product: ProductModel): Promise<any | { status: number }> {
     try {
@@ -113,9 +114,9 @@ export async function fetchProductDetails(id: number): Promise<any> {
 
         console.log("auctions 배열 확인", auctions);
 
-        const image = await fetchImage(String(id), ImageType.PRODUCT);
+        //const image = await fetchImage(String(id), ImageType.PRODUCT);
 
-        console.log("image 객체 확인", image);
+        //console.log("image 객체 확인", image);
 
         /**
          * 해당 상품, 컬러 다른 상품 라우트용 id, 컬러 다른 상품 color,
@@ -163,13 +164,14 @@ export async function fetchAllProducts(): Promise<ProductModel[]> {
             method: "GET",
         });
 
+        console.log("응답 객체 확인: ", response); // 응답 로그 확인
+
         if (response.ok) {
-            const data = response.json();
-            console.log("프로덕트 데이터 확인", data);
+            const data = await response.json();
+            console.log("프로덕트 데이터 확인", data); // 데이터 확인
             return data;
         } else {
             throw new Error(`상품 전체 정보 로드 실패 status: ${response.status}`);
-
         }
 
     } catch (error) {

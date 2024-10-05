@@ -50,7 +50,7 @@ const LIST_IMAGES_GALLERY_DEMO: (string | StaticImageData)[] = [
 const PRICE = 108;
 
 
-export default function AuctionDetailPage({params}: { params: { id: string }, product: ProductModel}) {
+export default function AuctionDetailPage({params}: { params: { id: string }}) {
 
     /**
      * 해당 auction 의 bid 도 불러와야 됨.
