@@ -1,6 +1,5 @@
 // src/lib/features/brand.slice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { BrandModel } from '@/model/BrandModel';
 import { RootState } from '@/lib/store';
 
 // 초기 상태 정의
