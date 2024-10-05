@@ -18,7 +18,7 @@ import {handleNaverCallback} from "@/hooks/useNaverInit";
 const loginSocials = [
     {
         name: "Continue with Naver",
-        href: "http://localhost:8000/oauth2/authorization/naver",
+        href: `${process.env.NEXT_PUBLIC_API_SERVER_URL}/oauth2/authorization/naver`,
         icon: btnG_official,
     },
     {
@@ -86,9 +86,9 @@ export default function PageLogin() {
                                 key={index}
                                 href={item.href}
                                 className="flex w-full rounded-lg bg-primary-50 dark:bg-neutral-700 px-4 py-3 transform transition-transform sm:px-6 hover:translate-y-[-2px]"
-/*
-                                id={item.name === "Continue with Naver" ? "naverIdLogin" : ""}
-*/
+                                /*
+                                                                id={item.name === "Continue with Naver" ? "naverIdLogin" : ""}
+                                */
                             >
                                 <Image
                                     className="flex-shrink-0"

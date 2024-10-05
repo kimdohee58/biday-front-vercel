@@ -1,28 +1,46 @@
 import {BidModel} from "@/model/BidModel";
 import {useSelector} from "react-redux";
 import {getToken} from "@/lib/features/user.slice";
+import Cookies from "js-cookie";
 
-const link = 'http://localhost:8080/api/bids'
+const link = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/bids`
 
 
-export async function insertBid(bid: BidModel): Promise<any | { status: number }> {
-
-    const token = useSelector(getToken);
-
-    const userinfo = bid.userId;
-
+export async function insertBid(bid): Promise<any | { status: number }> {
+    
     try {
+
+        console.log("insertBid 호출")
+
+        const token = Cookies.get("token");
+
+        console.log("토큰 확인: ", token);
+
+        const userinfo = {
+            userId: bid.userId,
+            userName: bid.userName,
+            userRole: bid.userRole,
+        }
+
+        const body = {
+            auctionId: bid.auctionId,
+            currentBid: bid.currentBid,
+        }
+
+        console.log("바디 이후");
 
         const response = await fetch(link, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'UserInfo': `${userinfo}`,
+                    'UserInfo': JSON.stringify(userinfo),
                     'Authorization': `Bearer ${token}`,
                 },
-                body: JSON.stringify(bid)
+                body: JSON.stringify(body)
             }
         );
+
+        console.log("여기까지 옴?")
 
         return await response.json();
 
