@@ -28,6 +28,13 @@ export default function PageHome() {
     // 로딩 중일 때 화면에 표시할 요소
     if (isLoading) return <div>로딩 중...</div>;
 
+    const headers = {
+        "Content-Type ": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+    }
+   const token = "https://nid.naver.com/oauth2.0/token?client_id={NAVER_CLIENT_ID}&client_secret={NAVER_SECRET}&code={code}&grant_type=authorization_code&state={STATE}"
+
+
     // products 배열이 유효한지 확인
     if (!products || products.length === 0) {
         return <div>상품이 없습니다.</div>;
