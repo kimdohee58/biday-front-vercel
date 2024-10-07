@@ -1,6 +1,7 @@
 //src/api/request.ts
 
 export const api = {
+    account:"/api/account",
     address: "/api/addresses",
     category: "api/categories",
     size: "/api/sizes",
@@ -17,8 +18,9 @@ export const api = {
     brand: "/api/brands",
     auction: "/api/auctions",
     image: "/api/images",
-    wish:"/api/wishes"
-
+    wish:"/api/wishes",
+    seller:"/api/seller-payments",
+    loginHistory:"/api/loginHistory"
     // address ~ wish : 까지 총 17개.
 
 }

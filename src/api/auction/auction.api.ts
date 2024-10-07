@@ -1,10 +1,10 @@
-import { AuctionModel } from "@/model/AuctionModel";
-import { api } from "../request";
-import { strategy } from "../api.strategy";
+import {AuctionModel} from "@/model/AuctionModel";
+import {api} from "../request";
+import {strategy} from "../api.strategy";
 
 // 경매 상세보기 (GET 요청)
 const findById = async (id: number): Promise<AuctionModel> => {
-    const response = await strategy.GET(`${api.auction}/findById`, { id: id.toString() });
+    const response = await strategy.GET(`${api.auction}/findById`, {id: id.toString()});
     return response;
 };
 
@@ -38,28 +38,28 @@ const findByUser = async (userId: string, period: string, cursor?: number): Prom
 };
 
 // 경매 등록 (POST 요청)
-const saveAuction = async (auctionData: Partial<AuctionModel>): Promise<AuctionModel> => {
+const save = async (auctionData: Partial<AuctionModel>): Promise<AuctionModel> => {
     const response = await strategy.POST(`${api.auction}`, auctionData);
     return response;
 };
 
 // 경매 수정 (PATCH 요청)
-const updateAuction = async (auctionData: Partial<AuctionModel>): Promise<AuctionModel> => {
+const update = async (auctionData: Partial<AuctionModel>): Promise<AuctionModel> => {
     const response = await strategy.PATCH(`${api.auction}`, auctionData);
     return response;
 };
 
 // 경매 삭제 (DELETE 요청)
-const deleteById = async (id: number): Promise<void> => {
+const delete_ = async (id: number): Promise<void> => {
     await strategy.DELETE(`${api.auction}?id=${id}`);
 };
 
-export const auction = {
+export const auctionAPI = {
     findById,
     findBySize,
     findAllBySize,
     findByUser,
-    saveAuction,
-    updateAuction,
-    deleteById,
+    update,
+    save,
+    delete_ // 키워드 딜리트라는 단억나 키워드여서 _ 언더바를 준거다. 다른 이름으로 아 자바 컨트롤러랑 맞추고 싶은데 에러가 나서 한거.
 };
