@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, {useState} from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 
 // @material-tailwind/react
@@ -21,7 +21,8 @@ import { DayPicker } from "react-day-picker";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 
 export default function Account1() {
-    const [date, setDate] = React.useState();
+    const [date, setDate] = useState();
+    const [tranId, setTranId] = useState();
 
     return (
 
