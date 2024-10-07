@@ -1,4 +1,4 @@
-//src/model/sullAuction.model.ts
+//src/model/auction.model.ts
 import {AwardModel} from "@/model/auction/award.model";
 
 export interface AuctionModel {

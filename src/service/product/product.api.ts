@@ -1,5 +1,5 @@
 import {ProductDictionary, ProductModel} from "@/model/ProductModel";
-import {fetchAuctionList} from "@/service/sullAuction/auction.api";
+import {fetchAuctionList} from "@/service/auction/auction.api";
 import {fetchImage} from "@/service/image/image.api";
 import {keys} from "@amcharts/amcharts5/.internal/core/util/Object";
 import {ImageType} from "@/model/ImageModel";
