@@ -14,7 +14,6 @@ const findById = async (id: number): Promise<FaqModel> => {
     const response = await strategy.GET(`${api.faq}/${id}`);
     return response;
 };
-
 // 새로운 질문 등록
 const addQuestion = async (questionData: Partial<FaqModel>): Promise<FaqModel> => {
     const response = await strategy.POST(`${api.faq}`, questionData);

@@ -26,7 +26,6 @@ const delete_ = async (id: number): Promise<void> => {
     await strategy.DELETE(`${api.announcement}/${id}`);
 };
 
-
 export const announcementAPI = {
     findAll,
     findById,

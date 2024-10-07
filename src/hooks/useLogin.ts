@@ -71,6 +71,7 @@ export const useLogin = () => {
 
     return { login };
 };
+
 // JWT 토큰에서 유저 ID 추출 함수
 const extractUserIdFromToken = (token: string): string => {
     // JWT 토큰을 디코딩하여 payload에서 유저 ID를 추출하는 코드

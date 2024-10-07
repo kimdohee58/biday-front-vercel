@@ -1,6 +1,6 @@
 export interface BidModel {
     /*id?: number;
-    auction: AuctionModel;
+    sullAuction: AuctionModel;
     userId: number;
     bidedAt: Date;
     currentBid: Date;

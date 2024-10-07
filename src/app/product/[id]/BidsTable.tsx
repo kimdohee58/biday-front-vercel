@@ -42,7 +42,7 @@ export default function BidsTable({auctions}: { auctions: AuctionModel[] }) {
 
 
     /* const {
-         data: auction,
+         data: sullAuction,
          isLoading,
          isError,
      }: UseQueryResult<AuctionModel> = useQuery<AuctionModel>({queryKey: [productId], queryFn: () => getAuction(productId)})
@@ -52,10 +52,10 @@ export default function BidsTable({auctions}: { auctions: AuctionModel[] }) {
          return <div>Loading...</div>;
      }
      if (isError) {
-         return <div>Error occurred while fetching auction data</div>;
+         return <div>Error occurred while fetching sullAuction data</div>;
      }*/
 
-    /* const auctions: AuctionModel[] = auction ? [auction] : [];*/
+    /* const auctions: AuctionModel[] = sullAuction ? [sullAuction] : [];*/
 
     return (
         <div className="">

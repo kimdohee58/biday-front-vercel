@@ -24,7 +24,7 @@ import AccordionInfo from "@/components/AccordionInfo";
 import ListingImageGallery from "@/components/listing-image-gallery/ListingImageGallery";
 import {usePathname, useRouter} from "next/navigation";
 import {Route} from "next";
-import {fetchAuction} from "@/service/auction/auction.api";
+import {fetchAuction} from "@/service/sullAuction/auction.api";
 import {useMutation, useQuery} from "@tanstack/react-query";
 import {fetchImage} from "@/service/image/image.api";
 import {ImageType} from "@/model/ImageModel";
@@ -56,8 +56,8 @@ export default function AuctionDetailPage({params}: { params: { id: string }}) {
 
 
     /**
-     * 해당 auction 의 bid 도 불러와야 됨.
-     * auction bid 개수
+     * 해당 sullAuction 의 bid 도 불러와야 됨.
+     * sullAuction bid 개수
      */
 
         // 옥셔션에서 불러올 것
