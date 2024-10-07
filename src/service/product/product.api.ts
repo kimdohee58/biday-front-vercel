@@ -1,8 +1,5 @@
 import {ProductDictionary, ProductModel} from "@/model/ProductModel";
 import {fetchAuctionList} from "@/service/auction/auction.api";
-import {fetchImage} from "@/service/image/image.api";
-import {keys} from "@amcharts/amcharts5/.internal/core/util/Object";
-import {ImageType} from "@/model/ImageModel";
 
 const baseUrl = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/products`
 
@@ -196,25 +193,11 @@ export async function fetchProductOne(id:number) {
 
         const url = baseUrl+`/findOne?id=${id}`;
 
-
         const response = await fetch(url, {cache: "no-store"});
 
         console.log("확인용",response.ok);
 
-
-        if (response.ok) {
-            const data = await response.json();
-            console.log("지금 만든 최신 확인", data);
-            return data;
-
-        } else {
-            console.log("실패")
-            const data = await response.json();
-            console.log("실패인 경우", data);
-            return {...data, id: 0}
-
-        }
-
+        return (await response.json())[String(id)];
 
     } catch (error) {
         console.error("상품 데이터 로드 중 오류 발생", error);

@@ -45,6 +45,8 @@ export default function RootLayout({
 }) {
     const [isClient, setIsClient] = useState(false);
 
+    const store = makeStore();
+
     // 클라이언트 사이드에서만 Redux Persist 활성화
     useEffect(() => {
         setIsClient(true);

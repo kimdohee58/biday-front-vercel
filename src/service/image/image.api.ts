@@ -56,11 +56,9 @@ export async function deleteImage(id: number) {
 
 // 이미지 업데이트
 
-// 이미지 불러오기
-export async function fetchImage(id: string, type: ImageType): Promise<ImageModel[]> {
+// 클라이언트 컴포넌트에서 이미지 불러오기
+export async function fetchImageFromClient(type: ImageType, id?: string): Promise<ImageModel[]> {
     const url = `${process.env.NEXT_PUBLIC_API_CLIENT_URL}/api/images?id=${id}&type=${type}`;
-
-    console.log("fetchImage 호출");
 
     try {
         const response = await fetch(url, {
@@ -68,10 +66,41 @@ export async function fetchImage(id: string, type: ImageType): Promise<ImageMode
         });
 
         if (!response.ok) {
-            throw new Error("이미지 로드 실패");
+            return [];
         }
 
-        const image = await response.json();
+        const data: ImageModel[] = await response.json();
+
+        console.log("fetchImageFromClient 이미지 확인: ", data);
+
+
+        return data;
+
+    } catch (error) {
+        console.error("이미지 로드 중 오류 발생", error);
+        throw new Error("이미지 로드 실패");
+    }
+}
+
+// 이미지 불러오기
+export async function fetchImage(id: string, type: ImageType): Promise<ImageModel[]> {
+
+    console.log("fetchImage 호출");
+
+    try {
+        const image = await prisma.image.findMany({
+            where: {
+                AND: [
+                    {type: type},
+                    {referencedId: id}
+                ]
+            },
+            take: 3,
+            orderBy: {
+                id: "desc",
+            }
+        });
+
 
         console.log("이미지 확인", image);
 
