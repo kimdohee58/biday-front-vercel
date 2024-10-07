@@ -10,7 +10,7 @@ export const handleReissueToken = async () => {
 
         console.log('refreshToken:', refreshToken);  // 쿠키에 저장된 리프레시 토큰 확인
         // 서버로 리프레시 토큰 전송하여 액세스 토큰 재발급 요청
-        const response = await fetch("http://localhost:8080/reissue", {
+        const response = await fetch("http://localhost:8000/reissue", {
             method: "POST",
             credentials: 'include',  // 쿠키 포함
             headers: {
