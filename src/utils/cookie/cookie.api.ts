@@ -30,11 +30,17 @@ export const clearToken = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
 
-    // 쿠키에서 토큰 제거
-    //Cookies.remove('token');
-    //Cookies.remove('refreshToken');
+
+    Cookies.remove('token', { path: '/', secure: true, sameSite: 'strict' });
+    Cookies.remove('refreshToken', { path: '/', secure: true, sameSite: 'strict' });
+
+    console.log('JWT 토큰이 쿠키에서 삭제되었습니다.');
+    console.log('쿠키에 저장된 토큰:', getCookie('token'));
+
     document.cookie = 'token=; Max-Age=0; path=/;';
     document.cookie = 'refreshToken=; Max-Age=0; path=/;';
+    Cookies.remove('token', { path: '/', secure: true, sameSite: 'strict' });
+    Cookies.remove('refreshToken', { path: '/', secure: true, sameSite: 'strict' });
 
     console.log('JWT 토큰이 로컬 스토리지와 쿠키에서 삭제되었습니다.');
     console.log('로컬 스토리지에 저장된 토큰:', localStorage.getItem('token'));

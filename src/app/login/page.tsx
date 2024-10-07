@@ -2,7 +2,6 @@
 "use client";
 
 import React, {useState, FormEvent} from 'react';
-import {useRouter} from 'next/navigation';
 import facebookSvg from "@/images/Facebook.svg";
 import twitterSvg from "@/images/Twitter.svg";
 import googleSvg from "@/images/Google.svg";
@@ -12,7 +11,7 @@ import Image from "next/image";
 import Link from "next/link";
 import {useLogin} from "@/hooks/useLogin";
 import btnG_official from "@/images/btnG_official.png";
-import {handleNaverCallback} from "@/hooks/useNaverInit";
+import {signIn} from "next-auth/react";
 
 // 소셜 로그인 버튼 데이터
 const loginSocials = [
@@ -44,8 +43,12 @@ export default function PageLogin() {
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
     const {login} = useLogin();
-    handleNaverCallback(); // 네이버 로그인 초기화
 
+    const handleLaverSigIn = () =>{
+        signIn('naver',{
+            callbackUrl: '/'
+        })
+    }
 
     // 입력 값 변경 처리 함수
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,6 +80,7 @@ export default function PageLogin() {
                 <h2 className="my-20 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
                     Login
                 </h2>
+                <button onClick={handleLaverSigIn}>네이버 로그인 버튼</button>
 
                 <div className="max-w-md mx-auto space-y-6">
                     {/* 소셜 로그인 버튼 */}
@@ -86,9 +90,7 @@ export default function PageLogin() {
                                 key={index}
                                 href={item.href}
                                 className="flex w-full rounded-lg bg-primary-50 dark:bg-neutral-700 px-4 py-3 transform transition-transform sm:px-6 hover:translate-y-[-2px]"
-                                /*
-                                                                id={item.name === "Continue with Naver" ? "naverIdLogin" : ""}
-                                */
+
                             >
                                 <Image
                                     className="flex-shrink-0"

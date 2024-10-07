@@ -1,3 +1,4 @@
+//src/app/layout.tsx
 "use client"
 import {Poppins, Noto_Sans_KR} from "next/font/google";
 import "./globals.css";
@@ -16,9 +17,11 @@ import "@/fonts/line-awesome-1.3.0/css/line-awesome.css";
 import "@/styles/index.scss";
 import "rc-slider/assets/index.css";
 import {QueryClient} from "@tanstack/react-query";
-import {makeStore, persistor} from "@/lib/store";
+import {makeStore, persistor, store} from "@/lib/store";
 import {useEffect, useState} from "react";
-import isClient from "beautiful-react-hooks/shared/isClient";  // store와 persistor 임포트
+import isClient from "beautiful-react-hooks/shared/isClient";
+import Script from "next/script";  // store와 persistor 임포트
+import {AuthProvider} from "@/context/AuthContext"; // AuthContext 임포트
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -52,25 +55,29 @@ export default function RootLayout({
     return (
         <html lang="ko" className={`${poppins.className}`}>
         <body className="bg-white text-base dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200">
-        <Provider store={store}>
-            {isClient ? (
-                <PersistGate loading={null} persistor={persistor as any}>
+        {/*어스프로바이더로 전체 앱 감싸야함. */}
+        <AuthProvider>
+            {/*리덕스 프로바이더로 전체 앱 감싸야함. */}
+            <Provider store={store}>
+                {isClient ? (
+                    <PersistGate loading={null} persistor={persistor as any}>
+                        <ReactQueryProvider>
+                            <SiteHeader/>
+                            <main>{children}</main>
+                            <Footer/>
+                        </ReactQueryProvider>
+                    </PersistGate>
+                ) : (
+                    // 서버 사이드 렌더링 시 PersistGate를 제외
                     <ReactQueryProvider>
-                        <SiteHeader />
+                        <SiteHeader/>
                         <main>{children}</main>
-                        <Footer />
+                        <Footer/>
                     </ReactQueryProvider>
-                </PersistGate>
-            ) : (
-                // 서버 사이드 렌더링 시 PersistGate를 제외
-                <ReactQueryProvider>
-                    <SiteHeader />
-                    <main>{children}</main>
-                    <Footer />
-                </ReactQueryProvider>
-            )}
-        </Provider>
-        <CommonClient />
+                )}
+            </Provider>
+            <CommonClient/>
+        </AuthProvider>
         </body>
         </html>
     );
