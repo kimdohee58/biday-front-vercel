@@ -12,8 +12,6 @@ export interface AuctionModel {
     status: boolean;
     createdAt: Date;
     updatedAt: Date;
-
-    // 송준한
     size:number,
     award:AwardModel,
 }
@@ -29,8 +27,6 @@ export const initialAuction : AuctionModel = {
     status: false,
     createdAt: new Date(),
     updatedAt: new Date(),
-
-    // 송준한
     size:0,
     award: {} as AwardModel,
 }
