@@ -1,5 +1,5 @@
 // src/hooks/useLogout.ts
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { clearToken } from '@/utils/cookie/cookie.api';
 import { useDispatch } from 'react-redux';
 import { clearUser } from '@/lib/features/user.slice';

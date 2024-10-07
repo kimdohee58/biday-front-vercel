@@ -1,6 +1,9 @@
 import {AuctionDetailModel, AuctionModel} from "@/model/AuctionModel";
 import {useSelector} from "react-redux";
 import {getToken} from "@/lib/features/user.slice";
+import {fetchImage, fetchImageFromClient} from "@/service/image/image.api";
+import {ImageType} from "@/model/ImageModel";
+import {fetchProduct, fetchProductOne} from "@/service/product/product.api";
 
 let baseUrl = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/auctions`
 
@@ -110,3 +113,25 @@ export async function fetchAuction(id?:number): Promise<AuctionDetailModel>{
     }
 }
 
+export async function fetchAuctionDetails(auctionId: number, productId: number) {
+    try {
+        // 옥션
+        const auction = await fetchAuction(auctionId);
+        // 옥션이미지
+        const auctionImage = await fetchImageFromClient(String(auctionId), ImageType.AUCTION);
+        // 상품
+        const product = await fetchProductOne(productId);
+        // 상품이미지
+        const productImage = await fetchImageFromClient(String(productId), ImageType.PRODUCT);
+
+        return {
+            auction,
+            auctionImage,
+            product,
+            productImage,
+        }
+
+    } catch (error) {
+
+    }
+}

@@ -5,14 +5,12 @@ import {ClockIcon, NoSymbolIcon, SparklesIcon,} from "@heroicons/react/24/outlin
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
 import NcImage from "@/shared/NcImage/NcImage";
-import ReviewItem from "@/components/ReviewItem";
 import detail21JPG from "@/images/products/detail3-1.webp";
 import detail22JPG from "@/images/products/detail3-2.webp";
 import detail23JPG from "@/images/products/detail3-3.webp";
 import detail24JPG from "@/images/products/detail3-4.webp";
 import {PRODUCTS} from "@/data/data";
 import IconDiscount from "@/components/IconDiscount";
-import NcInputNumber from "@/components/NcInputNumber";
 import BagIcon from "@/components/BagIcon";
 import toast from "react-hot-toast";
 import {StarIcon} from "@heroicons/react/24/solid";
@@ -22,16 +20,18 @@ import {StaticImageData} from "next/image";
 import LikeSaveBtns from "@/components/LikeSaveBtns";
 import AccordionInfo from "@/components/AccordionInfo";
 import ListingImageGallery from "@/components/listing-image-gallery/ListingImageGallery";
-import {usePathname, useRouter} from "next/navigation";
+import {useParams, usePathname, useRouter, useSearchParams} from "next/navigation";
 import {Route} from "next";
 import {fetchAuction} from "@/service/auction/auction.api";
 import {useMutation, useQuery} from "@tanstack/react-query";
-import {fetchImage} from "@/service/image/image.api";
 import {ImageType} from "@/model/ImageModel";
 import {fetchProduct, fetchProductOne} from "@/service/product/product.api";
 import {BidModel, BidStreamModel} from "@/model/BidModel";
 import {saveBid} from "@/api/bid/bid.api";
 import {insertBid} from "@/service/bid/bid.api";
+import {fetchImageFromClient} from "@/service/image/image.api";
+import Cookies from "js-cookie";
+import {useColor} from "@/hooks/useColor";
 
 const LIST_IMAGES_GALLERY_DEMO: (string | StaticImageData)[] = [
     detail21JPG,
@@ -52,43 +52,48 @@ const PRICE = 108;
 
 
 
-export default function AuctionDetailPage({params}: { params: { id: string }}) {
+export default function AuctionDetailPage() {
 
+    const searchParams = useSearchParams();
+    const productId = searchParams.get("productId" || "0") as string;
+    const router = useRouter();
+    const {id} = useParams();
 
-    /**
-     * 해당 auction 의 bid 도 불러와야 됨.
-     * auction bid 개수
-     */
+    const auction = useQuery({queryKey: ["auction"], queryFn: () => fetchAuction(Number(id))});
+    const auctionImage = useQuery({queryKey: ["auctionImage"], queryFn: () => fetchImageFromClient(ImageType.AUCTION, id as string)});
+    const product = useQuery({queryKey: ["product"], queryFn: () => fetchProductOne(1)});
+    const productImage = useQuery({queryKey: ["productImage"], queryFn: () => fetchImageFromClient(ImageType.PRODUCT, productId)});
 
-        // 옥셔션에서 불러올 것
+    if (!productImage.isLoading) {
+        console.log("프로덕트 이미지", productImage.data);
+    }
 
-    const auctionInfo = useQuery({queryKey: ["auction"], queryFn: () => fetchAuction(Number(params.id))});
-
-    // const auctionImage = useQuery({queryKey: ["image"], queryFn: () => fetchImage(params.id, ImageType.AUCTION)});
-
-    const product = useQuery({queryKey: ["product"], queryFn: () => fetchProductOne(1)})
-
-    if (!!auctionInfo.data) {
-        console.log("불러온 옥션 id", auctionInfo.data.id);
+    if (!!auction.data) {
+        console.log("불러온 옥션 id", auction.data.id);
     }
 
     // 이미지
 
     const {sizes, variants, status, allOfSizes, image} = PRODUCTS[0];
 
-
     const [message, setMessage] = useState();
-
-    const bidUrl = `${[process.env.NEXT_PUBLIC_API_SERVER_URL]}/api/bids/stream?auctionid=${Number(params.id)}`
 
     const [currentBid, setCurrentBid] = useState();
 
     const [highestBid, setHighestBid] = useState<number>();
     const [adjustBid, setAdjustBid] = useState<number>();
 
+    const getColor = (productName: string) => {
+        const parts = productName.split(`(`);
+        if (parts.length > 1) {
+            return parts[1].replace(')', '').trim();
+        }
+        return "";
+    };
+
     const renderHighestBid = () => {
 
-        const url = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/bids/stream?auctionId=${Number(params.id)}`;
+        const url = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/bids/stream?auctionId=${Number(id)}`;
         useEffect(() => {
             console.log("useEffect 진입");
 
@@ -122,7 +127,7 @@ export default function AuctionDetailPage({params}: { params: { id: string }}) {
                 eventSource.close();
             };
 
-        }, [params.id]);
+        }, [id]);
 
         useEffect(() => {
             if (highestBid !== undefined) {
@@ -136,7 +141,7 @@ export default function AuctionDetailPage({params}: { params: { id: string }}) {
 
 
 
-    const router = useRouter();
+
     const thisPathname = usePathname();
     const [variantActive, setVariantActive] = useState(0);
     const [sizeSelected, setSizeSelected] = useState(sizes ? sizes[0] : "");
@@ -166,7 +171,7 @@ export default function AuctionDetailPage({params}: { params: { id: string }}) {
           <span className="text-sm font-medium">
             Color:
             <span className="ml-1 font-semibold">
-              {variants[variantActive].name}
+              {product.isLoading? "" : getColor(product.data.name)}
             </span>
           </span>
                 </label>
@@ -179,6 +184,12 @@ export default function AuctionDetailPage({params}: { params: { id: string }}) {
     });
 
     const onClickBidButton = () => {
+        const token = Cookies.get("token");
+        if (!token) {
+            router.push("/login");
+            return;
+        }
+
         if (!adjustBid) {
             return;
         }
@@ -186,7 +197,7 @@ export default function AuctionDetailPage({params}: { params: { id: string }}) {
         const currentBid = adjustBid;
 
         const bidData = {
-            auctionId: Number(params.id),
+            auctionId: Number(id),
             userId: "66f68ebf2bd718301c69f1e5",
             userName: "shull",
             userRole: "ROLE_USER",
@@ -219,7 +230,7 @@ export default function AuctionDetailPage({params}: { params: { id: string }}) {
                     <label htmlFor="">
             <span className="">
               Size:
-              <span className="ml-1 font-semibold">{sizeSelected}</span>
+              <span className="ml-1 font-semibold">{auction.isLoading? "" : auction.data!!.size}</span>
             </span>
                     </label>
                     <a
@@ -297,7 +308,7 @@ export default function AuctionDetailPage({params}: { params: { id: string }}) {
                   <span>4.9 </span>
                   <span className="mx-1.5">·</span>
                   <span className="text-slate-700 dark:text-slate-400">
-                    {auctionInfo.data? `${auctionInfo.data.count} 입찰` : "진행중"}
+                      {auction.isLoading? "입찰 없음" : `${auction.data!!.award.count} 입찰`}
                   </span>
                 </span>
                             </a>
@@ -333,7 +344,7 @@ export default function AuctionDetailPage({params}: { params: { id: string }}) {
             <div className="listingSection__wrap !space-y-6">
                 <div>
                     <h2 className="text-2xl md:text-3xl font-semibold">
-                        Heavy Weight Hoodie
+                        {product.isLoading? "Loading..." : product.data!!.name}
                     </h2>
                     <div className="flex items-center mt-4 sm:mt-5">
                         <a
@@ -376,7 +387,7 @@ export default function AuctionDetailPage({params}: { params: { id: string }}) {
                 <h2 className="text-2xl font-semibold">Product details</h2>
                 {/* <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div> */}
                 <div className="prose prose-sm sm:prose dark:prose-invert sm:max-w-4xl">
-                    {auctionInfo.data?.description}
+                    {auction.isLoading? "" : auction.data!!.description}
                 </div>
                 {/* ---------- 6 ----------  */}
             </div>

@@ -1,7 +1,7 @@
-// src/api/product/product.api.ts
-import { ProductModel } from "@/model/ProductModel";
+// src/api/product11/product11.api.ts
 import { api } from "../request";
 import { strategy } from "../api.strategy";
+import {ProductModel} from "@/model/product/product.model";
 
 // 전체 상품 목록 불러오기 (GET 요청)
 const findAll = async (): Promise<ProductModel[]> => {
@@ -52,7 +52,7 @@ const deleteProduct = async (id: number): Promise<void> => {
     await strategy.DELETE(`${api.product}?id=${id}`);
 };
 
-export const product = {
+export const productAPI = {
     findAll,
     searchByFilter,
     findById,

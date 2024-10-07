@@ -1,8 +1,10 @@
+//src/app/page.tsx
 "use client";
 
 import React, { useEffect, useState } from "react";
 import { fetchAllProducts } from "@/service/product/product.api";
 import {ProductModel} from "@/model/ProductModel";
+import {getCookie} from "@/utils/cookie/cookie.api";
 
 export default function PageHome() {
     const [products, setProducts] = useState<ProductModel[]>([]); // 상품 목록 상태 관리
@@ -24,15 +26,6 @@ export default function PageHome() {
     useEffect(() => {
         loadProducts(); // 컴포넌트가 처음 렌더링될 때 상품 데이터를 로드
     }, []);
-
-    // 로딩 중일 때 화면에 표시할 요소
-    if (isLoading) return <div>로딩 중...</div>;
-
-    const headers = {
-        "Content-Type ": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
-    }
-   const token = "https://nid.naver.com/oauth2.0/token?client_id={NAVER_CLIENT_ID}&client_secret={NAVER_SECRET}&code={code}&grant_type=authorization_code&state={STATE}"
 
 
     // products 배열이 유효한지 확인
