@@ -1,3 +1,4 @@
+//src/model/user/loginHistory.model.ts
 export interface LoginHistoryModel {
     id: string;
     userId: string;

@@ -23,7 +23,7 @@ const pages: {
     link: "/account-savelists",
   },
   {
-    name: "주문 내역",
+    name: "경매 내역",
     link: "/account-order",
   },
   {

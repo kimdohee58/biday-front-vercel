@@ -33,6 +33,7 @@ const apiRequest = async (url: string, {method, params, data, headers, token}: R
             'Content-Type': 'application/json',
             ...(token && {'Authorization': `Bearer ${token}`}),
             ...(typeof headers === "object" ? headers : {}),
+
         },
         ...(data && typeof data === "object" ? {body: JSON.stringify(data)} : {}),
     };
@@ -64,15 +65,20 @@ const apiRequest = async (url: string, {method, params, data, headers, token}: R
 };
 
 export const strategy = {
+
     GET: (url: string, params?: Record<string, string>, headers?: Record<string, string>, token?: string) =>
-        apiRequest(url, { method: 'GET', ...(params && {params}), ...(headers && { headers }), ...(token && {token}) }),
-    POST: (url: string, data: any, params?: Record<string, string>, headers?: Record<string, string>, token?:string) =>
-        apiRequest(url, { method: 'POST', data, ...(params && {params}), ...(headers && { headers }), ...(token && {token}) }),
+        apiRequest(url, {method: 'GET', ...(params && {params}), ...(headers && {headers}), ...(token && {token})}),
+    POST: (url: string, data: any, params?: Record<string, string>, headers?: Record<string, string>, token?: string) =>
+        apiRequest(url, {
+            method: 'POST',
+            data, ...(params && {params}), ...(headers && {headers}), ...(token && {token})
+        }),
     PUT: (url: string, data: any, headers?: Record<string, string>, token?: string) =>
-        apiRequest(url, { method: 'PUT', data, ...(headers && { headers }), ...(token && {token}) }),
+        apiRequest(url, {method: 'PUT', data, ...(headers && {headers}), ...(token && {token})}),
     DELETE: (url: string, headers?: Record<string, string>, token?: string) =>
-        apiRequest(url, { method: 'DELETE', ...(headers && { headers }), ...(token && {token}) }),
+        apiRequest(url, {method: 'DELETE', ...(headers && {headers}), ...(token && {token})}),
     PATCH: (url: string, data: any, headers?: Record<string, string>, token?: string) =>
-        apiRequest(url, { method: 'PATCH', data, ...(headers && { headers }), ...(token && {token}) })
+        apiRequest(url, {method: 'PATCH', data, ...(headers && {headers}), ...(token && {token})}),
 };
+
 

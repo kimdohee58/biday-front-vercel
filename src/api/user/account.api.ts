@@ -24,7 +24,10 @@ const findById = async (userId: string, token:string): Promise<AccountModel> => 
     console.log("응답확인: ", data);
 
     return data;
+
 };
+
+
 
 // 계좌 등록 (POST 요청)
 const save = async (accountData: AccountModel): Promise<AccountModel> => {

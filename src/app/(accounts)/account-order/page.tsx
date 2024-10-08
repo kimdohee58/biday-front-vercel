@@ -83,6 +83,9 @@ export default function AccountOrder() {
               fontSize="text-sm font-medium"
             >
               더 보기
+              입찰내역
+              판매내역
+              낙찰내역
             </ButtonSecondary>
           </div>
         </div>
@@ -96,7 +99,7 @@ export default function AccountOrder() {
   return (
     <div className="space-y-10 sm:space-y-12">
       {/* HEADING */}
-      <h2 className="text-2xl sm:text-3xl font-semibold">주문내역</h2>
+      <h2 className="text-2xl sm:text-3xl font-semibold">경매내역확인</h2>
       {renderOrder()}
       {renderOrder()}
     </div>
