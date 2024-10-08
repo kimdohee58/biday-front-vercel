@@ -7,9 +7,7 @@ const link = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/bids`
 
 
 export async function insertBid(bid): Promise<any | { status: number }> {
-    
     try {
-
         console.log("insertBid 호출")
 
         const token = Cookies.get("token");

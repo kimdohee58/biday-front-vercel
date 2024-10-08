@@ -31,7 +31,7 @@ const pages: {
     link: "/account-password",
   },
   {
-    name: "판매자 등록",
+    name: "계좌정보",
     link: "/account-seller",
   },
 ];
