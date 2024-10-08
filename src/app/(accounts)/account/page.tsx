@@ -25,6 +25,10 @@ export default function AccountPage() {
     );    const [showPostcode, setShowPostcode] = useState(false);
     const token = useSelector(getToken);  // Redux에서 token 가져오기
 
+
+    console.log("asdfasdfasdfasdfasdfasdasdf 유저 점 아이디 ",user.id);
+    console.log("asdfasdf",user.name);
+    console.log("asdfasdf",token)
     const handleUpdate = async () => {
         const updatedUser = {
             ...user,

@@ -1,18 +1,23 @@
-// src/api/loginHistory/loginHistory.api.ts
 import { api } from "../request";
 import { strategy } from "../api.strategy";
-import {LoginHistoryModel} from "@/model/user/loginHistory.model";
+import { LoginHistoryModel } from "@/model/user/loginHistory.model";
 
 // 유저 로그인이력 조회 (GET 요청)
 const findByUserId = async (userId: string): Promise<boolean> => {
     const response = await strategy.GET(`${api.loginHistory}/${userId}`);
-    return await response.json(); // 서버가 Mono<Boolean>을 반환하므로 boolean으로 처리
+    return response as boolean; // 서버에서 Mono<Boolean>을 반환하므로 boolean으로 처리
 };
 
 // 유저 로그인이력 저장 (POST 요청)
 const saveLoginHistory = async (loginHistoryData: LoginHistoryModel): Promise<LoginHistoryModel> => {
     const response = await strategy.POST(`${api.loginHistory}`, loginHistoryData);
-    return await response.json(); // 서버가 Mono<LoginHistoryDocument>를 반환하므로 LoginHistoryModel로 처리
+    const result = await response.json() as LoginHistoryModel;
+
+    // 서버에서 받은 createdAt 값이 문자열일 경우 Date 객체로 변환
+    return {
+        ...result,
+        createdAt: new Date(result.createdAt) // createdAt을 Date 객체로 변환
+    };
 };
 
 export const loginHistoryAPI = {

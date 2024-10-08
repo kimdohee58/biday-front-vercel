@@ -1,4 +1,5 @@
-//src/model/naverLogin.ts
+/*
+//src/model/navers.ts
 interface NaverLogin {
     new (options: {
         clientId: string;
@@ -19,3 +20,4 @@ interface Window {
         LoginWithNaverId: NaverLogin;
     };
 }
+*/
