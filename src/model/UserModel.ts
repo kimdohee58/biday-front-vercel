@@ -2,7 +2,7 @@
 import {AddressModel} from "@/model/AddressModel";
 
 export interface UserModel {
-    id?: string;
+    id: string;
     oauthName?: string;
     name?: string;
     email?: string;
@@ -14,7 +14,7 @@ export interface UserModel {
     totalRating?: number;
     addresses?: AddressModel[];
 
-    newPassword : string;
+    newPassword? : string;
 }
 
 

@@ -7,7 +7,6 @@ export const handleNaverInit = () => {
         naverLoginScript.src = 'https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js';
         naverLoginScript.async = true;
         document.body.appendChild(naverLoginScript);
-
         naverLoginScript.onload = () => {
             const naverLogin = new window.naver.LoginWithNaverId({
                 clientId: 'RD1oMcYETTxoiJLIsYYS', // Naver 개발자 센터에서 받은 클라이언트 ID

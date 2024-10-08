@@ -10,7 +10,7 @@ export const handleReissueToken = async () => {
 
         console.log('refreshToken:', refreshToken);  // 쿠키에 저장된 리프레시 토큰 확인
         // 서버로 리프레시 토큰 전송하여 액세스 토큰 재발급 요청
-        const response = await fetch("http://localhost:8080/reissue", {
+        const response = await fetch("http://localhost:8000/reissue", {
             method: "POST",
             credentials: 'include',  // 쿠키 포함
             headers: {
@@ -22,7 +22,8 @@ export const handleReissueToken = async () => {
         if (response.ok) {
             const data = await response.json();
             console.log("재발급된 데이터:", data);  // 서버에서 반환된 데이터 확인
-            alert('Token reissued successfully!');
+            //alert('Token reissued successfully!');
+            Cookies.set('accessToken', data.accessToken, { expires: 1, sameSite: 'strict' }); // 1일간 유효한 쿠키 설정
         } else {
             // 요청 실패 시 상태 코드에 따른 에러 처리
             alert(`Error reissuing token: ${response.statusText}`);

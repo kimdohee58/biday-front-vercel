@@ -1,8 +1,10 @@
+//src/app/page.tsx
 "use client";
 
 import React, { useEffect, useState } from "react";
 import { fetchAllProducts } from "@/service/product/product.api";
 import {ProductModel} from "@/model/ProductModel";
+import {getCookie} from "@/utils/cookie/cookie.api";
 
 export default function PageHome() {
     const [products, setProducts] = useState<ProductModel[]>([]); // 상품 목록 상태 관리
@@ -25,8 +27,6 @@ export default function PageHome() {
         loadProducts(); // 컴포넌트가 처음 렌더링될 때 상품 데이터를 로드
     }, []);
 
-    // 로딩 중일 때 화면에 표시할 요소
-    if (isLoading) return <div>로딩 중...</div>;
 
     // products 배열이 유효한지 확인
     if (!products || products.length === 0) {

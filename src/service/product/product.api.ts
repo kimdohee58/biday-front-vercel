@@ -1,8 +1,5 @@
 import {ProductDictionary, ProductModel} from "@/model/ProductModel";
 import {fetchAuctionList} from "@/service/auction/auction.api";
-import {fetchImage} from "@/service/image/image.api";
-import {keys} from "@amcharts/amcharts5/.internal/core/util/Object";
-import {ImageType} from "@/model/ImageModel";
 
 const baseUrl = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/products`
 
@@ -186,5 +183,25 @@ export async function fetchAllProducts(): Promise<ProductModel[]> {
     } catch (error) {
         console.error("상품 전체 로드 중 오류 발생: product.api.ts fetchAllProducts", error);
         throw new Error("상품 전체 정보 로드 실패");
+    }
+}
+
+// 하나 불러오기
+export async function fetchProductOne(id:number) {
+
+    try {
+
+        const url = baseUrl+`/findOne?id=${id}`;
+
+        const response = await fetch(url, {cache: "no-store"});
+
+        console.log("확인용",response.ok);
+
+        return (await response.json())[String(id)];
+
+    } catch (error) {
+        console.error("상품 데이터 로드 중 오류 발생", error);
+        throw new Error("상품 데이터 로드 실패");
+
     }
 }

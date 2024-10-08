@@ -47,7 +47,6 @@ async function apiRequest(
 export async function findUserById(id: string): Promise< UserModel | null> {
     try {
         const data = await apiRequest(`/findById/${id}`, "GET");  // 경로에 ID 추가
-        console.log("유저 정보 가져오기 성공:", data);
         return data as UserModel;
     } catch (error) {
         console.error(`ID 불러오기 실패 : ${id}`, error);
@@ -107,11 +106,16 @@ export const updateUser = async (id: string, user: UserModel): Promise<Response>
 
 // 비밀번호 변경 API
 export async function changepass(user: UserModel): Promise<Response> {
+
     const body = {
         email: user.email,
         password: user.password, // 기존 비밀번호
         newPassword : user.newPassword // 새로운 비밀번호
     };
+    console.log("asdflfdsjal  : email" , user.email)
+    console.log("asdflfdsjal  : password" , user.password)
+    console.log("asdflfdsjal  : new" , user.newPassword)
+    console.log("asldf;dsafjlks : " , body)
 
     try {
         const response = await apiRequest(`/changepass`, "PATCH", body);
@@ -139,8 +143,10 @@ export const logoutUser = async (): Promise<void> => {
     const refreshToken = document.cookie.split('; ').find(row => row.startsWith('refresh='));
     const tokenValue = refreshToken ? refreshToken.split('=')[1] : '';
 
+    document.cookie = 'refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+
     try {
-        const response = await fetch("http://localhost:8080/logout", {
+        const response = await fetch("http://localhost:8000/logout", {
             method: "POST",
             credentials: 'include',
             headers: {

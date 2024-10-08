@@ -1,9 +1,6 @@
-import {store} from "next/dist/build/output/store";
-import {useSelector} from "react-redux";
-import {getToken} from "@/lib/features/user.slice";
+import {handleReissueToken} from "@/utils/reissue/reissueToken";
 
-const fetchWithToken = async (url: string, options: RequestInit = {}) => {
-    const token = useSelector(getToken);
+const fetchWithToken = async (url: string, token: string, options: RequestInit = {}):Promise<Response> => {
 
     const headers = {
         ...options.headers,
@@ -16,9 +13,8 @@ const fetchWithToken = async (url: string, options: RequestInit = {}) => {
     });
 
     if (response.status === 401) {
-        // const newToken =
-
-        return fetchWithToken(url, options);
+        await handleReissueToken();
+        return fetchWithToken(url, token, options);
     }
 
     return response;

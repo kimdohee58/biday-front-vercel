@@ -9,7 +9,8 @@ import Image from "next/image";
 import {ProductModel} from "@/model/ProductModel";
 import {useQuery} from "@tanstack/react-query";
 import {fetchAllProducts} from "@/service/product/product.api";
-import {timeMinute} from "d3-time";
+import {ImageType} from "@/model/ImageModel";
+import {fetchImageFromClient} from "@/service/image/image.api";
 
 const productCard = () => {
 
@@ -58,22 +59,23 @@ export default function InsertAuction(productId?: number) {
     const [duration, setDuration] = useState<number>(3);
     const [files, setFiles] = useState<File[]>([])
 
-    const {data: productList, isLoading, error} = useQuery({queryKey: ["products"], queryFn: fetchAllProducts});
+    const productList= useQuery({queryKey: ["products"], queryFn: fetchAllProducts});
+    const productImages = useQuery({queryKey: ["products"], queryFn: () => fetchImageFromClient(ImageType.PRODUCT) });
+
 
     useEffect(() => {
-        if (productList && productId) {
-            const foundProduct = productList.find((item) => item.id === productId);
+        if (!productList.isLoading && productId) {
+            const foundProduct = productList.data!.find((item) => item.id === productId);
             foundProduct ? setSelectedProduct(foundProduct) : null;
         }
     }, [productList, productId]);
 
-    if (error instanceof Error) return <div>Error: {error.message}</div>;
+    if (productList.error instanceof Error) return <div>Error: {productList.error.message}</div>;
     // 에러 페이지로 변경
 
-    if (!isLoading) {
+    if (!productList.isLoading) {
         console.log(productList);
     }
-
 
     const openModal = () => {
         setIsOpen(true);
@@ -177,7 +179,7 @@ export default function InsertAuction(productId?: number) {
     };
 
     const renderSelectProductButton = () => {
-        if (isLoading) {
+        if (productList.isLoading) {
             return <button disabled type="button"
                            className="justify-center py-2.5 px-5 me-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 inline-flex items-center">
                 <svg aria-hidden="true" role="status"
