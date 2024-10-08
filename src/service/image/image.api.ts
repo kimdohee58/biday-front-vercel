@@ -84,7 +84,7 @@ export async function fetchImageFromClient(type: ImageType, id?: string): Promis
 
 // 이미지 불러오기
 export async function fetchImage(id: string, type: ImageType): Promise<ImageModel[]> {
-
+    // 패치이미지는 서버 컴포넌트용.
     console.log("fetchImage 호출");
 
     try {

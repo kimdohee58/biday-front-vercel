@@ -1,4 +1,4 @@
-// global.d.ts
+//src/model/golbal.ts
 export interface NaverLogin {
     new (options: {
         clientId: string;
@@ -14,8 +14,10 @@ export interface NaverLogin {
     };
 }
 
-export interface Window {
-    naver: {
-        LoginWithNaverId: NaverLogin;
-    };
+declare global {
+    interface Window {
+        naver: {
+            LoginWithNaverId: NaverLogin;
+        };
+    }
 }

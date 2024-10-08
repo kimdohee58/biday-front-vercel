@@ -1,5 +1,6 @@
 //src/utils/cookie/cookie.api.ts
 import Cookies from 'js-cookie';
+import {createUserToken} from "@/utils/jwt.utils";
 
 // JWT 토큰과 Refresh 토큰을 쿠키에 저장하는 함수
 export const saveToken = (token: string, refreshToken?: string) => {
@@ -9,7 +10,6 @@ export const saveToken = (token: string, refreshToken?: string) => {
         path: '/',  // 모든 경로에서 유효
         secure: true, // HTTPS에서만 쿠키 전송
         sameSite: 'strict', // 동일 사이트에서만 쿠키 사용
-        httpOnly: false // js-cookie는 브라우저에서 관리되므로 httpOnly는 false로 설정 (서버에서 설정할 경우에만 httpOnly 가능)
     });
 
     // 2. Refresh 토큰이 있을 경우 쿠키에 저장 (30일 동안 유지)
@@ -19,9 +19,10 @@ export const saveToken = (token: string, refreshToken?: string) => {
             path: '/',  // 모든 경로에서 유효
             secure: true, // HTTPS에서만 쿠키 전송
             sameSite: 'strict', // 동일 사이트에서만 쿠키 사용
-            httpOnly: false // js-cookie에서는 설정 불가, 서버에서 httpOnly 쿠키로 관리 가능
         });
     }
+
+
 };
 
 // JWT 토큰을 로컬 스토리지와 쿠키에서 삭제하는 함수 (로그아웃 시 사용)
@@ -31,16 +32,13 @@ export const clearToken = () => {
     localStorage.removeItem('refreshToken');
 
 
-    Cookies.remove('token', { path: '/', secure: true, sameSite: 'strict' });
-    Cookies.remove('refreshToken', { path: '/', secure: true, sameSite: 'strict' });
+    Cookies.remove('token', {path: '/', secure: true, sameSite: 'strict'});
+    Cookies.remove('refreshToken', {path: '/', secure: true, sameSite: 'strict'});
 
-    console.log('JWT 토큰이 쿠키에서 삭제되었습니다.');
-    console.log('쿠키에 저장된 토큰:', getCookie('token'));
-
-    document.cookie = 'token=; Max-Age=0; path=/;';
-    document.cookie = 'refreshToken=; Max-Age=0; path=/;';
-    Cookies.remove('token', { path: '/', secure: true, sameSite: 'strict' });
-    Cookies.remove('refreshToken', { path: '/', secure: true, sameSite: 'strict' });
+    //document.cookie = 'token=; Max-Age=0; path=/;';
+    //document.cookie = 'refreshToken=; Max-Age=0; path=/;';
+    Cookies.remove('token', {path: '/', secure: true, sameSite: 'strict'});
+    Cookies.remove('refreshToken', {path: '/', secure: true, sameSite: 'strict'});
 
     console.log('JWT 토큰이 로컬 스토리지와 쿠키에서 삭제되었습니다.');
     console.log('로컬 스토리지에 저장된 토큰:', localStorage.getItem('token'));
@@ -66,3 +64,21 @@ export const getCookie = (name: string): string | null => {
     }
     return null;
 };
+
+
+export const userToken = (userInfo: { id: string; name: string; email: string; role:string}) => {
+    // 유저 정보를 기반으로 JWT 커스텀 토큰 생성
+    const userToken = createUserToken(userInfo);
+
+    // 생성된 JWT 토큰을 쿠키에 저장 (7일 동안 유지)
+    Cookies.set('userToken', userToken, {
+        expires:7,
+        path: "/", // 모든 경로에서 유효
+        secure:true, // HTTPS에서만 쿠키를 전송한다고 하는데, 이거 우리 사용 안하지 않나..
+        sameSite: 'strict', // 동일 사이트에서만 쿠키 사용
+        httpOnly:false // js쿠키에서는 브라우저에서 관리가 되기 때문에 httpOnly는 false로 설정.
+    });
+
+    console.log("유저 정보 JWT 토큰이 내 마음속 쿠키에 저장~ ")
+
+}

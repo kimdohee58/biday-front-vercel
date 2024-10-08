@@ -1,7 +1,7 @@
 //src/app/login/page.tsx
 "use client";
 
-import React, {useState, FormEvent} from 'react';
+import React, {useState, FormEvent, useEffect} from 'react';
 import facebookSvg from "@/images/Facebook.svg";
 import twitterSvg from "@/images/Twitter.svg";
 import googleSvg from "@/images/Google.svg";
@@ -11,14 +11,23 @@ import Image from "next/image";
 import Link from "next/link";
 import {useLogin} from "@/hooks/useLogin";
 import btnG_official from "@/images/btnG_official.png";
-import {signIn} from "next-auth/react";
+import axios from "axios";
+import Cookies from 'js-cookie';
+import {router} from "next/client";
+import axiosInstance from "@/app/api/axiosInstance/axiosInstance";
+import {response} from "express";
+import { useRouter } from 'next/navigation'; // App Router의 useRouter 사용
+import { useSearchParams } from 'next/navigation'; // useSearchParams 사용
+
 
 // 소셜 로그인 버튼 데이터
 const loginSocials = [
     {
-        name: "Continue with Naver",
-        href: `${process.env.NEXT_PUBLIC_API_SERVER_URL}/oauth2/authorization/naver`,
+        name: "onNaverLogin",
+        href: "http://localhost:8000/oauth2/authorization/naver",
         icon: btnG_official,
+        on: "handleNaver",
+
     },
     {
         name: "Continue with Facebook src/app/login/page.tsx",
@@ -43,12 +52,26 @@ export default function PageLogin() {
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
     const {login} = useLogin();
+    const searchParams = useSearchParams(); // URL의 query parameters 추출
+    const router = useRouter(); // App Router에서 페이지 이동을 위해 사용
 
-    const handleLaverSigIn = () =>{
-        signIn('naver',{
-            callbackUrl: '/'
-        })
+
+    const handleNaver = async () => {
+        try{
+            const response = await fetch (`${process.env.NEXT_PUBLIC_API_SERVER_URL}/oauth2/token/naver`,{
+                method:"GET",
+
+            })
+
+            if (!response.ok) {
+                throw new Error("버튼 실패")
+            }
+            window.location.href="/"
+        }catch(error){
+            console.error("네이버 핸들링 로그인 실패 ", error);
+        }
     }
+
 
     // 입력 값 변경 처리 함수
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,13 +97,14 @@ export default function PageLogin() {
     };
 
 
+
+
     return (
         <div className={`nc-PageLogin`} data-nc-id="PageLogin">
             <div className="container mb-24 lg:mb-32">
                 <h2 className="my-20 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
                     Login
                 </h2>
-                <button onClick={handleLaverSigIn}>네이버 로그인 버튼</button>
 
                 <div className="max-w-md mx-auto space-y-6">
                     {/* 소셜 로그인 버튼 */}
@@ -90,6 +114,7 @@ export default function PageLogin() {
                                 key={index}
                                 href={item.href}
                                 className="flex w-full rounded-lg bg-primary-50 dark:bg-neutral-700 px-4 py-3 transform transition-transform sm:px-6 hover:translate-y-[-2px]"
+                                onClick={item.name === "onNaverLogin" ? handleNaver : undefined}
 
                             >
                                 <Image
