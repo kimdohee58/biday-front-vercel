@@ -23,7 +23,9 @@ export default function AvatarDropdown() {
 
     const user = useSelector((state: RootState) => state.user.user);
     const { handleLogout } = useLogout(); // useLogout 훅 사용
-    const dispatch = useDispatch();
+
+    // 주석 추가한 시간 10.10 17시
+    /*const dispatch = useDispatch();
     const router = useRouter();
 
     const handleLogoutClick = async () => {
@@ -40,7 +42,7 @@ export default function AvatarDropdown() {
             console.error("로그아웃 실패:", error);
             alert("로그아웃에 실패했습니다.");
         }
-    };
+    };*/
 
     return (
         <div className="AvatarDropdown border border-rose-500">
@@ -268,7 +270,7 @@ export default function AvatarDropdown() {
                                                 <Link
                                                     href={"/"}
                                                     className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
-                                                    onClick={handleLogoutClick}
+                                                    onClick={handleLogout}
                                                 >
                                                     <div className="flex items-center justify-center flex-shrink-0 text-neutral-500 dark:text-neutral-300">
                                                         <svg
