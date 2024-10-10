@@ -1,12 +1,12 @@
 // src/api/product11/product11.api.ts
-import { api } from "../request";
-import { strategy } from "../api.strategy";
-import {ProductModel} from "@/model/product/product.model";
+import {api} from "../request";
+import {strategy} from "../api.strategy";
+import {ProductDictionary, ProductModel} from "@/model/product/product.model";
+import {RequestOptions} from "@/model/api/RequestOptions";
 
 // 전체 상품 목록 불러오기 (GET 요청)
 const findAll = async (): Promise<ProductModel[]> => {
-    const response = await strategy.GET(`${api.product}/findAll`);
-    return response;
+    return await strategy.GET(`${api.product}/findAll`);
 };
 
 // 필터를 이용한 상품 목록 불러오기 (GET 요청)
@@ -30,25 +30,28 @@ const searchByFilter = async (
 };
 
 // 상품 상세 조회 (GET 요청)
-const findById = async (id: number): Promise<ProductModel> => {
-    const response = await strategy.GET(`${api.product}`, { id: id.toString() });
+const findById = async (options: RequestOptions<null>): Promise<ProductModel> => {
+    const response = await strategy.GET(`${api.product}`,);
     return response;
 };
 
 // 상품 등록 (POST 요청)
-const saveProduct = async (productData: Partial<ProductModel>): Promise<ProductModel> => {
-    const response = await strategy.POST(`${api.product}`, productData);
-    return response;
+const saveProduct = async (options: RequestOptions<ProductModel>) => {
+    return await strategy.POST(`${api.product}`, options);
 };
 
 // 상품 수정 (PATCH 요청)
-const updateProduct = async (productData: Partial<ProductModel>): Promise<ProductModel> => {
-    const response = await strategy.PATCH(`${api.product}`, productData);
-    return response;
+const updateProduct = async (options: RequestOptions<Partial<ProductModel>>): Promise<ProductModel> => {
+    return await strategy.PATCH(`${api.product}`, options);
 };
 
+// 상품 1개 상세보기 (GET 요청)
+const findOneById = async (options: RequestOptions<null>):Promise<ProductDictionary> => {
+    return await strategy.GET(`${api.product}/findOne`, options);
+}
+
 // 상품 삭제 (DELETE 요청)
-const deleteProduct = async (id: number): Promise<void> => {
+const deleteProduct = async (options: RequestOptions<null>): Promise<void> => {
     await strategy.DELETE(`${api.product}?id=${id}`);
 };
 
@@ -59,4 +62,5 @@ export const productAPI = {
     saveProduct,
     updateProduct,
     deleteProduct,
+    findOneById,
 };

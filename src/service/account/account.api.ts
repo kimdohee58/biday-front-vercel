@@ -22,9 +22,10 @@ export async function getAccount() {
 
     const userId = "6703c9bf0ef91f70f4e4e0ec";
 
+
     try {
 
-        return await accountAPI.findById(userId, token);
+        return await accountAPI.findById(userId, token, userToken);
 
 
     } catch (error) {

@@ -3,9 +3,10 @@ import { api } from "../request";
 import { strategy } from "../api.strategy";
 import {AccountModel} from "@/model/user/account.model";
 import Cookies from "js-cookie";
+import {UserInfo} from "@/model/user/userInfo.model";
 
 // 계좌 조회 (GET 요청)
-const findById = async (userId: string, token:string): Promise<AccountModel> => {
+const findById = async (userId: string, token:string, userToken:UserInfo): Promise<AccountModel> => {
 
     console.log("토큰 확인: ", token);
 

@@ -9,6 +9,7 @@ import {initialUser, UserModel} from "@/model/UserModel";  // API 호출을 임�
 import {createUserToken, extractUserInfoFromToken} from '@/utils/jwt.utils';
 import {getCookie, saveToken} from "@/utils/cookie/cookie.api";
 import Cookies from "js-cookie";
+import {UserToken} from "@/model/user/UserToken";
 
 export const useLogin = () => {
     const dispatch = useDispatch();
@@ -17,7 +18,7 @@ export const useLogin = () => {
     const login = async (username: string, password: string) => {
         try {
             const response = await handleLogin(username, password);
-
+            console.log("adfkadsjfldjf 유즈 로그인 입성 " )
             if (response) {
                 // Authorization 헤더에서 토큰 추출
                 const authorizationHeader = response.headers["authorization"];
@@ -32,9 +33,9 @@ export const useLogin = () => {
                     const { id, name, role, email } = extractUserInfoFromToken(accessToken);
                     console.log("페이로드 한 유저 정보 저장 jwt.utils.ts: ", id, name, role, email);
 
-                  /*  // 토큰에서 유저 정보 추출 (userId,name,role)
-                    const userId = extractUserIdFromToken(token);  // JWT 토큰에서 userId 추출
-                    console.log("JWT 토큰에서 userId 쪼개기 : ", userId);*/
+                    /*  // 토큰에서 유저 정보 추출 (userId,name,role)
+                      const userId = extractUserIdFromToken(token);  // JWT 토큰에서 userId 추출
+                      console.log("JWT 토큰에서 userId 쪼개기 : ", userId);*/
 
                     // 서버에서 유저 ID로 유저 정보 가져오기
                     const user = await findUserById(id);
@@ -42,12 +43,12 @@ export const useLogin = () => {
                     if (user) {
                         // UserModel에 맞게 데이터 변환
                         const userData : UserModel = {
-                                ...initialUser,  // 초기값을 기반으로
-                                id: user.id, // 백엔드에서 받은 id
-                                name: user.name,  // 백엔드에서 받은 name
-                                email: user.email,  // 백엔드에서 받은 email
-                                phoneNum: user.phoneNum,  // 백엔드에서 받은 phone
-                                status: user.status ? String(user.status) : '',  // boolean인 status를 문자열로 변환
+                            ...initialUser,  // 초기값을 기반으로
+                            id: user.id, // 백엔드에서 받은 id
+                            name: user.name,  // 백엔드에서 받은 name
+                            email: user.email,  // 백엔드에서 받은 email
+                            phoneNum: user.phoneNum,  // 백엔드에서 받은 phone
+                            status: user.status ? String(user.status) : '',  // boolean인 status를 문자열로 변환
                         };
 
                         // Redux store에 유저 정보를 저장
@@ -66,9 +67,27 @@ export const useLogin = () => {
                             secure: true,
                             sameSite: 'strict',
                         });
-                        console.log("userToken 커스텀 토큰 내 마음속에 저장~ :  ", userToken);
-                        console.log("userToken 쿠키키키키키키 토큰 내 마음속에 저장~ :  ", userPayload);
-                        console.log("userToken 쿠키키키키키키asdfasdfasdfasd 토큰 내 마음속에 저장~ :  ");
+
+                        if(user){
+                            const userInfo:UserToken = {
+                                userId:user.id,
+                                userName:user.name ?? '',
+                                userRole:role ?? '',
+                            };
+
+                            // 리덕스 스토리어 로컬스토리지 저장
+                            dispatch(saveUser({ user: userInfo, token: '' }));
+                            // 로컬 스토리지 유저 정보 제이슨으로 저장.
+                            localStorage.setItem('userInfo', JSON.stringify(userInfo));
+
+                            // 쿠키에 유저 정보를 제이슨 형태로 저장
+                            Cookies.set('userInfo', JSON.stringify(userInfo), {
+                                expires:7,
+                                path:"/",
+                                sameSite: 'strict',
+                            })
+                            console.log("유저 정보 리덕스, 쿠키에 저장 : ", userInfo);
+                        }
                     }
                     router.push("/");
                 } else {
