@@ -14,7 +14,7 @@ export const useTokenManager = () => {
                 throw new Error('Access token is missing');
             }
 
-            const response = await fetch('http://localhost:8080/users/UsersList', {
+            const response = await fetch('http://localhost:8000/users/UsersList', {
                 method: 'GET',
                 headers: {
                     "Authorization": `Bearer ${accessToken}`,
@@ -41,7 +41,7 @@ export const useTokenManager = () => {
     // refreshToken으로 accessToken 재발급
     const handleReissueToken = async () => {
         try {
-            const response = await fetch("http://localhost:8080/reissue", {
+            const response = await fetch("http://localhost:8000/reissue", {
                 method: "POST",
                 credentials: 'include',
                 headers: {
@@ -64,7 +64,7 @@ export const useTokenManager = () => {
     // 로그아웃 처리
     const handleLogout = async () => {
         try {
-            const response = await fetch("http://localhost:8080/logout", {
+            const response = await fetch("http://localhost:8000/logout", {
                 method: "POST",
                 credentials: 'include',
                 headers: {

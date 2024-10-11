@@ -23,24 +23,6 @@ export default function AvatarDropdown() {
 
     const user = useSelector((state: RootState) => state.user.user);
     const { handleLogout } = useLogout(); // useLogout 훅 사용
-    const dispatch = useDispatch();
-    const router = useRouter();
-
-    const handleLogoutClick = async () => {
-        try {
-            // 1. 로그아웃 API 호출
-            await logoutUser();
-
-            // 2. Redux 스토어의 유저 정보와 토큰 초기화
-            dispatch(clearUser());
-
-            // 3. 로그아웃 후 리다이렉트 (예: 메인 페이지나 로그인 페이지로)
-            router.push("/login"); // 로그아웃 후 이동할 페이지
-        } catch (error) {
-            console.error("로그아웃 실패:", error);
-            alert("로그아웃에 실패했습니다.");
-        }
-    };
 
     return (
         <div className="AvatarDropdown border border-rose-500">
@@ -268,7 +250,7 @@ export default function AvatarDropdown() {
                                                 <Link
                                                     href={"/"}
                                                     className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
-                                                    onClick={handleLogoutClick}
+                                                    onClick={handleLogout}
                                                 >
                                                     <div className="flex items-center justify-center flex-shrink-0 text-neutral-500 dark:text-neutral-300">
                                                         <svg
@@ -346,6 +328,22 @@ export default function AvatarDropdown() {
                                         )}
 
                                         <div className="w-full border-b border-neutral-200 dark:border-neutral-700" />
+
+                                        {user ? (
+
+                                            <Link href="/login" onClick={() => close()}>
+                                                로그인
+                                            </Link>
+                                        ) : (
+                                            <>
+                                                <Link href="/account" onClick={() => close()}>
+                                                    My Account
+                                                </Link>
+                                                <Link href="/" onClick={handleLogout}>
+                                                    로그아웃
+                                                </Link>
+                                            </>
+                                        )}
 
                                         <div className="flex items-center justify-between p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
                                             <div className="flex items-center">

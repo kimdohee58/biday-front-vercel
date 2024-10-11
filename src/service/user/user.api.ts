@@ -1,8 +1,10 @@
 // src/service/user/user.api.ts
-import { UserModel } from "@/model/UserModel";
+
+import { UserModel } from "@/model/user/user.model";
 
 // 전략 패턴을 사용을 해야 한다. 7번 리플라이 서비스 점 딜리트 이런 식으로
 // 공통 API URL 설정
+
 let url = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/users`;
 
 // 공통 fetch 처리 함수
@@ -47,6 +49,7 @@ async function apiRequest(
 export async function findUserById(id: string): Promise< UserModel | null> {
     try {
         const data = await apiRequest(`/findById/${id}`, "GET");  // 경로에 ID 추가
+        console.log("파인드바이유저",data)
         return data as UserModel;
     } catch (error) {
         console.error(`ID 불러오기 실패 : ${id}`, error);

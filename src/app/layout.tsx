@@ -21,7 +21,8 @@ import {makeStore, persistor, store} from "@/lib/store";
 import {useEffect, useState} from "react";
 import isClient from "beautiful-react-hooks/shared/isClient";
 import Script from "next/script";  // store와 persistor 임포트
-import TokenCheck from "@/components/TokenCheck"; // AuthContext 임포트
+import TokenCheck from "@/components/TokenCheck";
+import {AuthProvider} from "@/context/AuthContext"; // AuthContext 임포트
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -36,12 +37,7 @@ const notoSans = Noto_Sans_KR({
 });
 
 
-export default function RootLayout({
-                                       children,
-                                       params,
-                                   }: {
-    children: React.ReactNode;
-    params: any;
+export default function RootLayout({children, params,}: { children: React.ReactNode; params: any;
 }) {
     const [isClient, setIsClient] = useState(false);
 
@@ -56,12 +52,13 @@ export default function RootLayout({
         <html lang="ko" className={`${poppins.className}`}>
         <body className="bg-white text-base dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200">
         {/*어스프로바이더로 전체 앱 감싸야함. */}
+        <AuthProvider>
             {/*리덕스 프로바이더로 전체 앱 감싸야함. */}
-            <TokenCheck/> {/*페이지 전환시 토크 체크 */}
             <Provider store={store}>
                 {isClient ? (
                     <PersistGate loading={null} persistor={persistor as any}>
                         <ReactQueryProvider>
+                            {/*<TokenCheck/>*/} {/*페이지 전환시 토크 체크 */}
                             <SiteHeader/>
                             <main>{children}</main>
                             <Footer/>
@@ -77,6 +74,7 @@ export default function RootLayout({
                 )}
             </Provider>
             <CommonClient/>
+        </AuthProvider>
         </body>
         </html>
     );
