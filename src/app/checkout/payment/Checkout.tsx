@@ -6,9 +6,14 @@ import { useEffect, useState } from "react";
 const clientKey = `${process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY}`;
 const customerKey = "";
 
-export default function Checkout({amount}: {amount: number}) {
+export default function Checkout({value, product, orderId, customerKey}: {value: number, product: string, orderId: string, customerKey: string}) {
+    const clientKey = `${process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY}`
     const [ready, setReady] = useState<boolean>(false);
-    const [widgets, setWidgets] = useState<any>(null);
+    const [widgets, setWidgets] = useState<any>(null)
+    const amount: PaymentCurrencyAmount = {
+        currency: "KRW",
+        value: String(value),
+    };
 
     useEffect(() => {
         async function fetchPaymentWidgets() {
@@ -80,13 +85,10 @@ export default function Checkout({amount}: {amount: number}) {
                             // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
                             // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
                             await widgets.requestPayment({
-                                orderId: "ZBIIW8xw0RbBPr8gmr7kL",
-                                orderName: "토스 티셔츠 외 2건",
+                                orderId: orderId,
+                                orderName: product,
                                 successUrl: window.location.origin + "/success",
                                 failUrl: window.location.origin + "/fail",
-                                customerEmail: "customer123@gmail.com",
-                                customerName: "김토스",
-                                customerMobilePhone: "01012341234",
                             });
                         } catch (error) {
                             // 에러 처리하기

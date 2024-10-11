@@ -19,15 +19,13 @@ import {useMutation, useQuery} from "@tanstack/react-query";
 import {accountAPI} from "@/api/user/account.api";
 import {savePaymentTemp} from "@/service/order/payment.service";
 import {usePayment} from "@/hooks/usePayment";
-import {useSearchParams} from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
 import {productAPI} from "@/api/product/product.api";
 import {fetchAwardDetails} from "@/service/auction/award.service";
 import {fetchProductAndAwardDetails} from "@/service/order/checkout.service";
 import useRandomId from "@/hooks/useRandomId";
-import PaymentComponent from "@/app/checkout/PaymentComponent";
-import Modal from "@/app/checkout/payment/Modal";
 import Checkout from "@/app/checkout/payment/Checkout";
-import {useRouter} from "next/router";
+import CustomModal from "@/app/checkout/payment/CustomModal";
 
 export default function CheckoutPage() {
 
@@ -35,10 +33,11 @@ export default function CheckoutPage() {
     const searchParams = useSearchParams();
     const productId = searchParams.get("productId") || "";
     const awardId = searchParams.get("awardId") || "";
+    const [amount, setAmount] = useState<number>(0);
 
     useEffect(() => {
         if (!productId || !awardId) {
-            router.replace("/404");
+            console.log("팅김")
         }
     }, [productId, awardId]);
 
@@ -54,11 +53,11 @@ export default function CheckoutPage() {
     const orderId = useRandomId(20);
     console.log(orderId);
 
-
     const {data, isLoading, error} = useQuery({
         queryKey: ["productAndAward"],
         queryFn: () => fetchProductAndAwardDetails(productId, awardId)
     });
+
 
     if (isLoading) {
         return <div>로딩중...</div>
@@ -69,10 +68,20 @@ export default function CheckoutPage() {
         // error 페이지 전환
     }
 
-    const clientKey = `${process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY}`;
-    const [amount, setAmount] = useState<number>(0);
+    useEffect(() => {
+        if (isLoading) {
+            console.log("로딩 중입니다...");
+        }
 
-    setAmount(data.award.currentBid);
+        if (!isLoading) {
+            setAmount(data.award.currentBid);
+        }
+
+        if (error) {
+            console.log("에러에러", error);
+        }
+
+    }, [isLoading, error, data]);
 
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -372,9 +381,9 @@ export default function CheckoutPage() {
                         <ButtonPrimary onClick={handleClick}
                                        className="mt-8 w-full">
                             Confirm order</ButtonPrimary>
-                        <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-                            <Checkout amount={amount}/>
-                        </Modal>
+                        <CustomModal isOpen={isModalOpen} onClose={handleCloseModal}>
+                            <Checkout value={amount} product={data.product.name} orderId={orderId} customerKey={"66f68ebf2bd718301c69f1e5"}/>
+                        </CustomModal>
                         <div
                             className="mt-5 text-sm text-slate-500 dark:text-slate-400 flex items-center justify-center">
                             <p className="block relative pl-5">
