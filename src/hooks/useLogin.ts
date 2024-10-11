@@ -38,12 +38,12 @@ export const useLogin = () => {
                     if (user) {
                         // UserModel에 맞게 데이터 변환
                         const userData : UserModel = {
-                                ...initialUser,  // 초기값을 기반으로
-                                id: user.id !!, // 백엔드에서 받은 id
-                                name: user.name,  // 백엔드에서 받은 name
-                                email: user.email,  // 백엔드에서 받은 email
-                                phoneNum: user.phoneNum,  // 백엔드에서 받은 phone
-                                status: user.status ? String(user.status) : '',  // boolean인 status를 문자열로 변환
+                            ...initialUser,  // 초기값을 기반으로
+                            id: user.id !!, // 백엔드에서 받은 id
+                            name: user.name,  // 백엔드에서 받은 name
+                            email: user.email,  // 백엔드에서 받은 email
+                            phoneNum: user.phoneNum,  // 백엔드에서 받은 phone
+                            status: user.status ? String(user.status) : '',  // boolean인 status를 문자열로 변환
                         };
 
                         // Redux store에 유저 정보를 저장

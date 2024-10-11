@@ -18,7 +18,7 @@ import {
 import {AccountModel, BankCode} from "@/model/user/account.model";
 import Cookies from "js-cookie";
 import {useMutation, useQuery} from "@tanstack/react-query";
-import useTranId from "@/hooks/useTranId";
+import useRandomId from "@/hooks/useRandomId";
 import {getAccount} from "@/service/account/account.api";
 import {ApiError} from "@/utils/error";
 
@@ -29,7 +29,7 @@ export default function Account1() {
     const [birth, setBirth] = useState<string>("");
     const [accountNum, setAccountNum] = useState("");
     const [bankName, setBankName] = useState("");
-    const bankTranId = useTranId();
+    const bankTranId = useRandomId();
     const [accountPlaceholder, setAccountPlaceholder] = useState("계좌번호를 입력해 주세요.");
     const [accountPattern, setAccountPattern] = useState<string>("");
 
@@ -39,10 +39,6 @@ export default function Account1() {
     const SCOPE = 'login inquiry transfer';
     const STATE = '12341234123412341234123412341234';
     const AUTH_TYPE = '0';
-
-    const userToken = Cookies.get("userToken");
-
-    const userId = "6703c9bf0ef91f70f4e4e0ec";
 
     const accountData = useQuery({queryKey: ["account"], queryFn: () => getAccount()});
 
