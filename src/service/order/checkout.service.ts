@@ -29,6 +29,7 @@ export async function fetchProductAndAwardDetails(productId: string, awardId: st
         const [productDict, award]: [ProductDictionary, AwardModel] = await Promise.all([
             productAPI.findOneById(productOptions),
             awardAPI.findById(awardOptions)
+
         ]);
 
         const product = Object.values(productDict)[0];

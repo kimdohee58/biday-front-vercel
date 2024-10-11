@@ -19,7 +19,7 @@ export enum BankCode {
     한국은행 = "001",
     산업은행 = "002",
     기업은행 = "003",
-    국민은행 = "004",]
+    국민은행 = "004",
     외환은행 = "005",
     수협중앙회 = "006",
     수출입은행 = "008",
@@ -34,22 +34,5 @@ export enum BankCode {
     하나은행 = "081",
     신한은행 = "088",
     카카오뱅크 = "090",
-    토스뱅크 = "092",
+    토스뱅크 = "092"
 }
-
-
-export const initialAccountModel : AccountModel = {
-    id: "",
-    userId: "",
-    bankTranId:"",
-    bankCode : "",
-    bankName :"",
-    accountNumber:"",
-    accountName:"",
-    bankRspCode:"",
-    bankTranDate : new Date(),
-}
-
-/*export const aacountState: AccountModel = {
-    id: 0, // 처음에는 ID가 없을 수 있으므로 undefined로 설정
-};*/

@@ -21,7 +21,8 @@ import {makeStore, persistor, store} from "@/lib/store";
 import {useEffect, useState} from "react";
 import isClient from "beautiful-react-hooks/shared/isClient";
 import Script from "next/script";  // store와 persistor 임포트
-import TokenCheck from "@/components/TokenCheck"; // AuthContext 임포트
+import TokenCheck from "@/components/TokenCheck";
+import Portal from "@/Portal"; // AuthContext 임포트
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -75,6 +76,9 @@ export default function RootLayout({
                         <Footer/>
                     </ReactQueryProvider>
                 )}
+                <Portal>
+                    <div id="modal-root"></div>
+                </Portal>
             </Provider>
             <CommonClient/>
         </body>

@@ -1,18 +1,14 @@
-'use client';
+"use client";
 
 import { loadTossPayments, ANONYMOUS } from "@tosspayments/tosspayments-sdk";
 import { useEffect, useState } from "react";
 
-const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
-const customerKey = "-OFOLhX2_qZPVjjwbbyt-";
+const clientKey = `${process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY}`;
+const customerKey = "";
 
-export function CheckoutPage() {
-    const [amount, setAmount] = useState({
-        currency: "KRW",
-        value: 50_000,
-    });
-    const [ready, setReady] = useState(false);
-    const [widgets, setWidgets] = useState(null);
+export default function Checkout({amount}: {amount: number}) {
+    const [ready, setReady] = useState<boolean>(false);
+    const [widgets, setWidgets] = useState<any>(null);
 
     useEffect(() => {
         async function fetchPaymentWidgets() {
@@ -67,30 +63,12 @@ export function CheckoutPage() {
     }, [widgets, amount]);
 
     return (
-        <div className="wrapper">
+        <div className="wrapper w-1/3 mx-auto">
             <div className="box_section">
                 {/* 결제 UI */}
                 <div id="payment-method" />
                 {/* 이용약관 UI */}
                 <div id="agreement" />
-                {/* 쿠폰 체크박스 */}
-                <div>
-                    <div>
-                        <label htmlFor="coupon-box">
-                            <input
-                                id="coupon-box"
-                                type="checkbox"
-                                aria-checked="true"
-                                disabled={!ready}
-                                onChange={(event) => {
-                                    // ------  주문서의 결제 금액이 변경되었을 경우 결제 금액 업데이트 ------
-                                    setAmount(event.target.checked ? amount - 5_000 : amount + 5_000);
-                                }}
-                            />
-                            <span>5,000원 쿠폰 적용</span>
-                        </label>
-                    </div>
-                </div>
 
                 {/* 결제하기 버튼 */}
                 <button
@@ -102,7 +80,7 @@ export function CheckoutPage() {
                             // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
                             // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
                             await widgets.requestPayment({
-                                orderId: "v9AglULMHMqtG5hzlIWNJ",
+                                orderId: "ZBIIW8xw0RbBPr8gmr7kL",
                                 orderName: "토스 티셔츠 외 2건",
                                 successUrl: window.location.origin + "/success",
                                 failUrl: window.location.origin + "/fail",
