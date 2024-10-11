@@ -7,7 +7,7 @@ import { handleLogin } from '@/service/user/login.api';
 import {findUserById} from "@/service/user/user.api";
 import {initialUser, UserModel} from "@/model/UserModel";  // API 호출을 임포트
 import {createUserToken, extractUserInfoFromToken} from '@/utils/jwt.utils';
-import {getCookie, saveToken} from "@/utils/cookie/cookie.api";
+import {saveToken} from "@/utils/cookie/cookie.api";
 import Cookies from "js-cookie";
 import {UserToken} from "@/model/user/userToken";
 
@@ -22,7 +22,6 @@ export const useLogin = () => {
             if (response) {
                 // Authorization 헤더에서 토큰 추출
                 const authorizationHeader = response.headers["authorization"];
-                console.log("authorizationHeader 들어오는 확인 하는 코드 :  ", authorizationHeader)
 
                 if (authorizationHeader) {
                     const accessToken = authorizationHeader.split(" ")[1]; // Bearer {token} 형태이므로 토큰만 추출
@@ -49,23 +48,12 @@ export const useLogin = () => {
 
                         // Redux store에 유저 정보를 저장
                         dispatch(saveUser({ user: userData, token:accessToken }));  // 유저 정보와 토큰을 Redux에 저장
-                        console.log("유저 정보 Redux에 저장 완료:", userData);
-                        console.log("유저 정보 토큰 리덕스에 저장 했는지 확인 : ", userData, accessToken);
+                        console.log("유저 정보 Redux에 저장 완료:", saveUser);
 
                         // 유저 정보를 JWT로 만들어 userToken으로 js 쿠키에 저장.
                         const userPayload = {id: userData.id, name: userData.name ?? '',role};
                         const userToken = createUserToken(userPayload);
 
-                        // 쿠키에 userToken 저장
-                        Cookies.set('userToken', userToken,{
-                            expires:7,
-                            path: "/",
-                            secure: true,
-                            sameSite: 'strict',
-                        });
-                        console.log("userToken 커스텀 토큰 내 마음속에 저장~ :  ", userToken);
-                        console.log("userToken 쿠키키키키키키 토큰 내 마음속에 저장~ :  ", userPayload);
-                        console.log("userToken 쿠키키키키키키asdfasdfasdfasd 토큰 내 마음속에 저장~ :  ");
 
                         if(user) {
                             const userInfo: UserToken = {
@@ -73,9 +61,16 @@ export const useLogin = () => {
                                 userName: user.name !! ,
                                 userRole: user.role !! ,
                             };
+                            //localStorage.setItem('userToken', JSON.stringify(userData));
 
                             dispatch(saveUserToken({userInfo }))
-                            console.log("saveUserTokensaveUserToken     "        , saveUserToken)
+                            console.log("세이브유저토큰 : " , userInfo)
+                            console.log("userInfo의 아이디 객체를 확인하기 " , userInfo.userId)
+                            console.log("userInfo의 이름 객체를 확인하기 " , userInfo.userName)
+                            console.log("userInfo의 등급 객체를 확인하기 " , userInfo.userRole)
+
+                            localStorage.setItem("userInfo", JSON.stringify(userInfo));
+                            console.log("로컬스토리지 밑에 있는 로그  : " , userInfo)
 
                         }
                     }

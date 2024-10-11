@@ -37,7 +37,6 @@ const userSlice = createSlice({
             state.user = initialUser;  // 유저 정보 초기화
             state.token = null;  // 토큰 초기화
             state.userInfo = initialUserToken; // 유저토큰초기화
-            console.log("유저 정보에 대한거 초기화 ")
         },
     },
 });

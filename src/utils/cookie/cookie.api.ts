@@ -69,7 +69,7 @@ export const getCookie = (name: string): string | null => {
 };
 
 
-export const userToken = (userInfo: { id: string; name: string; email: string; role:string}) => {
+export const userToken = (userInfo: { id: string; name: string;role:string}) => {
     // 유저 정보를 기반으로 JWT 커스텀 토큰 생성
     const userToken = createUserToken(userInfo);
 
@@ -81,7 +81,5 @@ export const userToken = (userInfo: { id: string; name: string; email: string; r
         sameSite: 'strict', // 동일 사이트에서만 쿠키 사용
         httpOnly:false // js쿠키에서는 브라우저에서 관리가 되기 때문에 httpOnly는 false로 설정.
     });
-
     console.log("유저 정보 JWT 토큰이 내 마음속 쿠키에 저장~ ")
-
 }
