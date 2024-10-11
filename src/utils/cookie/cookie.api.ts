@@ -38,7 +38,6 @@ export const clearToken = () => {
     localStorage.removeItem('persist:root');
     localStorage.removeItem('theme');
 
-
     Cookies.remove('token', {path: '/', secure: true, sameSite: 'strict'});
     Cookies.remove('refreshToken', {path: '/', secure: true, sameSite: 'strict'});
     Cookies.remove('token', {path: '/', secure: true, sameSite: 'strict'});
@@ -51,9 +50,26 @@ export const clearToken = () => {
 
 /*쿠키만 삭제 하는 메서드 */
 export const removeCookie = (name: string) => {
-    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
-    document.cookie = `Authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
-    console.log("Authorization 백엔드꺼 지우기 " ,document.cookie)
+     document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
+     document.cookie = `Authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
+     console.log("Authorization 백엔드꺼 지우기 ", document.cookie);
+
+    //const allCookies = Cookies.get();
+    //Object.keys(allCookies).forEach(cookieName => {
+    //    Cookies.remove(cookieName, {path: '/'})
+    //})
+
+    /* TODO
+    *  allCookie 전부 삭제를 하는거를 만들었으니깐
+    * 이거를 한번 실행을 해서 제대로 모든 쿠키가 삭제가 되는지
+    * 확인을 해봐야한다.
+    * 10월 11일 20시 31분
+    *
+    *
+    * 그리고 쿠키 무결성 검사를 해야 한다.
+    * */
+    console.log("모든 쿠키가 삭제되었습니다. ")
+
 }
 
 /*쿠키 읽어오는 메서드*/
