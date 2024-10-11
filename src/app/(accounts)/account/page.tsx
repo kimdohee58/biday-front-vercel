@@ -10,19 +10,29 @@ import {useDispatch, useSelector} from "react-redux";
 import Postcode from "@/components/Postcode";
 import {addAddress, setAddresses} from "@/lib/features/address.slice";
 import {getToken, getUser, saveUser} from "@/lib/features/user.slice";
-import {initialUser} from "@/model/UserModel";
+//import {initialUser} from "@/model/UserModel";
 import {updateUser} from "@/service/user/user.api";
+import {AddressModel} from "@/model/user/address.model"
+import {initialUser} from "@/model/user/user.model";
+import axios from "axios";
+import {HTTPRequest} from "@/utils/headers";
+
 
 export default function AccountPage() {
     const user = useSelector((state: RootState) => state.user.user || initialUser);
+    console.log("user 로그인 확인 하는 코드 : " , user)
+
     const dispatch = useDispatch();
+
+
 
     const [name, setName] = useState(user.name);
     const [email, setEmail] = useState(user.email);
     const [phoneNum, setPhoneNum] = useState(user.phoneNum);
-    const [selectedAddress, setSelectedAddress] = useState<string>(
+    /*const [selectedAddress, setSelectedAddress] = useState<string>(
         user.addresses?.[0]?.address1 || ""
-    );    const [showPostcode, setShowPostcode] = useState(false);
+    );*/
+    const [showPostcode, setShowPostcode] = useState(false);
     const token = useSelector(getToken);  // Redux에서 token 가져오기
 
     const handleUpdate = async () => {
@@ -31,16 +41,16 @@ export default function AccountPage() {
             name,
             email,
             phoneNum,
-            addresses: [
-                {
-                    address1: selectedAddress || "",  // 필수 입력값이므로 빈 문자열 처리
-                    address2: user.addresses?.[0]?.address2 || "",  // 기존 값 유지 또는 빈 문자열
-                    zipcode: user.addresses?.[0]?.zipcode || "",  // 기존 값 유지 또는 빈 문자열
-                    type: user.addresses?.[0]?.type || "home",  // 기본값 설정
-                    pick: user.addresses?.[0]?.pick || false,  // 기본값 설정
-                    userId: user.id || "",  // 유저 ID 유지
-                },
-            ],
+            // addresses: [
+            //     {
+            //         address1: selectedAddress || "",  // 필수 입력값이므로 빈 문자열 처리
+            //         address2: user.addresses?.[0]?.address2 || "",  // 기존 값 유지 또는 빈 문자열
+            //         zipcode: user.addresses?.[0]?.zipcode || "",  // 기존 값 유지 또는 빈 문자열
+            //         type: user.addresses?.[0]?.type || "home",  // 기본값 설정
+            //         pick: user.addresses?.[0]?.pick || false,  // 기본값 설정
+            //         userId: user.id || "",  // 유저 ID 유지
+            //     },
+            // ],
         };
 
         try {
@@ -70,7 +80,7 @@ export default function AccountPage() {
 
     // 주소 선택 완료 후 처리하는 함수
     const handleAddressComplete = (data: any) => {
-        setSelectedAddress(data.address); // 주소 검색 결과에서 선택한 주소 저장
+        // setSelectedAddress(data.address); // 주소 검색 결과에서 선택한 주소 저장
         setShowPostcode(false); // 주소 검색 창 닫기
 
         // 선택된 주소를 Redux에 저장할 수도 있음
@@ -82,6 +92,25 @@ export default function AccountPage() {
             userId: user.id || ''
         }));
     };
+
+    const handleCheck = async () => {
+        /*onst getUser = localStorage.getItem("userInfo")
+        const getadsf = JSON.parse(getUser !!)
+        console.log("getUser", getUser)
+        console.log("getadsf", getadsf)*/
+        const headersUserInfo = HTTPRequest("GET", "http://localhost:8000/api/addresses/list");
+        console.log("headersUserInfo", headersUserInfo)
+
+        try {
+            const response = await axios.get("http://localhost:8000/api/addresses/list", {
+                headers: headersUserInfo
+            });
+
+            console.log("response getUser", response);
+        } catch (error) {
+            console.error("Error fetching user data", error);
+        }
+    }
 
     return (
         <div className={`nc-AccountPage`}>
@@ -120,8 +149,9 @@ export default function AccountPage() {
                         {/* 주소 입력란 */}
                         <div>
                             <Label>주소</Label>
-                            <Input className="mt-1.5" value={selectedAddress} placeholder="주소를 선택하세요" readOnly />
-                            <ButtonPrimary onClick={() => setShowPostcode(true)}>주소 추가하기</ButtonPrimary>
+                            {/*<Input className="mt-1.5" value={selectedAddress} placeholder="주소를 선택하세요" readOnly />*/}
+                            {/*<ButtonPrimary onClick={() => setShowPostcode(true)}>주소 추가하기</ButtonPrimary>*/}
+                            <ButtonPrimary onClick={handleCheck}>주소 추가하기</ButtonPrimary>
                         </div>
 
                         {/* 주소 검색 창 표시 */}

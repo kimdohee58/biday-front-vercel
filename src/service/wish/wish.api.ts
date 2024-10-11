@@ -11,7 +11,7 @@ export async function toggleWish(wish: WishModel, user: UserModel, product: Prod
             "productId": (product.id?? '').toString()
         })
 
-        const response = await fetch(`http://localhost:8080/wish?${param}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/wish?${param}`, {
             method: 'GET',
             headers: {
                 'Content-Type' : 'application/json',
@@ -32,7 +32,7 @@ export async function toggleWish(wish: WishModel, user: UserModel, product: Prod
 
 export async function selectWishList(user: UserModel) {
     try {
-        const response = await fetch('http://localhost:8080/wish/' + user.id, {
+        const response = await fetch('${process.env.NEXT_PUBLIC_API_SERVER_URL}/wish/' + user.id, {
             method: 'GET',
             headers: {
                 'Content-Type' : 'application/json',
@@ -55,7 +55,7 @@ export async function selectWishList(user: UserModel) {
 export async function deleteWish(wish: WishModel) {
     try {
 
-        const response = await fetch('http://localhost:8080/wish/' + wish.id, {
+        const response = await fetch('${process.env.NEXT_PUBLIC_API_SERVER_URL}/wish/' + wish.id, {
             method: 'DELETE',
             headers: {
                 'Content-Type' : 'application/json',

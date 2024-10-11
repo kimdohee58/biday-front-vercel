@@ -21,6 +21,7 @@ import {makeStore, persistor, store} from "@/lib/store";
 import {useEffect, useState} from "react";
 import isClient from "beautiful-react-hooks/shared/isClient";
 import Script from "next/script";  // store와 persistor 임포트
+import TokenCheck from "@/components/TokenCheck";
 import {AuthProvider} from "@/context/AuthContext"; // AuthContext 임포트
 
 const poppins = Poppins({
@@ -36,12 +37,7 @@ const notoSans = Noto_Sans_KR({
 });
 
 
-export default function RootLayout({
-                                       children,
-                                       params,
-                                   }: {
-    children: React.ReactNode;
-    params: any;
+export default function RootLayout({children, params,}: { children: React.ReactNode; params: any;
 }) {
     const [isClient, setIsClient] = useState(false);
 
@@ -62,6 +58,7 @@ export default function RootLayout({
                 {isClient ? (
                     <PersistGate loading={null} persistor={persistor as any}>
                         <ReactQueryProvider>
+                            {/*<TokenCheck/>*/} {/*페이지 전환시 토크 체크 */}
                             <SiteHeader/>
                             <main>{children}</main>
                             <Footer/>

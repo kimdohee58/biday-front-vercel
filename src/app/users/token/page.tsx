@@ -42,7 +42,7 @@ export default function Home() {
     // refreshToken으로 accessToken 재발급
     const handleReissueToken = async () => {
         try {
-            const response = await fetch("http://localhost:8080/reissue", {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/reissue`, {
                 method: "POST",
                 credentials: 'include',  // refreshToken이 HttpOnly 쿠키로 자동 전송됨
                 headers: {
@@ -65,7 +65,7 @@ export default function Home() {
     // 로그아웃 처리
     const handleLogout = async () => {
         try {
-            const response = await fetch("http://localhost:8080/logout", {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/logout`, {
                 method: "POST",
                 credentials: 'include',  // refreshToken이 자동 전송됨
                 headers: {

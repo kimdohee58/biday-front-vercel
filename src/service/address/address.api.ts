@@ -5,11 +5,20 @@ import { AddressModel } from '@/model/AddressModel';
 const baseUrl = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/addresses`;
 
 // 모든 주소 목록 불러오기 (토큰을 사용해서 해당 유저의 주소를 가져옴)
+let getUser = localStorage.getItem("userInfo");
+console.log("겟유저 어드레스 에이피아이 ", getUser);
+
 export async function getAddressList(token: string): Promise<AddressModel[]> {
     const response = await fetch(`${baseUrl}/list`, {
         method: 'GET',
         headers: {
             Authorization: token,
+            "UserInfo": JSON.stringify({
+                // getUser ,
+                // userId:userId !!,
+                // userName:userName !!,
+                // userRole:userRole
+            })
         },
     });
     if (!response.ok) {

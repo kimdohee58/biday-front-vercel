@@ -1,6 +1,6 @@
 export interface ShipperModel {
     id?: number;
-    payment: PaymentModel;
+  //  payment: PaymentModel;
     carrier: string;
     trackingNumber: string;
     shipmentDate: Date;

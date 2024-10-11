@@ -23,7 +23,7 @@ const pages: {
     link: "/account-savelists",
   },
   {
-    name: "주문 내역",
+    name: "경매 내역",
     link: "/account-order",
   },
   {
@@ -31,7 +31,7 @@ const pages: {
     link: "/account-password",
   },
   {
-    name: "판매자 등록",
+    name: "계좌정보",
     link: "/account-seller",
   },
 ];

@@ -2,10 +2,12 @@
 import { api } from "../request";
 import { strategy } from "../api.strategy";
 import {PaymentModel} from "@/model/order/payment.model";
+import {PaymentTempModel} from "@/model/order/paymentTemp.model";
+import {RequestOptions} from "@/model/api/RequestOptions";
 
 // 결제 데이터 임시 저장 (POST 요청)
-const savePaymentTemp = async (paymentTempData: Partial<PaymentModel>): Promise<void> => {
-    await strategy.POST(`${api.payment}/temp`, paymentTempData);
+const savePaymentTemp = async (options: RequestOptions<PaymentTempModel>): Promise<void> => {
+    await strategy.POST(`${api.payment}/temp`, options);
 };
 
 // 결제 승인 (POST 요청)

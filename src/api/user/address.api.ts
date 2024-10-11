@@ -1,14 +1,11 @@
-// src/api/address/address.api.ts
 import { api } from "../request";
 import { strategy } from "../api.strategy";
-import {AddressModel} from "@/model/user/address.model";
+import { AddressModel } from "@/model/user/address.model";
 
 // 주소 목록 조회 (GET 요청)
-const findAllByUserId = async (userId: string, role: string, name: string): Promise<AddressModel[]> => {
-    const response = await strategy.GET(`${api.address}/list`, {
-        userId,
-        role,
-        name,
+const findAllByUserId = async (userInfoHeader: string): Promise<AddressModel[]> => {
+    const response = await strategy.GET(`${api.address}/list`, undefined, {
+        'UserInfo': userInfoHeader,
     });
     return response;
 };
@@ -20,16 +17,21 @@ const pickAddress = async (id: string): Promise<string> => {
 };
 
 // 주소 수 카운트 (GET 요청)
-const countAddresses = async (token: string): Promise<number> => {
-    const response = await strategy.GET(`${api.address}/count`, {
-        Authorization: token,
+const countAddresses = async (userInfoHeader: string): Promise<number> => {
+    const response = await strategy.GET(`${api.address}/count`, undefined, {
+        'UserInfo': userInfoHeader,
     });
     return response;
 };
 
+/*// 주소 삭제 (DELETE 요청)
+const deleteAddressById = async (id: string): Promise<void> => {
+    await strategy.DELETE(`${api.address}/deleteById`, undefined, { id });
+};*/
+
 // 주소 삭제 (DELETE 요청)
 const deleteAddressById = async (id: string): Promise<void> => {
-    await strategy.DELETE(`${api.address}/deleteById/${id}`); // id를 경로 파라미터로 전달
+    await strategy.DELETE(`${api.address}/deleteById`, undefined);
 };
 
 // 주소 등록 (POST 요청)

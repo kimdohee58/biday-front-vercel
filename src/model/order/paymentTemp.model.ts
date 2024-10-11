@@ -1,11 +1,11 @@
-export interface paymentTempModel  {
+export interface PaymentTempModel  {
     orderId:string;
-    awardId:string;
+    awardId:number;
     amount:number;
 }
 
-export const initialPaymentTempModel : paymentTempModel = {
+export const initialPaymentTempModel : PaymentTempModel = {
     orderId:"",
-    awardId:"",
+    awardId:0,
     amount:0,
 }

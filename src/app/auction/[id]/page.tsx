@@ -27,7 +27,6 @@ import {useMutation, useQuery} from "@tanstack/react-query";
 import {ImageType} from "@/model/ImageModel";
 import {fetchProduct, fetchProductOne} from "@/service/product/product.api";
 import {BidModel, BidStreamModel} from "@/model/BidModel";
-import {saveBid} from "@/api/bid/bid.api";
 import {insertBid} from "@/service/bid/bid.api";
 import {fetchImageFromClient} from "@/service/image/image.api";
 import Cookies from "js-cookie";
@@ -184,6 +183,7 @@ export default function AuctionDetailPage() {
     });
 
     const onClickBidButton = () => {
+
         const token = Cookies.get("token");
         if (!token) {
             router.push("/login");
