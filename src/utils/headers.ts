@@ -22,7 +22,6 @@ export const HTTPRequest = (method:HTTPMethod, url:string) =>{
     } else {
         return {'UserInfo': userInfo};
     }
-
 }
 
 

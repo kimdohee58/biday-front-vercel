@@ -3,7 +3,6 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import {setItem,removeItem} from "@/utils/storage/storage.api";
 import {setCookie} from "undici-types";
 import {removeCookie} from "@/utils/cookie/cookie.api";
-import {UserToken} from "@/model/"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'GET') {
