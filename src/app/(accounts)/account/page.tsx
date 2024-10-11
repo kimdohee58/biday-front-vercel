@@ -20,7 +20,11 @@ import {HTTPRequest} from "@/utils/headers";
 
 export default function AccountPage() {
     const user = useSelector((state: RootState) => state.user.user || initialUser);
+    console.log("user 로그인 확인 하는 코드 : " , user)
+
     const dispatch = useDispatch();
+
+
 
     const [name, setName] = useState(user.name);
     const [email, setEmail] = useState(user.email);
@@ -31,10 +35,6 @@ export default function AccountPage() {
     const [showPostcode, setShowPostcode] = useState(false);
     const token = useSelector(getToken);  // Redux에서 token 가져오기
 
-
-    console.log("asdfasdfasdfasdfasdfasdasdf 유저 점 아이디 ",user.id);
-    console.log("asdfasdf",user.name);
-    console.log("asdfasdf",token)
     const handleUpdate = async () => {
         const updatedUser = {
             ...user,

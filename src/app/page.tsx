@@ -33,6 +33,7 @@ export default function PageHome() {
     const handleAuthToken = async () => {
         const authToken = getCookie("Authorization");
 
+        console.log("Authorization", authToken)
         if (authToken) {
             console.log("OAuth 토큰: ", authToken);
             try {
