@@ -1,18 +1,21 @@
 "use client";
 
-import { loadTossPayments, ANONYMOUS } from "@tosspayments/tosspayments-sdk";
+import {loadTossPayments, ANONYMOUS, TossPaymentsWidgets} from "@tosspayments/tosspayments-sdk";
 import { useEffect, useState } from "react";
 
 const clientKey = `${process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY}`;
-const customerKey = "";
+
+interface Amount {
+    currency: string;
+    value: number;
+}
 
 export default function Checkout({value, product, orderId, customerKey}: {value: number, product: string, orderId: string, customerKey: string}) {
-    const clientKey = `${process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY}`
     const [ready, setReady] = useState<boolean>(false);
-    const [widgets, setWidgets] = useState<any>(null)
-    const amount: PaymentCurrencyAmount = {
+    const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
+    const amount: Amount = {
         currency: "KRW",
-        value: String(value),
+        value: value,
     };
 
     useEffect(() => {
@@ -84,7 +87,7 @@ export default function Checkout({value, product, orderId, customerKey}: {value:
                             // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
                             // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
                             // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
-                            await widgets.requestPayment({
+                            await widgets!.requestPayment({
                                 orderId: orderId,
                                 orderName: product,
                                 successUrl: window.location.origin + "/success",

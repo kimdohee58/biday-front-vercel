@@ -31,8 +31,7 @@ const searchByFilter = async (
 
 // 상품 상세 조회 (GET 요청)
 const findById = async (options: RequestOptions<null>): Promise<ProductModel> => {
-    const response = await strategy.GET(`${api.product}`,);
-    return response;
+    return await strategy.GET(`${api.product}`, options);
 };
 
 // 상품 등록 (POST 요청)

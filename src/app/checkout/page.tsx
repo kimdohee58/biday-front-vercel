@@ -18,7 +18,6 @@ import {PaymentTempModel} from "@/model/order/paymentTemp.model";
 import {useMutation, useQuery} from "@tanstack/react-query";
 import {accountAPI} from "@/api/user/account.api";
 import {savePaymentTemp} from "@/service/order/payment.service";
-import {usePayment} from "@/hooks/usePayment";
 import {useRouter, useSearchParams} from "next/navigation";
 import {productAPI} from "@/api/product/product.api";
 import {fetchAwardDetails} from "@/service/auction/award.service";
