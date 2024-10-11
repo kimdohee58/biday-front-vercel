@@ -2,14 +2,14 @@
 
 import { useRouter } from 'next/navigation'; // next/navigation에서 useRouter 임포트
 import { useDispatch } from 'react-redux';
-import {saveUser, UserState} from '@/lib/features/user.slice';
+import {saveUser, saveUserToken, UserState} from '@/lib/features/user.slice';
 import { handleLogin } from '@/service/user/login.api';
 import {findUserById} from "@/service/user/user.api";
 import {initialUser, UserModel} from "@/model/UserModel";  // API 호출을 임포트
 import {createUserToken, extractUserInfoFromToken} from '@/utils/jwt.utils';
-import {getCookie, saveToken} from "@/utils/cookie/cookie.api";
+import {saveToken} from "@/utils/cookie/cookie.api";
 import Cookies from "js-cookie";
-import {UserToken} from "@/model/user/UserToken";
+import {UserToken} from "@/model/user/userToken";
 
 export const useLogin = () => {
     const dispatch = useDispatch();
@@ -18,11 +18,10 @@ export const useLogin = () => {
     const login = async (username: string, password: string) => {
         try {
             const response = await handleLogin(username, password);
-            console.log("adfkadsjfldjf 유즈 로그인 입성 " )
+
             if (response) {
                 // Authorization 헤더에서 토큰 추출
                 const authorizationHeader = response.headers["authorization"];
-                console.log("authorizationHeader 들어오는 확인 하는 코드 :  ", authorizationHeader)
 
                 if (authorizationHeader) {
                     const accessToken = authorizationHeader.split(" ")[1]; // Bearer {token} 형태이므로 토큰만 추출
@@ -30,12 +29,8 @@ export const useLogin = () => {
 
 
                     // jwt.utils.ts에서 함수 사용 유저 객체 추출
-                    const { id, name, role, email } = extractUserInfoFromToken(accessToken);
-                    console.log("페이로드 한 유저 정보 저장 jwt.utils.ts: ", id, name, role, email);
-
-                    /*  // 토큰에서 유저 정보 추출 (userId,name,role)
-                      const userId = extractUserIdFromToken(token);  // JWT 토큰에서 userId 추출
-                      console.log("JWT 토큰에서 userId 쪼개기 : ", userId);*/
+                    const { id, name, role } = extractUserInfoFromToken(accessToken);
+                    console.log("페이로드 한 유저 정보 저장 jwt.utils.ts: ", id, name, role);
 
                     // 서버에서 유저 ID로 유저 정보 가져오기
                     const user = await findUserById(id);
@@ -44,7 +39,7 @@ export const useLogin = () => {
                         // UserModel에 맞게 데이터 변환
                         const userData : UserModel = {
                             ...initialUser,  // 초기값을 기반으로
-                            id: user.id, // 백엔드에서 받은 id
+                            id: user.id !!, // 백엔드에서 받은 id
                             name: user.name,  // 백엔드에서 받은 name
                             email: user.email,  // 백엔드에서 받은 email
                             phoneNum: user.phoneNum,  // 백엔드에서 받은 phone
@@ -53,40 +48,30 @@ export const useLogin = () => {
 
                         // Redux store에 유저 정보를 저장
                         dispatch(saveUser({ user: userData, token:accessToken }));  // 유저 정보와 토큰을 Redux에 저장
-                        console.log("유저 정보 Redux에 저장 완료:", userData);
-                        console.log("유저 정보 토큰 리덕스에 저장 했는지 확인 : ", userData, accessToken);
+                        console.log("유저 정보 Redux에 저장 완료:", saveUser);
 
                         // 유저 정보를 JWT로 만들어 userToken으로 js 쿠키에 저장.
-                        const userPayload = {id: userData.id, name: userData.name ?? '', email, role};
+                        const userPayload = {id: userData.id, name: userData.name ?? '',role};
                         const userToken = createUserToken(userPayload);
 
-                        // 쿠키에 userToken 저장
-                        Cookies.set('userToken', userToken,{
-                            expires:7,
-                            path: "/",
-                            secure: true,
-                            sameSite: 'strict',
-                        });
 
-                        if(user){
-                            const userInfo:UserToken = {
-                                userId:user.id,
-                                userName:user.name ?? '',
-                                userRole:role ?? '',
+                        if(user) {
+                            const userInfo: UserToken = {
+                                userId: user.id !!,
+                                userName: user.name !! ,
+                                userRole: user.role !! ,
                             };
+                            //localStorage.setItem('userToken', JSON.stringify(userData));
 
-                            // 리덕스 스토리어 로컬스토리지 저장
-                            dispatch(saveUser({ user: userInfo, token: '' }));
-                            // 로컬 스토리지 유저 정보 제이슨으로 저장.
-                            localStorage.setItem('userInfo', JSON.stringify(userInfo));
+                            dispatch(saveUserToken({userInfo }))
+                            console.log("세이브유저토큰 : " , userInfo)
+                            console.log("userInfo의 아이디 객체를 확인하기 " , userInfo.userId)
+                            console.log("userInfo의 이름 객체를 확인하기 " , userInfo.userName)
+                            console.log("userInfo의 등급 객체를 확인하기 " , userInfo.userRole)
 
-                            // 쿠키에 유저 정보를 제이슨 형태로 저장
-                            Cookies.set('userInfo', JSON.stringify(userInfo), {
-                                expires:7,
-                                path:"/",
-                                sameSite: 'strict',
-                            })
-                            console.log("유저 정보 리덕스, 쿠키에 저장 : ", userInfo);
+                            localStorage.setItem("userInfo", JSON.stringify(userInfo));
+                            console.log("로컬스토리지 밑에 있는 로그  : " , userInfo)
+
                         }
                     }
                     router.push("/");

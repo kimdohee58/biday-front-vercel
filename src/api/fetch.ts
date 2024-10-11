@@ -6,5 +6,3 @@ export const fetchAPI = async (url: string, options?: RequestInit) => {
     return await fetch(`${baseURL}${url}`, options);
 
 };
-
-

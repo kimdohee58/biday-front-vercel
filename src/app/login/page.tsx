@@ -19,6 +19,7 @@ import {response} from "express";
 import { useRouter } from 'next/navigation'; // App Router의 useRouter 사용
 import { useSearchParams } from 'next/navigation'; // useSearchParams 사용
 
+const baseURL = process.env.NEXT_PUBLIC_API_SERVER_URL;
 
 // 소셜 로그인 버튼 데이터
 const loginSocials = [

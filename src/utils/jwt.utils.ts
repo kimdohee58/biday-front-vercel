@@ -10,7 +10,7 @@ const base64Encode = (data: string) => {
     return btoa(unescape(encodeURIComponent(data)));
 }
 
-export const extractUserInfoFromToken = (token: string): { id: string, name: string, role: string, email: string } => {
+export const extractUserInfoFromToken = (token: string): { id: string, name: string, role: string } => {
     const base64Url = token.split('.')[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     const jsonPayload = decodeURIComponent(
@@ -24,12 +24,11 @@ export const extractUserInfoFromToken = (token: string): { id: string, name: str
     return {
         id: payload.id,
         name: payload.name,
-        role: payload.role,
-        email: payload.email
+        role: payload.role
     };
 };
 
-export const createUserToken = (payload: { id: string; name: string; role: string; email: string; }) => {
+export const createUserToken = (payload: { id: string; name: string; role: string;  }) => {
     // 헤더
     const header = {
         alg: "HS256",
@@ -45,3 +44,4 @@ export const createUserToken = (payload: { id: string; name: string; role: strin
 
     return `${encodedHeader}.${encodedPayload}.${signature}`;
 }
+

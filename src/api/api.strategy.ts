@@ -2,6 +2,7 @@ import { fetchAPI } from './fetch';
 import {handleReissueToken} from "@/utils/reissue/reissueToken";
 import {ApiError} from "@/utils/error";
 import {RequestOptions} from "@/model/api/RequestOptions";
+import {HTTPRequest} from "@/utils/headers";
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | "PATCH" ;
 
@@ -10,16 +11,14 @@ const apiRequest = async (url: string, method: HttpMethod, {params, data, header
 
     const queryString = params ? `?${new URLSearchParams(params)}` : '';
 
-    console.log("data", data);
-    console.log("userToken", userToken);
-
     const options: RequestInit = {
         method: method,
         headers: {
             'Content-Type': contentType || 'application/json',
             ...(token && {'Authorization': `Bearer ${token}`}),
-            ...(userToken && {'UserInfo': userToken}),
+            ...(userToken && {'UserInfo': HTTPRequest(method,url)}),
             ...(headers || {}),
+
 
         },
         ...(data && {body: JSON.stringify(data)}),

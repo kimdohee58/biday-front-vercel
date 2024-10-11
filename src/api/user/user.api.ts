@@ -1,4 +1,4 @@
-import { UserModel } from "@/model/UserModel";
+import { UserModel } from "@/model/user/user.model";
 import { strategy } from "../api.strategy"; // 전략 패턴을 사용하는 공통 모듈 import
 import { api } from "../request"; // 공통 API 경로 설정 import
 

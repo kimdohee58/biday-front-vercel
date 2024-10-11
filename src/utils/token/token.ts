@@ -1,10 +1,8 @@
 //src/utils/token/token.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
-import {userInfo} from "node:os";
-import Cookies from "js-cookie";
-import {saveUser} from "@/lib/features/user.slice";
-import {UserInfo} from "@/model/user/UserInfo";
-import {store} from "@/lib/store";
+import {setItem,removeItem} from "@/utils/storage/storage.api";
+import {setCookie} from "undici-types";
+import {removeCookie} from "@/utils/cookie/cookie.api";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'GET') {
@@ -21,25 +19,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 }
 
-// 유저 정보를 단순 문자열로 결합하여 "커스텀 토큰" 생성
-export const createCustomUserToken = (userInfo: UserInfo) => {
-    // 유저 정보를 단순 문자열로 결합 (커스텀 토큰)
-    const customToken = `${userInfo.id};${userInfo.name};${userInfo.role}`;
-    return customToken;
-};
 
-export const userToken = (userInfo:UserInfo) => {
-    const customToken = createCustomUserToken(userInfo);
-
-    // 쿠키에 저장.
-    Cookies.set('userToken', customToken, {
-        expires: 7,
-        path: "/",
-        sameSite: "strict",
-    });
-
-    // 리덕스 로컬스토리지에 저장.
-    store.dispatch(saveUser({user: userInfo, token: customToken}));
-
-}
+// userToken 배열, 인코딩 껴놓은거 유정이가 ㅁ나든걸로 껴 놓으면 된다.
 
