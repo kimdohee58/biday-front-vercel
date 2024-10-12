@@ -83,19 +83,6 @@ export default function PageHome() {
         가방: products.slice(15, 20),
     };
 
-    const userToken = localStorage.getItem("userToken");
-
-    useEffect(() => {
-        console.log("로컬스토리지 겟 확인 하는 코드 : " , localStorage.getItem("userToken"))
-        if (localStorage.getItem("userToken")) {
-            let a: UserToken = JSON.parse(localStorage.getItem("userToken")!!)
-            console.log("a 혹인 하는 코드 : ", a)
-            console.log("a.userId", a.userId)
-            //const b = a.userId;
-            //console.log("A 에 유저토큰이 들어오는 확인하는 코드 : " , b)
-        }
-    }, [userToken]);
-
     return (
         <main className="container mx-auto px-4 lg:px-8">
             {Object.keys(categories).map((category) => (

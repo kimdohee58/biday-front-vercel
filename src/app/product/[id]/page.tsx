@@ -14,10 +14,7 @@ import SectionPromo2 from "@/components/SectionPromo2";
 import Image from "next/image";
 import {AuctionModel} from "@/model/AuctionModel";
 import {fetchProduct, fetchProductDetails} from "@/service/product/product.api";
-import {ProductModel} from "@/model/ProductModel";
 import {Route} from "@/routers/types";
-import {fetchImage} from "@/service/image/image.api";
-import {ImageModel} from "@/model/ImageModel";
 import Link from "next/link";
 
 

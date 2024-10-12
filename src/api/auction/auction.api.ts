@@ -1,11 +1,11 @@
 import {AuctionModel} from "@/model/AuctionModel";
 import {api} from "../request";
 import {strategy} from "../api.strategy";
+import {RequestOptions} from "@/model/api/RequestOptions";
 
 // 경매 상세보기 (GET 요청)
-const findById = async (id: number): Promise<AuctionModel> => {
-    const response = await strategy.GET(`${api.auction}/findById`, {id: id.toString()});
-    return response;
+const findById = async (options: RequestOptions<null>): Promise<AuctionModel> => {
+    return await strategy.GET(`${api.auction}/findById`, options);
 };
 
 // 헤더 경매 목록 조회 (GET 요청)
