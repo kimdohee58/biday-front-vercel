@@ -20,12 +20,14 @@ import { useRouter } from 'next/navigation'; // App Router의 useRouter 사용
 import { useSearchParams } from 'next/navigation'; // useSearchParams 사용
 
 const baseURL = process.env.NEXT_PUBLIC_API_SERVER_URL;
+// `${process.env.NEXT_PUBLIC_API_SERVER_URL}/oauth2/token/naver`
+// href: "http://localhost:8000/oauth2/authorization/naver",
 
 // 소셜 로그인 버튼 데이터
 const loginSocials = [
     {
         name: "onNaverLogin",
-        href: "http://localhost:8000/oauth2/authorization/naver",
+        href : `${process.env.NEXT_PUBLIC_API_SERVER_URL}/oauth2/authorization/naver`,
         icon: btnG_official,
         on: "handleNaver",
 
@@ -96,9 +98,6 @@ export default function PageLogin() {
             console.log("실패다.", err)
         }
     };
-
-
-
 
     return (
         <div className={`nc-PageLogin`} data-nc-id="PageLogin">

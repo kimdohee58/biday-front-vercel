@@ -69,7 +69,7 @@ export const useLogin = () => {
                             console.log("userInfo의 이름 객체를 확인하기 " , userInfo.userName)
                             console.log("userInfo의 등급 객체를 확인하기 " , userInfo.userRole)
 
-                            localStorage.setItem("userInfo", JSON.stringify(userInfo));
+                            localStorage.setItem("userToken", JSON.stringify(userInfo));
                             console.log("로컬스토리지 밑에 있는 로그  : " , userInfo)
 
                         }
