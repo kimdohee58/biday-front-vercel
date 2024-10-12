@@ -33,7 +33,7 @@ export const HTTPRequest = (method: HTTPMethod, url: string) => {
 export const getUserInfo = () => {
     console.log("getUserInfo 들어오는지 확인: ", getUserInfo);
 
-    const userInfoString = localStorage.getItem("userInfo");
+    const userInfoString = localStorage.getItem("userToken");
     console.log("userInfoString 들어오는지 확인: ", userInfoString);
 
     // 쿠키 셋도 만들기

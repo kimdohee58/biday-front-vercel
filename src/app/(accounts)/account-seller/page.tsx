@@ -22,6 +22,12 @@ import useRandomId from "@/hooks/useRandomId";
 import {getAccount} from "@/service/account/account.api";
 import {ApiError} from "@/utils/error";
 
+
+/*const accountDetails = () => {
+    const accountData = useQuery({queryKey: ["account"], queryFn: () => getAccount()});
+
+};*/
+
 export default function Account1() {
     const [date, setDate] = useState();
     const [bankCode, setBankCode] = useState<string>("");
@@ -29,7 +35,7 @@ export default function Account1() {
     const [birth, setBirth] = useState<string>("");
     const [accountNum, setAccountNum] = useState("");
     const [bankName, setBankName] = useState("");
-    const bankTranId = useRandomId();
+    const bankTranId = useRandomId(16);
     const [accountPlaceholder, setAccountPlaceholder] = useState("계좌번호를 입력해 주세요.");
     const [accountPattern, setAccountPattern] = useState<string>("");
 
