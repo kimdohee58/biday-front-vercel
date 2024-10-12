@@ -27,10 +27,10 @@ import {useMutation, useQuery} from "@tanstack/react-query";
 import {ImageType} from "@/model/ImageModel";
 import {fetchProduct, fetchProductOne} from "@/service/product/product.api";
 import {BidModel, BidStreamModel} from "@/model/BidModel";
-import {insertBid} from "@/service/bid/bid.api";
 import {fetchImageFromClient} from "@/service/image/image.api";
 import Cookies from "js-cookie";
 import {useColor} from "@/hooks/useColor";
+import {saveBid} from "@/service/auction/bid.service";
 
 const LIST_IMAGES_GALLERY_DEMO: (string | StaticImageData)[] = [
     detail21JPG,
@@ -179,7 +179,7 @@ export default function AuctionDetailPage() {
     };
 
     const mutation = useMutation({
-        mutationFn: insertBid
+        mutationFn: saveBid
     });
 
     const onClickBidButton = () => {
@@ -198,9 +198,6 @@ export default function AuctionDetailPage() {
 
         const bidData = {
             auctionId: Number(id),
-            userId: "66f68ebf2bd718301c69f1e5",
-            userName: "shull",
-            userRole: "ROLE_USER",
             currentBid: currentBid,
         }
 

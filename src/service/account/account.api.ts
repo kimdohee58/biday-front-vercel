@@ -8,7 +8,7 @@ import {accountAPI} from "@/api/user/account.api";
 export async function saveAccount(account: AccountModel) {
 
     const options = {
-
+        data: account,
     }
 
     try {
@@ -21,16 +21,17 @@ export async function saveAccount(account: AccountModel) {
 
 // 판매자 계좌조회
 export async function getAccount() {
+    const userToken = localStorage.getItem("userToken");
+    if (!userToken) {
+        throw new Error();
+    }
 
-    const userToken = Cookies.get("userToken");
-
-    const userId = "6703c9bf0ef91f70f4e4e0ec";
-
+    const options = {
+        userToken: userToken,
+    }
 
     try {
-
-        return await accountAPI.findById(userId, token, userToken);
-
+        return await accountAPI.findById(options);
 
     } catch (error) {
 

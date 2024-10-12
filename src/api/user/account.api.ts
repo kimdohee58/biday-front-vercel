@@ -7,19 +7,9 @@ import {UserInfo} from "@/model/user/userInfo.model";
 import {RequestOptions} from "@/model/api/RequestOptions";
 
 // 계좌 조회 (GET 요청)
-const findById = async (userId: string, token:string, userToken:UserInfo): Promise<AccountModel> => {
+const findById = async (options: RequestOptions<null>): Promise<AccountModel> => {
 
-    console.log("토큰 확인: ", token);
-
-    const response = await strategy.GET(`${api.account}`, undefined, {'UserInfo' : JSON.stringify(userToken)}, token);
-
-    const data = await response;
-
-    console.log("api/account/account.api.ts response 응답: ", data);
-
-    console.log("응답확인: ", data);
-
-    return data;
+    return  await strategy.GET(`${api.account}`, options);
 
 };
 
@@ -27,11 +17,7 @@ const findById = async (userId: string, token:string, userToken:UserInfo): Promi
 
 // 계좌 등록 (POST 요청)
 const save = async (options: RequestOptions<AccountModel>): Promise<AccountModel> => {
-    const response = await strategy.POST(`${api.account}/save`, options);
-
-    const data = await response.json();
-    console.log("응답확인: ",data);
-    return data;
+    return await strategy.POST(`${api.account}/save`, options);
 };
 
 export const accountAPI = {

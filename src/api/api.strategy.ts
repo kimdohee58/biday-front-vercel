@@ -10,6 +10,7 @@ const apiRequest = async (url: string, method: HttpMethod, {params, data, header
     console.log("strategy 진입");
 
     const queryString = params ? `?${new URLSearchParams(params)}` : '';
+    console.log("userToken", HTTPRequest(method,url))
 
     const options: RequestInit = {
         method: method,

@@ -2,7 +2,7 @@
 
 export interface AccountModel {
     id?: string;
-    userId:string; // 단순작엄이다. useModel 타입으로 하지 말라고 하심.
+    userId: string; // 단순작엄이다. useModel 타입으로 하지 말라고 하심.
     bankTranId:string;
     bankCode : string;
     bankName : string;

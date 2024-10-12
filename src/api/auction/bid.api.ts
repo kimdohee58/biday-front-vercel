@@ -1,8 +1,8 @@
 // src/api/bid/bid.api.ts
-import { api } from "../request";
-import { strategy } from "../api.strategy";
+import {api} from "../request";
+import {strategy} from "../api.strategy";
 import {BidModel} from "@/model/auction/bid.model";
-
+import {RequestOptions} from "@/model/api/RequestOptions";
 
 
 // 입찰 스트림 조회 (GET 요청 - SSE)
@@ -43,9 +43,8 @@ const streamBid = async (auctionId: number): Promise<BidModel[]> => {
 
 
 // 입찰 저장 (POST 요청)
-const save = async (bidData: Partial<BidModel>): Promise<BidModel> => {
-    const response = await strategy.POST(`${api.bid}`, bidData);
-    return response;
+const save = async (options: RequestOptions<BidModel>): Promise<BidModel> => {
+    return await strategy.POST(`${api.bid}`, options);
 };
 
 
