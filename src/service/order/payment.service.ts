@@ -8,7 +8,6 @@ import {awardAPI} from "@/api/auction/award.api";
 export async function savePaymentTemp(
     paymentTemp: PaymentTempModel
 ) {
-    // const userToken = Cookies.get("userToken")!!;
 
     const userToken = "{\"userId\":\"6700e19686d1ce6cd1fc6f25\",\"userName\":\"shull\",\"userRole\":\"ROLE_USER\"}";
 

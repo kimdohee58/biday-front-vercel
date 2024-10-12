@@ -3,7 +3,6 @@ import axiosInstance from "@/app/api/axiosInstance/axiosInstance";
 import Cookies from "js-cookie";
 import {AxiosResponse} from "axios";
 
-
 export const handleLogin = async (username: string, password: string): Promise<AxiosResponse | null> => {
     try {
         const response: AxiosResponse = await axiosInstance.post("/login", {

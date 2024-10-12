@@ -7,26 +7,31 @@ import {accountAPI} from "@/api/user/account.api";
 // 판매자 계좌등록
 export async function saveAccount(account: AccountModel) {
 
-    const response = await accountAPI.save(account);
+    const options = {
+        data: account,
+    }
+
+    try {
+        return await accountAPI.save(options);
+    } catch (error) {
+
+    }
 
 }
 
 // 판매자 계좌조회
 export async function getAccount() {
-    const token = Cookies.get("token");
-
-    if (!token) {
-        throw new Error ("access 토큰 부재")
+    const userToken = localStorage.getItem("userToken");
+    if (!userToken) {
+        throw new Error();
     }
-    const userToken = Cookies.get("userToken");
 
-    const userId = "6703c9bf0ef91f70f4e4e0ec";
-
+    const options = {
+        userToken: userToken,
+    }
 
     try {
-
-        return await accountAPI.findById(userId, token, userToken);
-
+        return await accountAPI.findById(options);
 
     } catch (error) {
 

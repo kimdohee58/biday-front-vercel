@@ -32,7 +32,6 @@ export const HTTPRequest = (method: HTTPMethod, url: string) => {
 
 export const getUserToken = () => {
     console.log("getuserToken 들어오는지 확인: ", getUserToken);
-
     const userTokenString = localStorage.getItem("userToken");
     console.log("userTokenString 들어오는지 확인: ", userTokenString);
 

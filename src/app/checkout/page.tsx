@@ -26,6 +26,11 @@ import useRandomId from "@/hooks/useRandomId";
 import Checkout from "@/app/checkout/payment/Checkout";
 import CustomModal from "@/app/checkout/payment/CustomModal";
 
+
+const CheckoutDetails = () => {
+
+};
+
 export default function CheckoutPage() {
 
     const router = useRouter();

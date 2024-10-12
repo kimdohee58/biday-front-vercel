@@ -10,8 +10,7 @@ export async function fetchProductAndAwardDetails(productId: string, awardId: st
     const token = Cookies.get("token")!!;
 
     const commonOptions = {
-        // token: "eyJhbGciOiJIUzUxMiJ9.eyJjYXRlZ29yeSI6ImFjY2VzcyIsImlkIjoiNjcwMGUxOTY4NmQxY2U2Y2QxZmM2ZjI1Iiwicm9sZSI6IlJPTEVfU0VMTEVSIiwibmFtZSI6IuyEpOycoOyglSIsImlhdCI6MTcyODUyODE1NywiZXhwIjoxNzI4NTI4NzU3fQ.R11WV4lb7kbjNHcs4Hvj1rjaBD2jeveheghOCa8Q3xU8D9HqClZtixpVYV-ss6od3dXAC9fgBmcpx23c5_pP1Q",
-        userToken: "{\"userId\":\"6700e19686d1ce6cd1fc6f25\",\"userName\":\"shull\",\"userRole\":\"ROLE_USER\"}"
+        userToken: localStorage.getItem("userToken")!,
     }
     const productOptions: RequestOptions<null> = {
         params: {

@@ -25,7 +25,6 @@ export default function AccountPage() {
     const dispatch = useDispatch();
 
 
-
     const [name, setName] = useState(user.name);
     const [email, setEmail] = useState(user.email);
     const [phoneNum, setPhoneNum] = useState(user.phoneNum);
