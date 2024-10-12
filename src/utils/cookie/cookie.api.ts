@@ -1,10 +1,20 @@
 //src/utils/cookie/cookie.api.ts
 import Cookies from 'js-cookie';
+import jwt from 'jsonwebtoken'; // 페이로드 디코딩을 위해 사용
+
 import {createUserToken} from "@/utils/jwt.utils";
 
 // JWT 토큰과 Refresh 토큰을 쿠키에 저장하는 함수
 export const saveToken = (token: string, refreshToken?: string) => {
+
+    // 무결성 검증 먼저 수행
+    if (!IntegrityToken(token)) {
+        console.error('무결성 검증 실패: 토큰 저장이 중단되었습니다.');
+        return;
+    }
+
     // 1. JWT 토큰을 쿠키에 저장 (7일 동안 유지)
+
     Cookies.set('token', token, {
         expires: 7, // 7일 동안 유지
         path: '/',  // 모든 경로에서 유효
@@ -24,7 +34,7 @@ export const saveToken = (token: string, refreshToken?: string) => {
 };
 
 // JWT 토큰을 로컬 스토리지와 쿠키에서 삭제하는 함수 (로그아웃 시 사용)
-export const clearToken = () => {
+/*export const clearToken = () => {
     // 로컬 스토리지에서 토큰 제거
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
@@ -45,34 +55,32 @@ export const clearToken = () => {
     Cookies.remove('accessToken', { path: '/', secure: true, sameSite: 'strict' }); // accessToken 제거
     Cookies.remove('userToken', { path: '/', secure: true, sameSite: 'strict' });   // userToken 제거
     Cookies.remove('Authorization', { path: '/', secure: true, sameSite: 'strict' });   // userToken 제거
+};*/
+// JWT 토큰을 로컬 스토리지와 쿠키에서 삭제하는 함수 (로그아웃 시 사용)
+export const clearToken = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem("userInfo");
+
+    Cookies.remove('token', { path: '/', secure: true, sameSite: 'strict' });
+    Cookies.remove('refreshToken', { path: '/', secure: true, sameSite: 'strict' });
 };
 
 
+export const AuthorizationToken = () => {
+
+    Cookies.remove('Authorization', { path: '/', secure: true, sameSite: 'strict' });
+};
+
 /*쿠키만 삭제 하는 메서드 */
-export const removeCookie = (name: string) => {
-    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
-    document.cookie = `Authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
-    console.log("Authorization 백엔드꺼 지우기 ", document.cookie);
-
-    //const allCookies = Cookies.get();
-    //Object.keys(allCookies).forEach(cookieName => {
-    //    Cookies.remove(cookieName, {path: '/'})
-    //})
-
-    /* TODO
-    *  allCookie 전부 삭제를 하는거를 만들었으니깐
-    * 이거를 한번 실행을 해서 제대로 모든 쿠키가 삭제가 되는지
-    * 확인을 해봐야한다.
-    * 10월 11일 20시 31분
-    *
-    *
-    * 그리고 쿠키 무결성 검사를 해야 한다.
-    * */
-    console.log("모든 쿠키가 삭제되었습니다. ")
-
+export const removeCookie = () => {
+    const allCookies = Cookies.get();
+    Object.keys(allCookies).forEach(cookieName => {
+       Cookies.remove(cookieName, {path: '/'})
+    })
 }
 
-/*쿠키 읽어오는 메서드*/
+// 쿠키 읽어오는 함수
 export const getCookie = (name: string): string | null => {
     const nameEQ = `${name}=`;
     const ca = document.cookie.split(';');
@@ -84,18 +92,74 @@ export const getCookie = (name: string): string | null => {
     return null;
 };
 
-
-export const userToken = (userInfo: { id: string; name: string;role:string}) => {
+// 유저 토큰을 저장하는 함수
+export const userToken = (userInfo: { id: string; name: string; role: string }) => {
     // 유저 정보를 기반으로 JWT 커스텀 토큰 생성
     const userToken = createUserToken(userInfo);
 
     // 생성된 JWT 토큰을 쿠키에 저장 (7일 동안 유지)
     Cookies.set('userToken', userToken, {
-        expires:7,
+        expires: 7,
         path: "/", // 모든 경로에서 유효
-        secure:true, // HTTPS에서만 쿠키를 전송한다고 하는데, 이거 우리 사용 안하지 않나..
+        secure: true, // HTTPS에서만 쿠키 전송
         sameSite: 'strict', // 동일 사이트에서만 쿠키 사용
-        httpOnly:false // js쿠키에서는 브라우저에서 관리가 되기 때문에 httpOnly는 false로 설정.
+        httpOnly: false // 브라우저에서 접근 가능하게 httpOnly는 false로 설정
     });
-    console.log("유저 정보 JWT 토큰이 내 마음속 쿠키에 저장~ ")
-}
+    console.log("유저 정보 JWT 토큰이 쿠키에 저장되었습니다.");
+};
+
+// JWT 무결성 검사 함수
+export const IntegrityToken = (token: string | null): boolean => {
+    if (!token) {
+        console.error('토큰이 없습니다.');
+        return false;
+    }
+
+    try {
+        // 토큰을 디코딩하고 페이로드를 추출
+        const decoded = jwt.decode(token) as jwt.JwtPayload;
+        // 만료 시간 (exp) 추출
+        const exp = decoded?.exp;
+        if (!exp) {
+            console.error('토큰에 만료 시간이 없습니다.');
+            return false;
+        }
+
+        // 현재 시간과 만료 시간 비교
+        const currentTime = Math.floor(Date.now() / 1000); // 현재 시간 (초 단위)
+        const timeRemaining = exp - currentTime;
+        if (timeRemaining <= 0) {
+            console.error('토큰이 만료되었습니다.');
+            return false;
+        }
+
+        console.log(`토큰이 유효합니다. 남은 시간: ${timeRemaining}초`);
+        return true;
+    } catch (error) {
+        console.error('토큰 디코딩 실패:', error);
+        return false;
+    }
+};
+
+// JWT 토큰 남은 시간 계산 함수
+export const getTokenRemainingTime = (token: string | null): number | null => {
+    if (!token) return null;
+
+    try {
+        // 토큰 디코딩
+        const decoded = jwt.decode(token) as jwt.JwtPayload;
+        if (!decoded || !decoded.exp) {
+            console.error('토큰에서 만료 시간을 추출할 수 없습니다.');
+            return null;
+        }
+
+        // 현재 시간과 만료 시간 비교
+        const currentTime = Math.floor(Date.now() / 1000); // 초 단위로 현재 시간
+        const timeRemaining = decoded.exp - currentTime;
+
+        return timeRemaining > 0 ? timeRemaining : 0; // 남은 시간 반환, 없으면 0
+    } catch (error) {
+        console.error('토큰 디코딩 실패:', error);
+        return null;
+    }
+};

@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchAllProducts } from "@/service/product/product.api";
 import {ProductModel} from "@/model/ProductModel";
-import {getCookie, removeCookie, saveToken} from "@/utils/cookie/cookie.api";
+import {AuthorizationToken, getCookie, removeCookie, saveToken} from "@/utils/cookie/cookie.api";
 import { useDispatch } from 'react-redux';
 import {extractUserInfoFromToken} from "@/utils/jwt.utils";
 import {saveUser} from "@/lib/features/user.slice";
@@ -33,9 +33,8 @@ export default function PageHome() {
     const handleAuthToken = async () => {
         const authToken = getCookie("Authorization");
 
-        console.log("Authorization", authToken)
         if (authToken) {
-            console.log("OAuth 토큰: ", authToken);
+
             try {
                 saveToken(authToken); // 토큰을 쿠키에 저장
                 const { id } = extractUserInfoFromToken(authToken); // 토큰에서 유저 정보 추출
@@ -59,12 +58,11 @@ export default function PageHome() {
                     localStorage.setItem('userToken', JSON.stringify(userData));
 
                     console.log("유저 정보가 쿠키와 로컬스토리지에 저장됨");
-                    router.push("/"); // 로그인 후 메인 페이지로 리다이렉트
                 }
             } catch (error) {
                 console.error("토큰 로그인 실패: ", error);
             }
-            removeCookie("Authorization"); // 쿠키에서 토큰 삭제
+            AuthorizationToken();  // 쿠키에서 토큰 삭제
         } else {
             console.log("Authorization 토큰을 찾을 수 없습니다.");
         }
@@ -74,6 +72,7 @@ export default function PageHome() {
         handleAuthToken(); // 페이지 로드 시 인증 토큰 확인
         loadProducts(); // 상품 데이터 로드
     }, []);
+
 
     // 카테고리별 상품 분류
     const categories: { [key: string]: ProductModel[] } = {
