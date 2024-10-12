@@ -11,10 +11,10 @@ import Image from "next/image";
 import Link from "next/link";
 import useSignUpUser from "@/hooks/useSignInUser";
 import {insertUser} from "@/service/user/user.api";
-import {UserModel} from "@/model/UserModel";
 import {signUpSchema} from "@/schema/userValidationSchema";
 import {FormControl, FormLabel} from "@chakra-ui/react";
 import {router} from "next/client";
+import {UserModel} from "@/model/user/user.model";
 
 
 const loginSocials = [
@@ -36,16 +36,12 @@ const loginSocials = [
 ];
 
 export default function PageSignUp(){
-  const { status, handleSignUp, errorMessage } = useSignUpUser(); // 송준한 커스텀 훅
+  const { status, handleSignUp, errorMessage } = useSignUpUser(); // 커스텀 훅 사용
   const [formData, setFormData] = useState<Partial<UserModel>>({
     name: '',
     email: '',
     password: '',
     phoneNum: '',
-    //zipcode: '',
-    //streetAddress: '',
-    //detailAddress: '',
-    //addressType: ''
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
@@ -56,26 +52,20 @@ export default function PageSignUp(){
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Use the existing formData state directly, no need to re-declare it
+    // Zod 스키마를 이용한 유효성 검사
     const validation = signUpSchema.safeParse(formData);
-    console.log("폼 데이터 : 핸들체인지 블록 ", JSON.stringify(formData));
-
-
-    if (validation.success) {
-      const validData: UserModel = validation.data;
-      // validation.data는 이제 UserModel과 동일한 구조
-    } else {
+    if (!validation.success) {
       const errorMessages = validation.error.issues.map(issue => issue.message).join(", ");
-      alert(errorMessages); // 에러 처리
+      alert(errorMessages);
       return;
     }
 
-    // Proceed to submit the form data
-    const result = await insertUser(validation.data);
-    if (result.status) {
+    // 유효성 검사를 통과하고 데이터를 커스텀 훅의 핸들사인업 함수에 전달.
+    const isSignUpSuccessful = await handleSignUp(validation.data);
+    if (isSignUpSuccessful) {
       alert("회원가입 성공");
     } else {
-      alert("회원가입 실패");
+      alert(`회원가입 실패: ${errorMessage}`);
     }
   };
 

@@ -65,10 +65,6 @@ export async function insertUser(user: UserModel): Promise<any> {
         email: user.email,
         password: user.password,
         phoneNum: user.phoneNum,
-        //zipcode: user.zipcode,
-        //streetAddress: user.streetAddress,
-        //detailAddress: user.detailAddress,
-        //type: user.addressType,
     };
 
     try {
@@ -98,10 +94,6 @@ export const updateUser = async (id: string, user: UserModel): Promise<Response>
         email: user.email,
         password: user.password,
         phoneNum: user.phoneNum,
-        //zipcode: user.zipcode,
-        //streetAddress: user.streetAddress,
-        //detailAddress: user.detailAddress,
-        //type: user.addressType,
     };
 
     return apiRequest(`/${id}`, "PUT", body);
@@ -115,10 +107,6 @@ export async function changepass(user: UserModel): Promise<Response> {
         password: user.password, // 기존 비밀번호
         newPassword : user.newPassword // 새로운 비밀번호
     };
-    console.log("asdflfdsjal  : email" , user.email)
-    console.log("asdflfdsjal  : password" , user.password)
-    console.log("asdflfdsjal  : new" , user.newPassword)
-    console.log("asldf;dsafjlks : " , body)
 
     try {
         const response = await apiRequest(`/changepass`, "PATCH", body);
@@ -148,7 +136,7 @@ export const logoutUser = async (): Promise<void> => {
 
     document.cookie = 'refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
 
-    try {
+    try {                                       // 템플릿 메서드 키가 안먹혀서, 보류
         const response = await fetch("http://localhost:8000/logout", {
             method: "POST",
             credentials: 'include',

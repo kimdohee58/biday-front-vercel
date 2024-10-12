@@ -1,4 +1,4 @@
-// utils/auth.ts
+//src/utils/accessHeader.ts
 import { headers } from 'next/headers';
 
 export const getAuthorizationHeader = () => {

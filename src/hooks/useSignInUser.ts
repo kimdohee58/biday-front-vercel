@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import { signUpSchema } from '@/schema/userValidationSchema';
-import { insertUser } from '@/service/user/signUp.api';
-import { UserModel } from "@/model/UserModel";
+import { insertUser } from "@/api/user/user.api";
+import {UserModel} from "@/model/user/user.model";
 
 const useSignUpUser = () => {
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
     const [errorMessage, setErrorMessage] = useState<string>('');
+
 
     // 회원가입 처리 함수
     const handleSignUp = async (user : UserModel) => {
@@ -40,6 +41,15 @@ const useSignUpUser = () => {
             return false;
         }
     };
+
+    // 유효성 검사 실시간으로 수행
+    const validation = signUpSchema.safeParse({ ...formData, [name]: value });
+    if (!validation.success) {
+        const errorMessages = validation.error.issues.map(issue => issue.message).join(", ");
+        setFieldError(name, errorMessages);
+    }else{
+        setFieldError(name, "");
+    }
 
     return { status, handleSignUp, errorMessage }; // 상태와 함수 반환
 };

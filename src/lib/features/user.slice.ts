@@ -26,8 +26,6 @@ const userSlice = createSlice({
         saveUser: (state, action: PayloadAction<{ user: UserModel, token: string }>) => {
             state.user = action.payload.user;  // 유저 정보 저장
             state.token = action.payload.token;  // 토큰 저장
-            console.log("유저 정보 저장이 됐습니다. : ", state.user);
-            console.log("토큰이 저장이 됐습니다. : ", state.token);
         },
         saveUserToken: (state, action: PayloadAction<{  userInfo:UserToken}>) => {
             state.userInfo = action.payload.userInfo;
