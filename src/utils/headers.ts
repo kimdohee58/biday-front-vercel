@@ -3,38 +3,37 @@
 type HTTPMethod = 'GET' | 'POST' | 'DELETE' | 'PUT' | 'PATCH';
 
 export const HTTPRequest = (method: HTTPMethod, url: string) => {
-    const userInfo = getUserInfo();
+    const userToken = getUserToken();
     // const xhr = new XMLHttpRequest();
     // // HTTP 메서드 동적으로 설정
     // xhr.open(method, url, true);
     // console.log("HTTPMethod 확인: ", method);
 
-    if (userInfo != null) {
+    if (userToken != null) {
         // role 배열의 첫 번째 요소만 가져오기
-        const userRole = userInfo.userRole ? userInfo.userRole[0] : null; // 첫 번째 요소가 없으면 null
-        const { role: _, ...restUserInfo } = userInfo; // role 제외한 나머지 정보 저장
-        const encodeUserInfo = encodeURIComponent(JSON.stringify({ ...restUserInfo, userRole })); // 나머지 정보와 role을 함께 인코딩
-        //xhr.setRequestHeader("UserInfo", encodeUserInfo);
+        const userRole = userToken.userRole ? userToken.userRole[0] : null; // 첫 번째 요소가 없으면 null
+        const { role: _, ...restuserToken } = userToken; // role 제외한 나머지 정보 저장
+        const encodeuserToken = encodeURIComponent(JSON.stringify({ ...restuserToken, userRole })); // 나머지 정보와 role을 함께 인코딩
+        //xhr.setRequestHeader("userToken", encodeuserToken);
 
-        console.log("encodeUserInfo 되는지 확인: ", encodeUserInfo);
+        console.log("encodeuserToken 되는지 확인: ", encodeuserToken);
         // 이거 나중에 쿠키로 설정을 해야 한다.
         /*TODO
-        *  나중에 userToken에다가 userInfo 모델을 넣어야 함.
+        *  나중에 userToken에다가 userToken 모델을 넣어야 함.
         *
         *
         *
         * / */
-        return  encodeUserInfo
+        return  encodeuserToken
     } else {
-        return userInfo;
+        return userToken;
     }
 }
 
-export const getUserInfo = () => {
-    console.log("getUserInfo 들어오는지 확인: ", getUserInfo);
-
-    const userInfoString = localStorage.getItem("userToken");
-    console.log("userInfoString 들어오는지 확인: ", userInfoString);
+export const getUserToken = () => {
+    console.log("getuserToken 들어오는지 확인: ", getUserToken);
+    const userTokenString = localStorage.getItem("userToken");
+    console.log("userTokenString 들어오는지 확인: ", userTokenString);
 
     // 쿠키 셋도 만들기
     // junhan 으로 피알을 하고,
@@ -51,6 +50,7 @@ export const getUserInfo = () => {
 
     // 미안 내가 조금 더 알아볼게
     // 메인
-    return userInfoString ? JSON.parse(userInfoString) : null; // JSON 문자열을 객체로 변환
+    return userTokenString ? JSON.parse(userTokenString) : null; // JSON 문자열을 객체로 변환
 };
-// userToken 배열, 인코딩 껴놓은거 유정이가 ㅁ나든걸로 껴 놓으면 된다.
+
+

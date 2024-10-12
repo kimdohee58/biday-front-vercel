@@ -13,9 +13,9 @@ export const useLogout = () => {
         try {
             // 로컬 스토리지 및 쿠키에서 토큰 제거
             clearToken();
-            console.log("훅에 있는 로그아웃 실행 : ")
 
-        //    removeCookie();
+            removeCookie();
+
             // 리덕스 스토어에서 유저 정보 초기화
             dispatch(clearUser());
 

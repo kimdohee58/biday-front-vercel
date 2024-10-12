@@ -58,7 +58,7 @@ export default function RootLayout({children, params,}: { children: React.ReactN
                 {isClient ? (
                     <PersistGate loading={null} persistor={persistor as any}>
                         <ReactQueryProvider>
-                            {/*<TokenCheck/>*/} {/*페이지 전환시 토크 체크 */}
+                            {<TokenCheck/>} {/*페이지 전환시 토크 체크 */}
                             <SiteHeader/>
                             <main>{children}</main>
                             <Footer/>
