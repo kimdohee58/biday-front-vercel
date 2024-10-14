@@ -58,7 +58,7 @@ export default function AuctionDetailPage() {
     const {id} = useParams();
 
     const auction = useQuery({queryKey: ["auction"], queryFn: () => fetchAuction(String(id))});
-    const auctionImage = useQuery({queryKey: ["auctionImage"], queryFn: () => fetchImage(ImageType.AUCTION, id as string)});
+    const auctionImage = useQuery({queryKey: ["auctionImage"], queryFn: () => fetchImage(ImageType.AUCTION, id)});
     const product = useQuery({queryKey: ["product"], queryFn: () => fetchProductOne(productId)});
     const productImage = useQuery({queryKey: ["productImage"], queryFn: () => fetchImage(ImageType.PRODUCT, productId)});
 

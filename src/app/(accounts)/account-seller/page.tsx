@@ -1,6 +1,4 @@
-"use client";
-
-import React, {ChangeEvent, useEffect, useState} from "react";
+import React, {ChangeEvent} from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import {accountAPI} from "@/api/user/account.api"
 import {Suspense} from "react";
@@ -24,16 +22,19 @@ import useRandomId from "@/hooks/useRandomId";
 import {getAccount, saveAccount} from "@/service/account/account.api";
 import {ApiError} from "@/utils/error";
 import {UserToken} from "@/model/user/userToken.model";
+import { cookies } from "next/headers";
 
 
 async function AccountDetails() {
+
     const accountData = useQuery({queryKey: ["account"], queryFn: () => getAccount()});
-    const userToken = localStorage.getItem("userToken");
+    const cookieStore = cookies();
+    const userToken = cookieStore.get("userToken");
     if (!userToken) {
         return;
     }
 
-    const user = JSON.parse(userToken);
+    const user = JSON.parse(userToken.value);
 
     if (!accountData.data) {
         return (
