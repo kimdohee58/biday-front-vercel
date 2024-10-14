@@ -122,11 +122,8 @@ export async function fetchImageOne(type: ImageType, id: string) {
     try {
         const response = await fetch(url, {
             method: "GET",
+            cache: "no-store",
         });
-
-        if (!response.ok) {
-            return {};
-        }
 
         const data: ImageModel = await response.json();
 

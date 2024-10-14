@@ -29,7 +29,7 @@ async function RenderImage({id}: { id: string}) {
             <Image
                 fill
                 sizes="(max-width: 640px) 100vw, 33vw"
-                src={productImage? `${productImage.uploadUrl}` : "./error.jpg"}
+                src={productImage? `${productImage.uploadUrl}` : "/error.jpg"}
                 className="w-full rounded-2xl object-cover"
                 alt={"test"}
                 />

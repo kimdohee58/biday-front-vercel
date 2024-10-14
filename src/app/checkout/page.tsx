@@ -1,4 +1,3 @@
-/*
 "use client";
 
 import Label from "@/components/Label/Label";
@@ -17,17 +16,15 @@ import {loadTossPayments} from "@tosspayments/tosspayments-sdk";
 import Cookies from "js-cookie";
 import {PaymentTempModel} from "@/model/order/paymentTemp.model";
 import {useMutation, useQuery} from "@tanstack/react-query";
-import {accountAPI} from "@/api/user/account.api";
 import {savePaymentTemp} from "@/service/order/payment.service";
 import {useRouter, useSearchParams} from "next/navigation";
-import {productAPI} from "@/api/product/product.api";
 import {fetchAwardDetails} from "@/service/auction/award.service";
 import {fetchProductAndAwardDetails} from "@/service/order/checkout.service";
 import useRandomId from "@/hooks/useRandomId";
 import Checkout from "@/app/checkout/payment/Checkout";
 import CustomModal from "@/app/checkout/payment/CustomModal";
 
-const OrderSummarySection = ({productId, awardId}: {productId: string, awardId: string}) {
+function OrderSummarySection ({productId, awardId}: {productId: string, awardId: string}) {
     const {data, isLoading, error} = useQuery({
         queryKey: ["productAndAward"],
         queryFn: () => fetchProductAndAwardDetails(productId, awardId)
@@ -232,8 +229,8 @@ const OrderSummarySection = ({productId, awardId}: {productId: string, awardId: 
                                className="mt-8 w-full">
                     Confirm order</ButtonPrimary>
                 <CustomModal isOpen={isModalOpen} onClose={handleCloseModal}>
-                    <Checkout value={amount} product={data.product.name} orderId={orderId}
-                              customerKey={"66f68ebf2bd718301c69f1e5"}/>
+                        <Checkout value={amount} product={data.product.name} orderId={orderId}
+                                  customerKey={"66f68ebf2bd718301c69f1e5"}/>
                 </CustomModal>
                 <div
                     className="mt-5 text-sm text-slate-500 dark:text-slate-400 flex items-center justify-center">
@@ -299,11 +296,6 @@ const CheckoutDetails = ({productId, awardId}: { productId: string, awardId: str
         queryFn: () => fetchProductAndAwardDetails(productId, awardId)
     });
 };
-
-const
-
-    export
-default
 
 function CheckoutPage() {
 
@@ -470,4 +462,3 @@ function CheckoutPage() {
         </div>
     );
 };
-*/

@@ -9,7 +9,15 @@ export async function GET(request: Request) {
 
         const {searchParams} = new URL(request.url);
         const id = searchParams.get("id");
+
         const type = searchParams.get("type") as ImageType;
+
+        if (!id || !type) {
+            return NextResponse.json({error: "잘못된 요청 : id 또는 type 누락 "}, {status: 400});
+        }
+
+        // const type = decodeURIComponent(encoded);
+        console.log("decodedType", type);
 
         if (type === ImageType.PRODUCT && !id) {
             const productImages = await prisma.image.findMany({
@@ -27,19 +35,30 @@ export async function GET(request: Request) {
         }
 
         if (type === ImageType.PRODUCT && id) {
-            const productImage = await prisma.image.findFirst({
+            console.log("상품, id 하나 불러오기")
+
+            console.log(`type: ${type}, id: ${id}`);
+            const findProps = {
                 where: {
                     type: type,
-                    referencedId: id,
+                    referencedId: Number(id),
                 }
-            })
+            };
 
-            return NextResponse.json(productImage);
+            const productImage = await prisma.image.findFirst(findProps
+            );
+
+            if (!productImage) {
+                throw new Error("");
+            }
+
+            return NextResponse.json({
+                ...productImage,
+                referencedId: productImage.referencedId.toString(),
+            });
         }
 
-        if (!id || !type) {
-            return NextResponse.json({error: "잘못된 요청 : id 또는 type 누락 "}, {status: 400});
-        }
+
 
         const images = await prisma.image.findMany({
             where: {

@@ -4,14 +4,20 @@ import {productAPI} from "@/api/product/product.api";
 import {awardAPI} from "@/api/auction/award.api";
 import {ProductDictionary} from "@/model/product/product.model";
 import {AwardModel} from "@/model/auction/award.model"
+import {cookies} from "next/headers";
 
 export async function fetchProductAndAwardDetails(productId: string, awardId: string) {
-    const userToken = Cookies.get("userToken")!!;
-    const token = Cookies.get("token")!!;
+    const cookieStore = cookies();
+    const cookie = cookieStore.get("userToken");
+
+    if (!cookie) {
+        throw new Error("cookie");
+    }
+
 
     const commonOptions = {
         userToken: localStorage.getItem("userToken")!,
-    }
+    };
     const productOptions: RequestOptions<null> = {
         params: {
             id: productId,

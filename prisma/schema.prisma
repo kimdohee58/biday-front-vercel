@@ -20,7 +20,7 @@ model Image {
   uploadPath   String
   uploadUrl    String
   type         String
-  referencedId  String
+  referencedId BigInt
   createdAt    DateTime @default(now())
 
   @@map("images")

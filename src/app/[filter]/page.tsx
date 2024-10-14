@@ -14,11 +14,19 @@ import {ProductModel, SearchFilter} from "@/model/product/product.model";
 import {fetchProducts} from "@/service/product/product.service";
 import {setLoading} from "@/lib/features/products.slice";
 
+type ProductCardData = {
+    product: ProductModel;
+    image: string;
+};
+
+function FetchItems() {
+
+}
+
 export default function PageCollection({params} : {params: {filter: string}}){
     // const searchParams = useSearchParams(); // searchParams 가져오기
     // const categoryFilter  = searchParams.get('filter') as string;
     // console.log("categoryFilter", categoryFilter);
-    console.log("Category filter", params.filter )
 
     const itemsPerPage = 20; // 한 페이지에 20개씩 (가로 5 , 세로 4개)
     const [PRODUCTS, setProducts] = useState<ProductModel[]>([]);
