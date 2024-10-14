@@ -34,7 +34,8 @@ export async function getAccount() {
         return await accountAPI.findById(options);
 
     } catch (error) {
-
+        console.error("getAccount 도중 오류 발생", error);
+        throw new Error("");
     }
 
 }

@@ -26,7 +26,7 @@ import {ApiError} from "@/utils/error";
 import {UserToken} from "@/model/user/userToken.model";
 
 
-const AccountDetails = () => {
+async function AccountDetails() {
     const accountData = useQuery({queryKey: ["account"], queryFn: () => getAccount()});
     const userToken = localStorage.getItem("userToken");
     if (!userToken) {
