@@ -159,3 +159,28 @@ export const logoutUser = async (): Promise<void> => {
         }
     }
 };
+
+// 이메일 중복확인
+export async function checkEmailDuplication(email:string): Promise<boolean>{
+    try {
+        const data = await apiRequest("/validate", "POST", {email});
+        console.log("이메일 중복확인 성공 코드 : ", data);
+        return true;//이메일 사용 가능.
+    } catch (error){
+        console.error("이메일 중복확인 실패 코드 : ", error);
+        return false; //이메일 존재
+    }
+}
+
+// 핸드폰 중복확인
+export async function checkPhoneDuplication(phoneNum: string): Promise<boolean> {
+    try {
+        const data = await apiRequest("/phoneNum", "POST", {phoneNum});
+        console.log("핸드폰 중복확인 성공 코드 : ", data);
+        return true; // 핸드폰 번호 사용 가능
+    } catch (error){
+        console.error("핸드폰 번호 사용중 : ", error);
+        return false; // 핸드폰 번호 이미 사용중
+    }
+}
+

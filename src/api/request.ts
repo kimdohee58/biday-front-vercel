@@ -21,6 +21,5 @@ export const api = {
     wish:"/api/wishes",
     seller:"/api/seller-payments",
     loginHistory:"/api/loginHistory"
-    // address ~ wish : 까지 총 17개.
 
 }

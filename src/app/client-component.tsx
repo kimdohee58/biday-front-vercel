@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { extractUserInfoFromToken } from "@/utils/jwt.utils";
 import { saveUser } from "@/lib/features/user.slice";
 import { findUserById } from "@/service/user/user.api";
+import {checkTokenAndReissueIfNeeded} from "@/utils/token/token";
 
 interface ClientComponentProps {
     authorizationToken: string;
@@ -16,7 +17,7 @@ interface ClientComponentProps {
 
 export default function ClientComponent({ authorizationToken }: ClientComponentProps) {
     const [products, setProducts] = useState<ProductModel[]>([]);
-    const dispatch = useDispatch();
+    //const dispatch = useDispatch();
 
     const loadProducts = async () => {
         try {
@@ -29,7 +30,8 @@ export default function ClientComponent({ authorizationToken }: ClientComponentP
     };
 
     const handleAuthToken = async () => {
-        const authToken = authorizationToken || getCookie("Authorization");
+        console.log("handleAuthToken : ",authorizationToken)
+        const authToken = authorizationToken
 
         if (authToken) {
             try {
@@ -47,7 +49,7 @@ export default function ClientComponent({ authorizationToken }: ClientComponentP
                         newPassword: user.newPassword || "",
                     };
 
-                    dispatch(saveUser({ user: userData, token: authToken }));
+                   // dispatch(saveUser({ user: userData, token: authToken }));
                     localStorage.setItem("userToken", JSON.stringify(userData));
                 }
             } catch (error) {
@@ -61,6 +63,7 @@ export default function ClientComponent({ authorizationToken }: ClientComponentP
     useEffect(() => {
         handleAuthToken(); // 페이지 로드 시 인증 토큰 확인
         loadProducts(); // 상품 데이터 로드
+        checkTokenAndReissueIfNeeded(authorizationToken);
     }, [authorizationToken]);
 
     return (

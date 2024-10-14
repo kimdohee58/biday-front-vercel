@@ -1,7 +1,7 @@
-"use client"
-//src/app/signup/page.tsx
+"use client";
+// src/app/signup/page.tsx
 
-import React, {FC, useState} from "react";
+import React, { useState } from "react";
 import facebookSvg from "@/images/Facebook.svg";
 import twitterSvg from "@/images/Twitter.svg";
 import googleSvg from "@/images/Google.svg";
@@ -9,13 +9,12 @@ import Input from "@/shared/Input/Input";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import Image from "next/image";
 import Link from "next/link";
-import useSignUpUser from "@/hooks/useSignInUser";
-import {insertUser} from "@/service/user/user.api";
-import {signUpSchema} from "@/schema/userValidationSchema";
-import {FormControl, FormLabel} from "@chakra-ui/react";
+import useSignUpUser from "@/hooks/useSignInUser"; // 커스텀 훅 임포트 수정
+import { signUpSchema } from "@/schema/userValidationSchema";
+import { FormControl, FormLabel } from "@chakra-ui/react";
+import { UserModel } from "@/model/user/user.model";
 import {router} from "next/client";
-import {UserModel} from "@/model/user/user.model";
-
+import {checkEmailDuplication, checkPhoneDuplication} from "@/service/user/user.api";
 
 const loginSocials = [
   {
@@ -35,19 +34,39 @@ const loginSocials = [
   },
 ];
 
-export default function PageSignUp(){
+export default function PageSignUp() {
   const { status, handleSignUp, errorMessage } = useSignUpUser(); // 커스텀 훅 사용
-  const [formData, setFormData] = useState<Partial<UserModel>>({
+  const [formData, setFormData] = useState<Partial<UserModel & {confirmPassword:string}>>({
     name: '',
     email: '',
     password: '',
+    confirmPassword:'',
     phoneNum: '',
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
+  const [fieldErrors, setFieldErrors] = useState<{ [key: string]: string }>({});
+
+  const setFieldError = (name: string, errorMessage: string) => {
+    setFieldErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: errorMessage,
+    }));
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({...formData, [name]: value});
-  }
+    setFormData({ ...formData, [name]: value });
+
+    // 실시간 유효성 검사
+    const validation = signUpSchema.safeParse({ ...formData, [name]: value });
+
+    if (!validation.success) {
+      const errorMessages = validation.error.issues.map((issue) => issue.message).join(", ");
+      setFieldError(name, errorMessages);
+    } else {
+      setFieldError(name, "");
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,15 +74,17 @@ export default function PageSignUp(){
     // Zod 스키마를 이용한 유효성 검사
     const validation = signUpSchema.safeParse(formData);
     if (!validation.success) {
-      const errorMessages = validation.error.issues.map(issue => issue.message).join(", ");
+      const errorMessages = validation.error.issues.map((issue) => issue.message).join(", ");
       alert(errorMessages);
       return;
     }
 
-    // 유효성 검사를 통과하고 데이터를 커스텀 훅의 핸들사인업 함수에 전달.
-    const isSignUpSuccessful = await handleSignUp(validation.data);
+    // 유효성 검사를 통과하고 데이터를 커스텀 훅의 handleSignUp 함수에 전달
+    const isSignUpSuccessful = await handleSignUp(validation.data as UserModel);
     if (isSignUpSuccessful) {
       alert("회원가입 성공");
+      // 회원가입 성공 후 인덱스 페이지 이동.
+      router.push('/');
     } else {
       alert(`회원가입 실패: ${errorMessage}`);
     }
@@ -119,19 +140,42 @@ export default function PageSignUp(){
               {/* 이메일 입력 필드 */}
               <label className="block">
                 <span className="text-neutral-800 dark:text-neutral-200">Email address</span>
-                <Input
-                    type="email"
-                    placeholder="example@example.com"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="mt-1"
-                />
+                <div className="flex">
+                  <Input
+                      type="email"
+                      placeholder="example@example.com"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="mt-1 flex-grow"
+                  />
+                  <button
+                      type="button"
+                      onClick={async () => {
+                        if (!formData.email) {  // 이메일이 비어 있을 때 처리
+                          setFieldError("email", "이메일을 입력해주세요.");
+                          return;
+                        }
+                        const isAvailable = await checkEmailDuplication(formData.email!);
+                        if (!isAvailable) {
+                          setFieldError("email", "이메일이 이미 사용중입니다.");
+                        } else {
+                          setFieldError("email", "");
+                          alert("사용이 가능한 이메일입니다.");
+                        }
+                      }}
+                      className="ml-2 px-4 py-2 bg-green-600 text-white rounded-md whitespace-nowrap"
+                  >
+                    중복확인
+                  </button>
+                </div>
+                {fieldErrors.email && <span className="text-sm text-red-400">{fieldErrors.email}</span>}
               </label>
 
               {/* 비밀번호 입력 필드 */}
               <label className="block">
-                <span className="flex justify-between items-center text-neutral-800 dark:text-neutral-200">Password</span>
+                <span
+                    className="flex justify-between items-center text-neutral-800 dark:text-neutral-200">Password</span>
                 <Input
                     type="password"
                     name="password"
@@ -141,21 +185,63 @@ export default function PageSignUp(){
                     placeholder="비밀번호 입력"
                 />
                 <span className="text-sm text-gray-500">
-                비밀번호는 최소 11글자 이상이어야 하며, 대문자와 특수문자를 포함해야 합니다.
+                비밀번호는 최소 8글자 이상이어야 하며, 대문자와 특수문자를 포함해야 합니다.
               </span>
               </label>
 
-              <FormControl mb={4}>
-                <FormLabel htmlFor="phoneNum">전화번호</FormLabel>
+              {/* 비밀번호 재확인 필드 */}
+              <label className="block">
+                <span className="flex justify-between items-center text-neutral-800 dark:text-neutral-200">Confirm Password</span>
                 <Input
-                    type="text"
-                    id="phoneNum"
-                    name="phoneNum"
-                    value={formData.phoneNum}
+                    type="password"
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
                     onChange={handleChange}
-                    required
+                    className="mt-1"
+                    placeholder="비밀번호 재입력"
                 />
+                {fieldErrors.confirmPassword && (
+                    <span className="text-sm text-red-500">{fieldErrors.confirmPassword}</span>
+                )}
+              </label>
+
+              {/* 핸드폰 번호 입력 필드 */}
+              <FormControl mb={4} isInvalid={!!fieldErrors.phoneNum}>
+                <FormLabel htmlFor="phoneNum">전화번호</FormLabel>
+                <div className="flex">
+                  <Input
+                      type="tel"
+                      id="phoneNum"
+                      name="phoneNum"
+                      value={formData.phoneNum}
+                      onChange={handleChange}
+                      placeholder="010-1234-5678"
+                      required
+                      className="flex-grow"
+                  />
+                  <button
+                      type="button"
+                      onClick={async () => {
+                        if (!formData.phoneNum) {
+                          setFieldError("phoneNum", "전화번호를 입력해주세요.");
+                          return;
+                        }
+                        const isAvailable = await checkPhoneDuplication(formData.phoneNum!);
+                        if (!isAvailable) {
+                          setFieldError("phoneNum", "핸드폰 번호가 이미 사용 중입니다.");
+                        } else {
+                          setFieldError("phoneNum", "");
+                          alert("사용 가능한 번호입니다.");
+                        }
+                      }}
+                      className="ml-2 px-4 py-2 bg-green-600 text-white rounded-md whitespace-nowrap"
+                  >
+                    중복확인
+                  </button>
+                </div>
+                {fieldErrors.phoneNum && <span className="text-sm text-red-500">{fieldErrors.phoneNum}</span>}
               </FormControl>
+
 
               {/* 제출 버튼 */}
               <ButtonPrimary type="submit">Continue</ButtonPrimary>
@@ -172,4 +258,4 @@ export default function PageSignUp(){
         </div>
       </div>
   );
-};
+}

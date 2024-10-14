@@ -14,15 +14,15 @@ import SwitchDarkMode2 from "@/shared/SwitchDarkMode/SwitchDarkMode2";
 import Link from "next/link";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/lib/store";
-import { useRouter } from "next/navigation";
-import { logoutUser } from "@/service/user/user.api";
-import { clearUser } from "@/lib/features/user.slice";
 import {useLogout} from "@/hooks/useLogout";
 
 export default function AvatarDropdown() {
-
-    const user = useSelector((state: RootState) => state.user.user);
+    const dispatch = useDispatch();
     const { handleLogout } = useLogout(); // useLogout 훅 사용
+    const user = useSelector((state: RootState) => state.user.user);
+    console.log("user 객체가 있는지 확인하는 코드 ", user);
+    console.log("dispatch 확인 하는 코드 " , dispatch)
+    console.log("useSelector 확인하는 코드: " , useSelector)
 
     return (
         <div className="AvatarDropdown border border-rose-500">
@@ -84,7 +84,7 @@ export default function AvatarDropdown() {
                                         <div className="w-full border-b border-neutral-200 dark:border-neutral-700" />
 
                                         {/* 로그인 상태일 때 표시될 링크 */}
-                                        {user ? (
+                                        {user ?.name? (
                                             <>
                                                 <Link
                                                     href={"/account"}
@@ -329,7 +329,7 @@ export default function AvatarDropdown() {
 
                                         <div className="w-full border-b border-neutral-200 dark:border-neutral-700" />
 
-                                        {user ? (
+                                        {/*{user ? (
 
                                             <Link href="/login" onClick={() => close()}>
                                                 로그인
@@ -343,7 +343,7 @@ export default function AvatarDropdown() {
                                                     로그아웃
                                                 </Link>
                                             </>
-                                        )}
+                                        )}*/}
 
                                         <div className="flex items-center justify-between p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
                                             <div className="flex items-center">

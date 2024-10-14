@@ -20,10 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 }
 
-
-
 // userToken 배열, 인코딩 껴놓은거 유정이가 ㅁ나든걸로 껴 놓으면 된다.
-
 
 // Authorization 헤더에서 Bearer 토큰을 추출하는 함수
 const extractAccessTokenFromHeader = (authorizationHeader: string | null): string | null => {
