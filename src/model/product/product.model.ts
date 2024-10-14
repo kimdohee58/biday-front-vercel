@@ -1,3 +1,5 @@
+model>product>product.model.ts
+
 import {SizeModel} from "@/model/product/size.model";
 
 export interface ProductModel {
@@ -13,6 +15,29 @@ export interface ProductModel {
     createdAt: Date;
     updatedAt: Date;
     wishes:number;
-    sizes: SizeModel[];
+    size: SizeModel[];
 }
 export type ProductDictionary = { [key: string]: ProductModel; };
+
+export interface SearchFilter {
+    brand?: string,
+    category?: string,
+    keyword?: string,
+    color?: string,
+    order?: string
+}
+
+export const initialProduct: ProductModel = {
+    id: 0,
+    brand: '',
+    category: '',
+    name: '',
+    productCode: "",
+    price: 0,
+    color: '',
+    description: '',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    wishes:0,
+    size: {} as SizeModel[],
+};

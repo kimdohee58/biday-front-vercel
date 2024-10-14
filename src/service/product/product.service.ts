@@ -1,8 +1,30 @@
 import {productAPI} from "@/api/product/product.api";
-import {ProductDictionary, ProductModel} from "@/model/product/product.model";
+import {ProductDictionary, ProductModel, SearchFilter} from "@/model/product/product.model";
 import {auctionAPI} from "@/api/auction/auction.api";
 import {AuctionModel} from "@/model/auction/auction.model";
 import {fetchAuctionsBySize} from "@/service/auction/auction.service";
+import {setLoading} from "@/lib/features/products.slice";
+
+export async function fetchProducts(searchFilter: SearchFilter) {
+    try {
+        const options = {
+            params: {
+                ...(searchFilter.brand && {brand: searchFilter.brand}),
+                ...(searchFilter.category && {category: searchFilter.category}),
+                ...(searchFilter.keyword && {keyword: searchFilter.keyword}),
+                ...(searchFilter.color && {color: searchFilter.color}),
+                ...(searchFilter.order && {order: searchFilter.order}),
+            }
+        }
+
+        // API 호출
+        return await productAPI.searchByFilter(options)
+    } catch (error) {
+        console.error("상품 데이터를 가져오는 데 오류가 발생했습니다:", error);
+    } finally {
+        setLoading(false); // 로딩 완료
+    }
+}
 
 export async function fetchProductOne(productId: string): Promise<ProductModel> {
 

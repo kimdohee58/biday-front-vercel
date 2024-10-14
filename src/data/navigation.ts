@@ -91,25 +91,25 @@ const OTHER_PAGE_CHILD: NavItemType[] = [
 export const NAVIGATION_DEMO_2: NavItemType[] = [
   {
     id: ncNanoId(),
-    href: "/collection",
-    name: "상의",
+    href: `/outer`,
+    name: "Outer",
   },
   {
     id: ncNanoId(),
-    href: "/collection-2",
-    name: "하의",
+    href: `/top`,
+    name: "Top",
   },
   {
     id: ncNanoId(),
-    href: "/collection",
-    name: "신발",
+    href: "/bottom",
+    name: "Bottom",
+  },
+  {
+    id: ncNanoId(),
+    href: "/acc",
+    name: "Acc",
   },
 
-  {
-    id: ncNanoId(),
-    href: "/collection-2",
-    name: "가방",
-  },
   {
     id: ncNanoId(),
     href: "/collection",

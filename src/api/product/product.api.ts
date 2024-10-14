@@ -1,7 +1,7 @@
 // src/api/product11/product11.api.ts
 import {api} from "../request";
 import {strategy} from "../api.strategy";
-import {ProductDictionary, ProductModel} from "@/model/product/product.model";
+import {ProductDictionary, ProductModel, SearchFilter} from "@/model/product/product.model";
 import {RequestOptions} from "@/model/api/RequestOptions";
 
 // 전체 상품 목록 불러오기 (GET 요청)
@@ -11,23 +11,12 @@ const findAll = async (): Promise<ProductModel[]> => {
 
 // 필터를 이용한 상품 목록 불러오기 (GET 요청)
 const searchByFilter = async (
-    brandId?: number,
-    categoryId?: number,
-    keyword: string = '',
-    color: string = '',
-    order: string = '',
-    lastItemId?: number
+    options: RequestOptions<SearchFilter,null>
 ): Promise<ProductModel[]> => {
-    const response = await strategy.GET(`${api.product}/findByFilter`, {
-        ...(brandId && { brandId: brandId.toString() }),
-        ...(categoryId && { categoryId: categoryId.toString() }),
-        keyword,
-        color,
-        order,
-        ...(lastItemId && { lastItemId: lastItemId.toString() }),
-    });
-    return response;
+    return await strategy.GET(`${api.product}/findByFilter`,
+        options);
 };
+
 
 // 상품 상세 조회 (GET 요청)
 const findById = async (options: RequestOptions<{ id: number},null>): Promise<ProductDictionary[]> => {
