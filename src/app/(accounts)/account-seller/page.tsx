@@ -3,6 +3,8 @@
 import React, {ChangeEvent, useEffect, useState} from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import {accountAPI} from "@/api/user/account.api"
+import {Suspense} from "react";
+import {DefaultSkeleton} from "@/components/skeleton/DefaultSkeletone"
 
 import {
     Input,
@@ -24,7 +26,7 @@ import {ApiError} from "@/utils/error";
 import {UserToken} from "@/model/user/userToken.model";
 
 
-const accountDetails = () => {
+const AccountDetails = () => {
     const accountData = useQuery({queryKey: ["account"], queryFn: () => getAccount()});
     const userToken = localStorage.getItem("userToken");
     if (!userToken) {
@@ -33,11 +35,13 @@ const accountDetails = () => {
 
     const user = JSON.parse(userToken);
 
-    if (!accountData.isLoading && !accountData.data) {
+    if (!accountData.data) {
         return (
             <div>
-                계좌 정보가 존재하지 않습니다.
-                계좌를 등록하고 판매를 시작해 보세요.
+                <div>
+                    계좌 정보가 존재하지 않습니다.
+                    계좌를 등록하고 판매를 시작해 보세요.
+                </div>
             </div>
         )
     }
@@ -55,7 +59,7 @@ const accountDetails = () => {
                     </Typography>
                     <Input
                         size="lg"
-                        placeholder={user.userName}
+                        value={user.userName}
                         labelProps={{
                             className: "hidden",
                         }}
@@ -77,7 +81,8 @@ const accountDetails = () => {
                         labelProps={{
                             className: "hidden",
                         }}
-                        disabled={true}
+                        value={"990919"}
+                        disabled
                         className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
                     />
                 </div>
@@ -97,7 +102,8 @@ const accountDetails = () => {
                             className: "hidden",
                         }}
                         className="border-t-blue-gray-200 aria-[expanded=true]:border-t-primary"
-                        disabled={true}
+                        disabled
+                        value={accountData.data!.bankName}
                     >
                         {accountData.data!.bankName}
                     </Select>
@@ -112,11 +118,11 @@ const accountDetails = () => {
                     </Typography>
                     <Input
                         size="lg"
-                        placeholder={accountData.data!.accountNum}
                         labelProps={{
                             className: "hidden",
                         }}
-                        disabled={true}
+                        disabled
+                        value={accountData.data!.accountNum}
                         className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
                     />
                 </div>
@@ -239,6 +245,10 @@ export default function Account1() {
         mutationFn: saveAccount
     });
 
+    const handleLogin = () => {
+        window.location.href = `${AUTH_URL}?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(SCOPE)}&state=${STATE}&auth_type=${AUTH_TYPE}`;
+    };
+
     const onClickSubmit = () => {
         const userToken = JSON.parse(localStorage.getItem("userToken")!);
 
@@ -260,106 +270,20 @@ export default function Account1() {
 
     return (
 
-        <section className="px-8 py-20 container mx-auto">
-            <Typography variant="h5" color="blue-gray">
-                계좌 정보
-            </Typography>
+        <div className="space-y-10 sm:space-y-12">
+            <h2 className="text-2xl sm:text-3xl font-semibold">계좌 정보</h2>
             <Typography
                 variant="small"
                 className="text-gray-600 font-normal mt-1"
             >
                 Update your profile information below.
             </Typography>
-            <div className="flex flex-col mt-8">
-                <div className="mb-6 flex flex-col items-end gap-4 md:flex-row">
-                    <div className="w-full">
-                        <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="mb-2 font-medium"
-                        >
-                            이름
-                        </Typography>
-                        <Input
-                            size="lg"
-                            placeholder="홍길동"
-                            value={name}
-                            labelProps={{
-                                className: "hidden",
-                            }}
-                            onChange={onChangeName}
-                            className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
-                        />
-                    </div>
-                    <div className="w-full">
-                        <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="mb-2 font-medium"
-                        >
-                            생년월일
-                        </Typography>
-                        <Input
-                            size="lg"
-                            placeholder="Roberts"
-                            labelProps={{
-                                className: "hidden",
-                            }}
-                            value={birth}
-                            onChange={onChangeBirth}
-                            className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
-                        />
-                    </div>
-                </div>
-                <div className="mb-6 flex flex-col items-end gap-4 md:flex-row">
-                    <div className="w-full">
-                        <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="mb-2 font-medium"
-                        >
-                            은행
-                        </Typography>
-                        <Select
-                            size="lg"
-                            labelProps={{
-                                className: "hidden",
-                            }}
-                            className="border-t-blue-gray-200 aria-[expanded=true]:border-t-primary"
-                            onChange={onChangeBankCode}
-                        >
-                            {Object.entries(BankCode).map(([key, value]) => (
-                                <Option key={value} value={`${key}:${value}`}>
-                                    {key}
-                                </Option>
-                            ))}
-                        </Select>
-                    </div>
-                    <div className="w-full">
-                        <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="mb-2 font-medium"
-                        >
-                            계좌번호
-                        </Typography>
-                        <Input
-                            size="lg"
-                            placeholder="Roberts"
-                            labelProps={{
-                                className: "hidden",
-                            }}
-                            value={accountNum}
-                            onChange={onChangeAccountNum}
-                            className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
-                        />
-                    </div>
-                </div>
-            </div>
-
+            <Suspense fallback={<DefaultSkeleton/>}>
+                <AccountDetails/>
+            </Suspense>
             <ButtonPrimary
-            onClick={onClickSubmit}>판매자 등록</ButtonPrimary>
-        </section>
+                onClick={handleLogin}>판매자 등록</ButtonPrimary>
+        </div>
     );
 }
 

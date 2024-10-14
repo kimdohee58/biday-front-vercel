@@ -22,15 +22,14 @@ import AccordionInfo from "@/components/AccordionInfo";
 import ListingImageGallery from "@/components/listing-image-gallery/ListingImageGallery";
 import {useParams, usePathname, useRouter, useSearchParams} from "next/navigation";
 import {Route} from "next";
-import {fetchAuction} from "@/service/auction/auction.api";
 import {useMutation, useQuery} from "@tanstack/react-query";
-import {ImageType} from "@/model/ImageModel";
-import {fetchProduct, fetchProductOne} from "@/service/product/product.api";
-import {BidModel, BidStreamModel} from "@/model/BidModel";
-import {fetchImageFromClient} from "@/service/image/image.api";
+import {ImageType} from "@/model/ftp/image.model";
+import {fetchProductOne} from "@/service/product/product.service";
+import {BidStreamModel} from "@/model/auction/bid.model";
+import {fetchImage} from "@/service/ftp/image.service";
 import Cookies from "js-cookie";
-import {useColor} from "@/hooks/useColor";
 import {saveBid} from "@/service/auction/bid.service";
+import {fetchAuction} from "@/service/auction/auction.service";
 
 const LIST_IMAGES_GALLERY_DEMO: (string | StaticImageData)[] = [
     detail21JPG,
@@ -58,10 +57,10 @@ export default function AuctionDetailPage() {
     const router = useRouter();
     const {id} = useParams();
 
-    const auction = useQuery({queryKey: ["auction"], queryFn: () => fetchAuction(Number(id))});
-    const auctionImage = useQuery({queryKey: ["auctionImage"], queryFn: () => fetchImageFromClient(ImageType.AUCTION, id as string)});
-    const product = useQuery({queryKey: ["product"], queryFn: () => fetchProductOne(1)});
-    const productImage = useQuery({queryKey: ["productImage"], queryFn: () => fetchImageFromClient(ImageType.PRODUCT, productId)});
+    const auction = useQuery({queryKey: ["auction"], queryFn: () => fetchAuction(String(id))});
+    const auctionImage = useQuery({queryKey: ["auctionImage"], queryFn: () => fetchImage(ImageType.AUCTION, id as string)});
+    const product = useQuery({queryKey: ["product"], queryFn: () => fetchProductOne(productId)});
+    const productImage = useQuery({queryKey: ["productImage"], queryFn: () => fetchImage(ImageType.PRODUCT, productId)});
 
     if (!productImage.isLoading) {
         console.log("프로덕트 이미지", productImage.data);
@@ -91,10 +90,9 @@ export default function AuctionDetailPage() {
     };
 
     const renderHighestBid = () => {
-
         const url = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/bids/stream?auctionId=${Number(id)}`;
+
         useEffect(() => {
-            console.log("useEffect 진입");
 
             const eventSource = new EventSource(url);
 
@@ -104,7 +102,6 @@ export default function AuctionDetailPage() {
                     const bidStream: BidStreamModel = JSON.parse(event.data);
                     setHighestBid(bidStream.currentBid);
                     setAdjustBid(bidStream.currentBid + 4000);
-                    console.log("adjustBid", adjustBid);
                 } catch (error) {
                     console.error("SSE 데이터 파싱 중 오류 발생", error);
                 }
@@ -305,7 +302,6 @@ export default function AuctionDetailPage() {
                   <span>4.9 </span>
                   <span className="mx-1.5">·</span>
                   <span className="text-slate-700 dark:text-slate-400">
-                      {auction.isLoading? "입찰 없음" : `${auction.data!!.award.count} 입찰`}
                   </span>
                 </span>
                             </a>

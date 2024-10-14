@@ -1,21 +1,21 @@
 import {AuctionModel} from "@/model/AuctionModel";
 import {api} from "../request";
 import {strategy} from "../api.strategy";
+import {RequestOptions} from "@/model/api/RequestOptions";
 
 // 경매 상세보기 (GET 요청)
-const findById = async (id: number): Promise<AuctionModel> => {
-    const response = await strategy.GET(`${api.auction}/findById`, {id: id.toString()});
-    return response;
+const findById = async (options: RequestOptions<{id: string}, null>): Promise<AuctionModel> => {
+    return await strategy.GET(`${api.auction}/findById`, options);
 };
 
 // 헤더 경매 목록 조회 (GET 요청)
-const findBySize = async (sizeId?: number, order?: string, cursor?: number): Promise<AuctionModel[]> => {
-    const response = await strategy.GET(`${api.auction}/findBySize`, {
-        sizeId: sizeId?.toString() || '',  // undefined인 경우 빈 문자열로 처리
-        order: order || '',  // undefined인 경우 빈 문자열로 처리
-        cursor: cursor?.toString() || '',  // undefined인 경우 빈 문자열로 처리
-    });
-    return response;
+type findBySizeParams = {
+    sizeId: number,
+    order?: string,
+    cursor?: number
+}
+const findBySize = async (options: RequestOptions<findBySizeParams, null>): Promise<AuctionModel[]> => {
+    return await strategy.GET(`${api.auction}/findBySize`, options);
 };
 
 // 상품 상세 경매 목록 조회 (GET 요청)

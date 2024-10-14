@@ -1,5 +1,5 @@
 import {PrismaClient} from "@prisma/client";
-import {ImageModel, ImageType} from "@/model/ImageModel";
+import {ImageModel, ImageType} from "@/model/ftp/image.model";
 import {NextResponse} from "next/server";
 
 const prisma = new PrismaClient();

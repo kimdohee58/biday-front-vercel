@@ -6,7 +6,7 @@ import {HTTPRequest} from "@/utils/headers";
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | "PATCH" ;
 
-const apiRequest = async (url: string, method: HttpMethod, {params, data, headers, token, userToken, contentType}: RequestOptions<any>) => {
+const apiRequest = async (url: string, method: HttpMethod, {params, data, headers, token, userToken, contentType, cache}: RequestOptions<any,any>) => {
     console.log("strategy 진입");
 
     const queryString = params ? `?${new URLSearchParams(params)}` : '';
@@ -19,9 +19,8 @@ const apiRequest = async (url: string, method: HttpMethod, {params, data, header
             ...(token && {'Authorization': `Bearer ${token}`}),
             ...(userToken && {'UserInfo': HTTPRequest(method,url)}),
             ...(headers || {}),
-
-
         },
+        ...(cache && {cache: {cache}}),
         ...(data && {body: JSON.stringify(data)}),
     };
 
@@ -49,11 +48,11 @@ const apiRequest = async (url: string, method: HttpMethod, {params, data, header
 };
 
 export const strategy = {
-    GET: (url: string, options: RequestOptions<any>) => apiRequest(url, 'GET', options),
-    POST: (url: string, options: RequestOptions<any>) => apiRequest(url, 'POST', options),
-    PUT: (url: string, options: RequestOptions<any>) => apiRequest(url, 'PUT', options),
-    DELETE: (url: string, options: RequestOptions<any>) => apiRequest(url, 'DELETE', options),
-    PATCH: (url: string, options: RequestOptions<any>) => apiRequest(url, 'PATCH', options),
+    GET: (url: string, options: RequestOptions<any, any>) => apiRequest(url, 'GET', options),
+    POST: (url: string, options: RequestOptions<any, any>) => apiRequest(url, 'POST', options),
+    PUT: (url: string, options: RequestOptions<any, any>) => apiRequest(url, 'PUT', options),
+    DELETE: (url: string, options: RequestOptions<any, any>) => apiRequest(url, 'DELETE', options),
+    PATCH: (url: string, options: RequestOptions<any, any>) => apiRequest(url, 'PATCH', options),
 };
 
 
