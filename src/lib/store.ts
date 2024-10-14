@@ -39,23 +39,21 @@ const rootReducer = combineReducers({
 // persistReducer로 루트 리듀서를 감싸줌
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-// 스토어 설정 함수
-export const makeStore = () => {
-    return configureStore({
-        reducer: persistedReducer,
-        middleware: (getDefaultMiddleware) =>
-            getDefaultMiddleware({
-                serializableCheck: false,  // 직렬화 경고 무시
-                ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
-            }),
-        devTools: process.env.NODE_ENV !== 'production',  // DevTools 활성화 여부 설정 (production 환경에서는 비활성화)
-    });
-};
+// 스토어 생성
+export const store = configureStore({
+    reducer: persistedReducer,
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: false,  // 직렬화 경고 무시
+            ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
+        }),
+    devTools: process.env.NODE_ENV !== 'production',  // DevTools 활성화 여부 설정 (production 환경에서는 비활성화)
+});
 
-export const store = makeStore();
-//export const persistor = typeof window !== 'undefined' ? persistStore(store) : null;
-export const persistor = persistStore(store); // 블로그 보고 적은거 ㅇ원래 위에꺼 사용함.
-export type AppStore = ReturnType<typeof makeStore>;
-export type RootState = ReturnType<AppStore['getState']>;
-export type AppDispatch = AppStore['dispatch'];
+// redux-persist에서 사용할 persistor 생성
+export const persistor = persistStore(store);
+
+// 타입 정의
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 

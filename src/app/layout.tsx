@@ -13,7 +13,7 @@ import "@/fonts/line-awesome-1.3.0/css/line-awesome.css";
 import "@/styles/index.scss";
 import "rc-slider/assets/index.css";
 import {AuthProvider} from "@/context/AuthContext";
-import ClientReduxProvider from "@/lib/features/auth/ClientReduxProvider";
+import ClientReduxProvider from "@/features/auth/ClientReduxProvider";
 
 const poppins = Poppins({
     subsets: ["latin"],
