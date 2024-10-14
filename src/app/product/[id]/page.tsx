@@ -3,7 +3,6 @@ import LikeButton from "@/components/LikeButton";
 import {StarIcon} from "@heroicons/react/24/solid";
 import BagIcon from "@/components/BagIcon";
 
-
 import {ClockIcon, NoSymbolIcon, SparklesIcon,} from "@heroicons/react/24/outline";
 import IconDiscount from "@/components/IconDiscount";
 import Prices from "@/components/Prices";
@@ -13,12 +12,34 @@ import Policy from "./Policy";
 import SectionPromo2 from "@/components/SectionPromo2";
 import Image from "next/image";
 import {AuctionModel} from "@/model/AuctionModel";
-import {fetchProduct, fetchProductDetails} from "@/service/product/product.api";
 import {Route} from "@/routers/types";
 import Link from "next/link";
+import {fetchProductDetails} from "@/service/product/product.service";
+import {fetchImage} from "@/service/ftp/image.service";
+import {ImageModel, ImageType} from "@/model/ftp/image.model"
+import {Suspense} from "react";
+import {PhotoPlaceholderSkeleton} from "@/components/skeleton/PhotoPlaceholderSkeleton";
 
+async function RenderImage({id}: { id: string}) {
 
-export default async function ProductDetailPage({params}: { params: { id: string | string[]; }; }) {
+    const productImageArray = await fetchImage(ImageType.PRODUCT, id);
+
+    const productImage = productImageArray[0];
+
+    return (
+        <div className="aspect-w-16 aspect-h-16 relative">
+            <Image
+                fill
+                sizes="(max-width: 640px) 100vw, 33vw"
+                src={productImage? `${productImage.uploadUrl}` : "./error.jpg"}
+                className="w-full rounded-2xl object-cover"
+                alt={"test"}
+                />
+        </div>
+    );
+}
+
+export default async function ProductDetailPage({params}: { params: { id: string } }) {
 
     const {colorIds, product, size, auctions} = await fetchProductDetails(Number(params.id));
 
@@ -28,13 +49,13 @@ export default async function ProductDetailPage({params}: { params: { id: string
     const getColor = () => {
         const parts = product.name.split("(");
         if (parts.length > 1) {
-            return parts[1].replace(")","").trim();
+            return parts[1].replace(")", "").trim();
         }
         return "";
     };
 
     const renderAuctionTable = () => {
-        if (auctions == null || auctions.length == 0) {
+        if (!auctions || auctions.length == 0) {
             return <div>현재 진행중인 경매가 없습니다.</div>;
         }
 
@@ -221,15 +242,9 @@ export default async function ProductDetailPage({params}: { params: { id: string
                     <div className="w-full lg:w-[55%] ">
                         {/* HEADING */}
                         <div className="relative">
-                            <div className="aspect-w-16 aspect-h-16 relative">
-                                <Image
-                                    fill
-                                    sizes="(max-width: 640px) 100vw, 33vw"
-                                    src="/esafai/eListPrdImage523_1.jpg"
-                                    className="w-full rounded-2xl object-cover"
-                                    alt={"test"}
-                                />
-                            </div>
+                            <Suspense fallback={<PhotoPlaceholderSkeleton/>}>
+                                <RenderImage id={params.id}/>
+                            </Suspense>
                             {/*{renderStatus()}*/}
                             {/* META FAVORITES */}
                             <LikeButton className="absolute right-3 top-3 "/>

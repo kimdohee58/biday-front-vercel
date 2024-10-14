@@ -1,5 +1,6 @@
 import {ProductDictionary, ProductModel} from "@/model/ProductModel";
 
+
 const baseUrl = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/products`
 
 export async function insertProduct(product: ProductModel): Promise<any | { status: number }> {

@@ -23,10 +23,10 @@ import ListingImageGallery from "@/components/listing-image-gallery/ListingImage
 import {useParams, usePathname, useRouter, useSearchParams} from "next/navigation";
 import {Route} from "next";
 import {useMutation, useQuery} from "@tanstack/react-query";
-import {ImageType} from "@/model/ImageModel";
+import {ImageType} from "@/model/ftp/image.model";
 import {fetchProductOne} from "@/service/product/product.service";
 import {BidStreamModel} from "@/model/auction/bid.model";
-import {fetchImageFromClient} from "@/service/image/image.api";
+import {fetchImage} from "@/service/ftp/image.service";
 import Cookies from "js-cookie";
 import {saveBid} from "@/service/auction/bid.service";
 import {fetchAuction} from "@/service/auction/auction.service";
@@ -58,9 +58,9 @@ export default function AuctionDetailPage() {
     const {id} = useParams();
 
     const auction = useQuery({queryKey: ["auction"], queryFn: () => fetchAuction(String(id))});
-    const auctionImage = useQuery({queryKey: ["auctionImage"], queryFn: () => fetchImageFromClient(ImageType.AUCTION, id as string)});
+    const auctionImage = useQuery({queryKey: ["auctionImage"], queryFn: () => fetchImage(ImageType.AUCTION, id as string)});
     const product = useQuery({queryKey: ["product"], queryFn: () => fetchProductOne(productId)});
-    const productImage = useQuery({queryKey: ["productImage"], queryFn: () => fetchImageFromClient(ImageType.PRODUCT, productId)});
+    const productImage = useQuery({queryKey: ["productImage"], queryFn: () => fetchImage(ImageType.PRODUCT, productId)});
 
     if (!productImage.isLoading) {
         console.log("프로덕트 이미지", productImage.data);

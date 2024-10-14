@@ -1,7 +1,4 @@
 import {ProductModel} from "@/model/ProductModel";
-import {UserModel} from "@/model/UserModel";
-import {BidModel} from "@/model/BidModel";
-import {ImageModel} from "@/model/ImageModel";
 import {AwardModel} from "@/model/AwardModel";
 
 export interface AuctionModel {

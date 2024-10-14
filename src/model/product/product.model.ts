@@ -13,21 +13,6 @@ export interface ProductModel {
     createdAt: Date;
     updatedAt: Date;
     wishes:number;
-    size: SizeModel[];
+    sizes: SizeModel[];
 }
 export type ProductDictionary = { [key: string]: ProductModel; };
-
-export const initialProduct: ProductModel = {
-    id: 0,
-    brand: '',
-    category: '',
-    name: '',
-    productCode: "",
-    price: 0,
-    color: '',
-    description: '',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    wishes:0,
-    size: {} as SizeModel[],
-};

@@ -30,7 +30,7 @@ const searchByFilter = async (
 };
 
 // 상품 상세 조회 (GET 요청)
-const findById = async (options: RequestOptions<null>): Promise<ProductModel> => {
+const findById = async (options: RequestOptions<{ id: number},null>): Promise<ProductDictionary[]> => {
     return await strategy.GET(`${api.product}`, options);
 };
 
@@ -45,7 +45,7 @@ const updateProduct = async (options: RequestOptions<Partial<ProductModel>>): Pr
 };
 
 // 상품 1개 상세보기 (GET 요청)
-const findOneById = async (options: RequestOptions<null>) => {
+const findOneById = async (options: RequestOptions<null>):Promise<ProductDictionary> => {
     return await strategy.GET(`${api.product}/findOne`, options);
 }
 

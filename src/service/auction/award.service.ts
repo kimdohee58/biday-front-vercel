@@ -1,8 +1,8 @@
 import {AuctionDetailModel, AuctionModel} from "@/model/AuctionModel";
 import {useSelector} from "react-redux";
 import {getToken} from "@/lib/features/user.slice";
-import {fetchImage, fetchImageFromClient} from "@/service/image/image.api";
-import {ImageType} from "@/model/ImageModel";
+import {fetchImage} from "@/service/ftp/image.service";
+import {ImageType} from "@/model/ftp/image.model";
 import {fetchProduct, fetchProductOne} from "@/service/product/product.api";
 
 export async function insertAuction(auction: AuctionModel): Promise<any | { status: number }> {
@@ -103,11 +103,11 @@ export async function fetchAuctionDetails(auctionId: number, productId: number) 
         // 옥션
         const auction = await fetchAuction(auctionId);
         // 옥션이미지
-        const auctionImage = await fetchImageFromClient(String(auctionId), ImageType.AUCTION);
+        const auctionImage = await fetchImage(String(auctionId), ImageType.AUCTION);
         // 상품
         const product = await fetchProductOne(productId);
         // 상품이미지
-        const productImage = await fetchImageFromClient(String(productId), ImageType.PRODUCT);
+        const productImage = await fetchImage(String(productId), ImageType.PRODUCT);
 
         return {
             auction,

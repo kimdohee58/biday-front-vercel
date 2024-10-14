@@ -4,7 +4,7 @@ import React, {ChangeEvent, useEffect, useState} from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import {accountAPI} from "@/api/user/account.api"
 import {Suspense} from "react";
-import {DefaultSkeleton} from "@/components/skeletone/DefaultSkeletone"
+import {DefaultSkeleton} from "@/components/skeleton/DefaultSkeletone"
 
 import {
     Input,
