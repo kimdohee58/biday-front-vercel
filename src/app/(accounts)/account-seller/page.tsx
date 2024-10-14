@@ -23,7 +23,6 @@ import {useMutation, useQuery} from "@tanstack/react-query";
 import useRandomId from "@/hooks/useRandomId";
 import {getAccount, saveAccount} from "@/service/account/account.api";
 import {ApiError} from "@/utils/error";
-import {UserToken} from "@/model/user/userToken.model";
 
 
 const AccountDetails = () => {

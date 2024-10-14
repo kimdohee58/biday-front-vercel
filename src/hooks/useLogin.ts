@@ -28,6 +28,7 @@ export const useLogin = () => {
                     saveToken(accessToken); // 쿠키에 토큰을 저장.
 
 
+
                     // jwt.utils.ts에서 함수 사용 유저 객체 추출
                     const { id, name, role } = extractUserInfoFromToken(accessToken);
 
@@ -66,6 +67,7 @@ export const useLogin = () => {
                             //localStorage.setItem("userToken", JSON.stringify(userInfo));
                             localStorage.setItem("userToken", userToken);
                         }
+
                     }
                     router.push("/");
                 } else {

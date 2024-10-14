@@ -1,10 +1,17 @@
 //src/utils/cookie/cookie.api.ts
 import Cookies from 'js-cookie';
-import jwt from 'jsonwebtoken'; // 페이로드 디코딩을 위해 사용
+import jwt from 'jsonwebtoken';
+import {UserToken} from "@/model/user/userToken";
 
-import {createUserToken} from "@/utils/jwt.utils";
+// 유저 토큰을 저장하는 함수
+export const userToken = (userToken:UserToken) => {
+    Cookies.set('userToken', JSON.stringify(userToken), { expires: 7 });  // 7일 동안 쿠키 유지
 
-// JWT 토큰과 Refresh 토큰을 쿠키에 저장하는 함수
+    console.log("유저 정보 JWT 토큰이 쿠키에 저장되었습니다.");
+
+    // 사용방법 노션에 있음 frontend userToken 이라고 검색을 하기
+};
+
 export const saveToken = (token: string, refreshToken?: string) => {
 
     // 무결성 검증 먼저 수행
@@ -32,6 +39,8 @@ export const saveToken = (token: string, refreshToken?: string) => {
         });
     }
 };
+
+
 
 // JWT 토큰을 로컬 스토리지와 쿠키에서 삭제하는 함수 (로그아웃 시 사용)
 /*export const clearToken = () => {
@@ -90,22 +99,6 @@ export const getCookie = (name: string): string | null => {
         if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
     }
     return null;
-};
-
-// 유저 토큰을 저장하는 함수
-export const userToken = (userInfo: { id: string; name: string; role: string }) => {
-    // 유저 정보를 기반으로 JWT 커스텀 토큰 생성
-    const userToken = createUserToken(userInfo);
-
-    // 생성된 JWT 토큰을 쿠키에 저장 (7일 동안 유지)
-    Cookies.set('userToken', userToken, {
-        expires: 7,
-        path: "/", // 모든 경로에서 유효
-        secure: true, // HTTPS에서만 쿠키 전송
-        sameSite: 'strict', // 동일 사이트에서만 쿠키 사용
-        httpOnly: false // 브라우저에서 접근 가능하게 httpOnly는 false로 설정
-    });
-    console.log("유저 정보 JWT 토큰이 쿠키에 저장되었습니다.");
 };
 
 // JWT 무결성 검사 함수

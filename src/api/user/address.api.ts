@@ -1,37 +1,38 @@
-import { api } from "../request";
-import { strategy } from "../api.strategy";
-import { AddressModel } from "@/model/user/address.model";
+import {api} from "../request";
+import {strategy} from "../api.strategy";
+import {AddressModel} from "@/model/user/address.model";
 
 // 주소 목록 조회 (GET 요청)
 const findAllByUserId = async (userInfoHeader: string): Promise<AddressModel[]> => {
-    const response = await strategy.GET(`${api.address}/list`, undefined, {
-        'UserInfo': userInfoHeader,
+    const response = await strategy.GET(`${api.address}/list`, {
+        userToken: userInfoHeader
     });
     return response;
 };
 
 // 주소 선택 (PUT 요청)
 const pickAddress = async (id: string): Promise<string> => {
-    const response = await strategy.PUT(`${api.address}/pick`, { id });
+    const response = await strategy.PUT(`${api.address}/pick`, {
+        data: {id},
+    })
     return response;
 };
 
 // 주소 수 카운트 (GET 요청)
 const countAddresses = async (userInfoHeader: string): Promise<number> => {
-    const response = await strategy.GET(`${api.address}/count`, undefined, {
-        'UserInfo': userInfoHeader,
+    const response = await strategy.GET(`${api.address}/count`, {
+        userToken:userInfoHeader
     });
     return response;
 };
 
-/*// 주소 삭제 (DELETE 요청)
-const deleteAddressById = async (id: string): Promise<void> => {
-    await strategy.DELETE(`${api.address}/deleteById`, undefined, { id });
-};*/
 
 // 주소 삭제 (DELETE 요청)
 const deleteAddressById = async (id: string): Promise<void> => {
-    await strategy.DELETE(`${api.address}/deleteById`, undefined);
+    await strategy.DELETE(`${api.address}/deleteById`, {
+        params : {id},
+        headers:{}
+    });
 };
 
 // 주소 등록 (POST 요청)

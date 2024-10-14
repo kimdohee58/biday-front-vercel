@@ -16,3 +16,5 @@ export interface ProductModel {
     sizes: SizeModel[];
 }
 export type ProductDictionary = { [key: string]: ProductModel; };
+
+
