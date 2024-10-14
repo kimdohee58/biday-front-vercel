@@ -4,14 +4,11 @@ import {StarIcon} from "@heroicons/react/24/solid";
 import BagIcon from "@/components/BagIcon";
 
 import {ClockIcon, NoSymbolIcon, SparklesIcon,} from "@heroicons/react/24/outline";
-import IconDiscount from "@/components/IconDiscount";
 import Prices from "@/components/Prices";
 import SectionSliderProductCard from "@/components/SectionSliderProductCard";
-import detail1JPG from "@/images/products/detail1.jpg";
 import Policy from "./Policy";
 import SectionPromo2 from "@/components/SectionPromo2";
 import Image from "next/image";
-import {AuctionModel} from "@/model/AuctionModel";
 import {Route} from "@/routers/types";
 import Link from "next/link";
 import {fetchProductDetails} from "@/service/product/product.service";
@@ -19,6 +16,7 @@ import {fetchImage} from "@/service/ftp/image.service";
 import {ImageModel, ImageType} from "@/model/ftp/image.model"
 import {Suspense} from "react";
 import {PhotoPlaceholderSkeleton} from "@/components/skeleton/PhotoPlaceholderSkeleton";
+import {AuctionModel} from "@/model/auction/auction.model"
 
 async function RenderImage({id}: { id: string}) {
 
@@ -42,7 +40,6 @@ async function RenderImage({id}: { id: string}) {
 export default async function ProductDetailPage({params}: { params: { id: string } }) {
 
     const {colorIds, product, size, auctions} = await fetchProductDetails(Number(params.id));
-
 
     const insertAuctionUrl = `/auction/insert?productId=${params.id}`;
 
@@ -95,7 +92,7 @@ export default async function ProductDetailPage({params}: { params: { id: string
                                     {auction.size}
                                 </td>
                                 <td className="px-6 py-4">
-                                    {auction.userId}
+                                    {auction.user}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     {auction.endedAt && !isNaN(new Date(auction.endedAt).getTime())

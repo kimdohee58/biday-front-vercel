@@ -135,9 +135,6 @@ export default function AuctionDetailPage() {
     }
 
 
-
-
-
     const thisPathname = usePathname();
     const [variantActive, setVariantActive] = useState(0);
     const [sizeSelected, setSizeSelected] = useState(sizes ? sizes[0] : "");

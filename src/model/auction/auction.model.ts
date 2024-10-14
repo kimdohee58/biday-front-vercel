@@ -3,7 +3,7 @@ import {AwardModel} from "@/model/auction/award.model";
 
 export interface AuctionModel {
     id?: number;
-    userId: number;
+    user: string;
     description: string;
     startingBid: number;
     currentBid: number;

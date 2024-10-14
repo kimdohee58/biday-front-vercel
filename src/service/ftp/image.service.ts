@@ -65,31 +65,6 @@ export async function fetchImage(type: ImageType, id?: string): Promise<ImageMod
      */
 
     if (typeof window !== "undefined") {
-        // 서버컴포넌트
-        try {
-            const image = await prisma.image.findMany({
-                where: {
-                    AND: [
-                        {type: type},
-                        {referencedId: id}
-                    ]
-                },
-                ...(id && {take: 3}),
-                orderBy: {
-                    id: "desc",
-                }
-            });
-
-            console.log("이미지 확인", image);
-
-            return image;
-
-        } catch (error) {
-            console.error("이미지 로드 중 에러 발생: image.api.ts: fetchImage", error);
-            throw new Error("이미지 로드 실패");
-        }
-
-    } else {
         // 클라이언트 컴포넌트
         try {
             const response = await fetch(url, {
@@ -111,6 +86,57 @@ export async function fetchImage(type: ImageType, id?: string): Promise<ImageMod
             console.error("이미지 로드 중 오류 발생", error);
             throw new Error("이미지 로드 실패");
         }
+
+    } else {
+        // 클라이언트 컴포넌트
+        try {
+            const image = await prisma.image.findMany({
+                where: {
+                    AND: [
+                        {type: type},
+                        {referencedId: id}
+                    ]
+                },
+                take: 3,
+                orderBy: {
+                    id: "desc",
+                }
+            });
+
+            console.log("이미지 확인", image);
+
+            return image;
+
+        } catch (error) {
+            console.error("이미지 로드 중 에러 발생: image.api.ts: fetchImage", error);
+            throw new Error("이미지 로드 실패");
+        }
     }
 
+}
+
+export async function fetchImageOne(type: ImageType, id: string) {
+
+    const url = `${process.env.NEXT_PUBLIC_API_CLIENT_URL}/api/images?id=${id}&type=${type}`;
+    // 클라이언트 컴포넌트
+    try {
+        const response = await fetch(url, {
+            method: "GET",
+        });
+
+        if (!response.ok) {
+            return {};
+        }
+
+        const data: ImageModel = await response.json();
+
+        console.log("fetchImageFromClient 이미지 확인: ", data);
+
+
+        return data;
+
+    } catch (error) {
+        console.error("이미지 로드 중 오류 발생", error);
+        throw new Error("이미지 로드 실패");
+    }
 }

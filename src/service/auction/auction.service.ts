@@ -15,13 +15,13 @@ export async function fetchAuction(auctionId: string) {
     }
 }
 
-export async function fetchAuctionsBySize(sizeId: number): Promise<AuctionModel[]> {
+export async function fetchAuctionsBySize(sizeId: number) {
     try {
         const options = {
             params: {sizeId: sizeId},
         };
 
-        const result = await auctionAPI.findBySize(options);
+        const result = await auctionAPI.findAllBySize(options);
 
         if (typeof result === "undefined") return [];
 

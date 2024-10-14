@@ -1,5 +1,5 @@
 import {PrismaClient} from "@prisma/client";
-import {ImageModel, ImageType} from "@/model/ftp/image.model";
+import {ImageType} from "@/model/ftp/image.model";
 import {NextResponse} from "next/server";
 
 const prisma = new PrismaClient();
@@ -11,7 +11,7 @@ export async function GET(request: Request) {
         const id = searchParams.get("id");
         const type = searchParams.get("type") as ImageType;
 
-        if (type === "상품" && !id) {
+        if (type === ImageType.PRODUCT && !id) {
             const productImages = await prisma.image.findMany({
                     where: {
                         type: type
@@ -24,6 +24,17 @@ export async function GET(request: Request) {
             );
 
             return NextResponse.json(productImages);
+        }
+
+        if (type === ImageType.PRODUCT && id) {
+            const productImage = await prisma.image.findFirst({
+                where: {
+                    type: type,
+                    referencedId: id,
+                }
+            })
+
+            return NextResponse.json(productImage);
         }
 
         if (!id || !type) {
