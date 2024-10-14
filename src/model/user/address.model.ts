@@ -3,7 +3,6 @@ export interface AddressModel {
 
     id: number;
     userId: string;
-
     streetAddress: string;
     detailAddress: string;
 

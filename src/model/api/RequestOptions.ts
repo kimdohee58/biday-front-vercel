@@ -1,6 +1,7 @@
+//src/model/api/RequestOption.ts
 export interface RequestOptions<K extends Record<string, any>, T> {
     params?: K;
-    data?: T;
+    data?: T; // 데이터가 바디 타입임.
     headers?: Record<string, string>;
     token?: string;
     cache?: CacheOption | CacheRevalidateOptions;

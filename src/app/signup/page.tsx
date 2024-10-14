@@ -13,8 +13,9 @@ import useSignUpUser from "@/hooks/useSignInUser"; // 커스텀 훅 임포트 �
 import { signUpSchema } from "@/schema/userValidationSchema";
 import { FormControl, FormLabel } from "@chakra-ui/react";
 import { UserModel } from "@/model/user/user.model";
-import {router} from "next/client";
+import {useRouter} from "next/navigation";
 import {checkEmailDuplication, checkPhoneDuplication} from "@/service/user/user.api";
+import {router} from "next/client";
 
 const loginSocials = [
   {
@@ -36,6 +37,7 @@ const loginSocials = [
 
 export default function PageSignUp() {
   const { status, handleSignUp, errorMessage } = useSignUpUser(); // 커스텀 훅 사용
+  const router = useRouter(); // useRouter 훅 선언
   const [formData, setFormData] = useState<Partial<UserModel & {confirmPassword:string}>>({
     name: '',
     email: '',
