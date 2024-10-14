@@ -29,7 +29,6 @@ const userSlice = createSlice({
         },
         saveUserToken: (state, action: PayloadAction<{  userInfo:UserToken}>) => {
             state.userInfo = action.payload.userInfo;
-            console.log("유저토큰 저장이 됐습니다. ", state.userInfo);
         },
         clearUser: (state) => {
             state.user = initialUser;  // 유저 정보 초기화
