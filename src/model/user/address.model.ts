@@ -17,7 +17,6 @@ export interface AddressModel {
     address2?: string;
 }
 
-
 // 주소 초기값 설정
 export const initialAddress: AddressModel = {
     id: 0,
@@ -31,6 +30,4 @@ export const initialAddress: AddressModel = {
     type: '',
     pick: false,
     email: "",
-
-
 };

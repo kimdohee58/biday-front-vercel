@@ -20,15 +20,19 @@ const TokenCheck = () => {
     const router = useRouter();
     const [isClient, setIsClient] = useState(false);
 
+
+    // 유정 이거 언디파인드로 하지 말라고 함.
+    // 윈도우를 유즈이팩트안에서 사용하지 말고, 따로 빼내서 하라고 함.
     useEffect(() => {
+        // 브라우저에서만 실행되도록 하는 코드.
         if (typeof window !== "undefined") {
             setIsClient(true);
 
             const checkToken = async () => {
-                const accessToken = Cookies.get("accessToken");
+                const refreshToken = Cookies.get("refresh");
 
                 // 토큰이 없으면 로그인 페이지로 이동
-                if (!accessToken) {
+                if (!refreshToken) {
                   //  router.push("/login");
                     return;
                 }

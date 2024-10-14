@@ -20,8 +20,6 @@ import { useRouter } from 'next/navigation'; // App Router의 useRouter 사용
 import { useSearchParams } from 'next/navigation'; // useSearchParams 사용
 
 const baseURL = process.env.NEXT_PUBLIC_API_SERVER_URL;
-// `${process.env.NEXT_PUBLIC_API_SERVER_URL}/oauth2/token/naver`
-// href: "http://localhost:8000/oauth2/authorization/naver",
 
 // 소셜 로그인 버튼 데이터
 const loginSocials = [
@@ -63,9 +61,7 @@ export default function PageLogin() {
         try{
             const response = await fetch (`${process.env.NEXT_PUBLIC_API_SERVER_URL}/oauth2/token/naver`,{
                 method:"GET",
-
             })
-
             if (!response.ok) {
                 throw new Error("버튼 실패")
             }
