@@ -12,23 +12,18 @@ import PaymentMethod from "./PaymentMethod";
 import ShippingAddress from "./ShippingAddress";
 import Image from "next/image";
 import Link from "next/link";
-import {loadTossPayments} from "@tosspayments/tosspayments-sdk";
-import Cookies from "js-cookie";
 import {PaymentTempModel} from "@/model/order/paymentTemp.model";
 import {useMutation, useQuery} from "@tanstack/react-query";
 import {savePaymentTemp} from "@/service/order/payment.service";
 import {useRouter, useSearchParams} from "next/navigation";
-import {fetchAwardDetails} from "@/service/auction/award.service";
-import {fetchProductAndAwardDetails} from "@/service/order/checkout.service";
 import useRandomId from "@/hooks/useRandomId";
 import Checkout from "@/app/checkout/payment/Checkout";
 import CustomModal from "@/app/checkout/payment/CustomModal";
+import {fetchProductOne} from "@/service/product/product.service";
+import {fetchAwardOne} from "@/service/auction/award.service";
+import {AddressModel} from "@/model/user/address.model";
 
-function OrderSummarySection ({productId, awardId}: {productId: string, awardId: string}) {
-    const {data, isLoading, error} = useQuery({
-        queryKey: ["productAndAward"],
-        queryFn: () => fetchProductAndAwardDetails(productId, awardId)
-    });
+function orderSummarySection ({productId, awardId, userId}: {productId: string, awardId: string, userId: number}) {
 
     const renderProduct = (item: Product, index: number) => {
         const {image, price, name} = item;
@@ -290,20 +285,20 @@ function OrderSummarySection ({productId, awardId}: {productId: string, awardId:
     )
 }
 
-const CheckoutDetails = ({productId, awardId}: { productId: string, awardId: string }) => {
-    const {data, isLoading, error} = useQuery({
-        queryKey: ["productAndAward"],
-        queryFn: () => fetchProductAndAwardDetails(productId, awardId)
-    });
-};
-
-function CheckoutPage() {
-
+export default function CheckoutPage() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const productId = searchParams.get("productId") || "";
     const awardId = searchParams.get("awardId") || "";
     const [amount, setAmount] = useState<number>(0);
+
+    const [phoneNum, setPhoneNum] = useState<number>();
+    const [email, setEmail] = useState<string>();
+    const [address, setAddress] = useState<AddressModel>();
+    const [name, setName] = useState<string>();
+
+    const product = useQuery({queryKey: ["product", productId], queryFn: () => fetchProductOne(productId)});
+    const award = useQuery({queryKey: ["award", awardId], queryFn: () => fetchAwardOne(Number(awardId))});
 
     useEffect(() => {
         if (!productId || !awardId) {
@@ -321,37 +316,6 @@ function CheckoutPage() {
     >("ShippingAddress");
 
     const orderId = useRandomId(20);
-    console.log(orderId);
-
-    const {data, isLoading, error} = useQuery({
-        queryKey: ["productAndAward"],
-        queryFn: () => fetchProductAndAwardDetails(productId, awardId)
-    });
-
-
-    if (isLoading) {
-        return <div>로딩중...</div>
-    }
-
-    if (data === undefined) {
-        return <div>오류가 발생했습니다.</div>;
-        // error 페이지 전환
-    }
-
-    useEffect(() => {
-        if (isLoading) {
-            console.log("로딩 중입니다...");
-        }
-
-        if (!isLoading) {
-            setAmount(data.award.currentBid);
-        }
-
-        if (error) {
-            console.log("에러에러", error);
-        }
-
-    }, [isLoading, error, data]);
 
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 

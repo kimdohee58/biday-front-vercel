@@ -1,122 +1,24 @@
-import {AuctionDetailModel, AuctionModel} from "@/model/AuctionModel";
-import {useSelector} from "react-redux";
-import {getToken} from "@/lib/features/user.slice";
-import {fetchImage} from "@/service/ftp/image.service";
-import {ImageType} from "@/model/ftp/image.model";
-import {fetchProduct, fetchProductOne} from "@/service/product/product.api";
+import {awardAPI} from "@/api/auction/award.api";
+import Cookies from "js-cookie";
 
-export async function insertAuction(auction: AuctionModel): Promise<any | { status: number }> {
-
-    try {
-
-        const response = await fetch(baseUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type' : 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify(auction)
-            }
-        );
-
-        return await response.json();
-
-    } catch (error) {
-
-    }
-}
-
-// 경매 삭제
-export async function deleteAuction(id:number) {
-    const token = useSelector(getToken);
-
-    baseUrl = baseUrl += `/${id}`;
-    try {
-        const response = await fetch(baseUrl, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            }
-        });
-
-        const data: any = await response.json();
-
-        return data;
-
-    } catch (error) {
-        console.error("경매 개별 삭제 중 오류 발생", error);
-
-        return {status: 500}
+export async function fetchAwardOne (awardId: number) {
+    const userToken = Cookies.get("userToken");
+    if (!userToken) {
+        throw new Error("쿠키 접근 불가");
+        // 추후 error enum 변경
     }
 
-}
-
-
-// 상품 상세 경매 목록
-export async function fetchAuctionList(id: number): Promise<any | { status: number }> {
-    const url = baseUrl + `/findAllBySize?sizeId=${id}`;
-
+    const options = {
+        params : {awardId: awardId},
+        userToken: userToken,
+    };
 
     try {
-        const response = await fetch(url, {
-            cache: "no-store",
-            method: 'GET',
-        });
 
-        const data = await response.json();
-
-        if (!data || data.length == 0) return [];
-
-        return data;
-    } catch (error) {
-        console.error("상품 id로 경매 데이터 로드 중 오류 발생", error);
-        return { status: 500 };
-    }
-}
-
-// 경매 상세보기
-export async function fetchAuction(id?:number): Promise<AuctionDetailModel>{
-    let url = baseUrl;
-    if (id) url = baseUrl + `/findById?id=${id}`;
-
-    try {
-        const response = await fetch(url, {
-            cache: "no-store",
-            method: 'GET'
-        });
-
-        const data = await response.json();
-
-        console.log("옥션", data);
-
-        return data;
+        return await awardAPI.findById(options);
 
     } catch (error) {
-        console.error("경매 데이터 로드 중 오류 발생", error);
-        throw new Error("경매 데이터 로드 중 오류 발생");
-    }
-}
-
-export async function fetchAuctionDetails(auctionId: number, productId: number) {
-    try {
-        // 옥션
-        const auction = await fetchAuction(auctionId);
-        // 옥션이미지
-        const auctionImage = await fetchImage(String(auctionId), ImageType.AUCTION);
-        // 상품
-        const product = await fetchProductOne(productId);
-        // 상품이미지
-        const productImage = await fetchImage(String(productId), ImageType.PRODUCT);
-
-        return {
-            auction,
-            auctionImage,
-            product,
-            productImage,
-        }
-
-    } catch (error) {
-
+        console.log("fetchAwardOne 도중 오류 발생", error);
+        throw new Error("fetchAwardOne  도중 오류 발생");
     }
 }

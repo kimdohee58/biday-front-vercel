@@ -21,10 +21,11 @@ import NcImage from "@/shared/NcImage/NcImage";
 import {fetchImageOne} from "@/service/ftp/image.service";
 import {ImageType} from "@/model/ftp/image.model";
 import {useQuery} from "@tanstack/react-query";
+import {ProductModel} from "@/model/product/product.model";
 
 export interface ProductCardProps {
     className?: string;
-    data?: Product;
+    data?: ProductModel;
     isLiked?: boolean;
 }
 

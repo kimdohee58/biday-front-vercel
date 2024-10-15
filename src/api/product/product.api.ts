@@ -34,7 +34,7 @@ const updateProduct = async (options: RequestOptions<Partial<ProductModel>>): Pr
 };
 
 // 상품 1개 상세보기 (GET 요청)
-const findOneById = async (options: RequestOptions<null>):Promise<ProductDictionary> => {
+const findOneById = async (options: RequestOptions<{ id: string},null>):Promise<ProductDictionary> => {
     return await strategy.GET(`${api.product}/findOne`, options);
 }
 

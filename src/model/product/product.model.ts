@@ -1,5 +1,3 @@
-model>product>product.model.ts
-
 import {SizeModel} from "@/model/product/size.model";
 
 export interface ProductModel {
@@ -15,7 +13,7 @@ export interface ProductModel {
     createdAt: Date;
     updatedAt: Date;
     wishes:number;
-    size: SizeModel[];
+    sizes: SizeModel[];
 }
 export type ProductDictionary = { [key: string]: ProductModel; };
 
