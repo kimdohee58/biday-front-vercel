@@ -91,4 +91,3 @@ export async function fetchProductDetails(id: number): Promise<{
         throw new Error("fetchProductError");
     }
 }
-

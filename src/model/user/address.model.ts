@@ -1,7 +1,7 @@
 // src/model/address.model.ts
 export interface AddressModel {
 
-    id: number;
+    id: string;
     userId: string;
     streetAddress: string;
     detailAddress: string;
@@ -12,13 +12,13 @@ export interface AddressModel {
     pick: boolean;
     email: string;
 
-    address1: string;
+    address1?: string;
     address2?: string;
 }
 
 // 주소 초기값 설정
 export const initialAddress: AddressModel = {
-    id: 0,
+    id: "",
     userId: "",
 
     streetAddress: "",
