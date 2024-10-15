@@ -12,7 +12,7 @@ function Providers({ children }: React.PropsWithChildren) {
     return (
         <QueryClientProvider client={client}>
             <ReactQueryStreamedHydration>{children}</ReactQueryStreamedHydration>
-            <ReactQueryDevtools initialIsOpen={false} />
+            <ReactQueryDevtools initialIsOpen={process.env.NEXT_PUBLIC_MODE === 'local'}/>
         </QueryClientProvider>
     );
 }
