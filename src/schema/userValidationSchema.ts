@@ -1,3 +1,4 @@
+//src/schema/userValidationSchema.ts
 import { z } from "zod";
 
 export const signUpSchema = z.object({

@@ -13,10 +13,16 @@ import useSignUpUser from "@/hooks/useSignInUser"; // 커스텀 훅 임포트 �
 import { signUpSchema } from "@/schema/userValidationSchema";
 import { FormControl, FormLabel } from "@chakra-ui/react";
 import { UserModel } from "@/model/user/user.model";
-import {router} from "next/client";
-import {checkEmailDuplication, checkPhoneDuplication} from "@/service/user/user.api";
+import { useRouter } from "next/navigation";
+import { checkEmailDuplication, checkPhoneDuplication } from "@/service/user/user.api";
+import btnG_official from "@/images/btnG_official.png";
 
 const loginSocials = [
+  {
+    name: "onNaverLogin",
+    href: `${process.env.NEXT_PUBLIC_API_SERVER_URL}/oauth2/authorization/naver`,
+    icon: btnG_official,
+  },
   {
     name: "Continue with Facebook",
     href: "#",
@@ -36,20 +42,29 @@ const loginSocials = [
 
 export default function PageSignUp() {
   const { status, handleSignUp, errorMessage } = useSignUpUser(); // 커스텀 훅 사용
-  const [formData, setFormData] = useState<Partial<UserModel & {confirmPassword:string}>>({
+  const router = useRouter(); // useRouter 훅 선언
+  const [formData, setFormData] = useState<Partial<UserModel & { confirmPassword: string }>>({
     name: '',
     email: '',
     password: '',
-    confirmPassword:'',
+    confirmPassword: '',
     phoneNum: '',
   });
 
   const [fieldErrors, setFieldErrors] = useState<{ [key: string]: string }>({});
+  const [fieldSuccess, setFieldSuccess] = useState<{ [key: string]: string }>({});
 
   const setFieldError = (name: string, errorMessage: string) => {
     setFieldErrors((prevErrors) => ({
       ...prevErrors,
       [name]: errorMessage,
+    }));
+  };
+
+  const setFieldSuccessMessage = (name: string, successMessage: string) => {
+    setFieldSuccess((prevSuccess) => ({
+      ...prevSuccess,
+      [name]: successMessage,
     }));
   };
 
@@ -105,7 +120,14 @@ export default function PageSignUp() {
                       href={item.href}
                       className="flex w-full rounded-lg bg-primary-50 dark:bg-neutral-800 px-4 py-3 transform transition-transform sm:px-6 hover:translate-y-[-2px]"
                   >
-                    <Image sizes="40px" className="flex-shrink-0" src={item.icon} alt={item.name} />
+                    <Image
+                        className="flex-shrink-0"
+                        src={item.icon}
+                        alt={item.name}
+                        width={24}
+                        height={24}
+                        sizes="40px"
+                    />
                     <h3 className="flex-grow text-center text-sm font-medium text-neutral-700 dark:text-neutral-300 sm:text-sm">
                       {item.name}
                     </h3>
@@ -152,16 +174,17 @@ export default function PageSignUp() {
                   <button
                       type="button"
                       onClick={async () => {
-                        if (!formData.email) {  // 이메일이 비어 있을 때 처리
+                        if (!formData.email) {
                           setFieldError("email", "이메일을 입력해주세요.");
                           return;
                         }
                         const isAvailable = await checkEmailDuplication(formData.email!);
-                        if (!isAvailable) {
+                        console.log(isAvailable,"중복중복ㅈㅇㅂㅈㄱ")
+                        if (isAvailable) {  // true -> 이미 사용 중
                           setFieldError("email", "이메일이 이미 사용중입니다.");
-                        } else {
+                        } else {  // false -> 사용 가능
                           setFieldError("email", "");
-                          alert("사용이 가능한 이메일입니다.");
+                          setFieldSuccessMessage("email", "사용이 가능한 이메일입니다.");
                         }
                       }}
                       className="ml-2 px-4 py-2 bg-green-600 text-white rounded-md whitespace-nowrap"
@@ -170,12 +193,15 @@ export default function PageSignUp() {
                   </button>
                 </div>
                 {fieldErrors.email && <span className="text-sm text-red-400">{fieldErrors.email}</span>}
+                {!fieldErrors.email && fieldSuccess.email && (
+                    <span className="text-sm text-green-400">{fieldSuccess.email}</span>
+                )}
               </label>
 
               {/* 비밀번호 입력 필드 */}
               <label className="block">
-                <span
-                    className="flex justify-between items-center text-neutral-800 dark:text-neutral-200">Password</span>
+              <span
+                  className="flex justify-between items-center text-neutral-800 dark:text-neutral-200">Password</span>
                 <Input
                     type="password"
                     name="password"
@@ -227,11 +253,11 @@ export default function PageSignUp() {
                           return;
                         }
                         const isAvailable = await checkPhoneDuplication(formData.phoneNum!);
-                        if (!isAvailable) {
+                        if (isAvailable) {  // true -> 이미 사용 중
                           setFieldError("phoneNum", "핸드폰 번호가 이미 사용 중입니다.");
-                        } else {
+                        } else {  // false -> 사용 가능
                           setFieldError("phoneNum", "");
-                          alert("사용 가능한 번호입니다.");
+                          setFieldSuccessMessage("phoneNum", "사용 가능한 번호입니다.");
                         }
                       }}
                       className="ml-2 px-4 py-2 bg-green-600 text-white rounded-md whitespace-nowrap"
@@ -240,8 +266,10 @@ export default function PageSignUp() {
                   </button>
                 </div>
                 {fieldErrors.phoneNum && <span className="text-sm text-red-500">{fieldErrors.phoneNum}</span>}
+                {!fieldErrors.phoneNum && fieldSuccess.phoneNum && (
+                    <span className="text-sm text-green-400">{fieldSuccess.phoneNum}</span>
+                )}
               </FormControl>
-
 
               {/* 제출 버튼 */}
               <ButtonPrimary type="submit">Continue</ButtonPrimary>

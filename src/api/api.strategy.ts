@@ -1,3 +1,4 @@
+//src/api/api.strategy.ts
 import { fetchAPI } from './fetch';
 import {handleReissueToken} from "@/utils/reissue/reissueToken";
 import {ApiError} from "@/utils/error";
@@ -41,9 +42,7 @@ const apiRequest = async (url: string, method: HttpMethod, {params, data, header
 
         response = await fetchAPI(`${url}${queryString}`, options);
     }
-
     return response.json();
-
 };
 
 export const strategy = {
@@ -53,5 +52,3 @@ export const strategy = {
     DELETE: (url: string, options: RequestOptions<any, any>) => apiRequest(url, 'DELETE', options),
     PATCH: (url: string, options: RequestOptions<any, any>) => apiRequest(url, 'PATCH', options),
 };
-
-

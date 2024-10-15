@@ -8,6 +8,7 @@ import {checkEmailDuplication, checkPhoneDuplication, insertUser} from "@/servic
 const useSignUpUser = () => {
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
     const [errorMessage, setErrorMessage] = useState<string>('');
+    const [successMessage, setSuccessMessage] = useState<string>(''); // 성공 메시지 관리
 
 
     // 회원가입 처리 함수
@@ -25,7 +26,7 @@ const useSignUpUser = () => {
         try {
             // 2. 이메일 중복 확인
             const emailAvailable = await checkEmailDuplication(user.email!);
-            if (!emailAvailable) {
+            if (emailAvailable) {
                 setErrorMessage("이미 사용중인 이메일입니다.");
                 setStatus('error');
                 return false;
@@ -33,7 +34,7 @@ const useSignUpUser = () => {
 
             // 3. 핸드폰 중복 확인
             const phoneAvailable = await checkPhoneDuplication(user.phoneNum!);
-            if (!phoneAvailable) {
+            if (phoneAvailable) {
                 setErrorMessage("이미 사용중인 번호입니다.");
                 setStatus('error');
                 return false;
