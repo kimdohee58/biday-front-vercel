@@ -4,13 +4,20 @@ import jwt from 'jsonwebtoken';
 import {UserToken} from "@/model/user/userToken";
 
 // 유저 토큰을 저장하는 함수
-export const userToken = (userToken:UserToken) => {
+/*export const saveUserTokenToCookie = (userToken:UserToken) => {
     Cookies.set('userToken', JSON.stringify(userToken), { expires: 7 });  // 7일 동안 쿠키 유지
 
-    console.log("유저 정보 JWT 토큰이 쿠키에 저장되었습니다.");
+    console.log("유저객체가 쿠키에 저장되었습니다.");
 
     // 사용방법 노션에 있음 frontend userToken 이라고 검색을 하기
+};*/
+
+export const saveUserTokenToCookie = (userToken: UserToken) => {
+    Cookies.set('userToken', JSON.stringify(userToken), { path: '/', secure: true, sameSite: 'Lax' });
+    console.log("유저객체가 쿠키에 저장되었습니다.");
+    //
 };
+
 
 export const saveToken = (token: string, refreshToken?: string) => {
 

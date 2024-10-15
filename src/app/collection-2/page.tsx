@@ -24,6 +24,7 @@ export default function PageCollection2({}){
     console.log("페이지 변경", page)
     setCurrentPage(page);
   };
+  // 리덕스, 서비스 에이피아이, tsx 화면 /jsx
   return (
     <div className={`nc-PageCollection2`}>
       <div className="container py-16 lg:pb-28 lg:pt-20 space-y-16 sm:space-y-20 lg:space-y-28">

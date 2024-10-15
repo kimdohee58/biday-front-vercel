@@ -43,9 +43,7 @@ const apiRequest = async (url: string, method: HttpMethod, {params, data, header
 
         response = await fetchAPI(`${url}${queryString}`, options);
     }
-
     return response.json();
-
 };
 
 export const strategy = {
@@ -55,5 +53,3 @@ export const strategy = {
     DELETE: (url: string, options: RequestOptions<any, any>) => apiRequest(url, 'DELETE', options),
     PATCH: (url: string, options: RequestOptions<any, any>) => apiRequest(url, 'PATCH', options),
 };
-
-

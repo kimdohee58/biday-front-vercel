@@ -57,7 +57,7 @@ export default function PageLogin() {
     const router = useRouter(); // App Router에서 페이지 이동을 위해 사용
 
 
-    const handleNaver = async () => {
+   /* const handleNaver = async () => {
         try{
             const response = await fetch (`${process.env.NEXT_PUBLIC_API_SERVER_URL}/oauth2/token/naver`,{
                 method:"GET",
@@ -69,7 +69,7 @@ export default function PageLogin() {
         }catch(error){
             console.error("네이버 핸들링 로그인 실패 ", error);
         }
-    }
+    }*/
 
 
     // 입력 값 변경 처리 함수
@@ -110,7 +110,9 @@ export default function PageLogin() {
                                 key={index}
                                 href={item.href}
                                 className="flex w-full rounded-lg bg-primary-50 dark:bg-neutral-700 px-4 py-3 transform transition-transform sm:px-6 hover:translate-y-[-2px]"
+/*
                                 onClick={item.name === "onNaverLogin" ? handleNaver : undefined}
+*/
 
                             >
                                 <Image

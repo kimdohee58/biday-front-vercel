@@ -1,32 +1,35 @@
 // src/hooks/useLogin.ts
-'use client'
 
 import { useRouter } from 'next/navigation'; // next/navigation에서 useRouter 임포트
 import { useDispatch } from 'react-redux';
 import {saveUser, saveUserToken, UserState} from '@/lib/features/user.slice';
 import { handleLogin } from '@/service/user/login.api';
 import {findUserById} from "@/service/user/user.api";
-import {initialUser, UserModel} from "@/model/UserModel";  // API 호출을 임포트
+import {initialUser, UserModel} from "@/model/user/user.model";  // API 호출을 임포트
 import {createUserToken, extractUserInfoFromToken} from '@/utils/jwt.utils';
-import {saveToken} from "@/utils/cookie/cookie.api";
+import {saveToken, saveUserTokenToCookie} from "@/utils/cookie/cookie.api";
 import {UserToken} from "@/model/user/userToken";
+import {useUserContext} from "@/utils/userContext"
 
 export const useLogin = () => {
     const dispatch = useDispatch();
     const router = useRouter();
+    const {setUser} = useUserContext(); // Context 컴포넌트
 
     const login = async (username: string, password: string) => {
+
         try {
             const response = await handleLogin(username, password);
 
             if (response) {
-                // Authorization 헤더에서 토큰 추출
                 const authorizationHeader = response.headers["authorization"];
+
 
                 if (authorizationHeader) {
                     const accessToken = authorizationHeader.split(" ")[1]; // Bearer {token} 형태이므로 토큰만 추출
-                    saveToken(accessToken); // 쿠키에 토큰을 저장.
 
+                    // accessToken을 클라이언트 쿠키에 저장
+                    saveToken(accessToken);
 
 
                     // jwt.utils.ts에서 함수 사용 유저 객체 추출
@@ -50,24 +53,27 @@ export const useLogin = () => {
                         dispatch(saveUser({ user: userData, token:accessToken }));  // 유저 정보와 토큰을 Redux에 저장
 
                         // 유저 정보를 JWT로 만들어 userToken으로 js 쿠키에 저장.
-                        const userPayload = {id: userData.id, name: userData.name ?? '',role};
+                        const userPayload = {id: userData.id !!, name: userData.name !!,role};
                         const userToken = createUserToken(userPayload);
 
-
+                        // 백엔드 헤더에 보낼 유저객체 userToken
                         if(user) {
                             const userInfo: UserToken = {
                                 userId: user.id !!,
                                 userName: user.name !! ,
                                 userRole: user.role !! ,
                             };
-                            //localStorage.setItem('userToken', JSON.stringify(userData));
-
                             dispatch(saveUserToken({userInfo }))
 
-                            //localStorage.setItem("userToken", JSON.stringify(userInfo));
-                            localStorage.setItem("userToken", userToken);
-                        }
+                            localStorage.setItem("userToken", JSON.stringify(userInfo));
 
+                            saveUserTokenToCookie(userInfo); // 여기를 수정
+
+
+                            setUser(userData);  // 유저 정보를 Context에 저장
+                            console.log("setUser 컨택스트 유저 정보 저장 :   ", setUser);
+                            console.log("setUser 컨택스트 userData :   ", userData);
+                        }
                     }
                     router.push("/");
                 } else {

@@ -20,9 +20,9 @@ export default function AvatarDropdown() {
     const dispatch = useDispatch();
     const { handleLogout } = useLogout(); // useLogout 훅 사용
     const user = useSelector((state: RootState) => state.user.user);
-    console.log("user 객체가 있는지 확인하는 코드 ", user);
-    console.log("dispatch 확인 하는 코드 " , dispatch)
-    console.log("useSelector 확인하는 코드: " , useSelector)
+    //console.log("user 객체가 있는지 확인하는 코드 ", user);
+    //console.log("dispatch 확인 하는 코드 " , dispatch)
+    //console.log("useSelector 확인하는 코드: " , useSelector)
 
     return (
         <div className="AvatarDropdown border border-rose-500">
