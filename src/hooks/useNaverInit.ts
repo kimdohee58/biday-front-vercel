@@ -1,24 +1,44 @@
-//src/hooks/useNaverInit.ts
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
-export const handleNaverInit = () => {
+const NaverLogin = () => {
     useEffect(() => {
-        const naverLoginScript = document.createElement('script');
-        naverLoginScript.src = 'https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js';
-        naverLoginScript.async = true;
-        document.body.appendChild(naverLoginScript);
-        naverLoginScript.onload = () => {
-            const naverLogin = new window.naver.LoginWithNaverId({
-                clientId: 'RD1oMcYETTxoiJLIsYYS', // Naver 개발자 센터에서 받은 클라이언트 ID
-                callbackUrl: 'http://localhost:3000/auth/callback', // 인증 후 리다이렉트될 URL
-                isPopup: false, // 팝업을 사용할 경우 true로 설정
-                loginButton: { color: 'green', type: 1, height: 10 }
-            });
-            naverLogin.init();
-        };
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        const state = urlParams.get('state');
 
-        return () => {
-            document.body.removeChild(naverLoginScript);
-        };
-    }, [])
-}
+        if (code && state) {
+            handleNaverLogin(code, state);
+        }
+    }, []);
+
+    const handleNaverLogin = async (code: string, state: string) => {
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/oauth2/token/naver?code=${code}&state=${state}`, {
+                method: 'GET',
+                credentials: 'include'
+            });
+
+            if (!response.ok) {
+                throw new Error('Login failed');
+            }
+
+            // Assuming the backend sets the tokens as HttpOnly cookies
+            // Redirect to home page or dashboard
+            window.location.href = '/';
+        } catch (error) {
+            console.error('Naver login failed:', error);
+            // Handle error (e.g., show error message to user)
+        }
+    };
+
+    const initiateNaverLogin = () => {
+        const clientId = process.env.NEXT_PUBLIC_NAVER_CLIENT_ID;
+        const redirectUri = encodeURIComponent(`${window.location.origin}/auth/callback`);
+        const state = Math.random().toString(36).substr(2, 11);
+        const naverAuthUrl = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`;
+
+        window.location.href = naverAuthUrl;
+    };
+};
+
+export default NaverLogin;

@@ -19,6 +19,7 @@ const nextConfig = {
                 pathname: "/**",
             },
         ],
+        domains: ["kr.object.ncloudstorage.com"]
     },
     webpack: (config) => {
         config.resolve.fallback = {

@@ -1,9 +1,9 @@
-"use client";
-
-import React, {useState} from "react";
+import React, {ChangeEvent} from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
+import {accountAPI} from "@/api/user/account.api"
+import {Suspense} from "react";
+import {DefaultSkeleton} from "@/components/skeleton/DefaultSkeletone"
 
-// @material-tailwind/react
 import {
     Input,
     Typography,
@@ -14,349 +14,293 @@ import {
     PopoverContent,
 } from "@material-tailwind/react";
 
-import { format } from "date-fns";
-import { DayPicker } from "react-day-picker";
 
-// @heroicons/react
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
+import {AccountModel, BankCode} from "@/model/user/account.model";
+import Cookies from "js-cookie";
+import {useMutation, useQuery} from "@tanstack/react-query";
+import useRandomId from "@/hooks/useRandomId";
+import {getAccount, saveAccount} from "@/service/account/account.api";
+import {ApiError} from "@/utils/error";
+import {UserToken} from "@/model/user/userToken.model";
+import { cookies } from "next/headers";
+
+
+async function AccountDetails() {
+
+    const accountData = useQuery({queryKey: ["account"], queryFn: () => getAccount()});
+    const cookieStore = cookies();
+    const userToken = cookieStore.get("userToken");
+    if (!userToken) {
+        return;
+    }
+
+    const user = JSON.parse(userToken.value);
+
+    if (!accountData.data) {
+        return (
+            <div>
+                <div>
+                    계좌 정보가 존재하지 않습니다.
+                    계좌를 등록하고 판매를 시작해 보세요.
+                </div>
+            </div>
+        )
+    }
+
+    return (
+        <div className="flex flex-col mt-8">
+            <div className="mb-6 flex flex-col items-end gap-4 md:flex-row">
+                <div className="w-full">
+                    <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="mb-2 font-medium"
+                    >
+                        이름
+                    </Typography>
+                    <Input
+                        size="lg"
+                        value={user.userName}
+                        labelProps={{
+                            className: "hidden",
+                        }}
+                        disabled
+                        className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
+                    />
+                </div>
+                <div className="w-full">
+                    <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="mb-2 font-medium"
+                    >
+                        생년월일
+                    </Typography>
+                    <Input
+                        size="lg"
+                        placeholder="Roberts"
+                        labelProps={{
+                            className: "hidden",
+                        }}
+                        value={"990919"}
+                        disabled
+                        className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
+                    />
+                </div>
+            </div>
+            <div className="mb-6 flex flex-col items-end gap-4 md:flex-row">
+                <div className="w-full">
+                    <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="mb-2 font-medium"
+                    >
+                        은행
+                    </Typography>
+                    <Select
+                        size="lg"
+                        labelProps={{
+                            className: "hidden",
+                        }}
+                        className="border-t-blue-gray-200 aria-[expanded=true]:border-t-primary"
+                        disabled
+                        value={accountData.data!.bankName}
+                    >
+                        {accountData.data!.bankName}
+                    </Select>
+                </div>
+                <div className="w-full">
+                    <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="mb-2 font-medium"
+                    >
+                        계좌번호
+                    </Typography>
+                    <Input
+                        size="lg"
+                        labelProps={{
+                            className: "hidden",
+                        }}
+                        disabled
+                        value={accountData.data!.accountNum}
+                        className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
+                    />
+                </div>
+            </div>
+        </div>
+    );
+
+}
+
 
 export default function Account1() {
     const [date, setDate] = useState();
-    const [tranId, setTranId] = useState();
+    const [bankCode, setBankCode] = useState<string>("");
+    const [name, setName] = useState<string>("");
+    const [birth, setBirth] = useState<string>("");
+    const [accountNum, setAccountNum] = useState("");
+    const [bankName, setBankName] = useState("");
+    const bankTranId = useRandomId(16);
+
+    const AUTH_URL = 'https://testapi.openbanking.or.kr/oauth/2.0/authorize';
+    const CLIENT_ID = 'fce251a9-d76a-449c-8024-021ec51dc4eb';
+    const REDIRECT_URI = 'http://localhost:3000/callback';
+    const SCOPE = 'login inquiry transfer';
+    const STATE = '12341234123412341234123412341234';
+    const AUTH_TYPE = '0';
+
+    const accountData = useQuery({queryKey: ["account"], queryFn: () => getAccount()});
+
+    if (!accountData.isLoading) {
+        console.log(accountData.data);
+    }
+
+    if (accountData.error) {
+        switch (accountData.error.message) {
+            case ApiError.NOT_FOUND :
+                return (<div>
+                    <Typography variant="h5" color="blue-gray">
+                        아직 등록된 계좌가 없습니다.
+                    </Typography>
+                    <Typography
+                        variant="small"
+                        className="text-gray-600 font-normal mt-1"
+                    >
+                        계좌를 등록하면 판매를 시작할 수 있습니다.
+                    </Typography>
+                    <ButtonPrimary> 판매자 등록 </ButtonPrimary>
+                </div>);
+        }
+
+    }
+
+
+    /*useEffect(() => {
+        switch (bankCode) {
+            case BankCode.한국은행:
+                setAccountPlaceholder("1234-5678-9012");
+                setAccountPattern("^[0-9]{4}-[0-9]{4}-[0-9]{4}$");
+                break;
+            case BankCode.산업은행:
+                setAccountPlaceholder("000-00-000000");
+                break;
+            case BankCode.기업은행:
+                setAccountPlaceholder("000-00-0000000");
+                break;
+            case BankCode.국민은행:
+                break;
+            case BankCode.외환은행:
+                break;
+            case BankCode.수협중앙회:
+                break;
+            case BankCode.수출입은행:
+                break;
+            case BankCode.농협중앙회:
+                break;
+            case BankCode.지역농축협:
+                break;
+            case BankCode.우리은행:
+                break;
+            case BankCode.SC은행:
+                break;
+            case BankCode.한국씨티은행:
+                break;
+            case BankCode.새마을금고중앙회:
+                break;
+            case BankCode.신협중앙회:
+                break;
+            case BankCode.우체국:
+                break;
+            case BankCode.하나은행:
+                break;
+            case BankCode.신한은행:
+                break;
+            case BankCode.카카오뱅크:
+                break;
+            case BankCode.토스뱅크:
+                break;
+
+        }
+    }, []);*/
+
+    const onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
+        setName(e.target.value);
+    };
+
+    const onChangeBankCode = (value: string) => {
+        const [selectedKey, selectedValue] = value.split(':');
+        setBankCode(selectedValue);
+        setBankName(selectedKey);
+    };
+
+    const onChangeBirth = (e: ChangeEvent<HTMLInputElement>) => {
+        setBirth(e.target.value);
+    }
+
+    const onChangeAccountNum = (e: ChangeEvent<HTMLInputElement>) => {
+        setAccountNum(e.target.value);
+    }
+
+    const mutation = useMutation({
+        mutationFn: saveAccount
+    });
+
+    const handleLogin = () => {
+        window.location.href = `${AUTH_URL}?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(SCOPE)}&state=${STATE}&auth_type=${AUTH_TYPE}`;
+    };
+
+    const onClickSubmit = () => {
+        const userToken = JSON.parse(localStorage.getItem("userToken")!);
+
+        const account: AccountModel = {
+            userId: userToken.userId,
+            bankTranId: bankTranId,
+            bankCode: bankCode,
+            bankName: bankName,
+            accountName: name,
+            accountNum: accountNum,
+            bankRspCode: "000",
+            bankTranDate: new Date(),
+            bankRspMessage: "너무멋져용~!",
+        };
+
+        mutation.mutate(account);
+
+    };
 
     return (
 
-        <section className="px-8 py-20 container mx-auto">
-            <Typography variant="h5" color="blue-gray">
-                Basic Information
-            </Typography>
+        <div className="space-y-10 sm:space-y-12">
+            <h2 className="text-2xl sm:text-3xl font-semibold">계좌 정보</h2>
             <Typography
                 variant="small"
                 className="text-gray-600 font-normal mt-1"
             >
                 Update your profile information below.
             </Typography>
-            <div className="flex flex-col mt-8">
-                <div className="mb-6 flex flex-col items-end gap-4 md:flex-row">
-                    <div className="w-full">
-                        <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="mb-2 font-medium"
-                        >
-                            First Name
-                        </Typography>
-                        <Input
-                            size="lg"
-                            placeholder="Emma"
-                            labelProps={{
-                                className: "hidden",
-                            }}
-                            className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
-                        />
-                    </div>
-                    <div className="w-full">
-                        <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="mb-2 font-medium"
-                        >
-                            Last Name
-                        </Typography>
-                        <Input
-                            size="lg"
-                            placeholder="Roberts"
-                            labelProps={{
-                                className: "hidden",
-                            }}
-                            className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
-                        />
-                    </div>
-                </div>
-                <div className="mb-6 flex flex-col gap-4 md:flex-row">
-                    <div className="w-full">
-                        <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="mb-2 font-medium"
-                        >
-                            I&apos;m
-                        </Typography>
-                        <Select
-                            size="lg"
-                            labelProps={{
-                                className: "hidden",
-                            }}
-                            className="border-t-blue-gray-200 aria-[expanded=true]:border-t-primary"
-                        >
-                            <Option>Male</Option>
-                            <Option>Female</Option>
-                        </Select>
-                    </div>
-                    <div className="w-full">
-                        <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="mb-2 font-medium"
-                        >
-                            Birth Date
-                        </Typography>
-                        <Popover placement="bottom">
-                            <PopoverHandler>
-                                <Input
-                                    size="lg"
-                                    onChange={() => null}
-                                    placeholder="Select a Date"
-                                    value={date ? format(date, "PPP") : ""}
-                                    labelProps={{
-                                        className: "hidden",
-                                    }}
-                                    className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
-                                />
-                            </PopoverHandler>
-                            <PopoverContent>
-                                <DayPicker
-                                    mode="single"
-                                    selected={date}
-                                    onSelect={setDate as any}
-                                    showOutsideDays
-                                    className="border-0"
-                                    classNames={{
-                                        caption:
-                                            "flex justify-center py-2 mb-4 relative items-center",
-                                        caption_label: "text-sm !font-medium text-gray-900",
-                                        nav: "flex items-center",
-                                        nav_button:
-                                            "h-6 w-6 bg-transparent hover:bg-blue-gray-50 p-1 rounded-md transition-colors duration-300",
-                                        nav_button_previous: "absolute left-1.5",
-                                        nav_button_next: "absolute right-1.5",
-                                        table: "w-full border-collapse",
-                                        head_row: "flex !font-medium text-gray-900",
-                                        head_cell: "m-0.5 w-9 !font-normal text-sm",
-                                        row: "flex w-full mt-2",
-                                        cell: "text-gray-600 rounded-md h-9 w-9 text-center text-sm p-0 m-0.5 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-gray-900/20 [&:has([aria-selected].day-outside)]:text-white [&:has([aria-selected])]:bg-gray-900/50 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
-                                        day: "h-9 w-9 p-0 !font-normal",
-                                        day_range_end: "day-range-end",
-                                        day_selected:
-                                            "rounded-md bg-gray-900 text-white hover:bg-gray-900 hover:text-white focus:bg-gray-900 focus:text-white",
-                                        day_today: "rounded-md bg-gray-200 text-gray-900",
-                                        day_outside:
-                                            "day-outside text-gray-500 opacity-50 aria-selected:bg-gray-500 aria-selected:text-gray-900 aria-selected:bg-opacity-10",
-                                        day_disabled: "text-gray-500 opacity-50",
-                                        day_hidden: "invisible",
-                                    }}
-                                    components={{
-                                        IconLeft: ({ ...props }) => (
-                                            <ChevronLeftIcon
-                                                {...props}
-                                                className="h-4 w-4 stroke-2"
-                                            />
-                                        ),
-                                        IconRight: ({ ...props }) => (
-                                            <ChevronRightIcon
-                                                {...props}
-                                                className="h-4 w-4 stroke-2"
-                                            />
-                                        ),
-                                    }}
-                                />
-                            </PopoverContent>
-                        </Popover>
-                    </div>
-                    <div className="w-full">
-                        <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="mb-2 font-medium"
-                        >
-                            Day
-                        </Typography>
-                        <Select
-                            size="lg"
-                            labelProps={{
-                                className: "hidden",
-                            }}
-                            className="border-t-blue-gray-200 aria-[expanded=true]:border-t-primary"
-                        >
-                            <Option>1</Option>
-                            <Option>2</Option>
-                            <Option>3</Option>
-                            <Option>4</Option>
-                            <Option>5</Option>
-                            <Option>6</Option>
-                            <Option>7</Option>
-                            <Option>8</Option>
-                            <Option>9</Option>
-                            <Option>10</Option>
-                            <Option>11</Option>
-                            <Option>12</Option>
-                            <Option>13</Option>
-                            <Option>14</Option>
-                            <Option>15</Option>
-                            <Option>16</Option>
-                            <Option>17</Option>
-                            <Option>18</Option>
-                            <Option>19</Option>
-                            <Option>20</Option>
-                            <Option>21</Option>
-                            <Option>22</Option>
-                            <Option>23</Option>
-                            <Option>24</Option>
-                            <Option>25</Option>
-                            <Option>26</Option>
-                            <Option>27</Option>
-                            <Option>28</Option>
-                            <Option>29</Option>
-                            <Option>30</Option>
-                        </Select>
-                    </div>
-                    <div className="w-full">
-                        <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="mb-2 font-medium"
-                        >
-                            Year
-                        </Typography>
-                        <Select
-                            size="lg"
-                            labelProps={{
-                                className: "hidden",
-                            }}
-                            className="border-t-blue-gray-200 aria-[expanded=true]:border-t-primary"
-                        >
-                            <Option>2022</Option>
-                            <Option>2021</Option>
-                            <Option>2020</Option>
-                        </Select>
-                    </div>
-                </div>
-                <div className="mb-6 flex flex-col items-end gap-4 md:flex-row">
-                    <div className="w-full">
-                        <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="mb-2 font-medium"
-                        >
-                            Email
-                        </Typography>
-                        <Input
-                            size="lg"
-                            placeholder="emma@mail.com"
-                            labelProps={{
-                                className: "hidden",
-                            }}
-                            className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
-                        />
-                    </div>
-                    <div className="w-full">
-                        <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="mb-2 font-medium"
-                        >
-                            Confirm Email
-                        </Typography>
-                        <Input
-                            size="lg"
-                            placeholder="emma@mail.com"
-                            labelProps={{
-                                className: "hidden",
-                            }}
-                            className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
-                        />
-                    </div>
-                </div>
-                <div className="mb-6 flex flex-col items-end gap-4 md:flex-row">
-                    <div className="w-full">
-                        <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="mb-2 font-medium"
-                        >
-                            Location
-                        </Typography>
-                        <Input
-                            size="lg"
-                            placeholder="Florida, USA"
-                            labelProps={{
-                                className: "hidden",
-                            }}
-                            className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
-                        />
-                    </div>
-                    <div className="w-full">
-                        <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="mb-2 font-medium"
-                        >
-                            Phone Number
-                        </Typography>
-                        <Input
-                            size="lg"
-                            placeholder="+123 0123 456 789"
-                            labelProps={{
-                                className: "hidden",
-                            }}
-                            className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
-                        />
-                    </div>
-                </div>
-                <div className="flex flex-col items-end gap-4 md:flex-row">
-                    <div className="w-full">
-                        <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="mb-2 font-medium"
-                        >
-                            Language
-                        </Typography>
-                        <Input
-                            size="lg"
-                            placeholder="Language"
-                            labelProps={{
-                                className: "hidden",
-                            }}
-                            className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
-                        />
-                    </div>
-                    <div className="w-full">
-                        <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="mb-2 font-medium"
-                        >
-                            Skills
-                        </Typography>
-                        <Input
-                            size="lg"
-                            placeholder="Skills"
-                            labelProps={{
-                                className: "hidden",
-                            }}
-                            className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
-                        />
-                    </div>
-                </div>
-            </div>
-        </section>
+            <Suspense fallback={<DefaultSkeleton/>}>
+                <AccountDetails/>
+            </Suspense>
+            <ButtonPrimary
+                onClick={handleLogin}>판매자 등록</ButtonPrimary>
+        </div>
     );
 }
 
-export function AccountBilling (){
+export function AccountBilling() {
 
-  return (
-    <div className="space-y-10 sm:space-y-12">
-      {/* HEADING */}
-      <h2 className="text-2xl sm:text-3xl font-semibold">계좌 등록</h2>
-      <div className="max-w-2xl prose prose-slate dark:prose-invert">
+    return (
+        <div className="space-y-10 sm:space-y-12">
+            {/* HEADING */}
+            <h2 className="text-2xl sm:text-3xl font-semibold">계좌 등록</h2>
+            <div className="max-w-2xl prose prose-slate dark:prose-invert">
 
-        <div className="pt-10">
-          <ButtonPrimary>판매자 등록</ButtonPrimary>
+                <div className="pt-10">
+                    <ButtonPrimary>판매자 등록</ButtonPrimary>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 

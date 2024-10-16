@@ -1,13 +1,17 @@
+"use client"
 import Prices from "@/components/Prices";
 import { PRODUCTS } from "@/data/data";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
 import Image from "next/image";
 import { RootState } from "@/lib/store";
+import {useUserContext} from "@/utils/userContext";
 
 export default function AccountOrder() {
 
   const renderProductItem = (product: any, index: number) => {
-    const { image, name } = product;
+    const {image, name} = product;
+    const {user} = useUserContext();
+    console.log("어카운트 오더에 값이 들어오는지 확인 하는 코드 : " , user)
     return (
       <div key={index} className="flex py-4 sm:py-7 last:pb-0 first:pt-0">
         <div className="relative h-24 w-16 sm:w-20 flex-shrink-0 overflow-hidden rounded-xl bg-slate-100">
@@ -83,6 +87,9 @@ export default function AccountOrder() {
               fontSize="text-sm font-medium"
             >
               더 보기
+              입찰내역
+              판매내역
+              낙찰내역
             </ButtonSecondary>
           </div>
         </div>
@@ -96,7 +103,7 @@ export default function AccountOrder() {
   return (
     <div className="space-y-10 sm:space-y-12">
       {/* HEADING */}
-      <h2 className="text-2xl sm:text-3xl font-semibold">주문내역</h2>
+      <h2 className="text-2xl sm:text-3xl font-semibold">경매내역확인</h2>
       {renderOrder()}
       {renderOrder()}
     </div>

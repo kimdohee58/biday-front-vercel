@@ -1,5 +1,4 @@
 //src/app/layout.tsx
-"use client"
 import {Poppins, Noto_Sans_KR} from "next/font/google";
 import "./globals.css";
 import "@/fonts/line-awesome-1.3.0/css/line-awesome.css";
@@ -9,19 +8,13 @@ import Footer from "@/shared/Footer/Footer";
 import SiteHeader from "@/app/SiteHeader";
 import CommonClient from "./CommonClient";
 import ReactQueryProvider from "@/components/ReactQueryProvider";
-import {Provider} from "react-redux"; // ReactQueryProvider 경로 확인
-import Providers from "@/components/ReactQueryProvider"
-import {PersistGate} from "redux-persist/integration/react";
 import "./globals.css";
 import "@/fonts/line-awesome-1.3.0/css/line-awesome.css";
 import "@/styles/index.scss";
 import "rc-slider/assets/index.css";
-import {QueryClient} from "@tanstack/react-query";
-import {makeStore, persistor, store} from "@/lib/store";
-import {useEffect, useState} from "react";
-import isClient from "beautiful-react-hooks/shared/isClient";
-import Script from "next/script";  // store와 persistor 임포트
-import {AuthProvider} from "@/context/AuthContext"; // AuthContext 임포트
+import {AuthProvider} from "@/context/AuthContext";
+import ClientReduxProvider from "@/features/auth/ClientReduxProvider";
+import {UserProvider} from "@/utils/userContext";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -36,48 +29,25 @@ const notoSans = Noto_Sans_KR({
 });
 
 
-export default function RootLayout({
-                                       children,
-                                       params,
-                                   }: {
-    children: React.ReactNode;
-    params: any;
+export default function RootLayout({children, params,}: {
+    children: React.ReactNode; params: any;
 }) {
-    const [isClient, setIsClient] = useState(false);
 
-    const store = makeStore();
-
-    // 클라이언트 사이드에서만 Redux Persist 활성화
-    useEffect(() => {
-        setIsClient(true);
-    }, []);
+  // 입찰정보, 낙찰정보, 결제정보,마이페이지에서 네비게이션이 5개로 늘려야 한다. / 비밀번호 변경을,모달로 해서 하던가,
 
     return (
         <html lang="ko" className={`${poppins.className}`}>
         <body className="bg-white text-base dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200">
-        {/*어스프로바이더로 전체 앱 감싸야함. */}
-        <AuthProvider>
-            {/*리덕스 프로바이더로 전체 앱 감싸야함. */}
-            <Provider store={store}>
-                {isClient ? (
-                    <PersistGate loading={null} persistor={persistor as any}>
-                        <ReactQueryProvider>
-                            <SiteHeader/>
-                            <main>{children}</main>
-                            <Footer/>
-                        </ReactQueryProvider>
-                    </PersistGate>
-                ) : (
-                    // 서버 사이드 렌더링 시 PersistGate를 제외
-                    <ReactQueryProvider>
-                        <SiteHeader/>
-                        <main>{children}</main>
-                        <Footer/>
-                    </ReactQueryProvider>
-                )}
-            </Provider>
+        <ClientReduxProvider>
+            <ReactQueryProvider>
+                <UserProvider>
+                    <SiteHeader/>
+                    <main>{children}</main>
+                    <Footer/>
+                </UserProvider>
+            </ReactQueryProvider>
             <CommonClient/>
-        </AuthProvider>
+        </ClientReduxProvider>
         </body>
         </html>
     );

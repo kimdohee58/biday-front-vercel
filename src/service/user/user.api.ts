@@ -1,8 +1,10 @@
 // src/service/user/user.api.ts
-import { UserModel } from "@/model/UserModel";
+
+import { UserModel } from "@/model/user/user.model";
 
 // 전략 패턴을 사용을 해야 한다. 7번 리플라이 서비스 점 딜리트 이런 식으로
 // 공통 API URL 설정
+
 let url = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/users`;
 
 // 공통 fetch 처리 함수
@@ -47,6 +49,7 @@ async function apiRequest(
 export async function findUserById(id: string): Promise< UserModel | null> {
     try {
         const data = await apiRequest(`/findById/${id}`, "GET");  // 경로에 ID 추가
+        console.log("파인드바이유저",data)
         return data as UserModel;
     } catch (error) {
         console.error(`ID 불러오기 실패 : ${id}`, error);
@@ -62,10 +65,6 @@ export async function insertUser(user: UserModel): Promise<any> {
         email: user.email,
         password: user.password,
         phoneNum: user.phoneNum,
-        //zipcode: user.zipcode,
-        //streetAddress: user.streetAddress,
-        //detailAddress: user.detailAddress,
-        //type: user.addressType,
     };
 
     try {
@@ -95,10 +94,6 @@ export const updateUser = async (id: string, user: UserModel): Promise<Response>
         email: user.email,
         password: user.password,
         phoneNum: user.phoneNum,
-        //zipcode: user.zipcode,
-        //streetAddress: user.streetAddress,
-        //detailAddress: user.detailAddress,
-        //type: user.addressType,
     };
 
     return apiRequest(`/${id}`, "PUT", body);
@@ -112,10 +107,6 @@ export async function changepass(user: UserModel): Promise<Response> {
         password: user.password, // 기존 비밀번호
         newPassword : user.newPassword // 새로운 비밀번호
     };
-    console.log("asdflfdsjal  : email" , user.email)
-    console.log("asdflfdsjal  : password" , user.password)
-    console.log("asdflfdsjal  : new" , user.newPassword)
-    console.log("asldf;dsafjlks : " , body)
 
     try {
         const response = await apiRequest(`/changepass`, "PATCH", body);
@@ -145,7 +136,7 @@ export const logoutUser = async (): Promise<void> => {
 
     document.cookie = 'refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
 
-    try {
+    try {                                       // 템플릿 메서드 키가 안먹혀서, 보류
         const response = await fetch("http://localhost:8000/logout", {
             method: "POST",
             credentials: 'include',
@@ -168,3 +159,24 @@ export const logoutUser = async (): Promise<void> => {
         }
     }
 };
+
+// 이메일 중복확인
+export async function checkEmailDuplication(email:string): Promise<boolean>{
+    try {
+        const data = await apiRequest("/validate", "POST", {email});
+        return  data;//이메일 사용 가능.
+    } catch (error){
+        throw error;
+    }
+}
+
+// 핸드폰 중복확인
+export async function checkPhoneDuplication(phoneNum: string): Promise<boolean> {
+    try {
+        const data = await apiRequest("/phoneNum", "POST", {phoneNum});
+        return data; // 핸드폰 번호 사용 가능
+    } catch (error){
+        throw error;
+    }
+}
+

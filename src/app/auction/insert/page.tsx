@@ -2,15 +2,11 @@
 
 import Label from "@/components/Label/Label";
 import React, {ChangeEvent, FC, FormEvent, useEffect, useState} from "react";
-import ButtonPrimary from "@/shared/Button/ButtonPrimary";
-import Select from "@/shared/Select/Select";
-import Textarea from "@/shared/Textarea/Textarea";
-import Image from "next/image";
 import {ProductModel} from "@/model/ProductModel";
 import {useQuery} from "@tanstack/react-query";
 import {fetchAllProducts} from "@/service/product/product.api";
-import {ImageType} from "@/model/ImageModel";
-import {fetchImageFromClient} from "@/service/image/image.api";
+import {ImageType} from "@/model/ftp/image.model";
+import {fetchImage} from "@/service/ftp/image.service";
 
 const productCard = () => {
 
@@ -60,7 +56,7 @@ export default function InsertAuction(productId?: number) {
     const [files, setFiles] = useState<File[]>([])
 
     const productList= useQuery({queryKey: ["products"], queryFn: fetchAllProducts});
-    const productImages = useQuery({queryKey: ["products"], queryFn: () => fetchImageFromClient(ImageType.PRODUCT) });
+    const productImages = useQuery({queryKey: ["products"], queryFn: () => fetchImage(ImageType.PRODUCT) });
 
 
     useEffect(() => {

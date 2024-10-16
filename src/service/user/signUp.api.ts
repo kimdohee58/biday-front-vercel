@@ -20,7 +20,7 @@ export async function insertUser(user: UserModel): Promise<any> {
         console.log(typeof user , "유저")
         console.log("유저 에이파이 ",user)
 
-        const response = await fetch('http://localhost:8080/api/users/join', {
+        const response = await fetch('${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/users/join', {
             method: 'POST',
             headers: {
                 // 여기 HTTP 헤더에 쿠키를 담아서 보내줘야한다고 함.

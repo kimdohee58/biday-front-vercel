@@ -1,5 +1,5 @@
 import {ProductDictionary, ProductModel} from "@/model/ProductModel";
-import {fetchAuctionList} from "@/service/auction/auction.api";
+
 
 const baseUrl = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/products`
 

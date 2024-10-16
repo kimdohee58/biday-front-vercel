@@ -4,27 +4,8 @@ import {AuctionModel} from "@/model/AuctionModel";
 import {useRouter} from "next/navigation";
 
 
-/*export async function getAuction(id?:any){
-    if (!id) url = url += `/${id}`;
-
-    try {
-        const response = await fetch(url, {
-            method: 'GET'
-        });
-
-        const data = await response.json();
-
-        console.log("+++++>" + JSON.stringify(data));
-
-        return data;
-    } catch (error) {
-        console.error("경매 데이터 로드 중 오류 발생", error);
-        return { status: 500 };
-    }
-}*/
-
-
 export default function BidsTable({auctions}: { auctions: AuctionModel[] }) {
+
 
     if (auctions === null || auctions.length === 0) {
         return <div>현재 진행중인 경매가 없습니다.</div>

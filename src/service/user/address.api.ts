@@ -1,15 +1,27 @@
 // src/service/address/address.api.ts
 
-import { AddressModel } from '@/model/AddressModel';
+import { AddressModel } from "@/model/user/address.model";
+import {HTTPRequest} from "@/utils/headers";
+import {UserToken} from "@/model/user/userToken";
+
 
 const baseUrl = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/addresses`;
 
 // 모든 주소 목록 불러오기 (토큰을 사용해서 해당 유저의 주소를 가져옴)
+let getUser = localStorage.getItem("userInfo");
+//console.log("겟유저 어드레스 에이피아이 ", getUser);
+
 export async function getAddressList(token: string): Promise<AddressModel[]> {
     const response = await fetch(`${baseUrl}/list`, {
         method: 'GET',
         headers: {
             Authorization: token,
+            "UserInfo": JSON.stringify({
+                // getUser ,
+                // userId:userId !!,
+                // userName:userName !!,
+                // userRole:userRole
+            })
         },
     });
     if (!response.ok) {
@@ -18,22 +30,34 @@ export async function getAddressList(token: string): Promise<AddressModel[]> {
     return response.json();
 }
 
-// 주소 등록하기
-export async function insertAddress(token: string, address: AddressModel): Promise<AddressModel> {
-    const response = await fetch(`${baseUrl}/insert`, {
+export async function insertAddress(userToken: UserToken, address: AddressModel): Promise<void> {
+
+    // userRole이 배열인 경우 첫 번째 요소만 추출해서 문자열로 변환
+    const userInfo = {
+        ...userToken,
+        userRole: Array.isArray(userToken.userRole) ? userToken.userRole[0] : userToken.userRole
+    };
+
+    const encodedUserInfo = encodeURIComponent(JSON.stringify(userInfo));
+    console.log('Encoded UserInfo:', encodedUserInfo);
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/addresses/insert`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            Authorization: token,
+            'UserInfo': encodedUserInfo,  // 인코딩된 userInfo 헤더로 전송
         },
-        body: JSON.stringify(address),
+        body: JSON.stringify(address),  // 주소 데이터를 body에 담아 전송
     });
 
     if (!response.ok) {
         throw new Error('주소 등록 중 오류 발생');
     }
+
     return response.json();
 }
+
+
 
 // 특정 주소 선택하기
 export async function pickAddress(token: string, addressId: number): Promise<string> {
