@@ -13,6 +13,7 @@ export interface UserModel {
     totalRating?: number;
     newPassword?:string;
     role?: UserRole
+    phone?:string
 }
 
 
@@ -30,6 +31,7 @@ export const initialUser: UserModel = {
     totalRating: 0,
     newPassword:"",
     role: {} as UserRole, // 기본값 설정 (필요 시)
+    phone:"",
 };
 
 export enum UserRole {

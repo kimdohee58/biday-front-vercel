@@ -1,28 +1,31 @@
 // src/service/user/user.api.ts
 
-import { UserModel } from "@/model/user/user.model";
+import {UserModel} from "@/model/user/user.model";
+import Cookies from "js-cookie";
+import {RequestOptions} from "@/model/api/RequestOptions";
+import {strategy} from "@/api/api.strategy";
+import {HTTPRequest} from "@/utils/headers";
 
-// 전략 패턴을 사용을 해야 한다. 7번 리플라이 서비스 점 딜리트 이런 식으로
-// 공통 API URL 설정
 
-let url = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/users`;
+let baseURL = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/users`;
 
 // 공통 fetch 처리 함수
 async function apiRequest(
     endpoint: string,
     method: string = "GET",
-    body?:any
+    body?: any
 ): Promise<any> {
     const headers = {
         "Content-Type": "application/json",
     };
 
     try {
-        const response = await fetch(`${url}${endpoint}`, {
+        const response = await fetch(`${baseURL}${endpoint}`, {
             method,
             headers,
             body: body ? JSON.stringify(body) : undefined,
         });
+
 
 
         if (!response.ok) {
@@ -30,7 +33,6 @@ async function apiRequest(
         }
 
         const contentType = response.headers.get("Content-Type");
-        console.log("콘텐트 타입 서버에서 받은 헤더에 값이 있는지 확인 하는 코드 : " , contentType)
 
         // 응답이 JSON일 경우 JSON으로 파싱, 그렇지 않으면 텍스트로 처리
         if (contentType && contentType.includes("application/json")) {
@@ -46,10 +48,9 @@ async function apiRequest(
 
 
 // 회원 한 명의 정보를 가져오는 API
-export async function findUserById(id: string): Promise< UserModel | null> {
+export async function findUserById(id: string): Promise<UserModel | null> {
     try {
         const data = await apiRequest(`/findById/${id}`, "GET");  // 경로에 ID 추가
-        console.log("파인드바이유저",data)
         return data as UserModel;
     } catch (error) {
         console.error(`ID 불러오기 실패 : ${id}`, error);
@@ -69,11 +70,10 @@ export async function insertUser(user: UserModel): Promise<any> {
 
     try {
         const data = await apiRequest("/join", "POST", body);
-        console.log("유저 등록 성공:", data);
-        return { ...data, status: true }; // 성공 시 true 반환
+        return {...data, status: true}; // 성공 시 true 반환
     } catch (error) {
         console.error('Error inserting user:', error);
-        return { status: false }; // 실패 시 false 반환
+        return {status: false}; // 실패 시 false 반환
     }
 }
 
@@ -83,7 +83,7 @@ export async function deleteUser(id: number): Promise<void | { status: number }>
     try {
         await apiRequest(`/${id}/cancel`, "DELETE");
     } catch (error) {
-        return { status: 500 };
+        return {status: 500};
     }
 }
 
@@ -102,16 +102,24 @@ export const updateUser = async (id: string, user: UserModel): Promise<Response>
 // 비밀번호 변경 API
 export async function changepass(user: UserModel): Promise<Response> {
 
+    const UserInfo = HTTPRequest('PATCH', `${baseURL}/changepass`);
+
     const body = {
-        email: user.email,
         password: user.password, // 기존 비밀번호
-        newPassword : user.newPassword // 새로운 비밀번호
-    };
+        newPassword: user.newPassword // 새로운 비밀번호
+    }
 
+    console.log(UserInfo)
+
+    // const headers = {
+    //     "Content-Type": "application/json",
+    //     "UserInfo": userTokenStr
+    // }
     try {
-        const response = await apiRequest(`/changepass`, "PATCH", body);
 
-        // 응답이 텍스트 또는 JSON일 수 있으므로 둘 다 처리
+        const response = await apiRequest(`/changepass`, 'PATCH', { UserInfo, body });
+
+        // 응답이 텍스트 또는 JSON일 수 있으므로 둘 다 d처리
         if (typeof response === 'string') {
             console.log("비밀번호 변경 성공 제발 됐으면 좋겠다. ", response);
         } else {
@@ -127,27 +135,15 @@ export async function changepass(user: UserModel): Promise<Response> {
 
 // 로그아웃 API
 export const logoutUser = async (): Promise<void> => {
-    // 로컬 스토리지에서 토큰 제거
-    localStorage.removeItem('accessToken');
 
-    // 쿠키에서 refreshToken 추출
     const refreshToken = document.cookie.split('; ').find(row => row.startsWith('refresh='));
     const tokenValue = refreshToken ? refreshToken.split('=')[1] : '';
 
-    document.cookie = 'refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-
-    try {                                       // 템플릿 메서드 키가 안먹혀서, 보류
-        const response = await fetch("http://localhost:8000/logout", {
-            method: "POST",
-            credentials: 'include',
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ refreshToken: tokenValue }),
-        });
+    try {
+        // 전역적으로 사용하는 apiRequest 사용해서 logout api 처리
+        const response = await apiRequest(`/logout`, "POST", {refreshToken: tokenValue});
 
         if (response.ok) {
-            console.log('로그아웃 성공');
         } else {
             console.error(`로그아웃 실패: ${response.statusText}`);
         }
@@ -161,11 +157,11 @@ export const logoutUser = async (): Promise<void> => {
 };
 
 // 이메일 중복확인
-export async function checkEmailDuplication(email:string): Promise<boolean>{
+export async function checkEmailDuplication(email: string): Promise<boolean> {
     try {
         const data = await apiRequest("/validate", "POST", {email});
-        return  data;//이메일 사용 가능.
-    } catch (error){
+        return data;//이메일 사용 가능.
+    } catch (error) {
         throw error;
     }
 }
@@ -175,7 +171,7 @@ export async function checkPhoneDuplication(phoneNum: string): Promise<boolean> 
     try {
         const data = await apiRequest("/phoneNum", "POST", {phoneNum});
         return data; // 핸드폰 번호 사용 가능
-    } catch (error){
+    } catch (error) {
         throw error;
     }
 }

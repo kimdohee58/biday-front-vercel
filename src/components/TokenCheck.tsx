@@ -29,17 +29,21 @@ const TokenCheck = () => {
             setIsClient(true);
 
             const checkToken = async () => {
-                const refreshToken = Cookies.get("refresh");
+                const access = Cookies.get("token");
 
                 // 토큰이 없으면 로그인 페이지로 이동
-                if (!refreshToken) {
-                  //  router.push("/login");
+                if (!access) {
+                    router.push("/login");
                     return;
                 }
 
                 try {
                     // 서버에 액세스 토큰 유효성 확인을 위해 간단한 API 호출
-                    await axiosInstance.get("/check-token");
+                    await axiosInstance.get("/check-token", {
+                        headers: {
+                            Authorization: `Bearer ${access}`  // 리프레시 토큰을 헤더에 추가하여 요청
+                        }
+                    });
                 } catch (error) {
                     console.error("토큰 만료로 재발급 시도 중:", error);
                     // Axios 인터셉터가 자동으로 401을 처리하고 토큰을 재발급하므로, 별도 처리 없이 여기서는 대기

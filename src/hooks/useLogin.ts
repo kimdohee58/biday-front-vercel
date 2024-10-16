@@ -24,7 +24,6 @@ export const useLogin = () => {
             if (response) {
                 const authorizationHeader = response.headers["authorization"];
 
-
                 if (authorizationHeader) {
                     const accessToken = authorizationHeader.split(" ")[1]; // Bearer {token} 형태이므로 토큰만 추출
 
@@ -45,8 +44,9 @@ export const useLogin = () => {
                             id: user.id !!, // 백엔드에서 받은 id
                             name: user.name,  // 백엔드에서 받은 name
                             email: user.email,  // 백엔드에서 받은 email
-                            phoneNum: user.phoneNum,  // 백엔드에서 받은 phone
+                            phone: user.phone,  // 백엔드에서 받은 phone
                             status: user.status ? String(user.status) : '',  // boolean인 status를 문자열로 변환
+
                         };
 
                         // Redux store에 유저 정보를 저장
@@ -67,12 +67,9 @@ export const useLogin = () => {
 
                             localStorage.setItem("userToken", JSON.stringify(userInfo));
 
-                            saveUserTokenToCookie(userInfo); // 여기를 수정
-
+                            saveUserTokenToCookie(userInfo); // 유저인포 === 유저토큰
 
                             setUser(userData);  // 유저 정보를 Context에 저장
-                            console.log("setUser 컨택스트 유저 정보 저장 :   ", setUser);
-                            console.log("setUser 컨택스트 userData :   ", userData);
                         }
                     }
                     router.push("/");

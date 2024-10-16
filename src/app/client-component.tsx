@@ -4,12 +4,13 @@
 import React, { useEffect, useState } from "react";
 import { fetchAllProducts } from "@/service/product/product.api";
 import { ProductModel } from "@/model/ProductModel";
-import { getCookie, saveToken } from "@/utils/cookie/cookie.api";
+import {AuthorizationToken, getCookie, saveToken} from "@/utils/cookie/cookie.api";
 import { useDispatch } from "react-redux";
 import { extractUserInfoFromToken } from "@/utils/jwt.utils";
 import { saveUser } from "@/lib/features/user.slice";
 import { findUserById } from "@/service/user/user.api";
 import {checkTokenAndReissueIfNeeded} from "@/utils/token/token";
+import {dispatch} from "d3-dispatch";
 
 interface ClientComponentProps {
     authorizationToken: string;
@@ -17,7 +18,7 @@ interface ClientComponentProps {
 
 export default function ClientComponent({ authorizationToken }: ClientComponentProps) {
     const [products, setProducts] = useState<ProductModel[]>([]);
-    //const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
     const loadProducts = async () => {
         try {
@@ -30,9 +31,7 @@ export default function ClientComponent({ authorizationToken }: ClientComponentP
     };
 
     const handleAuthToken = async () => {
-        console.log("handleAuthToken : ",authorizationToken)
         const authToken = authorizationToken
-
         if (authToken) {
             try {
                 saveToken(authToken);
@@ -49,12 +48,13 @@ export default function ClientComponent({ authorizationToken }: ClientComponentP
                         newPassword: user.newPassword || "",
                     };
 
-                   // dispatch(saveUser({ user: userData, token: authToken }));
+                    dispatch(saveUser({user: userData, token: authToken}));  // 유저 정보와 토큰을 Redux에 저장
                     localStorage.setItem("userToken", JSON.stringify(userData));
                 }
             } catch (error) {
                 console.error("토큰 로그인 실패: ", error);
             }
+            AuthorizationToken();
         } else {
             console.log("Authorization 토큰을 찾을 수 없습니다.");
         }

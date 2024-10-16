@@ -42,7 +42,12 @@ const apiRequest = async (url: string, method: HttpMethod, {params, data, header
 
         response = await fetchAPI(`${url}${queryString}`, options);
     }
-    return response.json();
+    const responseType = response.headers.get("content-type");
+    if (responseType && responseType.includes("application/json")) {
+        return response.json();
+    } else {
+        return response.text();
+    }
 };
 
 export const strategy = {
