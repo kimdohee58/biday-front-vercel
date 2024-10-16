@@ -1,8 +1,30 @@
 import {productAPI} from "@/api/product/product.api";
-import {ProductDictionary, ProductModel} from "@/model/product/product.model";
+import {ProductDictionary, ProductModel, SearchFilter} from "@/model/product/product.model";
 import {auctionAPI} from "@/api/auction/auction.api";
 import {AuctionModel} from "@/model/auction/auction.model";
 import {fetchAuctionsBySize} from "@/service/auction/auction.service";
+import {setLoading} from "@/lib/features/products.slice";
+
+export async function fetchProducts(searchFilter: SearchFilter) {
+    try {
+        const options = {
+            params: {
+                ...(searchFilter.brand && {brand: searchFilter.brand}),
+                ...(searchFilter.category && {category: searchFilter.category}),
+                ...(searchFilter.keyword && {keyword: searchFilter.keyword}),
+                ...(searchFilter.color && {color: searchFilter.color}),
+                ...(searchFilter.order && {order: searchFilter.order}),
+            }
+        }
+
+        // API 호출
+        return await productAPI.searchByFilter(options)
+    } catch (error) {
+        console.error("상품 데이터를 가져오는 데 오류가 발생했습니다:", error);
+    } finally {
+        setLoading(false); // 로딩 완료
+    }
+}
 
 // 데이터 변환을 여기서 해야한다. 인수로 필요한 것을 받아서,
 // 서비스에서 데이터 변환을 자바 스프링을 서비스에서 했잖아. 변환을 똑같이 서비스를 여기에서 해야한다.
@@ -80,8 +102,10 @@ export async function fetchProductDetails(id: number): Promise<{
         const auctionArray = await Promise.all(sizes.map((size) => {
             return fetchAuctionsBySize(size);
         }));
-        const auctions = auctionArray.flat(Infinity) as unknown as AuctionModel[];
+        const auctions = auctionArray.flat(Infinity).filter((auction) => auction !== undefined) as unknown as AuctionModel[];
         const size = product.sizes.map((size) => size.size);
+
+        console.log("auctions", auctions);
 
         return {colorIds, product, size, auctions};
 

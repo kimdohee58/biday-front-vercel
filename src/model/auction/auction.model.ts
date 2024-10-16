@@ -4,7 +4,6 @@ import {AwardModel} from "@/model/auction/award.model";
 export interface AuctionModel {
     id?: number;
     user: string;
-    size:number,
     description: string;
     startingBid: number;
     currentBid: number;
@@ -13,6 +12,7 @@ export interface AuctionModel {
     status: boolean;
     createdAt: Date;
     updatedAt: Date;
+    size:number,
     award:AwardModel,
 }
 //     award: {} as AwardModel, 여기서 이게 new 생성자이다. new AwardModel() x

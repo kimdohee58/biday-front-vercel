@@ -92,7 +92,7 @@ export const AuthorizationToken = () => {
 export const removeCookie = () => {
     const allCookies = Cookies.get();
     Object.keys(allCookies).forEach(cookieName => {
-       Cookies.remove(cookieName, {path: '/'})
+        Cookies.remove(cookieName, {path: '/'})
     })
 }
 

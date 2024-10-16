@@ -17,4 +17,25 @@ export interface ProductModel {
 }
 export type ProductDictionary = { [key: string]: ProductModel; };
 
+export interface SearchFilter {
+    brand?: string,
+    category?: string,
+    keyword?: string,
+    color?: string,
+    order?: string
+}
 
+export const initialProduct: ProductModel = {
+    id: 0,
+    brand: '',
+    category: '',
+    name: '',
+    productCode: "",
+    price: 0,
+    color: '',
+    description: '',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    wishes:0,
+    size: {} as SizeModel[],
+};

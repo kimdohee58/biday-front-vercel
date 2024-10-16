@@ -16,7 +16,7 @@ const findByUser = async (
 };
 
 // 낙찰 상세 조회 (GET 요청)
-const findById = async (options: RequestOptions<null>):Promise<AwardModel> => {
+const findById = async (options: RequestOptions<{awardId: number}, null>): Promise<AwardModel> => {
     return await strategy.GET(`${api.award}/findById`, options);
 };
 
