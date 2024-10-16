@@ -52,6 +52,19 @@ const DATA_colors = [
   { name: "Brown" },
   { name: "Green" },
   { name: "Navy" },
+  { name: "Charcoal" },
+  { name: "Gray" },
+  { name: "Burgundy" },
+  { name: "Olive" },
+  { name: "Purple" },
+  { name: "Ivory" },
+  { name: "Melange" },
+  { name: "Cream" },
+  { name: "Yellow" },
+  { name: "Red" },
+  { name: "Pink" },
+  { name: "Orange" },
+  { name: "Khaki" },
 ];
 
 const DATA_sizes = [

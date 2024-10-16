@@ -33,7 +33,7 @@ export async function fetchProductOne(productId: string): Promise<ProductModel> 
     try {
         const options = {
             params: {
-                id: productId
+                productId: productId
             }
         }
 
@@ -58,7 +58,7 @@ export async function fetchProduct(productId: number): Promise<ProductModel[]> {
     try {
         const options = {
             params: {
-                id: productId,
+                productId: productId,
             }
         };
 
@@ -87,7 +87,7 @@ export async function fetchProductDetails(id: number): Promise<{
 
         const options = {
             params: {
-                id: id,
+                productId: id,
             }
         };
 
