@@ -2,6 +2,7 @@
 import axiosInstance from "@/app/api/axiosInstance/axiosInstance";
 import Cookies from "js-cookie";
 import {AxiosResponse} from "axios";
+import {saveToken} from "@/utils/cookie/cookie.api";
 
 export const handleLogin = async (username: string, password: string): Promise<AxiosResponse | null> => {
     try {
@@ -16,18 +17,13 @@ export const handleLogin = async (username: string, password: string): Promise<A
         });
 
         if (response.status === 200) {
-            const authorizationHeader = response.headers["Authorization"];
-            console.log("login.api.ts" , response) // 값 들어옴.  200.Ok
+
+            const authorizationHeader = response.headers["authorization"];
+
             if (authorizationHeader) {
                 const accessToken = authorizationHeader.split(" ")[1]; // "Bearer {accessToken}" 형태로 전송되므로 'Bearer' 부분을 제거
 
-                Cookies.set('accessToken', accessToken, {
-                    expires: 7,  // 쿠키 유효기간 설정
-                    path: '/',   // 쿠키 경로 설정
-                    secure: true,   // HTTPS에서만 전송되도록 설정
-                    sameSite: 'strict',  // sameSite 옵션 설정
-                });
-                console.log("토큰 쿠키에 저장이 됐습니다. 액세스 ", accessToken);
+                saveToken(accessToken)
             }
 
             return response;
