@@ -48,7 +48,7 @@ export default function AccountPage() {
         zipcode: "",
         addressType: "",  // 기본 주소 유형
     });
-
+    console.log("마이페이지 핸드폰 번호 있는지 확인하는 콘솔 : ",user.phoneNum)
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
 
     // 주소 검색 완료 후 처리하는 함수
@@ -60,6 +60,7 @@ export default function AccountPage() {
         });
         setIsModalOpen(false); // 주소 검색 완료 후 모달 닫기
     };
+
 
     // 주소 유형 변경 처리
     const handleAddressTypeChange = (value: string) => {
@@ -174,7 +175,7 @@ export default function AccountPage() {
                                     className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
                                     <i className="text-2xl las la-phone-volume"></i>
                                 </span>
-                                <Input className="!rounded-l-none" defaultValue={user.phoneNum}/>
+                                <Input className="!rounded-l-none" defaultValue={user.phone}/>
                             </div>
                         </div>
 

@@ -12,6 +12,7 @@ export default function AccountOrder() {
     const {image, name} = product;
     const {user} = useUserContext();
     console.log("어카운트 오더에 값이 들어오는지 확인 하는 코드 : " , user)
+
     return (
       <div key={index} className="flex py-4 sm:py-7 last:pb-0 first:pt-0">
         <div className="relative h-24 w-16 sm:w-20 flex-shrink-0 overflow-hidden rounded-xl bg-slate-100">
