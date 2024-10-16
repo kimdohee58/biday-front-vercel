@@ -68,7 +68,8 @@ const ProductCard: FC<ProductCardProps> = ({
         }
     }, [id, isLoading, error, images]);
 
-    const imageSrc = image || "https://kr.object.ncloudstorage.com/biday/products/ad87ead6-1682-4059-99d2-a5486d024ab2.jpg";
+    // const imageSrc = image || "https://kr.object.ncloudstorage.com/biday/error/ee5af342-be8f-4b1a-919e-064826a96eb8.png";
+    const imageSrc = image || "/—Pngtree—loading icon vector_6629917.png";
 
     const notifyAddTocart = ({size}: { size?: string }) => {
         toast.custom(
