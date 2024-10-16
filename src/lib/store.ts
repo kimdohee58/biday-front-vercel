@@ -14,6 +14,19 @@ import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'; // 기본적으로 localStorage 사용
 import { combineReducers } from 'redux';
 
+// 무한 스크롤 실패
+// import productsReducer from '@/features/dohee/products.slice';
+//
+// export const storeProduct = configureStore({
+//     reducer: {
+//         products: productsReducer,
+//     },
+// });
+//
+// export type RootStateProduct = ReturnType<typeof storeProduct.getState>;
+// export type AppDispatchProduct = typeof storeProduct.dispatch;
+
+
 // redux-persist 설정
 const persistConfig = {
     key: 'root',

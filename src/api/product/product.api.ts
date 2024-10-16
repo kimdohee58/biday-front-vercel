@@ -5,8 +5,8 @@ import {ProductDictionary, ProductModel, SearchFilter} from "@/model/product/pro
 import {RequestOptions} from "@/model/api/RequestOptions";
 
 // 전체 상품 목록 불러오기 (GET 요청)
-const findAll = async (): Promise<ProductModel[]> => {
-    return await strategy.GET(`${api.product}/findAll`);
+const findAll = async (): Promise<ProductDictionary[]> => {
+    return await strategy.GET(`${api.product}/findAll`, {});
 };
 
 // 필터를 이용한 상품 목록 불러오기 (GET 요청)
