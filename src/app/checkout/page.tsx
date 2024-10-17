@@ -53,8 +53,6 @@ export default function CheckoutPage() {
 
     console.log(award);
 
-    // award.auction.size 를 가지고 product 의 sizeModel 과 같은 키값
-
     const size = getSizeById(award.data.auction.sizeId, product.data.sizes);
     const color = getColor(product.data.name);
 
