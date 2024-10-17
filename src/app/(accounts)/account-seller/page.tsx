@@ -15,12 +15,10 @@ import {
 
 
 import {AccountModel, BankCode} from "@/model/user/account.model";
-import Cookies from "js-cookie";
 import {useMutation, useQuery} from "@tanstack/react-query";
 import useRandomId from "@/hooks/useRandomId";
 import {getAccount, saveAccount} from "@/service/account/account.api";
 import {ApiError} from "@/utils/error";
-import {UserToken} from "@/model/user/userToken.model";
 import { cookies } from "next/headers";
 
 

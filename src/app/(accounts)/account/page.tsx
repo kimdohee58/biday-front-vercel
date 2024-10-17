@@ -45,6 +45,8 @@ export default function AccountPage() {
     const reduxAddresses = useSelector((state: RootState) => getAddresses(state));
     console.log("리덕스에 있는 주소 확인하는 코드1111111111 : " , reduxAddresses1)
     console.log("리덕스에 있는 주소 확인하는 코드 : " , reduxAddresses)
+    const rdeux111 = useSelector(getAddresses);
+    console.log("FLEJRTM리덕스,ㅇㅁㅇㄴ러ㅏㅣ",rdeux111)
 
     const [formData, setFormData] = useState({
         addressId: "",
