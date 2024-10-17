@@ -26,12 +26,12 @@ export const saveToken = (token: string) => {
         return;
     }
 
-    const tenSecondsLater = new Date(new Date().getTime() + 10 * 1000); // 현재 시간에서 10초 더한 시간
+    const oneMinuteLater = new Date(new Date().getTime() + 1 * 60 * 1000); // 현재 시간에서 1분 더한 시간
 
     Cookies.set('token', token, {
-        expires: tenSecondsLater, // 10초 후에 만료
+        expires: oneMinuteLater, // 10초 후에 만료
         path: '/',  // 모든 경로에서 유효
-        secure: true, // HTTPS에서만 쿠키 전송
+        secure: false, // HTTPS에서만 쿠키 전송
         sameSite: 'Strict', // 동일 사이트에서만 쿠키 사용
     });
 

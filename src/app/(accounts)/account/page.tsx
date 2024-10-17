@@ -48,7 +48,6 @@ export default function AccountPage() {
         zipcode: "",
         addressType: "",  // 기본 주소 유형
     });
-    console.log("마이페이지 핸드폰 번호 있는지 확인하는 콘솔 : ",user.phoneNum)
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
 
     // 주소 검색 완료 후 처리하는 함수
