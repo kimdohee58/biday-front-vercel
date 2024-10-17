@@ -4,42 +4,19 @@ import Cookies from 'js-cookie';
 import {handleReissueToken} from "@/utils/reissue/reissueToken";
 import {getTokenRemainingTime} from "@/utils/cookie/cookie.api"; // 쿠키를 사용하기 위해 js-cookie 임포트
 
-
 // Axios 인스턴스 생성
 const axiosInstance = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_SERVER_URL,
+    baseURL: process.env.NEXT_PUBLIC_API_SERVER_URL, // 기본 URL 설정
     withCredentials: true,  // 쿠키를 포함하여 요청을 보내도록 설정
     timeout: 10000, // 시간 초과
 });
 
-// 요청 인터셉터: 요청 전에 액세스 토큰 만료 시간 체크 및 재발급 처리
+// 요청 인터셉터: Axios 요청 전 쿠키에서 액세스 토큰을 가져와 헤더에 추가
 axiosInstance.interceptors.request.use(
-    async (config) => {
-        let accessToken = Cookies.get('token');  // 쿠키에서 액세스 토큰 가져오기
-
+    (config) => {
+        const accessToken = Cookies.get('token');  // 쿠키에서 액세스 토큰 가져오기
         if (accessToken) {
-            const remainingTime = getTokenRemainingTime(accessToken);  // 토큰 남은 시간 확인
-
-            // 만료 60초 전이면 리프레시 토큰으로 재발급
-            if (remainingTime !== null && remainingTime <= 60) {
-                try {
-                    console.log("액세스 토큰 만료 임박, 재발급 시도");
-
-                    await handleReissueToken(); // 새로운 액세스 토큰 발급 요청
-                    accessToken = Cookies.get('token');  // 새로 발급된 액세스 토큰 가져오기
-
-                    if (accessToken) {
-                        config.headers['Authorization'] = `Bearer ${accessToken}`;  // 헤더에 추가
-                        console.log("새로운 액세스 토큰이 적용되었습니다.");
-                    }
-                } catch (error) {
-                    console.error('액세스 토큰 재발급 중 오류:', error);
-                    return Promise.reject(error);
-                }
-            } else {
-                // 토큰이 유효할 경우 바로 헤더에 추가
-                config.headers['Authorization'] = `Bearer ${accessToken}`;
-            }
+            config.headers['Authorization'] = `Bearer ${accessToken}`;
         }
         return config;
     },
@@ -49,25 +26,69 @@ axiosInstance.interceptors.request.use(
 );
 
 
-// 응답 인터셉터: 401 에러 발생 시 토큰 재발급
+axiosInstance.interceptors.request.use(
+    async (config) => {
+
+        let accessToken = Cookies.get('token');  // 쿠키에서 액세스 토큰 가져오기
+        // 액세스 토큰의 남은 시간이 얼마 남지 않았는지 체크
+        const remainingTime = getTokenRemainingTime("accessToken");
+
+        // 남은 시간이 60초 이하일 때, 리프레시 토큰을 사용하여 재발급 시도
+        if (accessToken && remainingTime !== null && remainingTime <= 60) {
+            try {
+                console.log("토큰 만료 임박, 새로운 액세스 토큰 발급 시도");
+
+                // 리프레시 토큰을 사용하여 액세스 토큰 재발급
+                await handleReissueToken();
+                accessToken = Cookies.get('token');  // 새로 발급된 액세스 토큰 가져오기
+
+                if (accessToken) {
+                    config.headers['Authorization'] = `Bearer ${accessToken}`;
+                    console.log("새로운 액세스 토큰이 요청에 적용되었습니다:", accessToken);
+                } else {
+                    console.error('액세스 토큰 재발급 실패');
+                }
+            } catch (error) {
+                console.error('토큰 재발급 중 오류:', error);
+                return Promise.reject(error);  // 재발급 실패 시 요청 중단
+            }
+        } else if (accessToken) {
+            // 토큰이 아직 유효한 경우 Authorization 헤더에 추가
+            config.headers['Authorization'] = `Bearer ${accessToken}`;
+        }
+
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
+
+
+// 요청 인터셉터 설정 (쿠키에서 토큰 가져오기)
 axiosInstance.interceptors.response.use(
+
     (response) => response,
     async (error) => {
+        console.log("Axios Error Details:", error.response); // 에러 세부 정보 출력
         const originalRequest = error.config;
 
         if (error.response && error.response.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
 
             try {
-                // 리프레시 토큰을 사용하여 새로운 액세스 토큰 발급
+                // 리프레시 토큰을 사용하여 액세스 토큰 재발급
                 await handleReissueToken();
+
+                console.log("New accessToken from reissue:", Cookies.get('token'));
 
                 const newAccessToken = Cookies.get('token');
                 if (newAccessToken) {
-                    // 헤더에 새로운 액세스 토큰 설정
+                    // 재발급된 액세스 토큰을 사용하여 헤더 업데이트
                     originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
 
-                    // 실패한 요청 다시 시도
+                    // 실패한 요청을 새로운 토큰으로 다시 시도
                     return axiosInstance(originalRequest);
                 }
             } catch (refreshError) {
