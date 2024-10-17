@@ -1,5 +1,5 @@
 //src/model/RatingModel.ts
-import {UserModel} from "@/model/UserModel";
+import {UserModel} from "@/model/user/user.model";
 
 export interface RatingModel {
     id?: number;
