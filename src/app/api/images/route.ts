@@ -35,7 +35,7 @@ export async function GET(request: Request) {
         }
 
         if (type === ImageType.PRODUCT && id) {
-            console.log("상품, id 하나 불러오기")
+            // console.log("상품, id 하나 불러오기")
 
             console.log(`type: ${type}, id: ${id}`);
             const findProps = {

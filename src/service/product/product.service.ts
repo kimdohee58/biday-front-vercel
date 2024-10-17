@@ -5,8 +5,24 @@ import {AuctionModel} from "@/model/auction/auction.model";
 import {fetchAuctionsBySize} from "@/service/auction/auction.service";
 import {setLoading} from "@/lib/features/products.slice";
 
-// 서치 필터에는 주지 말고, 리콰이얼드가 뽈스이다.
-// 불러서 리덕스에 저장을 하고 값을 사용을 하는 방법을 알아야 한다.
+export async function fetchAllProducts() {
+    try {
+
+        const productDictArray: ProductModel[] = await productAPI.findAll();
+
+        // if (productDictArray.length === 0) {
+        //     return [];
+        // }
+
+        return productDictArray.map((item) => Object.values(item)).flat();
+
+        // API 호출
+    } catch (error) {
+        console.error("상품 데이터를 가져오는 데 오류가 발생했습니다:", error);
+    } finally {
+        setLoading(false); // 로딩 완료
+    }
+}
 
 export async function fetchProducts(searchFilter: SearchFilter) {
     try {
