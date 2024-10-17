@@ -688,8 +688,8 @@ const TabFilters = () => {
                             {rangePrices[0] === PRICE_RANGE[0] &&
                             rangePrices[1] === PRICE_RANGE[1] ? null : (
                                 <span onClick={() => setRangePrices(PRICE_RANGE)}>
-                  {renderXClear()}
-                </span>
+                                    {renderXClear()}
+                                </span>
                             )}
                         </PopoverButton>
                         <Transition
