@@ -2,7 +2,6 @@ import React, {ChangeEvent} from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import {accountAPI} from "@/api/user/account.api"
 import {Suspense} from "react";
-import {DefaultSkeleton} from "@/components/skeleton/DefaultSkeletone"
 
 import {
     Input,
@@ -279,9 +278,7 @@ export default function Account1() {
             >
                 Update your profile information below.
             </Typography>
-            <Suspense fallback={<DefaultSkeleton/>}>
                 <AccountDetails/>
-            </Suspense>
             <ButtonPrimary
                 onClick={handleLogin}>판매자 등록</ButtonPrimary>
         </div>
