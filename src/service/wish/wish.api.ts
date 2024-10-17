@@ -1,6 +1,6 @@
 import {WishModel} from "@/model/WishModel";
-import {UserModel} from "@/model/UserModel";
 import {ProductModel} from "@/model/ProductModel";
+import {UserModel} from "@/model/user/user.model";
 
 const url = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/wish`
 

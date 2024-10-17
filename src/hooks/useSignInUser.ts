@@ -8,8 +8,36 @@ import {checkEmailDuplication, checkPhoneDuplication, insertUser} from "@/servic
 const useSignUpUser = () => {
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
     const [errorMessage, setErrorMessage] = useState<string>('');
-    const [successMessage, setSuccessMessage] = useState<string>(''); // 성공 메시지 관리
+    const [fieldErrors, setFieldErrors] = useState<{ [key: string]: string }>({});
+    const [fieldSuccess, setFieldSuccess] = useState<{ [key: string]: string; }>({});
 
+    // 에러 메시지 설정
+    const setFieldError = (name: string, errorMessage:string) => {
+        setFieldErrors((prevErrors) => ({
+            ...prevErrors,
+            [name]: errorMessage,
+        }));
+
+        // 에러 발생하면 해당 필드의 성공 메시지 초기화.
+        setFieldSuccess((prevSuccess) => ({
+            ...prevSuccess,
+            [name]:'',
+        }));
+    };
+
+    // 성공 메시지 설정
+    const setFieldSuccessMessage = (name: string, successMessage: string) => {
+        setFieldSuccess((prevSuccess) => ({
+            ...prevSuccess,
+            [name]: successMessage,
+        }));
+
+        // 성공 시 에러 메시지 초기화
+        setFieldErrors((prevErrors) => ({
+            ...prevErrors,
+            [name]: "",
+        }));
+    };
 
     // 회원가입 처리 함수
     const handleSignUp = async (user: UserModel) => {
@@ -17,6 +45,7 @@ const useSignUpUser = () => {
 
         // 1. Zod 스키마로 유효성 검사
         const validation = signUpSchema.safeParse(user);
+
         if (!validation.success) {
             const errorMessages = validation.error.issues.map((issue) => issue.message).join(', ');
             setErrorMessage(errorMessages); // 에러 메시지 설정
@@ -58,7 +87,13 @@ const useSignUpUser = () => {
         }
     };
 
-    return {status, handleSignUp, errorMessage}; // 상태와 함수 반환
+    return {status,
+        handleSignUp,
+        errorMessage,
+        fieldErrors,
+        fieldSuccess,
+        setFieldError,
+        setFieldSuccessMessage,}; // 상태와 함수 반환
 };
 
 export default useSignUpUser;

@@ -302,5 +302,5 @@ export function AccountBilling() {
             </div>
         </div>
     );
-};
+}
 

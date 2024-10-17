@@ -8,11 +8,11 @@ import {setLoading} from "@/lib/features/products.slice";
 export async function fetchAllProducts() {
     try {
 
-        const productDictArray: ProductDictionary[] = await productAPI.findAll();
+        const productDictArray: ProductModel[] = await productAPI.findAll();
 
-        if (productDictArray.length === 0) {
-            return [];
-        }
+        // if (productDictArray.length === 0) {
+        //     return [];
+        // }
 
         return productDictArray.map((item) => Object.values(item)).flat();
 
@@ -47,12 +47,14 @@ export async function fetchProducts(searchFilter: SearchFilter) {
 
 // 데이터 변환을 여기서 해야한다. 인수로 필요한 것을 받아서,
 // 서비스에서 데이터 변환을 자바 스프링을 서비스에서 했잖아. 변환을 똑같이 서비스를 여기에서 해야한다.
+
+
 export async function fetchProductOne(productId: string): Promise<ProductModel> {
 
     try {
         const options = {
             params: {
-                productId: productId
+                productId: Number(productId)
             }
         }
 
@@ -77,7 +79,7 @@ export async function fetchProduct(productId: number): Promise<ProductModel[]> {
     try {
         const options = {
             params: {
-                productId: productId,
+                productId: Number(productId),
             }
         };
 

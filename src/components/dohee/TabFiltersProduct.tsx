@@ -266,6 +266,43 @@ const TabFiltersProduct = ({
         </Popover>
     );
 
+    const renderMoreFilterItem = (
+        data: {
+            name: string;
+            description?: string;
+            defaultChecked?: boolean;
+        }[]
+    ) => {
+        const list1 = data.filter((_, i) => i < data.length / 2);
+        const list2 = data.filter((_, i) => i >= data.length / 2);
+        return (
+            <div className="grid grid-cols-2 gap-x-4 sm:gap-x-8 gap-8">
+                <div className="flex flex-col space-y-5">
+                    {list1.map((item) => (
+                        <Checkbox
+                            key={item.name}
+                            name={item.name}
+                            subLabel={item.description}
+                            label={item.name}
+                            defaultChecked={!!item.defaultChecked}
+                        />
+                    ))}
+                </div>
+                <div className="flex flex-col space-y-5">
+                    {list2.map((item) => (
+                        <Checkbox
+                            key={item.name}
+                            name={item.name}
+                            subLabel={item.description}
+                            label={item.name}
+                            defaultChecked={!!item.defaultChecked}
+                        />
+                    ))}
+                </div>
+            </div>
+        );
+    };
+
     const renderTabMobileFilter = () => {
         return (
             <div className="flex-shrink-0">
@@ -501,8 +538,8 @@ const TabFiltersProduct = ({
                                                                 key={item.id}
                                                                 name="radioNameSort"
                                                                 label={item.name}
-                                                                defaultChecked={sortOrderStates === item.id}
-                                                                onChange={setSortOrderStates}
+                                                                defaultChecked={selectedSortOrder === item.id}
+                                                                onChange={setSelectedSortOrder}
                                                             />
                                                         ))}
                                                     </div>
@@ -510,18 +547,18 @@ const TabFiltersProduct = ({
                                             </div>
 
                                             {/* --------- */}
-                                            {/* ---- */}
-                                            <div className="py-7">
-                                                <h3 className="text-xl font-medium">On sale!</h3>
-                                                <div className="mt-6 relative ">
-                                                    <MySwitch
-                                                        label="On sale!"
-                                                        desc="Products currently on sale"
-                                                        enabled={isOnSale}
-                                                        onChange={setIsIsOnSale}
-                                                    />
-                                                </div>
-                                            </div>
+                                            {/*/!* ---- *!/*/}
+                                            {/*<div className="py-7">*/}
+                                            {/*    <h3 className="text-xl font-medium">On sale!</h3>*/}
+                                            {/*    <div className="mt-6 relative ">*/}
+                                            {/*        <MySwitch*/}
+                                            {/*            label="On sale!"*/}
+                                            {/*            desc="Products currently on sale"*/}
+                                            {/*            enabled={isOnSale}*/}
+                                            {/*            onChange={setIsIsOnSale}*/}
+                                            {/*        />*/}
+                                            {/*    </div>*/}
+                                            {/*</div>*/}
                                         </div>
                                     </div>
 

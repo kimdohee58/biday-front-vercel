@@ -1,4 +1,4 @@
-import {UserModel} from "@/model/UserModel";
+import {UserModel} from "@/model/user/user.model";
 
 export interface FaqModel {
     id: number;

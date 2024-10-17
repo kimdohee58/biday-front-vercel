@@ -19,59 +19,24 @@ export const saveUserTokenToCookie = (userToken: UserToken) => {
 };
 
 
-export const saveToken = (token: string, refreshToken?: string) => {
-
+export const saveToken = (token: string) => {
     // 무결성 검증 먼저 수행
     if (!IntegrityToken(token)) {
         console.error('무결성 검증 실패: 토큰 저장이 중단되었습니다.');
         return;
     }
 
-    // 1. JWT 토큰을 쿠키에 저장 (7일 동안 유지)
+    const oneMinuteLater = new Date(new Date().getTime() + 1 * 60 * 1000); // 현재 시간에서 1분 더한 시간
 
     Cookies.set('token', token, {
-        expires: 7, // 7일 동안 유지
+        expires: oneMinuteLater, // 10초 후에 만료
         path: '/',  // 모든 경로에서 유효
-        secure: true, // HTTPS에서만 쿠키 전송
-        sameSite: 'strict', // 동일 사이트에서만 쿠키 사용
+        secure: false, // HTTPS에서만 쿠키 전송
+        sameSite: 'Strict', // 동일 사이트에서만 쿠키 사용
     });
 
-    // 2. Refresh 토큰이 있을 경우 쿠키에 저장 (30일 동안 유지)
-    if (refreshToken) {
-        Cookies.set('refreshToken', refreshToken, {
-            expires: 30, // 30일 동안 유지
-            path: '/',  // 모든 경로에서 유효
-            secure: true, // HTTPS에서만 쿠키 전송
-            sameSite: 'strict', // 동일 사이트에서만 쿠키 사용
-        });
-    }
 };
 
-
-
-// JWT 토큰을 로컬 스토리지와 쿠키에서 삭제하는 함수 (로그아웃 시 사용)
-/*export const clearToken = () => {
-    // 로컬 스토리지에서 토큰 제거
-    localStorage.removeItem('token');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem("userInfo");
-
-    // 이미지에 있던 항목
-    localStorage.removeItem('TanstackQueryDevtools.open');
-    localStorage.removeItem('ally-supports-cache');
-    localStorage.removeItem('as;dlfkjad');
-    localStorage.removeItem('com.naver.oauth.state_token');
-    localStorage.removeItem('persist:root');
-    localStorage.removeItem('theme');
-
-    Cookies.remove('token', {path: '/', secure: true, sameSite: 'strict'});
-    Cookies.remove('refreshToken', {path: '/', secure: true, sameSite: 'strict'});
-    Cookies.remove('token', {path: '/', secure: true, sameSite: 'strict'});
-    Cookies.remove('refreshToken', {path: '/', secure: true, sameSite: 'strict'});
-    Cookies.remove('accessToken', { path: '/', secure: true, sameSite: 'strict' }); // accessToken 제거
-    Cookies.remove('userToken', { path: '/', secure: true, sameSite: 'strict' });   // userToken 제거
-    Cookies.remove('Authorization', { path: '/', secure: true, sameSite: 'strict' });   // userToken 제거
-};*/
 // JWT 토큰을 로컬 스토리지와 쿠키에서 삭제하는 함수 (로그아웃 시 사용)
 export const clearToken = () => {
     localStorage.removeItem('token');
@@ -84,17 +49,20 @@ export const clearToken = () => {
 
 
 export const AuthorizationToken = () => {
-
     Cookies.remove('Authorization', { path: '/', secure: true, sameSite: 'strict' });
 };
 
 /*쿠키만 삭제 하는 메서드 */
 export const removeCookie = () => {
-    const allCookies = Cookies.get();
-    Object.keys(allCookies).forEach(cookieName => {
-        Cookies.remove(cookieName, {path: '/'})
-    })
-}
+
+    const allCookies = document.cookie.split('; ');
+    console.log(allCookies)
+    allCookies.forEach(cookie => {
+        const cookieName = cookie.split('=')[0]; // '=' 이전의 쿠키 이름을 추출
+        Cookies.remove(cookieName, { path: '/' });
+    });
+    console.log("모든 쿠키가 삭제되었습니다.");
+};
 
 // 쿠키 읽어오는 함수
 export const getCookie = (name: string): string | null => {
@@ -133,7 +101,6 @@ export const IntegrityToken = (token: string | null): boolean => {
             return false;
         }
 
-        console.log(`토큰이 유효합니다. 남은 시간: ${timeRemaining}초`);
         return true;
     } catch (error) {
         console.error('토큰 디코딩 실패:', error);

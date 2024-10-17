@@ -1,16 +1,12 @@
 //src/utils/jwt.utils.ts
-interface DecodedToken {
-    id: string;   //userId
-    name: string; // username
-    role: string;
-}
 
-// 철자 수정: base64Encode로 수정
+import {JwtPayload} from "@/model/api/JwtPayload";
+
 const base64Encode = (data: string) => {
     return btoa(unescape(encodeURIComponent(data)));
 }
 
-export const extractUserInfoFromToken = (token: string): { id: string, name: string, role: string } => {
+export const extractUserInfoFromToken = (token: string)=> {
     const base64Url = token.split('.')[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     const jsonPayload = decodeURIComponent(
@@ -21,14 +17,22 @@ export const extractUserInfoFromToken = (token: string): { id: string, name: str
     );
 
     const payload = JSON.parse(jsonPayload);
+
+
+    // JwtPayload 타입으로 반환
+
+
+
     return {
         id: payload.id,
+        role: payload.role,
         name: payload.name,
-        role: payload.role
+        category: payload.category,
+        expiredMs: payload.exp // 만료 시간 추가
     };
 };
+export const createUserToken = (payload: JwtPayload) => {
 
-export const createUserToken = (payload: { id: string; name: string; role: string;  }) => {
     // 헤더
     const header = {
         alg: "HS256",
@@ -43,5 +47,4 @@ export const createUserToken = (payload: { id: string; name: string; role: strin
     const signature = '';
 
     return `${encodedHeader}.${encodedPayload}.${signature}`;
-}
-
+};

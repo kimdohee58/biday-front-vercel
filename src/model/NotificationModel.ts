@@ -1,5 +1,5 @@
 //src/model/NotificationModel.ts
-import {UserModel} from "@/model/UserModel";
+import {UserModel} from "@/model/user/user.model";
 
 interface NotificationModel {
     id: number;

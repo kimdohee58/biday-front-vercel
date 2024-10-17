@@ -1,5 +1,5 @@
 import {ProductModel} from "@/model/product/product.model";
-import {UserModel} from "@/model/UserModel";
+import {UserModel} from "@/model/user/user.model";
 
 export interface WishModel {
     id?: number;

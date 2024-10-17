@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'; // next/navigation에서 useRouter 임포트
 import { useDispatch } from 'react-redux';
-import {saveUser, saveUserToken, UserState} from '@/lib/features/user.slice';
+import {addAddress, saveUser, saveUserToken, UserState} from '@/lib/features/user.slice';
 import { handleLogin } from '@/service/user/login.api';
 import {findUserById} from "@/service/user/user.api";
 import {initialUser, UserModel} from "@/model/user/user.model";  // API 호출을 임포트
@@ -10,6 +10,7 @@ import {createUserToken, extractUserInfoFromToken} from '@/utils/jwt.utils';
 import {saveToken, saveUserTokenToCookie} from "@/utils/cookie/cookie.api";
 import {UserToken} from "@/model/user/userToken";
 import {useUserContext} from "@/utils/userContext"
+import { fetchAllAddressesByUserId } from '@/service/user/address.service';
 
 export const useLogin = () => {
     const dispatch = useDispatch();
@@ -23,7 +24,6 @@ export const useLogin = () => {
 
             if (response) {
                 const authorizationHeader = response.headers["authorization"];
-
 
                 if (authorizationHeader) {
                     const accessToken = authorizationHeader.split(" ")[1]; // Bearer {token} 형태이므로 토큰만 추출
@@ -54,7 +54,7 @@ export const useLogin = () => {
 
                         // 유저 정보를 JWT로 만들어 userToken으로 js 쿠키에 저장.
                         const userPayload = {id: userData.id !!, name: userData.name !!,role};
-                        const userToken = createUserToken(userPayload);
+                        //const userToken = createUserToken(userPayload);
 
                         // 백엔드 헤더에 보낼 유저객체 userToken
                         if(user) {
@@ -67,14 +67,22 @@ export const useLogin = () => {
 
                             localStorage.setItem("userToken", JSON.stringify(userInfo));
 
-                            saveUserTokenToCookie(userInfo); // 여기를 수정
-
+                            saveUserTokenToCookie(userInfo); // 유저인포 === 유저토큰
 
                             setUser(userData);  // 유저 정보를 Context에 저장
-                            console.log("setUser 컨택스트 유저 정보 저장 :   ", setUser);
-                            console.log("setUser 컨택스트 userData :   ", userData);
+
+                            // 유저 ID로 주소 불러오기
+                            const addresses = await fetchAllAddressesByUserId();
+                            if (addresses) {
+                                addresses.forEach((address) => {
+                                    dispatch(addAddress(address));  // 불러온 주소를 Redux에 저장
+                                });
+                                console.log("주소 정보 확인하는 코드 : " ,addresses)
+                            }
                         }
                     }
+                    // 로그인을 할 때 넣고,
+                    // 주소 추가, 변동이 있을 때 리덕스에 또 넣으면 된다.
                     router.push("/");
                 } else {
                     throw new Error("Authorization 헤더가 없습니다.");

@@ -23,7 +23,6 @@ export const UserProvider = ({children}: {children:ReactNode}) => {
 // 유저 정보를 사용하는 커스텀 훅
 export const useUserContext = () => {
     const context = useContext(UserContext);
-    console.log("컨택스트 유틸 함수 : " , context)
     if (!context) {
         throw new Error("useUser error");
     }
