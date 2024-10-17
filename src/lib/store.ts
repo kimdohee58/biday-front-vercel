@@ -18,7 +18,7 @@ import { combineReducers } from 'redux';
 const persistConfig = {
     key: 'root',
     storage,      // localStorage 사용
-    whitelist: ['user'],  // user만 persist에 저장
+    whitelist: ['user'],
 };
 
 // 루트 리듀서 정의 (combineReducers 사용)
@@ -37,7 +37,8 @@ const rootReducer = combineReducers({
 
 
 // persistReducer로 루트 리듀서를 감싸줌
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+const persistedReducer
+    = persistReducer(persistConfig, rootReducer);
 
 // 스토어 생성
 export const store = configureStore({

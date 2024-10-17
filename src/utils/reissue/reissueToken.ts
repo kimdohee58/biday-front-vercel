@@ -1,8 +1,9 @@
 // src/utils/reissue/reissueToken.ts
 import Cookies from 'js-cookie';
-import {saveToken} from "@/utils/cookie/cookie.api";
+import { saveToken } from "@/utils/cookie/cookie.api";
+import axiosInstance from "@/app/api/axiosInstance/axiosInstance";
 
-const baseUrl = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/reissue`
+// const baseUrl = `${axiosInstance.defaults.baseURL}/reissue`;
 
 export const handleReissueToken = async () => {
     try {
@@ -12,15 +13,15 @@ export const handleReissueToken = async () => {
         }
 
         // 서버로 리프레시 토큰 전송하여 액세스 토큰 재발급 요청
-        const response = await fetch(baseUrl, {
-            method: "POST",
-            credentials: 'include',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ refresh: refreshToken }),
+        const response = await axiosInstance.post("/reissue", {
+            refresh: refreshToken
+        }, {
+            withCredentials: true // 쿠키 포함
         });
 
+        // 서버 응답이 성공적인 경우
         if (response.status === 200) {
-            const authorizationHeader = response.headers.get("Authorization");
+            const authorizationHeader = response.headers['authorization'];
 
             if (authorizationHeader) {
                 // Authorization 헤더에서 Bearer {token} 형태의 토큰을 추출

@@ -15,8 +15,8 @@ import {UserToken} from "@/model/user/userToken";
 export const saveUserTokenToCookie = (userToken: UserToken) => {
     Cookies.set('userToken', JSON.stringify(userToken), { path: '/', secure: true, sameSite: 'Lax' });
     console.log("유저객체가 쿠키에 저장되었습니다.");
-    //
 };
+
 
 
 export const saveToken = (token: string) => {
@@ -26,21 +26,27 @@ export const saveToken = (token: string) => {
         return;
     }
 
+    const tenSecondsLater = new Date(new Date().getTime() + 1000 * 1000); // 현재 시간에서 10초 더한 시간
 
     Cookies.set('token', token, {
-        expires: 7, // 10초 후에 만료
-        path: '/',  // 모든 경로에서 유효
-        secure: true, // HTTPS에서만 쿠키 전송
-        sameSite: 'Strict', // 동일 사이트에서만 쿠키 사용
+        expires: tenSecondsLater,
+        path: '/',
+        secure: false, // 로컬 테스트 시 false
+        sameSite: 'Lax', // 필요에 따라 조정
     });
-
+    console.log("token 저정완료 했습니다.", token);
 };
 
 // JWT 토큰을 로컬 스토리지와 쿠키에서 삭제하는 함수 (로그아웃 시 사용)
 export const clearToken = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('persist:root');
+    console.log(" localStorage.removeItem삭제 , " , localStorage.removeItem)
+
     localStorage.removeItem('refreshToken');
-    localStorage.removeItem("userInfo");
+    console.log(" localStorage.removeItem 삭제 ",  localStorage.removeItem)
+
+    localStorage.removeItem("userToken");
+    console.log("localStorage.removeItem 삭제 ", localStorage.removeItem)
 
     Cookies.remove('token', { path: '/', secure: true, sameSite: 'strict' });
     Cookies.remove('refreshToken', { path: '/', secure: true, sameSite: 'strict' });
@@ -106,14 +112,16 @@ export const IntegrityToken = (token: string | null): boolean => {
         return false;
     }
 };
-
 // JWT 토큰 남은 시간 계산 함수
-export const getTokenRemainingTime = (token: string | null): number | null => {
+export const getTokenRemainingTime = (token: string | undefined): number | null => {
     if (!token) return null;
 
+    console.log("getTokenRemainingTime", token);
     try {
         // 토큰 디코딩
         const decoded = jwt.decode(token) as jwt.JwtPayload;
+
+        console.log("token decoded : ",decoded)
         if (!decoded || !decoded.exp) {
             console.error('토큰에서 만료 시간을 추출할 수 없습니다.');
             return null;
@@ -122,6 +130,7 @@ export const getTokenRemainingTime = (token: string | null): number | null => {
         // 현재 시간과 만료 시간 비교
         const currentTime = Math.floor(Date.now() / 1000); // 초 단위로 현재 시간
         const timeRemaining = decoded.exp - currentTime;
+        console.log("남은 시간", timeRemaining);
 
         return timeRemaining > 0 ? timeRemaining : 0; // 남은 시간 반환, 없으면 0
     } catch (error) {
