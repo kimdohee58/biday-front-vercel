@@ -335,7 +335,7 @@ export default function PageCollection({ params }: { params: { filter: string } 
                     {/* HEADING */}
                     <div className="max-w-screen-sm">
                         <h2 className="block text-2xl sm:text-3xl lg:text-4xl font-semibold">
-                            {params.filter}
+                            {params.filter.toUpperCase()}
                         </h2>
                     </div>
 
