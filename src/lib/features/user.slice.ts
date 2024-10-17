@@ -13,7 +13,7 @@ export interface UserState {
 
 const initialState: UserState = { // 초기 상태
     user: initialUser,
-    token:null,
+    token: null,
     userInfo: initialUserToken
 };
 

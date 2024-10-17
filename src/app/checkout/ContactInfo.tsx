@@ -1,5 +1,7 @@
+"use client";
+
 import Label from "@/components/Label/Label";
-import React, { FC } from "react";
+import React, {FC, useState} from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
 import Checkbox from "@/shared/Checkbox/Checkbox";
@@ -16,6 +18,9 @@ interface Props {
 }
 
 const ContactInfo: FC<Props> = ({isActive, onCloseActive, onOpenActive, phoneNum, email, name, onSave}) => {
+  const [tempPhoneNum, setTempPhoneNum] = useState<string>(phoneNum);
+  const [tempEmail, setTempEmail] = useState<string>(email);
+
   const renderAccount = () => {
     return (
         <div className="border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden z-0">
@@ -68,8 +73,8 @@ const ContactInfo: FC<Props> = ({isActive, onCloseActive, onOpenActive, phoneNum
                 </svg>
               </h3>
               <div className="font-semibold mt-1 text-sm">
-                <span className="">{`${name}`}</span>
-                <span className="ml-3 tracking-tighter">{`${phoneNum}`}</span>
+                <span className="">{name}</span>
+                <span className="ml-3 tracking-tighter">{phoneNum}</span>
               </div>
             </div>
             <button
@@ -88,18 +93,18 @@ const ContactInfo: FC<Props> = ({isActive, onCloseActive, onOpenActive, phoneNum
               <h3 className="text-lg font-semibold">Contact information</h3>
             </div>
             <div className="max-w-lg">
-              <Label className="text-sm">Your phone number</Label>
+              <Label className="text-sm">연락처</Label>
               <Input className="mt-1.5" defaultValue={phoneNum} type={"tel"}/>
             </div>
             <div className="max-w-lg">
-              <Label className="text-sm">Email address</Label>
+              <Label className="text-sm">이메일</Label>
               <Input className="mt-1.5" defaultValue={email} type={"email"}/>
             </div>
             <div>
               <Checkbox
                   className="!text-sm"
                   name="uudai"
-                  label="Email me news and offers"
+                  label="새로운 소식 이메일로 받아보기"
                   defaultChecked
               />
             </div>
@@ -116,7 +121,7 @@ const ContactInfo: FC<Props> = ({isActive, onCloseActive, onOpenActive, phoneNum
                   className="mt-3 sm:mt-0 sm:ml-3"
                   onClick={() => onCloseActive()}
               >
-                Cancel
+                취소
               </ButtonSecondary>
             </div>
           </div>
