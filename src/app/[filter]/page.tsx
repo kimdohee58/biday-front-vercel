@@ -234,6 +234,7 @@ import TabFiltersProduct from "@/components/dohee/TabFiltersProduct";
 import { ProductModel, SearchFilter } from "@/model/product/product.model";
 import { fetchProducts } from "@/service/product/product.service";
 import { setLoading } from "@/lib/features/products.slice";
+import TabFilters from "@/components/TabFilters";
 
 type ProductCardData = {
     product: ProductModel;
@@ -242,33 +243,37 @@ type ProductCardData = {
 
 export default function PageCollection({ params }: { params: { filter: string } }) {
     const itemsPerPage = 20; // 한 페이지에 20개씩 (가로 5 , 세로 4개)
-    const [PRODUCTS, setProducts] = useState<ProductModel[]>([]);
+    const [products, setProducts] = useState<ProductModel[]>([]);
     const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
     const [selectedColors, setSelectedColors] = useState<string[]>([]);
+    const [selectedOrder, setSelectedOrder] = useState<string>('');
     const [filteredProducts, setFilteredProducts] = useState<ProductModel[]>([]);
 
+    // Fetch products when category or sort order changes
     useEffect(() => {
         const fetchAndSetProducts = async () => {
             setLoading(true);
             const searchFilter: SearchFilter = {
                 category: params.filter,
+                order: selectedOrder
             };
 
+            // Fetch products from the backend
             const fetchedProducts = await fetchProducts(searchFilter);
             if (fetchedProducts) {
-                setProducts(fetchedProducts);
-                setFilteredProducts(fetchedProducts); // 처음에는 모든 제품을 보여줌
+                setProducts(fetchedProducts); // Save fetched products in state
             }
             setLoading(false);
         };
 
         fetchAndSetProducts();
-    }, [params.filter]);
+    }, [params.filter, selectedOrder]);
 
+// Apply brand and color filtering after products or filters change
     useEffect(() => {
-        // 색상 필터링
-        let filtered = PRODUCTS;
+        let filtered = products; // Use the state 'products' instead of a local 'PRODUCTS'
 
+        // Filter by selected colors
         if (selectedColors.length > 0) {
             filtered = filtered.filter((product) =>
                 selectedColors.some((color) =>
@@ -277,7 +282,7 @@ export default function PageCollection({ params }: { params: { filter: string } 
             );
         }
 
-        // 브랜드 필터링
+        // Filter by selected brands
         if (selectedBrands.length > 0) {
             filtered = filtered.filter((product) =>
                 selectedBrands.some((brand) =>
@@ -286,9 +291,56 @@ export default function PageCollection({ params }: { params: { filter: string } 
             );
         }
 
+        // Log filtered products (optional for debugging)
         console.log("Filtered products:", filtered);
-        setFilteredProducts(filtered);  // 필터링된 제품으로 상태 업데이트
-    }, [selectedColors, selectedBrands, PRODUCTS]);
+
+        // Update filtered products state
+        setFilteredProducts(filtered);
+    }, [selectedColors, selectedBrands, selectedOrder, filteredProducts]); // Now depends on 'products' instead of 'PRODUCTS'
+
+    // useEffect(() => {
+    //     const fetchAndSetProducts = async () => {
+    //         setLoading(true);
+    //         const searchFilter: SearchFilter = {
+    //             category: params.filter,
+    //             order: selectedOrder
+    //         };
+    //
+    //         const fetchedProducts = await fetchProducts(searchFilter);
+    //         if (fetchedProducts) {
+    //             setProducts(fetchedProducts);
+    //             setFilteredProducts(fetchedProducts); // 처음에는 모든 제품을 보여줌
+    //         }
+    //         setLoading(false);
+    //     };
+    //
+    //     fetchAndSetProducts();
+    // }, [params.filter, selectedOrder]);
+    //
+    // useEffect(() => {
+    //     // 색상 필터링
+    //     let filtered = PRODUCTS;
+    //
+    //     if (selectedColors.length > 0) {
+    //         filtered = filtered.filter((product) =>
+    //             selectedColors.some((color) =>
+    //                 product.color.toLowerCase().trim() === color.toLowerCase().trim()
+    //             )
+    //         );
+    //     }
+    //
+    //     // 브랜드 필터링
+    //     if (selectedBrands.length > 0) {
+    //         filtered = filtered.filter((product) =>
+    //             selectedBrands.some((brand) =>
+    //                 product.brand.toLowerCase().trim() === brand.toLowerCase().trim()
+    //             )
+    //         );
+    //     }
+    //
+    //     console.log("Filtered products:", filtered);
+    //     setFilteredProducts(filtered);  // 필터링된 제품으로 상태 업데이트
+    // }, [selectedColors, selectedBrands, selectedOrder, PRODUCTS]);
 
     // 현재 페이지 상태를 관리
     const [currentPage, setCurrentPage] = useState(1);
@@ -302,29 +354,15 @@ export default function PageCollection({ params }: { params: { filter: string } 
         setCurrentPage(page);
     };
 
-    // const handleFilterChange = (newSelectedBrands: string[], newSelectedColors: string[]) => {
-    //     setSelectedBrands(newSelectedBrands);
-    //     setSelectedColors(newSelectedColors);
-    //   };
-
     // 필터 변경 핸들러
-    const handleFilterChange = (newSelectedBrands: string[], newSelectedColors: string[]) => {
-        setSelectedBrands((prevSelectedBrands) => {
-            const uniqueNewBrands = newSelectedBrands.filter(
-                (brand) => !prevSelectedBrands.includes(brand)
-            );
-            return [...prevSelectedBrands, ...uniqueNewBrands];
-        });
-
-        setSelectedColors((prevSelectedColors) => {
-            const uniqueNewColors = newSelectedColors.filter(
-                (color) => !prevSelectedColors.includes(color)
-            );
-            return [...prevSelectedColors, ...uniqueNewColors];
-        });
+    const handleFilterChange = (newSelectedBrands: string[], newSelectedColors: string[], newSelectedOrder: string) => {
+        setSelectedBrands(newSelectedBrands);
+        setSelectedColors(newSelectedColors)
+        setSelectedOrder(newSelectedOrder);
 
         console.log("selectedBrand", selectedBrands)
         console.log("selectedColor", selectedColors)
+        console.log("selectedOrder", selectedOrder)
     };
 
     // TODO : checked 해제하면 선택목록에서 빼기, orderBy 선택 및 전달
@@ -345,8 +383,10 @@ export default function PageCollection({ params }: { params: { filter: string } 
                         <TabFiltersProduct
                             selectedBrands={selectedBrands}
                             selectedColors={selectedColors}
+                            selectedOrder={selectedOrder}
                             onFilterChange={handleFilterChange}
                         />
+                        <TabFilters/>
 
                         {/* LOOP ITEMS */}
                         <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-x-8 gap-y-10 mt-8 lg:mt-10">

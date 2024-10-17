@@ -111,6 +111,36 @@ export default function ClientComponent({authorizationToken}: ClientComponentPro
     const [brandProducts, setBrandProducts] = useState<ProductModel[]>([]);
     const dispatch = useDispatch();
 
+    const handleAuthToken = async () => {
+        const authToken = authorizationToken
+        if (authToken) {
+            try {
+                saveToken(authToken);
+                const { id } = extractUserInfoFromToken(authToken);
+
+                const user = await findUserById(id);
+                if (user) {
+                    const userData = {
+                        id: user.id,
+                        name: user.name,
+                        email: user.email,
+                        phoneNum: user.phoneNum,
+                        status: user.status ? String(user.status) : "",
+                        newPassword: user.newPassword || "",
+                    };
+
+                    dispatch(saveUser({user: userData, token: authToken}));  // 유저 정보와 토큰을 Redux에 저장
+                    localStorage.setItem("userToken", JSON.stringify(userData));
+                }
+            } catch (error) {
+                console.error("토큰 로그인 실패: ", error);
+            }
+            AuthorizationToken();
+        } else {
+            console.log("Authorization 토큰을 찾을 수 없습니다.");
+        }
+    };
+
     // // category filter 별 api 호출
     // const loadOuterProducts = async () => {
     //     try {
