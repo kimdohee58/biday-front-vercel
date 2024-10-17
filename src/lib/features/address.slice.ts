@@ -1,18 +1,16 @@
 // src/lib/features/address.slice.ts
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AddressModel, initialAddress } from '@/model/AddressModel';
 import type { RootState } from '@/lib/store';
+import {AddressModel} from "@/model/user/address.model";
 
 // AddressState 인터페이스 정의
 interface AddressState {
     addresses: AddressModel[];
-    selectedAddressId?: string;
 }
 
 const initialState: AddressState = {
-    addresses: [initialAddress],  // 초기값으로 빈 주소 목록을 사용
-    selectedAddressId: undefined,
+    addresses: [],  // 초기값으로 빈 주소 목록을 사용
 };
 
 const addressSlice = createSlice({
@@ -28,15 +26,12 @@ const addressSlice = createSlice({
         removeAddress: (state, action: PayloadAction<string>) => {
             state.addresses = state.addresses.filter(address => address.userId !== action.payload);
         },
-        pickAddress: (state, action: PayloadAction<string>) => {
-            state.selectedAddressId = action.payload;
-        },
+        clearAddresses:(state)=>{
+            state.addresses = [];// 모든 주소 초기화
+        }
     },
 });
 
-export const { setAddresses, addAddress, removeAddress, pickAddress } = addressSlice.actions;
-
+export const { setAddresses, addAddress, removeAddress} = addressSlice.actions;
 export const selectAddresses = (state: RootState) => state.address.addresses;
-export const selectPickedAddress = (state: RootState) => state.address.selectedAddressId;
-
 export default addressSlice.reducer;

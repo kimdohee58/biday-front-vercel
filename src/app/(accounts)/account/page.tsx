@@ -12,7 +12,8 @@ import Postcode from "@/components/Postcode"; // 주소 검색 컴포넌트
 import {RadioGroup, Radio, Stack} from "@chakra-ui/react";
 import NcModal from "@/shared/NcModal/NcModal";
 import {fetchAllAddressesByUserId, fetchDeleteAddress, fetchPickAddress} from "@/service/user/address.service";
-import {useUserContext} from "@/utils/userContext"; // fetchPickAddress 추가
+import {useUserContext} from "@/utils/userContext";
+import {getAddresses} from "@/lib/features/user.slice"; // fetchPickAddress 추가
 
 // 주소 유형 매핑 함수
 const mapAddressType = (type: string) => {
@@ -38,8 +39,14 @@ export default function AccountPage() {
     const [showDropdown, setShowDropdown] = useState(false);
     const [addresses, setAddresses] = useState<AddressModel[]>([]); // 주소 목록 상태 관리
     const [error, setError] = useState<string | null>(null); // 에러 상태 관리
+    const reduxAddresses1 = useSelector(getAddresses);
 
-
+    // 리덕스에 있는 유저 주소 갖고오기
+    const reduxAddresses = useSelector((state: RootState) => getAddresses(state));
+    console.log("리덕스에 있는 주소 확인하는 코드1111111111 : " , reduxAddresses1)
+    console.log("리덕스에 있는 주소 확인하는 코드 : " , reduxAddresses)
+    const rdeux111 = useSelector(getAddresses);
+    console.log("FLEJRTM리덕스,ㅇㅁㅇㄴ러ㅏㅣ",rdeux111)
 
     const [formData, setFormData] = useState({
         addressId: "",
@@ -48,7 +55,6 @@ export default function AccountPage() {
         zipcode: "",
         addressType: "",  // 기본 주소 유형
     });
-
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
 
     // 주소 검색 완료 후 처리하는 함수

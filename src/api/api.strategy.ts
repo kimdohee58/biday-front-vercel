@@ -9,6 +9,7 @@ type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | "PATCH" ;
 
 const apiRequest = async (url: string, method: HttpMethod, {params, data, headers, token, userToken, contentType, cache}: RequestOptions<any,any>) => {
     console.log("strategy 진입");
+    console.log("token", HTTPRequest(method, url));
 
     const queryString = params ? `?${new URLSearchParams(params)}` : '';
 
@@ -42,7 +43,12 @@ const apiRequest = async (url: string, method: HttpMethod, {params, data, header
 
         response = await fetchAPI(`${url}${queryString}`, options);
     }
-    return response.json();
+    const responseType = response.headers.get("content-type");
+    if (responseType && responseType.includes("application/json")) {
+        return response.json();
+    } else {
+        return response.text();
+    }
 };
 
 export const strategy = {
