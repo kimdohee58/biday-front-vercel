@@ -26,6 +26,11 @@ export const handleReissueToken = async () => {
                 // Authorization 헤더에서 Bearer {token} 형태의 토큰을 추출
                 const newAccessToken = authorizationHeader.split(" ")[1]; // Bearer {token}에서 token 추출
                 console.log("새로운 액세스 토큰이 쿠키에 저장되었습니다:", newAccessToken);
+                // 네트워크 패널 확인
+                // 브라우저의 개발자 도구 네트워크 탭에서 Reissue 요청이 성공했는지 확인을 할 수 있고,
+                // HTTP 상태 코드 200이 나오면 성공적으로 처리된 것이고, 응답 헤더에 새로운 액세스 토큰이 있는지 확인할 수 있다.
+
+                // 재발급 후 새로운 액세스 토큰이 쿠키에 제대로 저장이 되었는지 개발자 도구의 애플리케이션 -> 쿠키에서 확인을 할 수 있다.
 
                 // 새로 받은 액세스 토큰을 저장 (saveToken 함수)
                 saveToken(newAccessToken);

@@ -1,5 +1,5 @@
-import {UserModel} from "@/model/UserModel";
 import {ChatButtonModel} from "@/model/ChatButtonModel";
+import {UserModel} from "@/model/user/user.model";
 
 export interface ChatClickModel {
     id?: number;

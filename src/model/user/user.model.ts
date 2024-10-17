@@ -1,4 +1,3 @@
-
 //src/model/user.model.ts
 import {AddressModel} from "@/model/user/address.model";
 
@@ -15,7 +14,6 @@ export interface UserModel {
     totalRating?: number;
     newPassword?:string;
     role?: UserRole
-    phone?:string
 }
 
 export interface UserSlice {
