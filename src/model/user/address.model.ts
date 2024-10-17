@@ -1,4 +1,3 @@
-// src/model/address.model.ts
 export interface AddressModel {
 
     id: string;

@@ -24,11 +24,11 @@ import {fetchAwardOne} from "@/service/auction/award.service";
 import {AddressModel} from "@/model/user/address.model";
 import {useSelector} from "react-redux";
 import {RootState} from "@/lib/store";
-import {initialUser, UserModel} from "@/model/user/user.model";
 import {ImageType} from "@/model/ftp/image.model";
 import {fetchImageOne} from "@/service/ftp/image.service";
 import {getColor, getSizeById} from "@/utils/productUtils";
 import {Alert} from "@/shared/Alert/Alert";
+import {getAddresses, getUser} from "@/lib/features/user.slice";
 
 export default function CheckoutPage() {
     const router = useRouter();
@@ -40,15 +40,16 @@ export default function CheckoutPage() {
     const award = useSuspenseQuery({queryKey: ["award", awardId], queryFn: () => fetchAwardOne(Number(awardId))});
     const productImage = useSuspenseQuery({queryKey: ["image", productId, ImageType.PRODUCT],
         queryFn: () => fetchImageOne(ImageType.PRODUCT, productId)});
-    const user: UserModel = useSelector((state: RootState) => state.user.user || initialUser);
+    const user = useSelector(getUser);
 
     if (!user) {
         return;
     }
 
-    const [phoneNum, setPhoneNum] = useState<string>(user.phone || "");
+    const [phoneNum, setPhoneNum] = useState<string>(user.phoneNum || "");
     const [email, setEmail] = useState<string>(user.email || "");
-    const addresses: AddressModel[] = user.addresses || [];
+    const addresses: AddressModel[] = useSelector(getAddresses);
+    console.log("addresses", addresses);
     const [selectedAddressIndex, setSelectedAddressIndex] = useState<number>(0);
 
     const handleAddressChange = (index: number) => {
