@@ -1,6 +1,5 @@
 //src/utils/token/token.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
-import Cookies from 'js-cookie';
 import {getTokenRemainingTime} from "@/utils/cookie/cookie.api";
 import {handleReissueToken} from "@/utils/reissue/reissueToken";
 
@@ -35,7 +34,10 @@ const extractAccessTokenFromHeader = (authorizationHeader: string | null): strin
 
 // JWT 토큰 남은 시간 기반으로 토큰 재발급을 체크하는 함수
 export const checkTokenAndReissueIfNeeded = async (authorizationHeader: string | null) => {
-    const token = extractAccessTokenFromHeader(authorizationHeader);
+
+    console.log("ㅇㅁㅇ리ㅏㅓauthorizationHeaderauthorizationHeader",authorizationHeader)
+    // const token = extractAccessTokenFromHeader(authorizationHeader);
+    const token = authorizationHeader
 
     if (!token) {
         console.error('액세스 토큰을 찾을 수 없습니다.');
@@ -43,9 +45,10 @@ export const checkTokenAndReissueIfNeeded = async (authorizationHeader: string |
     }
 
     const timeRemaining = getTokenRemainingTime(token);
+    console.log(timeRemaining)
 
     // 남은 시간이 5분 이하인 경우 (300초)
-    if (timeRemaining !== null && timeRemaining <= 300) {
+    if (timeRemaining !== null && timeRemaining <= 600) {
         console.log(`토큰 만료까지 ${timeRemaining}초 남았습니다. 토큰을 재발급합니다.`);
         await handleReissueToken();
     } else {

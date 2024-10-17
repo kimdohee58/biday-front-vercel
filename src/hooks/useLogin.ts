@@ -52,6 +52,7 @@ export const useLogin = () => {
                         // Redux store에 유저 정보를 저장
                         dispatch(saveUser({ user: userData, token:accessToken }));  // 유저 정보와 토큰을 Redux에 저장
 
+
                         // 유저 정보를 JWT로 만들어 userToken으로 js 쿠키에 저장.
                         const userPayload = {id: userData.id !!, name: userData.name !!,role};
                         //const userToken = createUserToken(userPayload);
@@ -76,6 +77,7 @@ export const useLogin = () => {
                             if (addresses) {
                                 addresses.forEach((address) => {
                                     dispatch(addAddress(address));  // 불러온 주소를 Redux에 저장
+                                    console.log("주소 저장 함수 탔습니다. ", address)
                                 });
                                 console.log("주소 정보 확인하는 코드 : " ,addresses)
                             }

@@ -1,31 +1,43 @@
-import {ProductModel} from "@/model/ProductModel";
+//src/lib/features/products.slice.ts
+import {initialProduct, ProductModel} from "@/model/product/product.model";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {RootState} from "@/lib/store";
 
-interface ProductsState {
+
+interface ProductState{
     products: ProductModel[];
+    product:ProductModel | null;
     loading: boolean;
+    error: string | null;
 }
 
-const initialState: ProductsState = {
+const initialState: ProductState = {
     products: [],
-    loading: false,
-}
+    product:null,
+    loading:false,
+    error:null,
+};
 
-const productsSlice = createSlice({
-    name: 'products',
+const productSlice = createSlice({
+    name:'product',
     initialState,
-    reducers: {
-        setProducts(state, action: PayloadAction<ProductModel[]>) {
+    reducers:{
+        setProducts: (state, action: PayloadAction<ProductModel[]>) => {
             state.products = action.payload;
         },
-        setLoading(state, action: PayloadAction<boolean>) {
+        setProduct:(state, action: PayloadAction<ProductModel>) => {
+            state.product = action.payload;
+        },
+        resetProduct: (state) => {
+            state.product = initialProduct;
+        },
+        setLoading:(state,action: PayloadAction<boolean>) => {
             state.loading = action.payload;
         },
+        setError:(state, action: PayloadAction<string | null>) => {
+            state.error = action.payload
+        }
     }
 })
 
-export const getProducts = (state: RootState) => state.products.products;
-
-export const {setProducts, setLoading} = productsSlice.actions;
-export default productsSlice.reducer;
+export const { setProducts, setProduct, resetProduct, setLoading, setError } = productSlice.actions;
+export default productSlice.reducer;

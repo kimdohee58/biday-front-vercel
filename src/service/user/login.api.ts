@@ -18,12 +18,6 @@ export const handleLogin = async (username: string, password: string): Promise<A
 
         if (response.status === 200) {
 
-            const authorizationHeader = response.headers["authorization"];
-            if (authorizationHeader) {
-                const accessToken = authorizationHeader.split(" ")[1]; // "Bearer {accessToken}" 형태로 전송되므로 'Bearer' 부분을 제거
-                saveToken(accessToken)
-            }
-
             return response;
         } else {
             throw new Error(response.statusText);
