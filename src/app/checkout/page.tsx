@@ -24,7 +24,7 @@ import {fetchAwardOne} from "@/service/auction/award.service";
 import {AddressModel} from "@/model/user/address.model";
 import {useSelector} from "react-redux";
 import {RootState} from "@/lib/store";
-import {initialUser} from "@/model/user/user.model";
+import {initialUser, UserModel} from "@/model/user/user.model";
 import {ImageType} from "@/model/ftp/image.model";
 import {fetchImageOne} from "@/service/ftp/image.service";
 import {getColor, getSizeById} from "@/utils/productUtils";
@@ -40,18 +40,22 @@ export default function CheckoutPage() {
     const award = useSuspenseQuery({queryKey: ["award", awardId], queryFn: () => fetchAwardOne(Number(awardId))});
     const productImage = useSuspenseQuery({queryKey: ["image", productId, ImageType.PRODUCT],
         queryFn: () => fetchImageOne(ImageType.PRODUCT, productId)});
-    const user = useSelector((state: RootState) => state.user.user || initialUser);
+    const user: UserModel = useSelector((state: RootState) => state.user.user || initialUser);
 
     if (!user) {
         return;
     }
 
-    const [phoneNum, setPhoneNum] = useState<string>(user.phoneNum || "");
+    const [phoneNum, setPhoneNum] = useState<string>(user.phone || "");
     const [email, setEmail] = useState<string>(user.email || "");
-    const [address, setAddress] = useState<AddressModel>();
-    const [name, setName] = useState<string>(user.name || "");
+    const addresses: AddressModel[] = user.addresses || [];
+    const [selectedAddressIndex, setSelectedAddressIndex] = useState<number>(0);
 
-    console.log(award);
+    const handleAddressChange = (index: number) => {
+        setSelectedAddressIndex(index);
+    };
+
+    const [name, setName] = useState<string>(user.name || "");
 
     const size = getSizeById(award.data.auction.sizeId, product.data.sizes);
     const color = getColor(product.data.name);
@@ -256,6 +260,7 @@ export default function CheckoutPage() {
                         }}
                         phoneNum={phoneNum}
                         email={email}
+                        name={name}
                         onSave={handleContactInfo}
 
                     />
@@ -272,17 +277,9 @@ export default function CheckoutPage() {
                             setTabActive("PaymentMethod");
                             handleScrollToEl("PaymentMethod");
                         }}
-                    />
-                </div>
-
-                <div id="PaymentMethod" className="scroll-mt-24">
-                    <PaymentMethod
-                        isActive={tabActive === "PaymentMethod"}
-                        onOpenActive={() => {
-                            setTabActive("PaymentMethod");
-                            handleScrollToEl("PaymentMethod");
-                        }}
-                        onCloseActive={() => setTabActive("PaymentMethod")}
+                        name={name}
+                        selectedAddress={addresses[selectedAddressIndex]}
+                        onAddressChange={handleAddressChange}
                     />
                 </div>
             </div>
@@ -359,15 +356,13 @@ export default function CheckoutPage() {
                                 <span>$276.00</span>
                             </div>
                         </div>
-                        <Suspense fallback={<div>loading...</div>}>
                             <ButtonPrimary onClick={handleClick}
                                            className="mt-8 w-full">
                                 Confirm order</ButtonPrimary>
                             <CustomModal isOpen={isModalOpen} onClose={handleCloseModal}>
                                 <Checkout value={amount} product={product.data.name} orderId={orderId}
-                                          customerKey={"66f68ebf2bd718301c69f1e5"}/>
+                                          customerKey={user.id}/>
                             </CustomModal>
-                        </Suspense>
 
                         <div
                             className="mt-5 text-sm text-slate-500 dark:text-slate-400 flex items-center justify-center">

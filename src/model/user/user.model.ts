@@ -1,4 +1,6 @@
 //src/model/user.model.ts
+import {AddressModel} from "@/model/user/address.model";
+
 export interface UserModel {
     id?: string;
     oauthName?: string;
@@ -14,20 +16,33 @@ export interface UserModel {
     role?: UserRole
 }
 
+export interface UserSlice {
+    id: string;
+    oauthName?: string;
+    name: string;
+    email: string;
+    phoneNum: string;
+    createdAt: Date;
+    updatedAt: Date;
+    status: string;
+    totalRating?: number;
+    role: UserRole
+    addresses: AddressModel[];
+}
+
 
 // initialUser 설정
-export const initialUser: UserModel = {
+export const initialUser: UserSlice = {
     id: '',
     oauthName: '',
     name: '',
     email: '',
-    password: '',
     phoneNum: '',
     createdAt: new Date(),
     updatedAt: new Date(),
     status: '',
     totalRating: 0,
-    newPassword:"",
+    addresses: [],
     role: {} as UserRole, // 기본값 설정 (필요 시)
 };
 
