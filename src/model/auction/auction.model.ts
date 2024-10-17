@@ -15,4 +15,18 @@ export interface AuctionModel {
     size:number,
     award:AwardModel,
 }
+
+export interface AwardAuctionModel {
+    id: number;
+    userId: string;
+    sizeId: number;
+    description: string;
+    startingBid: number;
+    currentBid: number;
+    startedAt: Date;
+    endedAt: Date;
+    status: boolean,
+    createdAt: Date;
+    updatedAt: Date;
+}
 //     award: {} as AwardModel, 여기서 이게 new 생성자이다. new AwardModel() x

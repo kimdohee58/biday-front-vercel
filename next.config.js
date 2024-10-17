@@ -7,19 +7,24 @@ const nextConfig = {
     images: {
         remotePatterns: [
             {
-                protocol: "https",  // 올바른 프로토콜 설정
+                protocol: "https",
                 hostname: "images.pexels.com",
                 port: "",
                 pathname: "/**",
             },
             {
-                protocol: "https",  // 올바른 프로토콜 설정
+                protocol: "https",
                 hostname: "images.unsplash.com",
                 port: "",
                 pathname: "/**",
             },
+            {
+                protocol: "https",
+                hostname: "kr.object.ncloudstorage.com",
+                port: "",
+                pathname: "/**",
+            },
         ],
-        domains: ["kr.object.ncloudstorage.com"]
     },
     webpack: (config) => {
         config.resolve.fallback = {

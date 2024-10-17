@@ -28,12 +28,14 @@ export async function fetchProducts(searchFilter: SearchFilter) {
 
 // 데이터 변환을 여기서 해야한다. 인수로 필요한 것을 받아서,
 // 서비스에서 데이터 변환을 자바 스프링을 서비스에서 했잖아. 변환을 똑같이 서비스를 여기에서 해야한다.
+
+
 export async function fetchProductOne(productId: string): Promise<ProductModel> {
 
     try {
         const options = {
             params: {
-                id: productId
+                productId: Number(productId)
             }
         }
 
@@ -58,7 +60,7 @@ export async function fetchProduct(productId: number): Promise<ProductModel[]> {
     try {
         const options = {
             params: {
-                id: productId,
+                productId: Number(productId),
             }
         };
 
@@ -87,7 +89,7 @@ export async function fetchProductDetails(id: number): Promise<{
 
         const options = {
             params: {
-                id: id,
+                productId: id,
             }
         };
 
