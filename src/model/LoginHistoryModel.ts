@@ -1,6 +1,6 @@
 //src/model/LoginHistoryModel.ts
 
-import {UserModel} from "@/model/UserModel";
+import {UserModel} from "@/model/user/user.model";
 
 export interface LoginHistoryModel {
     id?: number;

@@ -12,7 +12,8 @@ import Postcode from "@/components/Postcode"; // 주소 검색 컴포넌트
 import {RadioGroup, Radio, Stack} from "@chakra-ui/react";
 import NcModal from "@/shared/NcModal/NcModal";
 import {fetchAllAddressesByUserId, fetchDeleteAddress, fetchPickAddress} from "@/service/user/address.service";
-import {useUserContext} from "@/utils/userContext"; // fetchPickAddress 추가
+import {useUserContext} from "@/utils/userContext";
+import {getAddresses} from "@/lib/features/user.slice"; // fetchPickAddress 추가
 
 // 주소 유형 매핑 함수
 const mapAddressType = (type: string) => {
@@ -39,7 +40,9 @@ export default function AccountPage() {
     const [addresses, setAddresses] = useState<AddressModel[]>([]); // 주소 목록 상태 관리
     const [error, setError] = useState<string | null>(null); // 에러 상태 관리
 
-
+    // 리덕스에 있는 유저 주소 갖고오기
+    const reduxAddresses = useSelector((state: RootState) => getAddresses(state));
+    console.log("리덕스에 있는 주소 확인하는 코드 : " , reduxAddresses)
 
     const [formData, setFormData] = useState({
         addressId: "",
@@ -48,7 +51,6 @@ export default function AccountPage() {
         zipcode: "",
         addressType: "",  // 기본 주소 유형
     });
-    console.log("마이페이지 핸드폰 번호 있는지 확인하는 콘솔 : ",user.phoneNum)
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
 
     // 주소 검색 완료 후 처리하는 함수
@@ -60,7 +62,6 @@ export default function AccountPage() {
         });
         setIsModalOpen(false); // 주소 검색 완료 후 모달 닫기
     };
-
 
     // 주소 유형 변경 처리
     const handleAddressTypeChange = (value: string) => {
@@ -175,7 +176,7 @@ export default function AccountPage() {
                                     className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
                                     <i className="text-2xl las la-phone-volume"></i>
                                 </span>
-                                <Input className="!rounded-l-none" defaultValue={user.phone}/>
+                                <Input className="!rounded-l-none" defaultValue={user.phoneNum}/>
                             </div>
                         </div>
 
