@@ -25,7 +25,7 @@ const baseURL = process.env.NEXT_PUBLIC_API_SERVER_URL;
 const loginSocials = [
     {
         name: "onNaverLogin",
-        href : `${process.env.NEXT_PUBLIC_API_SERVER_URL}/oauth2/authorization/naver`,
+        href : `${axiosInstance.defaults.baseURL}/oauth2/authorization/naver`,  // axiosInstance의 baseURL을 사용
         icon: btnG_official,
         on: "handleNaver",
 

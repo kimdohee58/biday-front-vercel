@@ -7,10 +7,6 @@ import {UserToken} from "@/model/user/userToken";
 
 const baseUrl = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/addresses`;
 
-// 모든 주소 목록 불러오기 (토큰을 사용해서 해당 유저의 주소를 가져옴)
-let getUser = localStorage.getItem("userInfo");
-//console.log("겟유저 어드레스 에이피아이 ", getUser);
-
 export async function getAddressList(token: string): Promise<AddressModel[]> {
     const response = await fetch(`${baseUrl}/list`, {
         method: 'GET',
@@ -57,8 +53,6 @@ export async function insertAddress(userToken: UserToken, address: AddressModel)
     return response.json();
 }
 
-
-
 // 특정 주소 선택하기
 export async function pickAddress(token: string, addressId: number): Promise<string> {
     const response = await fetch(`${baseUrl}/pick?id=${String(addressId)}`, {
@@ -82,7 +76,6 @@ export async function deleteAddress(token: string, addressId: number): Promise<b
             Authorization: token,
         },
     });
-
     if (!response.ok) {
         throw new Error('주소 삭제 중 오류 발생');
     }
