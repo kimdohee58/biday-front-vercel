@@ -1,3 +1,4 @@
+
 //src/model/user.model.ts
 export interface UserModel {
     id?: string;

@@ -11,6 +11,7 @@ export interface UserState {
     token: string | null;
     userInfo : UserToken;
     addresses: AddressModel[];  // 주소 정보를 별도로 관리
+
 }
 
 const initialState: UserState = { // 초기 상태
@@ -30,7 +31,7 @@ const userSlice = createSlice({
             state.user = action.payload.user;  // 유저 정보 저장
             state.token = action.payload.token;  // 토큰 저장
         },
-        saveUserToken: (state, action: PayloadAction<{  userInfo:UserToken}>) => {
+        saveUserToken: (state, action: PayloadAction<{userInfo:UserToken}>) => {
             state.userInfo = action.payload.userInfo;
         },
         clearUser: (state) => {
@@ -50,6 +51,7 @@ const userSlice = createSlice({
         },
     },
 });
+
 
 // 액션과 셀렉터를 export
 export const {saveUser, clearUser, saveUserToken, addAddress, removeAddress, updatePickAddress} = userSlice.actions;
