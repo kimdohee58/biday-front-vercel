@@ -168,10 +168,15 @@ const TabFiltersProduct = ({
                             </svg>
 
                             <span className="ml-2">Brands</span>
-                            {!selectedBrands.length ? (
+                            {!tempSelectedBrands.length ? (
                                 <ChevronDownIcon className="w-4 h-4 ml-3"/>
                             ) : (
-                                <span onClick={() => setTempSelectedBrands([])}>{renderXClear()}</span>
+                                <span onClick={() => {
+                                    setTempSelectedBrands([]);
+                                    setTimeout(() => {
+                                        onFilterChange([], tempSelectedColors, tempSelectedSortOrder);
+                                    }, 0);
+                                }}>{renderXClear()}</span>
                             )}
                         </PopoverButton>
                         <Transition
@@ -193,7 +198,7 @@ const TabFiltersProduct = ({
                                                 <Checkbox
                                                     name={item.name}
                                                     label={item.name}
-                                                    defaultChecked={selectedBrands.includes(item.name)}
+                                                    defaultChecked={tempSelectedBrands.includes(item.name)}
                                                     onChange={(checked) =>
                                                         handleChangeBrands(checked, item.name)
                                                     }
@@ -295,10 +300,22 @@ const TabFiltersProduct = ({
                             </svg>
 
                             <span className="ml-2">Colors</span>
-                            {!selectedColors.length ? (
-                                <ChevronDownIcon className="w-4 h-4 ml-3"/>
+                            {/*{!selectedColors.length ? (*/}
+                            {/*    <ChevronDownIcon className="w-4 h-4 ml-3"/>*/}
+                            {/*) : (*/}
+                            {/*    <span onClick={() => setTempSelectedColors([])}>{renderXClear()}</span>*/}
+                            {/*)}*/}
+                            {tempSelectedColors.length ? (
+                                <span onClick={() => {
+                                    setTempSelectedColors([]);
+                                    setTimeout(() => {
+                                        onFilterChange(tempSelectedBrands, [], tempSelectedSortOrder);
+                                    }, 0);
+                                }}>
+                                {renderXClear()}
+                                </span>
                             ) : (
-                                <span onClick={() => setTempSelectedColors([])}>{renderXClear()}</span>
+                                <ChevronDownIcon className="w-4 h-4 ml-3"/>
                             )}
                         </PopoverButton>
                         <Transition
@@ -320,7 +337,7 @@ const TabFiltersProduct = ({
                                                 <Checkbox
                                                     name={item.name}
                                                     label={item.name}
-                                                    defaultChecked={selectedColors.includes(item.name)}
+                                                    defaultChecked={tempSelectedColors.includes(item.name)}
                                                     onChange={(checked) =>
                                                         handleChangeColors(checked, item.name)
                                                     }
