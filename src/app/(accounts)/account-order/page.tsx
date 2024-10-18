@@ -1,114 +1,184 @@
 "use client";
-import React, { useState } from "react";
-import Prices from "@/components/Prices";
-import { PRODUCTS } from "@/data/data";
+import React, { useState, useEffect } from "react";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
-import Image from "next/image";
-import { RootState } from "@/lib/store";
 import { useUserContext } from "@/utils/userContext";
+import { findByUserAuction } from "@/service/auction/auction.service";
+import { findByUserAward } from "@/service/auction/award.service";
+import { AuctionModel } from "@/model/auction/auction.model";
+import { AwardModel } from "@/model/auction/award.model";
 
+// HistoryType을 세분화
 enum HistoryType {
-    AUCTION = "AUCTION",
-    BID = "BID",
-    ORDER = "ORDER",
+    AUCTION = "AUCTION", // 경매 내역
+    AWARD = "AWARD",     // 낙찰 내역
+}
+
+enum AuctionSubType {
+    AUCTION_SELL = "AUCTION_SELL", // 판매 내역
+    AUCTION_BID = "AUCTION_BID",   // 입찰 내역
+}
+
+enum AwardSubType {
+    AWARD_AWARD = "AWARD_AWARD",  // 낙찰 내역
+    PAYMENT = "PAYMENT",          // 결제 내역
 }
 
 export default function AccountOrder() {
-    const [selectedHistory, setSelectedHistory] = useState<HistoryType>(
-        HistoryType.AUCTION
-    );
+    const [selectedHistory, setSelectedHistory] = useState<HistoryType | null>(null);
+    const [selectedAuctionSubType, setSelectedAuctionSubType] = useState<AuctionSubType | null>(null);
+    const [selectedAwardSubType, setSelectedAwardSubType] = useState<AwardSubType | null>(null);
+    const [auctionData, setAuctionData] = useState<AuctionModel[]>([]);
+    const [awardData, setAwardData] = useState<AwardModel[]>([]);
+    const [loading, setLoading] = useState(false);
+    const { user } = useUserContext();
 
-    const renderProductItem = (product: any, index: number) => {
-        const { image, name } = product;
-        const { user } = useUserContext();
+    // 경매 데이터를 가져오는 함수
+    const fetchAuctionData = async () => {
+        setLoading(true);
+        try {
+            const data = await findByUserAuction();
+            console.log("auctionData: ",data)
+            setAuctionData(data);
+        } catch (error) {
+            console.error("경매 데이터를 가져오는 중 오류가 발생했습니다.", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-        return (
-            <div key={index} className="flex py-4 sm:py-7 last:pb-0 first:pt-0">
-                <div className="relative h-24 w-16 sm:w-20 flex-shrink-0 overflow-hidden rounded-xl bg-slate-100">
-                    <Image
-                        fill
-                        sizes="100px"
-                        src={image}
-                        alt={name}
-                        className="h-full w-full object-cover object-center"
-                    />
-                </div>
+    // 낙찰 데이터를 가져오는 함수
+    const fetchAwardData = async () => {
+        setLoading(true);
+        try {
+            const data = await findByUserAward();
+            console.log("awardData: ",data)
+            setAwardData(data);
+        } catch (error) {
+            console.error("낙찰 데이터를 가져오는 중 오류가 발생했습니다.", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-                <div className="ml-4 flex flex-1 flex-col">
-                    <div>
-                        <div className="flex justify-between ">
-                            <div>
-                                <h3 className="text-base font-medium line-clamp-1">{name}</h3>
-                                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                                    <span>{"Natural"}</span>
-                                    <span className="mx-2 border-l border-slate-200 dark:border-slate-700 h-4"></span>
-                                    <span>{"XL"}</span>
-                                </p>
-                            </div>
-                            <Prices className="mt-0.5 ml-2" />
+    useEffect(() => {
+        if (selectedAuctionSubType) {
+            fetchAuctionData(); // 판매 내역 또는 입찰 내역 선택 시 경매 데이터를 가져오기
+        } else if (selectedAwardSubType) {
+            fetchAwardData(); // 낙찰 내역 또는 결제 내역 선택 시 낙찰 데이터를 가져오기
+        }
+    }, [selectedAuctionSubType, selectedAwardSubType]);
+
+    // 경매 내역 렌더링
+    const renderAuctionHistory = () => {
+        if (loading) {
+            return <div>Loading...</div>;
+        }
+
+        return auctionData.length > 0 ? (
+            auctionData.map((product, index) => (
+                <div key={index} className="flex py-4 sm:py-7 last:pb-0 first:pt-0">
+                    <div className="ml-4 flex flex-1 flex-col">
+                        <div>
+                            <h3 className="text-base font-medium">{product.id}</h3>
                         </div>
                     </div>
-                    <div className="flex flex-1 items-end justify-between text-sm">
-                        <p className="text-gray-500 dark:text-slate-400 flex items-center">
-                            <span className="hidden sm:inline-block">Qty</span>
-                            <span className="inline-block sm:hidden">x</span>
-                            <span className="ml-2">1</span>
-                        </p>
-
-                        <div className="flex">
-                            <button
-                                type="button"
-                                className="font-medium text-indigo-600 dark:text-primary-500 "
-                            >
-                                배송 추적
-                            </button>
-                        </div>
-
-                        <div className="flex">
-                            <button
-                                type="button"
-                                className="font-medium text-indigo-600 dark:text-primary-500 "
-                            >
-                                리뷰달기
-                            </button>
-                        </div>
-                    </div>
                 </div>
-            </div>
+            ))
+        ) : (
+            <p>내역이 없습니다.</p>
         );
     };
 
-    const renderHistoryContent = () => {
-        switch (selectedHistory) {
-            case HistoryType.AUCTION:
-                return (
-                    <div>
-                        <h2 className="text-2xl sm:text-3xl font-semibold">경매내역 확인</h2>
-                        <div className="border-t border-slate-200 dark:border-slate-700 p-2 sm:p-8 divide-y divide-y-slate-200 dark:divide-slate-700">
-                            {[PRODUCTS[0], PRODUCTS[1], PRODUCTS[2]].map(renderProductItem)}
+    // 낙찰 내역 렌더링
+    const renderAwardHistory = () => {
+        if (loading) {
+            return <div>Loading...</div>;
+        }
+
+        return awardData.length > 0 ? (
+            awardData.map((award, index) => (
+                <div key={index} className="flex py-4 sm:py-7 last:pb-0 first:pt-0">
+                    <div className="ml-4 flex flex-1 flex-col">
+                        <div>
+                            <h3 className="text-base font-medium">{award.id}</h3>
                         </div>
                     </div>
-                );
-            case HistoryType.BID:
-                return <h2 className="text-2xl sm:text-3xl font-semibold">입찰내역 확인</h2>;
-            case HistoryType.ORDER:
-                return <h2 className="text-2xl sm:text-3xl font-semibold">주문내역 확인</h2>;
-            default:
-                return null;
+                </div>
+            ))
+        ) : (
+            <p>내역이 없습니다.</p>
+        );
+    };
+
+    // 전체 내역 렌더링
+    const renderHistoryContent = () => {
+        if (selectedHistory === HistoryType.AUCTION) {
+            // 경매 내역 선택 시
+            return (
+                <div>
+                    <div className="flex space-x-4">
+                        <ButtonSecondary onClick={() => setSelectedAuctionSubType(AuctionSubType.AUCTION_SELL)}>
+                            판매 내역
+                        </ButtonSecondary>
+                        <ButtonSecondary onClick={() => setSelectedAuctionSubType(AuctionSubType.AUCTION_BID)}>
+                            입찰 내역
+                        </ButtonSecondary>
+                    </div>
+                    {selectedAuctionSubType === AuctionSubType.AUCTION_SELL && (
+                        <div>
+                            <h2 className="text-2xl sm:text-3xl font-semibold">판매 내역</h2>
+                            {renderAuctionHistory()}
+                        </div>
+                    )}
+                    {selectedAuctionSubType === AuctionSubType.AUCTION_BID && (
+                        <div>
+                            <h2 className="text-2xl sm:text-3xl font-semibold">입찰 내역</h2>
+                            {renderAuctionHistory()}
+                        </div>
+                    )}
+                </div>
+            );
         }
+
+        if (selectedHistory === HistoryType.AWARD) {
+            // 낙찰 내역 선택 시
+            return (
+                <div>
+                    <div className="flex space-x-4">
+                        <ButtonSecondary onClick={() => setSelectedAwardSubType(AwardSubType.AWARD_AWARD)}>
+                            낙찰 내역
+                        </ButtonSecondary>
+                        <ButtonSecondary onClick={() => setSelectedAwardSubType(AwardSubType.PAYMENT)}>
+                            결제 내역
+                        </ButtonSecondary>
+                    </div>
+                    {selectedAwardSubType === AwardSubType.AWARD_AWARD && (
+                        <div>
+                            <h2 className="text-2xl sm:text-3xl font-semibold">낙찰 내역</h2>
+                            {renderAwardHistory()}
+                        </div>
+                    )}
+                    {selectedAwardSubType === AwardSubType.PAYMENT && (
+                        <div>
+                            <h2 className="text-2xl sm:text-3xl font-semibold">결제 내역</h2>
+                            {renderAwardHistory()}
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        return null;
     };
 
     return (
         <div className="space-y-10 sm:space-y-12">
             <div className="flex space-x-4">
                 <ButtonSecondary onClick={() => setSelectedHistory(HistoryType.AUCTION)}>
-                    경매내역
+                    경매 내역
                 </ButtonSecondary>
-                <ButtonSecondary onClick={() => setSelectedHistory(HistoryType.BID)}>
-                    입찰내역
-                </ButtonSecondary>
-                <ButtonSecondary onClick={() => setSelectedHistory(HistoryType.ORDER)}>
-                    주문내역
+                <ButtonSecondary onClick={() => setSelectedHistory(HistoryType.AWARD)}>
+                    낙찰 내역
                 </ButtonSecondary>
             </div>
             {renderHistoryContent()}

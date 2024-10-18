@@ -8,10 +8,9 @@ export default function PageHome({params}: {params:{filter:string}}) {
     // 서버 사이드에서 Authorization 헤더 가져오기
     const cookieStore = cookies();
     const authorizationToken = cookieStore.get('token')?.value || '';
-
-    const searchFilter: SearchFilter = {
-        category:params.filter,
-    }
+    /*const searchFilter = { category: 'all' }; // 기본 카테고리 설정
+    const products = await fetchProducts(searchFilter); // 서버에서 상품 데이터를 미리 불러옴
+*/
 
     return (
         <div>

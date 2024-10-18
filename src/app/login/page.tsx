@@ -13,11 +13,12 @@ import btnG_official from "@/images/btnG_official.png";
 import axiosInstance from "@/app/api/axiosInstance/axiosInstance";
 import { useRouter } from 'next/navigation';
 import Cookies from "js-cookie";
-import { AuthorizationToken, saveToken } from "@/utils/cookie/cookie.api";
+import {AuthorizationToken, saveToken, saveUserTokenToCookie} from "@/utils/cookie/cookie.api";
 import { extractUserInfoFromToken } from "@/utils/jwt.utils";
 import { findUserById } from "@/service/user/user.api";
-import { saveUser } from "@/lib/features/user.slice";
+import {saveUser, saveUserToken} from "@/lib/features/user.slice";
 import { useDispatch } from 'react-redux';
+import {UserToken} from "@/model/user/userToken";
 
 const PageLogin = () => {
     const [email, setEmail] = useState<string>('');
@@ -55,12 +56,25 @@ const PageLogin = () => {
                         newPassword: user.newPassword || "",
                     };
 
-                    console.log("userData", userData);
                     dispatch(saveUser({ user: userData, token: authToken }));
-                    console.log("리덕스 퍼시스트 저장");
 
                     localStorage.setItem("userToken", JSON.stringify(userData));
-                    console.log("로컬스토리지 저장");
+
+                    if(user) {
+                        const userInfo: UserToken = {
+                            userId: user.id !!,
+                            userName: user.name !!,
+                            userRole: user.role !!,
+                        };
+                        dispatch(saveUserToken({userInfo}))
+
+                        localStorage.setItem("userToken", JSON.stringify(userInfo));
+
+                        saveUserTokenToCookie(userInfo); // 유저인포 === 유저토큰
+                    }
+
+
+
 
                     router.push('/');
                 }
