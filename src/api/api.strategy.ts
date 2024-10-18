@@ -9,7 +9,10 @@ type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | "PATCH" ;
 
 const apiRequest = async (url: string, method: HttpMethod, {params, data, headers, token, userToken, contentType, cache}: RequestOptions<any,any>) => {
     console.log("strategy 진입");
-    console.log("token", HTTPRequest(method, url));
+
+    if (userToken) {
+        console.log("token", HTTPRequest(userToken));
+    }
 
     const queryString = params ? `?${new URLSearchParams(params)}` : '';
 
@@ -18,7 +21,7 @@ const apiRequest = async (url: string, method: HttpMethod, {params, data, header
         headers: {
             'Content-Type': contentType || 'application/json',
             ...(token && {'Authorization': `Bearer ${token}`}),
-            ...(userToken && {'UserInfo': HTTPRequest(method,url)}),
+            ...(userToken && {'UserInfo': HTTPRequest(userToken)}),
             ...(headers || {}),
         },
         ...(cache && {cache: {cache}}),
