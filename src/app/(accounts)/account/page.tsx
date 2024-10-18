@@ -40,8 +40,8 @@ export default function AccountPage() {
     const [addresses, setAddresses] = useState<AddressModel[]>([]); // 주소 목록 상태 관리
     const [error, setError] = useState<string | null>(null); // 에러 상태 관리
 
-    const address = useSelector((state:RootState) => getAddresses(state))
-    console.log("마이페이지에 있는 주소 확인 하는 코드 : ", address);
+    const address = useSelector(getAddresses);
+    console.log("마이페이지에 있는 주소 확인 하는 코드 : 2222", address);
 
     saveUserTokenToCookie(userToken); // 유저인포 === 유저토큰
     console.log("유저토큰유저토큰유저토큰유저토큰유저토큰유저토큰유저토큰유저토큰유저토큰",saveUserTokenToCookie)
@@ -143,7 +143,7 @@ export default function AccountPage() {
 
     // useEffect로 주소 목록 로드
     useEffect(() => {
-        loadAddresses();
+        // loadAddresses();
     }, []);
 
     const [activeTab, setActiveTab] = useState<"order" | "bid" | "auction" | "win">("order");

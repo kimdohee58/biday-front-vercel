@@ -27,9 +27,6 @@ import {fetchImageOne} from "@/service/ftp/image.service";
 import {getColor, getSizeById} from "@/utils/productUtils";
 import {Alert} from "@/shared/Alert/Alert";
 import {getAddresses, getUser} from "@/lib/features/user.slice";
-import {getAccount} from "@/service/user/account.service";
-import {fetchAllAddressesByUserId} from "@/service/user/address.service";
-import {UserModel} from "@/model/user/user.model";
 
 /**
  *
@@ -57,6 +54,7 @@ export default function CheckoutPage() {
     const user = useSelector(getUser);
     const addresses = useSelector(getAddresses);
 
+    console.log("award", award);
 
     if (!user) {
         router.push("/login");
@@ -106,6 +104,7 @@ export default function CheckoutPage() {
     const [name, setName] = useState<string>(user.name || "");
 
     const size = getSizeById(award.data.auction.sizeId, product.data.sizes);
+
     const color = getColor(product.data.name);
 
     const amount = award.data.currentBid;
@@ -277,6 +276,7 @@ export default function CheckoutPage() {
         mutation.mutate(temp);
         setIsModalOpen(true);
 
+
     };
 
     const handleScrollToEl = (id: string) => {
@@ -412,7 +412,7 @@ export default function CheckoutPage() {
                             결제하기</ButtonPrimary>
                         <CustomModal isOpen={isModalOpen} onClose={handleCloseModal}>
                             <Checkout value={amount} product={product.data.name} orderId={orderId}
-                                      customerKey={user.id}/>
+                                      customerKey={user.id!}/>
                         </CustomModal>
 
                         <div

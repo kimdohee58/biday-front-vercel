@@ -26,10 +26,8 @@ export const saveToken = (token: string) => {
         return;
     }
 
-    const tenSecondsLater = new Date(new Date().getTime() + 1000 * 1000); // 현재 시간에서 10초 더한 시간
-
     Cookies.set('token', token, {
-        expires: tenSecondsLater,
+        expires: 7,
         path: '/',
         secure: false, // 로컬 테스트 시 false
         sameSite: 'Lax', // 필요에 따라 조정
