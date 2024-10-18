@@ -23,7 +23,6 @@ const mapAddressType = (type: string) => {
         case "WORK":
             return "회사";
         case "OTHER":
-        default:
             return "기본";
     }
 };
@@ -83,8 +82,6 @@ export default function AccountPage() {
             type: formData.addressType,
             pick: false,
             email: user.email || "",  // Redux에서 유저 이메일 가져오기
-            address1: formData.selectedAddress || "", // 어드레스 1, 2 지워도 되는데 이거 지우면 에러가 나와
-            address2: formData.addressDetail || "", //
         };
 
         try {

@@ -76,6 +76,7 @@ export const useLogin = () => {
                             if (addresses) {
                                 addresses.forEach((address) => {
                                     dispatch(addAddress(address));  // 불러온 주소를 Redux에 저장
+                                    console.log("주소 저장 함수 탔음",address);
                                 });
                                 console.log("주소 정보 확인하는 코드 : " ,addresses)
                             }

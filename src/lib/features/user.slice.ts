@@ -11,12 +11,11 @@ export interface UserState {
     token: string | null;
     userInfo : UserToken;
     addresses: AddressModel[];  // 주소 정보를 별도로 관리
-
 }
 
 const initialState: UserState = { // 초기 상태
     user: initialUser,
-    token:null,
+    token: null,
     userInfo: initialUserToken,
     addresses: [], // 주소 초기 값 설정
 };
@@ -40,7 +39,10 @@ const userSlice = createSlice({
             state.userInfo = initialUserToken; // 유저토큰초기화
         },
         addAddress: (state, action: PayloadAction<AddressModel>) => {
-            state.addresses.push(action.payload);  // 새로운 주소 추가
+            // 주소 배열에 새 주소 추가
+            if (state.addresses) {
+                state.addresses.push(action.payload);
+            }
         },
         removeAddress: (state, action: PayloadAction<string>) => {
             state.addresses = state.addresses.filter(address => address.id !== action.payload);  // 특정 주소 삭제

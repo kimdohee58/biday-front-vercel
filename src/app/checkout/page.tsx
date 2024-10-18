@@ -1,9 +1,7 @@
 "use client";
 
 import Label from "@/components/Label/Label";
-import NcInputNumber from "@/components/NcInputNumber";
 import Prices from "@/components/Prices";
-import {Product, PRODUCTS} from "@/data/data";
 import React, {Suspense, useEffect, useState} from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import Input from "@/shared/Input/Input";
@@ -28,7 +26,23 @@ import {ImageType} from "@/model/ftp/image.model";
 import {fetchImageOne} from "@/service/ftp/image.service";
 import {getColor, getSizeById} from "@/utils/productUtils";
 import {Alert} from "@/shared/Alert/Alert";
-import {getAddresses, getUser} from "@/lib/features/user.slice";
+import {getUser} from "@/lib/features/user.slice";
+import {getAccount} from "@/service/user/account.service";
+import {fetchAllAddressesByUserId} from "@/service/user/address.service";
+import {UserModel} from "@/model/user/user.model";
+
+/**
+ *
+ * 프로덕트와 award 통합하기
+ * (가지고오는 product와 award가 일치하는지 확인하거나 award를 통해서 product 불러오기)
+ */
+type ShippingProps = {
+    shipper: string;
+    recipient: string;
+    address: AddressModel;
+}
+
+type RequiredSome<T, K extends keyof T> = Required<Pick<T, K>> & Omit<T, K>;
 
 export default function CheckoutPage() {
     const router = useRouter();
@@ -41,19 +55,51 @@ export default function CheckoutPage() {
     const productImage = useSuspenseQuery({queryKey: ["image", productId, ImageType.PRODUCT],
         queryFn: () => fetchImageOne(ImageType.PRODUCT, productId)});
     const user = useSelector(getUser);
+    const addresses = useSuspenseQuery({queryKey: ["addresses", user.id], queryFn: fetchAllAddressesByUserId});
 
     if (!user) {
-        return;
+        router.push("/login");
     }
 
+    const [selectedAddressIndex, setSelectedAddressIndex] = useState<number>(0);
+    const [address, setAddress] = useState<AddressModel>(addresses.data[selectedAddressIndex]);
     const [phoneNum, setPhoneNum] = useState<string>(user.phoneNum || "");
     const [email, setEmail] = useState<string>(user.email || "");
-    const addresses: AddressModel[] = useSelector(getAddresses);
-    console.log("addresses", addresses);
-    const [selectedAddressIndex, setSelectedAddressIndex] = useState<number>(0);
+    const [shipper, setShipper] = useState<string>(user.name || "");
+    const [recipient, setRecipient] = useState<string>(user.name || "");
 
-    const handleAddressChange = (index: number) => {
+    const handleAddressIndexChange = (index: number) => {
         setSelectedAddressIndex(index);
+    };
+
+    const handleAddressChange = (address: AddressModel) => {
+        // setAddress();
+    };
+
+    const handlePhoneNumChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPhoneNum(e.target.value);
+    };
+
+    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setEmail(e.target.value);
+    };
+
+    const handleShipperChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setShipper(e.target.value);
+    };
+
+    const handleRecipientChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setRecipient(e.target.value);
+    }
+
+
+
+
+    const onClickPaymentButton = ({shipper, recipient, address}: ShippingProps) => {
+        // shipper 용
+        setShipper(shipper);
+        setRecipient(recipient);
+        setAddress(address);
     };
 
     const [name, setName] = useState<string>(user.name || "");
@@ -64,7 +110,6 @@ export default function CheckoutPage() {
     const amount = award.data.currentBid;
 
     const RenderProduct = () => {
-
         return (
             <div key={product.data.id} className="relative flex py-7 first:pt-0 last:pb-0">
                 <div className="relative h-36 w-24 sm:w-28 flex-shrink-0 overflow-hidden rounded-xl bg-slate-100">
@@ -241,6 +286,7 @@ export default function CheckoutPage() {
     };
 
     const handleContactInfo = (newPhoneNum: string, newEmail: string) => {
+        // contact info 용
         setPhoneNum(newPhoneNum)
         setEmail(newEmail);
     };
@@ -278,9 +324,12 @@ export default function CheckoutPage() {
                             setTabActive("PaymentMethod");
                             handleScrollToEl("PaymentMethod");
                         }}
-                        name={name}
-                        selectedAddress={addresses[selectedAddressIndex]}
-                        onAddressChange={handleAddressChange}
+                        shipper={shipper}
+                        recipient={recipient}
+                        selectedAddress={address}
+                        onAddressChange={handleAddressIndexChange}
+                        handleShipperChange={handleShipperChange}
+                        handleRecipientChange={handleRecipientChange}
                     />
                 </div>
             </div>
@@ -317,7 +366,7 @@ export default function CheckoutPage() {
                     <div className="w-full lg:w-[36%] ">
                         <h3 className="text-lg font-semibold">Order summary</h3>
                         <div className="mt-8 divide-y divide-slate-200/70 dark:divide-slate-700 ">
-                                <RenderProduct/>
+                            <RenderProduct/>
                         </div>
 
                         <div
@@ -334,36 +383,36 @@ export default function CheckoutPage() {
                             </div>
 
                             <div className="mt-4 flex justify-between py-2.5">
-                                <span>Subtotal</span>
+                                <span>낙찰금액</span>
                                 <span className="font-semibold text-slate-900 dark:text-slate-200">
-                  $249.00
+                  ₩{award.data.currentBid.toLocaleString()}
                 </span>
                             </div>
                             <div className="flex justify-between py-2.5">
-                                <span>Shipping estimate</span>
+                                <span>수수료 (판매자부담)</span>
                                 <span className="font-semibold text-slate-900 dark:text-slate-200">
-                  $5.00
+                  ₩10,000
                 </span>
                             </div>
                             <div className="flex justify-between py-2.5">
-                                <span>Tax estimate</span>
+                                <span>부가세</span>
                                 <span className="font-semibold text-slate-900 dark:text-slate-200">
-                  $24.90
+                  ₩{Math.round(award.data.currentBid - (award.data.currentBid / 1.1)).toLocaleString()}
                 </span>
                             </div>
                             <div
                                 className="flex justify-between font-semibold text-slate-900 dark:text-slate-200 text-base pt-4">
-                                <span>Order total</span>
-                                <span>$276.00</span>
+                                <span>총 결제액</span>
+                                <span> ₩{award.data.currentBid.toLocaleString()}</span>
                             </div>
                         </div>
-                            <ButtonPrimary onClick={handleClick}
-                                           className="mt-8 w-full">
-                                Confirm order</ButtonPrimary>
-                            <CustomModal isOpen={isModalOpen} onClose={handleCloseModal}>
-                                <Checkout value={amount} product={product.data.name} orderId={orderId}
-                                          customerKey={user.id}/>
-                            </CustomModal>
+                        <ButtonPrimary onClick={handleClick}
+                                       className="mt-8 w-full focus:outline-none focus:ring-4 focus:ring-white-500 focus:ring-opacity-50">
+                            결제하기</ButtonPrimary>
+                        <CustomModal isOpen={isModalOpen} onClose={handleCloseModal}>
+                            <Checkout value={amount} product={product.data.name} orderId={orderId}
+                                      customerKey={user.id}/>
+                        </CustomModal>
 
                         <div
                             className="mt-5 text-sm text-slate-500 dark:text-slate-400 flex items-center justify-center">

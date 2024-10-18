@@ -7,7 +7,7 @@ import {UserInfo} from "@/model/user/userInfo.model";
 import {RequestOptions} from "@/model/api/RequestOptions";
 
 // 계좌 조회 (GET 요청)
-const findById = async (options: RequestOptions<null>): Promise<AccountModel> => {
+const findById = async (options: RequestOptions<any,null>): Promise<AccountModel> => {
 
     return  await strategy.GET(`${api.account}`, options);
 

@@ -1,5 +1,10 @@
 
-//src/model/user.model.ts
+//src/model/user/user.model.ts
+
+/**
+ * TODO UserModel 자체를 Optional 로 만들지 말고, 로그인에서만 Optional 사용해서 UserModel 사용하세요
+ */
+
 export interface UserModel {
     id?: string;
     oauthName?: string;
@@ -13,7 +18,6 @@ export interface UserModel {
     totalRating?: number;
     newPassword?:string;
     role?: UserRole
-    phone?:string
 }
 
 
@@ -31,7 +35,6 @@ export const initialUser: UserModel = {
     totalRating: 0,
     newPassword:"",
     role: {} as UserRole, // 기본값 설정 (필요 시)
-    phone:"",
 };
 
 export enum UserRole {
