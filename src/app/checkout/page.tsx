@@ -26,7 +26,7 @@ import {ImageType} from "@/model/ftp/image.model";
 import {fetchImageOne} from "@/service/ftp/image.service";
 import {getColor, getSizeById} from "@/utils/productUtils";
 import {Alert} from "@/shared/Alert/Alert";
-import {getUser} from "@/lib/features/user.slice";
+import {getAddresses, getUser} from "@/lib/features/user.slice";
 import {getAccount} from "@/service/user/account.service";
 import {fetchAllAddressesByUserId} from "@/service/user/address.service";
 import {UserModel} from "@/model/user/user.model";
@@ -55,14 +55,15 @@ export default function CheckoutPage() {
     const productImage = useSuspenseQuery({queryKey: ["image", productId, ImageType.PRODUCT],
         queryFn: () => fetchImageOne(ImageType.PRODUCT, productId)});
     const user = useSelector(getUser);
-    const addresses = useSuspenseQuery({queryKey: ["addresses", user.id], queryFn: fetchAllAddressesByUserId});
+    const addresses = useSelector(getAddresses);
+
 
     if (!user) {
         router.push("/login");
     }
 
     const [selectedAddressIndex, setSelectedAddressIndex] = useState<number>(0);
-    const [address, setAddress] = useState<AddressModel>(addresses.data[selectedAddressIndex]);
+    const [address, setAddress] = useState<AddressModel>(addresses[selectedAddressIndex]);
     const [phoneNum, setPhoneNum] = useState<string>(user.phoneNum || "");
     const [email, setEmail] = useState<string>(user.email || "");
     const [shipper, setShipper] = useState<string>(user.name || "");
