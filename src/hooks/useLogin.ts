@@ -6,7 +6,7 @@ import {addAddress, saveUser, saveUserToken, UserState} from '@/lib/features/use
 import { handleLogin } from '@/service/user/login.api';
 import {findUserById} from "@/service/user/user.api";
 import {initialUser, UserModel} from "@/model/user/user.model";  // API 호출을 임포트
-import {createUserToken, extractUserInfoFromToken} from '@/utils/jwt.utils';
+import {extractUserInfoFromToken} from '@/utils/jwt.utils';
 import {saveToken, saveUserTokenToCookie} from "@/utils/cookie/cookie.api";
 import {UserToken} from "@/model/user/userToken";
 import {useUserContext} from "@/utils/userContext"
@@ -52,11 +52,6 @@ export const useLogin = () => {
                         // Redux store에 유저 정보를 저장
                         dispatch(saveUser({ user: userData, token:accessToken }));  // 유저 정보와 토큰을 Redux에 저장
 
-
-                        // 유저 정보를 JWT로 만들어 userToken으로 js 쿠키에 저장.
-                        const userPayload = {id: userData.id !!, name: userData.name !!,role};
-                        //const userToken = createUserToken(userPayload);
-
                         // 백엔드 헤더에 보낼 유저객체 userToken
                         if(user) {
                             const userInfo: UserToken = {
@@ -77,9 +72,9 @@ export const useLogin = () => {
                             if (addresses) {
                                 addresses.forEach((address) => {
                                     dispatch(addAddress(address));  // 불러온 주소를 Redux에 저장
-                                    console.log("주소 저장 함수 탔습니다. ", address)
+                                   // console.log("주소 저장 함수 탔습니다. ", address)
                                 });
-                                console.log("주소 정보 확인하는 코드 : " ,addresses)
+                                //console.log("주소 정보 확인하는 코드 : " ,addresses)
                             }
                         }
                     }

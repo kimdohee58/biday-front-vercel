@@ -28,7 +28,6 @@ axiosInstance.interceptors.request.use(
 );
 
 
-
 axiosInstance.interceptors.response.use(
     async (response) => {
         if (response.config.url === '/reissue' && response.status === 200) {
@@ -36,7 +35,7 @@ axiosInstance.interceptors.response.use(
             const location = response.headers['location'];
             if (location) {
                 try {
-                    const redirectResponse = await axios.get(location, { withCredentials: true });
+                    const redirectResponse = await axios.get(location, {withCredentials: true});
                     const authorizationHeader = redirectResponse.headers['authorization'];
 
                     if (authorizationHeader) {
@@ -44,9 +43,9 @@ axiosInstance.interceptors.response.use(
                         saveToken(accessToken);
                         console.log("로그인 후 저장된 액세스 토큰:", accessToken);
                     } else {
+                        await handleReissueToken();
                         console.error('Authorization 헤더가 없습니다.');
                     }
-
                     return redirectResponse;
                 } catch (error) {
                     console.error('리다이렉트 요청 중 오류 발생:', error);
@@ -63,11 +62,10 @@ axiosInstance.interceptors.response.use(
 );
 
 
-
 axiosInstance.interceptors.response.use(
     async (response) => {
         // 로그인 요청에 대한 응답 처리
-        if (response.config.url === '/login' && response.status === 200 ) {
+        if (response.config.url === '/login' && response.status === 200) {
             const authorizationHeader = response.headers['authorization'];
             if (authorizationHeader) {
                 const accessToken = authorizationHeader.split(' ')[1];
@@ -75,7 +73,7 @@ axiosInstance.interceptors.response.use(
                 saveToken(accessToken);
                 console.log("로그인 후 저장된 액세스 토큰:", accessToken);
                 const access = Cookies.get('token');
-                console.log("access",access)
+                console.log("access", access)
                 const remainingTime = getTokenRemainingTime(access);
                 console.log("엑시오스 remainingTime: ", remainingTime);
 
@@ -114,7 +112,6 @@ axiosInstance.interceptors.response.use(
 
 // 요청 인터셉터 설정 (쿠키에서 토큰 가져오기)
 axiosInstance.interceptors.response.use(
-
     (response) => response,
     async (error) => {
         console.log("Axios Error Details:", error.response); // 에러 세부 정보 출력
