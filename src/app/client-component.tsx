@@ -4,9 +4,9 @@ import React, {useEffect, useState} from "react";
 import {fetchAllProducts} from "@/service/product/product.service";
 import {ProductModel} from "@/model/ProductModel";
 import {AuthorizationToken, getCookie, saveToken} from "@/utils/cookie/cookie.api";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {extractUserInfoFromToken} from "@/utils/jwt.utils";
-import {saveUser} from "@/lib/features/user.slice";
+import {getAddresses, getUser, saveUser} from "@/lib/features/user.slice";
 import {findUserById} from "@/service/user/user.api";
 import TabFilters from "@/components/TabFilters";
 import ProductCard from "@/components/ProductCard";
@@ -180,7 +180,7 @@ export default function ClientComponent({authorizationToken}: ClientComponentPro
                     </div>
 
                     <div className="mt-10">
-                    <div className="space-y-10 lg:space-y-14">
+                        <div className="space-y-10 lg:space-y-14">
                             HEADING
                             <div className="flex justify-between items-center w-full">
                                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold">

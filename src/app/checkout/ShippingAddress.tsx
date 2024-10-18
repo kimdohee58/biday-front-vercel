@@ -35,7 +35,6 @@ const ShippingAddress: FC<Props> = ({
                                         handleRecipientChange,
                                         shipper,
                                         handleShipperChange,
-                                        hadnleRecipientChange
                                     }) => {
         const renderShippingAddress = () => {
             return (

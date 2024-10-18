@@ -17,7 +17,7 @@ import {
 import {AccountModel, BankCode} from "@/model/user/account.model";
 import {useMutation, useQuery} from "@tanstack/react-query";
 import useRandomId from "@/hooks/useRandomId";
-import {getAccount, saveAccount} from "@/service/account/account.api";
+import {getAccount, saveAccount} from "@/service/account/account.service";
 import {ApiError} from "@/utils/error";
 import { cookies } from "next/headers";
 

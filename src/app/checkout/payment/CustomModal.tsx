@@ -1,4 +1,6 @@
-import { useState } from 'react';
+"use client";
+
+
 
 interface ModalProps {
     isOpen: boolean;
@@ -8,6 +10,7 @@ interface ModalProps {
 
 const CustomModal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
     if (!isOpen) return null;
+
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">

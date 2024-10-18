@@ -14,6 +14,7 @@ export async function fetchAwardOne (awardId: number): Promise<AwardModel> {
         params : {awardId: awardId},
         userToken: userToken,
     };
+    console.log("userToken", JSON.parse(userToken));
 
     try {
 

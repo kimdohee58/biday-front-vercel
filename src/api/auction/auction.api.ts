@@ -1,4 +1,4 @@
-import {AuctionModel} from "@/model/AuctionModel";
+import {AuctionModel} from "@/model/auction/auction.model";
 import {api} from "../request";
 import {strategy} from "../api.strategy";
 import {RequestOptions} from "@/model/api/RequestOptions";

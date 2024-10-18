@@ -99,7 +99,7 @@ export default function Checkout({value, product, orderId, customerKey}: {value:
                         }
                     }}
                 >
-                    결제하기
+                    야이새끼야
                 </button>
             </div>
         </div>
