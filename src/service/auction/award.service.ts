@@ -1,6 +1,8 @@
 import {awardAPI} from "@/api/auction/award.api";
 import Cookies from "js-cookie";
 import {AwardModel} from "@/model/auction/award.model";
+import {AuctionModel} from "@/model/auction/auction.model";
+import {auctionAPI} from "@/api/auction/auction.api";
 
 // awardId: number
 export async function fetchAwardOne (awardId: number): Promise<AwardModel> {
@@ -28,5 +30,35 @@ export async function fetchAwardOne (awardId: number): Promise<AwardModel> {
     } catch (error) {
         console.log("fetchAwardOne 도중 오류 발생", error);
         throw new Error("fetchAwardOne  도중 오류 발생");
+    }
+}
+
+export async function findByUserAward(): Promise<AwardModel[]> {
+    try {
+        // 쿠키에서 userToken 가져오기
+        const userToken = Cookies.get('userToken')
+
+        if (!userToken) {
+            throw new Error("userToken 갖고 올 수 없습니다.")
+        }
+
+        const options = {
+            userToken : userToken, // 쿠키에서 가져온 userToken을 사용
+            params: {}
+        };
+
+        // findByUser API 호출
+        const awardArray: AwardModel[] = await awardAPI.findByUser(options);
+
+
+
+        if (awardArray.length === 0) {
+            console.log("낙찰 내역을 찾을 수 없습니다.");
+            return [];
+        }
+        return awardArray;
+    } catch (error) {
+        console.error("findByUserAward 에러 발생", error);
+        throw new Error("낙찰 내역을 가져오는 중 에러가 발생했습니다.");
     }
 }

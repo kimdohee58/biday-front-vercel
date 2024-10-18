@@ -1,4 +1,4 @@
-//src/lib/features/products.slice.ts
+//src/lib/features/products.slice.tsㅋ
 import {initialProduct, ProductModel} from "@/model/product/product.model";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 

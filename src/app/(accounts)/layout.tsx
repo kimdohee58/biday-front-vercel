@@ -24,7 +24,7 @@ const pages: {
         link: "/account-savelists",
     },
     {
-        name: "경매 내역",
+        name: "거래 내역",
         link: "/account-order",
     },
     {
