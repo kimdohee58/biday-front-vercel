@@ -11,7 +11,6 @@ export interface AddressModel {
 
     pick: boolean;
     email: string;
-
 }
 
 // 주소 초기값 설정

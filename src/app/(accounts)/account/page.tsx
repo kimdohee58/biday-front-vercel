@@ -24,7 +24,6 @@ const mapAddressType = (type: string) => {
         case "WORK":
             return "회사";
         case "OTHER":
-        default:
             return "기본";
     }
 };

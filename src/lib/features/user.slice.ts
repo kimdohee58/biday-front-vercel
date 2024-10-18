@@ -11,12 +11,11 @@ export interface UserState {
     token: string | null;
     userInfo : UserToken;
     addresses: AddressModel[];  // 주소 정보를 별도로 관리
-
 }
 
 const initialState: UserState = { // 초기 상태
     user: initialUser,
-    token:null,
+    token: null,
     userInfo: initialUserToken,
     addresses: [], // 주소 초기 값 설정
 };
