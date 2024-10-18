@@ -127,7 +127,7 @@ export async function fetchImageOne(type: ImageType, id: string) {
 
         const data: ImageModel = await response.json();
 
-        console.log("fetchImageFromClient 이미지 확인: ", data);
+        // console.log("fetchImageFromClient 이미지 확인: ", data);
 
 
         return data;

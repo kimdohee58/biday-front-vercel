@@ -18,7 +18,7 @@ import {Suspense} from "react";
 import {PhotoPlaceholderSkeleton} from "@/components/skeleton/PhotoPlaceholderSkeleton";
 import {AuctionModel} from "@/model/auction/auction.model"
 
-async function RenderImage({id}: { id: string}) {
+async function RenderImage({id}: { id: string }) {
 
     const productImageArray = await fetchImage(ImageType.PRODUCT, id);
 
@@ -29,15 +29,16 @@ async function RenderImage({id}: { id: string}) {
             <Image
                 fill
                 sizes="(max-width: 640px) 100vw, 33vw"
-                src={productImage? `${productImage.uploadUrl}` : "/error.jpg"}
+                src={productImage ? `${productImage.uploadUrl}` : "/error.jpg"}
                 className="w-full rounded-2xl object-cover"
                 alt={"test"}
-                />
+            />
         </div>
     );
 }
 
 export default async function ProductDetailPage({params}: { params: { id: string } }) {
+console.log("product/{id}", params.id)
 
     const {colorIds, product, size, auctions} = await fetchProductDetails(Number(params.id));
 
@@ -224,7 +225,7 @@ export default async function ProductDetailPage({params}: { params: { id: string
             <div className="">
                 <h2 className="text-2xl font-semibold">Product Details</h2>
                 <div className="prose prose-sm sm:prose dark:prose-invert sm:max-w-4xl mt-7">
-                    {product.description}
+                    <p dangerouslySetInnerHTML={{__html: product.description.replace(/\\n/g, '<br/>')}}/>
                 </div>
             </div>
         );

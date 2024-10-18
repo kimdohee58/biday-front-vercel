@@ -3,8 +3,8 @@ import Label from "@/components/Label/Label";
 import React, {useEffect, useState} from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import Input from "@/shared/Input/Input";
-import {RootState} from "@/lib/store";
-import {useSelector} from "react-redux";
+import {AppDispatch, RootState} from "@/lib/store";
+import {useDispatch, useSelector} from "react-redux";
 import {initialUser} from "@/model/user/user.model";
 import {AddressModel} from "@/model/user/address.model";
 import {insertAddress} from "@/service/user/address.api";
@@ -12,8 +12,9 @@ import Postcode from "@/components/Postcode"; // 주소 검색 컴포넌트
 import {RadioGroup, Radio, Stack} from "@chakra-ui/react";
 import NcModal from "@/shared/NcModal/NcModal";
 import {fetchAllAddressesByUserId, fetchDeleteAddress, fetchPickAddress} from "@/service/user/address.service";
-import {useUserContext} from "@/utils/userContext";
-import {getAddresses} from "@/lib/features/user.slice"; // fetchPickAddress 추가
+import OrderList from "@/components/OrderList";
+import {getAddresses} from "@/lib/features/user.slice";
+import {saveUserTokenToCookie} from "@/utils/cookie/cookie.api";
 
 // 주소 유형 매핑 함수
 const mapAddressType = (type: string) => {
@@ -38,14 +39,12 @@ export default function AccountPage() {
     const [showDropdown, setShowDropdown] = useState(false);
     const [addresses, setAddresses] = useState<AddressModel[]>([]); // 주소 목록 상태 관리
     const [error, setError] = useState<string | null>(null); // 에러 상태 관리
-    const reduxAddresses1 = useSelector(getAddresses);
 
-    // 리덕스에 있는 유저 주소 갖고오기
-    const reduxAddresses = useSelector((state: RootState) => getAddresses(state));
-    console.log("리덕스에 있는 주소 확인하는 코드1111111111 : " , reduxAddresses1)
-    console.log("리덕스에 있는 주소 확인하는 코드 : " , reduxAddresses)
-    const rdeux111 = useSelector(getAddresses);
-    console.log("FLEJRTM리덕스,ㅇㅁㅇㄴ러ㅏㅣ",rdeux111)
+    const address = useSelector((state:RootState) => getAddresses(state))
+    console.log("마이페이지에 있는 주소 확인 하는 코드 : ", address);
+
+    saveUserTokenToCookie(userToken); // 유저인포 === 유저토큰
+    console.log("유저토큰유저토큰유저토큰유저토큰유저토큰유저토큰유저토큰유저토큰유저토큰",saveUserTokenToCookie)
 
     const [formData, setFormData] = useState({
         addressId: "",
@@ -54,6 +53,7 @@ export default function AccountPage() {
         zipcode: "",
         addressType: "",  // 기본 주소 유형
     });
+   
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
 
     // 주소 검색 완료 후 처리하는 함수
@@ -145,6 +145,18 @@ export default function AccountPage() {
     useEffect(() => {
         loadAddresses();
     }, []);
+
+    const [activeTab, setActiveTab] = useState<"order" | "bid" | "auction" | "win">("order");
+
+    const renderContent = () => {
+        switch (activeTab) {
+            case "order":
+                return <OrderList />;
+
+        }
+    };
+
+
     return (
         <div className={`nc-AccountPage`}>
             <div className="space-y-10 sm:space-y-12">

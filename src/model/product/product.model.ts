@@ -1,3 +1,4 @@
+//src/model/prodcut/prodcut.model.ts
 import {SizeModel} from "@/model/product/size.model";
 
 export interface ProductModel {

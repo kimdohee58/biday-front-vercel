@@ -27,6 +27,7 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         saveUser: (state, action: PayloadAction<{ user: UserModel, token: string }>) => {
+            console.log("유저슬라이스 유저정보 리덕스에 저장 : " , saveUser)
             state.user = action.payload.user;  // 유저 정보 저장
             state.token = action.payload.token;  // 토큰 저장
         },

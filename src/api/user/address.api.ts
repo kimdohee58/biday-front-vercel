@@ -27,11 +27,6 @@ const deleteAddressById = async (options:RequestOptions<{id:string},null>): Prom
     return response;
 };
 
-// const deleteAddressById = async (options: RequestOptions<{ id: string }, null>): Promise<void> => {
-//     const id = options?.params?.id;
-//     await strategy.DELETE(`${api.address}/deleteById?id=${id}`, options);
-// };
-// 주소 등록 (POST 요청)
 const insertAddress = async (options: RequestOptions<{}, AddressModel>): Promise<AddressModel> => {
     const response = await strategy.POST(`${api.address}/insert`, options)
     return response;
