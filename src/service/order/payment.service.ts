@@ -4,6 +4,7 @@ import {PaymentTempModel} from "@/model/order/paymentTemp.model";
 import {RequestOptions} from "@/model/api/RequestOptions";
 import {productAPI} from "@/api/product/product.api";
 import {awardAPI} from "@/api/auction/award.api";
+import {PaymentConfirmModel} from "@/model/order/paymentConfirm.model";
 
 export async function savePaymentTemp(
     paymentTemp: PaymentTempModel
@@ -26,13 +27,19 @@ export async function savePaymentTemp(
     }
 }
 
-export async function confirmPayment(payments: ) {
+export async function confirmPayment(payment: PaymentConfirmModel) {
     const userToken = Cookies.get("userToken");
     if (!userToken) throw new Error("유저토큰 없음");
     // TODO error enum
 
     const options = {
-        userToken: userToken
-        data:
+        userToken: userToken,
+        data: payment,
+    }
+
+    try {
+        return await paymentAPI.savePayment(options);
+    } catch (error) {
+
     }
 }
