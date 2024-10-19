@@ -2,7 +2,7 @@
 
 export interface AccountModel {
     id?: string;
-    userId: string; // 단순작엄이다. useModel 타입으로 하지 말라고 하심.
+    userId: string;
     bankTranId:string;
     bankCode : string;
     bankName : string;
@@ -36,3 +36,18 @@ export enum BankCode {
     카카오뱅크 = "090",
     토스뱅크 = "092"
 }
+
+export const aacountState: AccountModel = {
+    id: "",
+    userId: "",
+    bankTranId: "",
+    bankCode : "",
+    bankName : "",
+    accountNum: "",
+    accountName: "",
+    bankRspCode: "",
+    bankTranDate : new Date(),
+    bankRspMessage: "",
+    createdAt: new Date(),
+    updatedAt: new Date()
+};
