@@ -405,7 +405,7 @@ export default function CheckoutPage() {
                             결제하기</ButtonPrimary>
                         <CustomModal isOpen={isModalOpen} onClose={handleCloseModal}>
                             <Checkout value={amount} product={product.data.name} orderId={orderId}
-                                      customerKey={user.id!}/>
+                                      customerKey={user.id!} awardId={awardId}/>
                         </CustomModal>
 
                         <div

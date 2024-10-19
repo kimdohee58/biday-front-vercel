@@ -3,7 +3,9 @@ import {paymentAPI} from "@/api/order/payment.api";
 import {PaymentTempModel} from "@/model/order/paymentTemp.model";
 import {PaymentConfirmModel} from "@/model/order/paymentConfirm.model";
 import {PaymentModel} from "@/model/order/payment.model";
+import {PaymentSaveModel} from "@/model/order/paymentSave.model";
 
+// PaymentTempModel
 export async function savePaymentTemp(
     paymentTemp: PaymentTempModel
 ) {
@@ -34,10 +36,11 @@ export async function fetchAllPaymentByUserId(): Promise<PaymentModel[]> {
 
         if (!userToken) {
             throw new Error("userToken 갖고 올 수 없습니다.")
+            // TODO error enum
         }
 
         const options = {
-            userToken : userToken, // 쿠키에서 가져온 userToken을 사용
+            userToken : userToken,
         }
 
         const paymentArray: PaymentModel[] = await paymentAPI.findByUser(options);
@@ -53,7 +56,7 @@ export async function fetchAllPaymentByUserId(): Promise<PaymentModel[]> {
     }
 }
 
-export async function confirmPayment(payment: PaymentConfirmModel) {
+export async function confirmPayment(payment: PaymentConfirmModel): Promise<PaymentSaveModel> {
     const userToken = Cookies.get("userToken");
     if (!userToken) throw new Error("유저토큰 없음");
     // TODO error enum
@@ -65,7 +68,9 @@ export async function confirmPayment(payment: PaymentConfirmModel) {
 
     try {
         return await paymentAPI.savePayment(options);
-    } catch (error) {
 
+    } catch (error) {
+        console.log("confirmPayment 오류", error);
+        throw new Error();
     }
 }

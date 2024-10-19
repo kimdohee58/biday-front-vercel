@@ -10,11 +10,12 @@ interface Amount {
     value: number;
 }
 
-export default function Checkout({value, product, orderId, customerKey}: {
+export default function Checkout({value, product, orderId, customerKey, awardId}: {
     value: number,
     product: string,
     orderId: string,
-    customerKey: string
+    customerKey: string,
+    awardId: string
 }) {
     const [ready, setReady] = useState<boolean>(false);
     const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
@@ -100,7 +101,7 @@ export default function Checkout({value, product, orderId, customerKey}: {
                             await widgets!.requestPayment({
                                 orderId: orderId,
                                 orderName: product,
-                                successUrl: window.location.origin + "/checkout/payment/success",
+                                successUrl: window.location.origin + `/checkout/payment/success?awardId=${awardId}`,
                                 failUrl: window.location.origin + "/fail",
                             });
                         } catch (error) {
