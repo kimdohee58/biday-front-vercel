@@ -2,7 +2,7 @@
 //src/model/product11.model.ts
 
 
-import {SizeModel} from "@/model/SizeModel";
+import {SizeModel} from "@/model/product/size.model";
 
 export interface ProductModel {
     id: number;

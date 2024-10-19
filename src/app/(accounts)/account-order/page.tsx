@@ -6,6 +6,8 @@ import { findByUserAuction } from "@/service/auction/auction.service";
 import { findByUserAward } from "@/service/auction/award.service";
 import { AuctionModel } from "@/model/auction/auction.model";
 import { AwardModel } from "@/model/auction/award.model";
+import {fetchAllPaymentByUserId} from "@/service/order/payment.service";
+import {PaymentModel} from "@/model/order/payment.model";
 
 // HistoryType을 세분화
 enum HistoryType {
@@ -30,8 +32,9 @@ export default function AccountOrder() {
     const [auctionData, setAuctionData] = useState<AuctionModel[]>([]);
     const [awardData, setAwardData] = useState<AwardModel[]>([]);
     const [loading, setLoading] = useState(false);
+    const [paymentData, setPaymentData] = useState<PaymentModel[]>([]);
     const { user } = useUserContext();
-
+    // 유즈서스펜스
     // 경매 데이터를 가져오는 함수
     const fetchAuctionData = async () => {
         setLoading(true);
@@ -45,6 +48,21 @@ export default function AccountOrder() {
             setLoading(false);
         }
     };
+
+    // 페이먼트 데이터를 가져오는 함수
+    const fetchPaymentData= async ()  => {
+        setLoading(true);
+        try{
+            const data = await fetchAllPaymentByUserId();
+            console.log("paymentData: " , data)
+            setPaymentData(data);
+        }catch (error){
+            console.error("결제 데이터를 가져오는 중 오류 발생 : " , error)
+        }finally {
+            setLoading(false);
+        }
+    }
+
 
     // 낙찰 데이터를 가져오는 함수
     const fetchAwardData = async () => {
@@ -64,7 +82,11 @@ export default function AccountOrder() {
         if (selectedAuctionSubType) {
             fetchAuctionData(); // 판매 내역 또는 입찰 내역 선택 시 경매 데이터를 가져오기
         } else if (selectedAwardSubType) {
-            fetchAwardData(); // 낙찰 내역 또는 결제 내역 선택 시 낙찰 데이터를 가져오기
+            if (selectedAwardSubType === AwardSubType.PAYMENT) {
+                fetchPaymentData(); // 결제 내역 선택 시 결제 데이터를 가져오기
+            } else {
+                fetchAwardData(); // 낙찰 내역 선택 시 낙찰 데이터를 가져오기
+            }
         }
     }, [selectedAuctionSubType, selectedAwardSubType]);
 
@@ -107,6 +129,32 @@ export default function AccountOrder() {
             ))
         ) : (
             <p>내역이 없습니다.</p>
+        );
+
+
+    };
+
+    // 결제 내역 렌더링
+    const renderPaymentHistory = () => {
+
+        if (loading) {
+            return <div>Loading...</div>;
+        }
+
+        return paymentData.length > 0 ? (
+            paymentData.map((payment, index) => (
+                <div key={index} className="flex py-4 sm:py-7 last:pb-0 first:pt-0">
+                    <div className="ml-4 flex flex-1 flex-col">
+                        <div>
+                            <h3 className="text-base font-medium">결제 ID: {payment.orderId}</h3>
+                            <p>Amount: {}원</p>{/*무슨 값을 넣어야 할지 모르겠음. */}
+                            <p>Date: {}</p>{/*무슨 값을 넣어야 할지 모르겠음. */}
+                        </div>
+                    </div>
+                </div>
+            ))
+        ) : (
+            <p>결제 내역이 없습니다.</p>
         );
     };
 
@@ -162,6 +210,12 @@ export default function AccountOrder() {
                         <div>
                             <h2 className="text-2xl sm:text-3xl font-semibold">결제 내역</h2>
                             {renderAwardHistory()}
+                        </div>
+                    )}
+                    {selectedAwardSubType === AwardSubType.PAYMENT && (
+                        <div>
+                            <h2 className="text-2xl sm:text-3xl font-semibold">결제 내역</h2>
+                            {renderPaymentHistory()}
                         </div>
                     )}
                 </div>
