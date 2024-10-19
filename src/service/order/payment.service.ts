@@ -9,17 +9,30 @@ export async function savePaymentTemp(
     paymentTemp: PaymentTempModel
 ) {
 
-    const userToken = "{\"userId\":\"6700e19686d1ce6cd1fc6f25\",\"userName\":\"shull\",\"userRole\":\"ROLE_USER\"}";
+    const userToken = Cookies.get('userToken');
+    if (!userToken) throw new Error("유저토큰 없음");
+    // TODO error enum
 
     const requestOptions = {
         data: paymentTemp,
         userToken: userToken,
-    }
+    };
 
     try {
         return await paymentAPI.savePaymentTemp(requestOptions);
     } catch (error) {
         console.log(error);
         throw new Error();
+    }
+}
+
+export async function confirmPayment(payments: ) {
+    const userToken = Cookies.get("userToken");
+    if (!userToken) throw new Error("유저토큰 없음");
+    // TODO error enum
+
+    const options = {
+        userToken: userToken
+        data:
     }
 }

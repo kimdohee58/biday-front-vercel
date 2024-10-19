@@ -1,7 +1,7 @@
 //src/lib/features/account.slice.ts
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootState} from "@/lib/store";
-import {AccountModel, aacountState} from "@/model/AccountModel";
+import {AccountModel, aacountState} from "@/model/user/account.model";
 
 
 

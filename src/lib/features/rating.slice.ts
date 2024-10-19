@@ -1,6 +1,6 @@
 // src/lib/features/rating.slice.ts
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { RatingModel } from '@/model/RatingModel';
+import { RatingModel } from '@/model/what/rating.model';
 import { RootState } from '@/lib/store';
 
 // 비동기 API 요청을 위한 Thunk 생성 (유저 등급 정보 가져오기)

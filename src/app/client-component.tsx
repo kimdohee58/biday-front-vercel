@@ -3,7 +3,7 @@
 
 import React, { useEffect, useState } from "react";
 import { fetchAllProducts } from "@/service/product/product.api";
-import { ProductModel } from "@/model/ProductModel";
+import { ProductModel } from "@/model/product/product.model";
 import {AuthorizationToken, getCookie, saveToken} from "@/utils/cookie/cookie.api";
 import { useDispatch } from "react-redux";
 import { extractUserInfoFromToken } from "@/utils/jwt.utils";

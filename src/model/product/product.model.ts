@@ -1,4 +1,4 @@
-//src/model/prodcut/prodcut.model.ts
+//src/model/product/product.model.ts
 import {SizeModel} from "@/model/product/size.model";
 
 export interface ProductModel {
@@ -15,6 +15,20 @@ export interface ProductModel {
     updatedAt: Date;
     wishes:number;
     sizes: SizeModel[];
+}
+
+export interface ProductDTO {
+    id: number;
+    brand: string;
+    category: string;
+    name: string;
+    subName: string;
+    productCode: string;
+    price: number;
+    color: string;
+    createdAt: Date;
+    updatedAt: Date;
+    wishes: number;
 }
 
 export type ProductDictionary = { [key: string]: ProductModel; };
