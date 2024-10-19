@@ -6,7 +6,6 @@ import React, {Suspense, useEffect, useState} from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import Input from "@/shared/Input/Input";
 import ContactInfo from "./ContactInfo";
-import PaymentMethod from "./PaymentMethod";
 import ShippingAddress from "./ShippingAddress";
 import Image from "next/image";
 import Link from "next/link";
@@ -21,11 +20,9 @@ import {fetchProductOne} from "@/service/product/product.service";
 import {fetchAwardOne} from "@/service/auction/award.service";
 import {AddressModel} from "@/model/user/address.model";
 import {useSelector} from "react-redux";
-import {RootState} from "@/lib/store";
 import {ImageType} from "@/model/ftp/image.model";
 import {fetchImageOne} from "@/service/ftp/image.service";
 import {getColor, getSizeById} from "@/utils/productUtils";
-import {Alert} from "@/shared/Alert/Alert";
 import {getAddresses, getUser} from "@/lib/features/user.slice";
 
 /**
@@ -53,8 +50,6 @@ export default function CheckoutPage() {
         queryFn: () => fetchImageOne(ImageType.PRODUCT, productId)});
     const user = useSelector(getUser);
     const addresses = useSelector(getAddresses);
-
-    console.log("award", award);
 
     if (!user) {
         router.push("/login");
@@ -90,8 +85,6 @@ export default function CheckoutPage() {
     const handleRecipientChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setRecipient(e.target.value);
     }
-
-
 
 
     const onClickPaymentButton = ({shipper, recipient, address}: ShippingProps) => {

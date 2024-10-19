@@ -1,5 +1,5 @@
-import {WishModel} from "@/model/WishModel";
-import {ProductModel} from "@/model/ProductModel";
+import {WishModel} from "@/model/product/wish.model";
+import {ProductModel} from "@/model/product/product.model";
 import {UserModel} from "@/model/user/user.model";
 
 const url = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/wish`

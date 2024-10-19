@@ -1,6 +1,5 @@
 import {fetchProduct} from "@/service/product/product.api";
 import {useEffect, useState} from "react";
-import {ProductModel} from "@/model/ProductModel";
 
 export default async function useProduct(id: number) {
     const [product, setProduct] = useState<any>(null);

@@ -1,4 +1,4 @@
-import {ProductDictionary, ProductModel} from "@/model/ProductModel";
+import {ProductDictionary, ProductModel} from "@/model/product/product.model";
 
 
 const baseUrl = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/products`

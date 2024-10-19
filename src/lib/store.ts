@@ -3,7 +3,6 @@ import {configureStore} from '@reduxjs/toolkit';
 import userSlice from '@/lib/features/user.slice';
 import productSlice from "@/lib/features/product.slice";
 import wishSlice from "@/lib/features/wish.slice";
-import accountSlice from "@/lib/features/account.slice";
 import addressSlice from "@/lib/features/address.slice";
 import brandSlice from "@/lib/features/brand.slice";
 import categorySlice from "@/lib/features/category.slice";
@@ -39,7 +38,6 @@ const rootReducer = combineReducers({
     user: userSlice,
     product: productSlice,
     wish: wishSlice,
-    account: accountSlice,
     address: addressSlice,
     brand: brandSlice,
     category: categorySlice,

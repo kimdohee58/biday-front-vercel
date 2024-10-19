@@ -100,7 +100,7 @@ export default function Checkout({value, product, orderId, customerKey}: {
                             await widgets!.requestPayment({
                                 orderId: orderId,
                                 orderName: product,
-                                successUrl: window.location.origin + "/success",
+                                successUrl: window.location.origin + "/checkout/payment/success",
                                 failUrl: window.location.origin + "/fail",
                             });
                         } catch (error) {
