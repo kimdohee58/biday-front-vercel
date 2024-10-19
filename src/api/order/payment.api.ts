@@ -7,7 +7,7 @@ import {RequestOptions} from "@/model/api/RequestOptions";
 import {PaymentConfirmModel} from "@/model/order/paymentConfirm.model";
 
 // 결제 데이터 임시 저장 (POST 요청)
-const savePaymentTemp = async (options: RequestOptions<PaymentTempModel>): Promise<void> => {
+const savePaymentTemp = async (options: Omit<RequestOptions<any,PaymentTempModel>, "parmas">): Promise<void> => {
     await strategy.POST(`${api.payment}/temp`, options);
 };
 
@@ -23,8 +23,8 @@ const findPaymentByPaymentKey = async (id: number): Promise<PaymentModel> => {
 };
 
 // 사용자 기준 결제 내역 조회 (GET 요청)
-const findByUser = async (token: string): Promise<PaymentModel[]> => {
-    const response = await strategy.GET(`${api.payment}/findByUser`, { Authorization: token });
+const findByUser = async (options:RequestOptions<{}, null>): Promise<PaymentModel[]> => {
+    const response = await strategy.GET(`${api.payment}/findByUser`, options);
     return response;
 };
 
