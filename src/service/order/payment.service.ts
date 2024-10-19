@@ -1,23 +1,21 @@
 import Cookies from "js-cookie";
 import {paymentAPI} from "@/api/order/payment.api";
 import {PaymentTempModel} from "@/model/order/paymentTemp.model";
-import {RequestOptions} from "@/model/api/RequestOptions";
-import {productAPI} from "@/api/product/product.api";
-import {awardAPI} from "@/api/auction/award.api";
-import {AddressModel} from "@/model/user/address.model";
-import {addressAPI} from "@/api/user/address.api";
+import {PaymentConfirmModel} from "@/model/order/paymentConfirm.model";
 import {PaymentModel} from "@/model/order/payment.model";
 
 export async function savePaymentTemp(
     paymentTemp: PaymentTempModel
 ) {
 
-    const userToken = "{\"userId\":\"6700e19686d1ce6cd1fc6f25\",\"userName\":\"shull\",\"userRole\":\"ROLE_USER\"}";
+    const userToken = Cookies.get('userToken');
+    if (!userToken) throw new Error("유저토큰 없음");
+    // TODO error enum
 
     const requestOptions = {
         data: paymentTemp,
         userToken: userToken,
-    }
+    };
 
     try {
         return await paymentAPI.savePaymentTemp(requestOptions);
@@ -45,12 +43,29 @@ export async function fetchAllPaymentByUserId(): Promise<PaymentModel[]> {
         const paymentArray: PaymentModel[] = await paymentAPI.findByUser(options);
 
         if (paymentArray.length === 0) {
-            console.log("주소를 찾을 수 없습니다.");
+            console.log("결제 찾을 수 없습니다.");
             return [];
         }
         return paymentArray
     } catch (error){
-        console.error("fetchAllAddressesByUserId 에러 발생", error);
-        throw new Error("주소 목록을 가져오는 중 에러가 발생했습니다.");
+        console.error("fetchAllPaymentByUserId 에러 발생", error);
+        throw new Error("결제를 가져오는 중 에러가 발생했습니다.");
+    }
+}
+
+export async function confirmPayment(payment: PaymentConfirmModel) {
+    const userToken = Cookies.get("userToken");
+    if (!userToken) throw new Error("유저토큰 없음");
+    // TODO error enum
+
+    const options = {
+        userToken: userToken,
+        data: payment,
+    }
+
+    try {
+        return await paymentAPI.savePayment(options);
+    } catch (error) {
+
     }
 }

@@ -2,7 +2,7 @@
 
 import Label from "@/components/Label/Label";
 import React, {ChangeEvent, FC, FormEvent, useEffect, useState} from "react";
-import {ProductModel} from "@/model/ProductModel";
+import {ProductModel} from "@/model/product/product.model";
 import {useQuery} from "@tanstack/react-query";
 import {fetchAllProducts} from "@/service/product/product.api";
 import {ImageType} from "@/model/ftp/image.model";

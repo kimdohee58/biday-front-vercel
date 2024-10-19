@@ -1,4 +1,4 @@
-import {SizeDictModel, SizeModel} from "@/model/product/size.model";
+import {SizeModel} from "@/model/product/size.model";
 
 export const getColor = (productName: string) => {
     const parts = productName.split(`(`);

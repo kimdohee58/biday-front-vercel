@@ -1,5 +1,5 @@
 // src/api/announcement/announcement.api.ts
-import { AnnouncementModel } from "@/model/AnnouncementModel";
+import { AnnouncementModel } from "@/model/admin/announcement.model";
 import { api } from "../request";
 import { strategy } from "../api.strategy";
 

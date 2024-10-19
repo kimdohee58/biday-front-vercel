@@ -1,5 +1,5 @@
 // src/api/faq/faq.api.ts
-import { FaqModel } from "@/model/FaqModel";
+import { FaqModel } from "@/model/admin/faq.model";
 import { api } from "../request";
 import { strategy } from "../api.strategy";
 

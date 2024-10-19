@@ -1,6 +1,6 @@
 // src/lib/features/loginHistory.slice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { LoginHistoryModel } from '@/model/LoginHistoryModel';
+import { LoginHistoryModel } from '@/model/user/loginHistory.model';
 import { RootState } from '@/lib/store';
 
 // 초기 상태 정의
