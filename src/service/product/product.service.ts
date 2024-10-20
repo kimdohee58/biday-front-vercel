@@ -1,26 +1,47 @@
 import {productAPI} from "@/api/product/product.api";
 import {ProductDictionary, ProductModel, SearchFilter} from "@/model/product/product.model";
-import {auctionAPI} from "@/api/auction/auction.api";
 import {AuctionModel} from "@/model/auction/auction.model";
 import {fetchAuctionsBySize} from "@/service/auction/auction.service";
 import {setLoading} from "@/lib/features/products.slice";
+import {fetchAllProductImage} from "@/service/ftp/image.service";
+import {ImageType} from "@/model/ftp/image.model";
+
+export async function fetchAllProductsWithImages() {
+    try {
+        const products = await fetchAllProducts();
+        const images = await fetchAllProductImage();
+
+        if (!products) {
+            console.error("products 값이 undefined");
+            throw new Error("");
+        }
+
+        const productsWithImages = products.map(product => {
+            const productImages = images.filter(image => (
+                image.referencedId === product.id.toString() && image.type === ImageType.PRODUCT
+            ));
+
+            return {
+                ...product,
+                images: productImages,
+            };
+        });
+
+        return productsWithImages;
+
+    } catch (error) {
+        console.error("fetchAllProductsWithImages 중 오류 발생");
+        throw new Error("")
+    }
+}
 
 export async function fetchAllProducts() {
     try {
 
-        const productDictArray: ProductModel[] = await productAPI.findAll();
+        return Object.values(await productAPI.findAll());
 
-        // if (productDictArray.length === 0) {
-        //     return [];
-        // }
-
-        return productDictArray.map((item) => Object.values(item)).flat();
-
-        // API 호출
     } catch (error) {
         console.error("상품 데이터를 가져오는 데 오류가 발생했습니다:", error);
-    } finally {
-        setLoading(false); // 로딩 완료
     }
 }
 
@@ -102,7 +123,7 @@ export async function fetchProductDetails(id: number): Promise<{
     product: ProductModel,
     size: string[],
     auctions: AuctionModel[]
-}>{
+}> {
     try {
         console.log("fetchProductDetails 진입");
 

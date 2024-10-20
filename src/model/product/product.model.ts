@@ -1,5 +1,6 @@
 //src/model/product/product.model.ts
 import {SizeModel} from "@/model/product/size.model";
+import {ImageModel} from "@/model/ftp/image.model";
 
 export interface ProductModel {
     id: number;
@@ -29,6 +30,10 @@ export interface ProductDTO {
     createdAt: Date;
     updatedAt: Date;
     wishes: number;
+}
+
+export interface ProductWithImageModel extends ProductModel {
+    image: ImageModel;
 }
 
 export type ProductDictionary = { [key: string]: ProductModel; };
