@@ -2,10 +2,10 @@ import Cookies from "js-cookie";
 import {paymentAPI} from "@/api/order/payment.api";
 import {PaymentTempModel} from "@/model/order/paymentTemp.model";
 import {PaymentConfirmModel} from "@/model/order/paymentConfirm.model";
+import {PaymentRequestModel} from "@/model/order/payment.model";
 import {PaymentModel} from "@/model/order/payment.model";
 import {PaymentSaveModel} from "@/model/order/paymentSave.model";
 
-// PaymentTempModel
 export async function savePaymentTemp(
     paymentTemp: PaymentTempModel
 ) {
@@ -24,14 +24,15 @@ export async function savePaymentTemp(
     } catch (error) {
         console.log(error);
         throw new Error();
+        // TODO error enum
     }
 }
 
 
 
-export async function fetchAllPaymentByUserId(): Promise<PaymentModel[]> {
+export async function fetchAllPaymentByUserId(): Promise<PaymentRequestModel[]> {
     try {
-        // 클라이언트에서 쿠키 갖고 오기
+
         const userToken = Cookies.get('userToken');
 
         if (!userToken) {
@@ -43,16 +44,18 @@ export async function fetchAllPaymentByUserId(): Promise<PaymentModel[]> {
             userToken : userToken,
         }
 
-        const paymentArray: PaymentModel[] = await paymentAPI.findByUser(options);
+        const paymentArray: PaymentRequestModel[] = await paymentAPI.findByUser(options);
 
         if (paymentArray.length === 0) {
             console.log("결제 찾을 수 없습니다.");
             return [];
         }
+
         return paymentArray
     } catch (error){
         console.error("fetchAllPaymentByUserId 에러 발생", error);
         throw new Error("결제를 가져오는 중 에러가 발생했습니다.");
+        // TODO error enum
     }
 }
 

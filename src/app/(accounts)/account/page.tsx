@@ -41,10 +41,8 @@ export default function AccountPage() {
     const [error, setError] = useState<string | null>(null); // 에러 상태 관리
 
     const address = useSelector(getAddresses);
-    console.log("마이페이지에 있는 주소 확인 하는 코드 : 2222", address);
 
     saveUserTokenToCookie(userToken); // 유저인포 === 유저토큰
-    console.log("유저토큰유저토큰유저토큰유저토큰유저토큰유저토큰유저토큰유저토큰유저토큰",saveUserTokenToCookie)
 
     const [formData, setFormData] = useState({
         addressId: "",
@@ -143,7 +141,7 @@ export default function AccountPage() {
 
     // useEffect로 주소 목록 로드
     useEffect(() => {
-        // loadAddresses();
+         loadAddresses();
     }, []);
 
     const [activeTab, setActiveTab] = useState<"order" | "bid" | "auction" | "win">("order");
@@ -364,16 +362,12 @@ export default function AccountPage() {
 
 
                                         {/* 업데이트 버튼 */}
-                                        <div className="pt-4">
+                                        <div className="pt-2">
                                             <ButtonPrimary onClick={handleUpdate}>주소 추가하기</ButtonPrimary>
                                         </div>
                                     </div>
                                 )}
                             />
-                        </div>
-
-                        <div className="pt-2">
-                            <ButtonPrimary>회원정보수정</ButtonPrimary>
                         </div>
                     </div>
                 </div>

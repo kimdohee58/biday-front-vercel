@@ -1,14 +1,21 @@
 // src/app/callback/page.tsx
 "use client";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
+import {useRouter, useSearchParams} from "next/navigation";
+import {useEffect} from "react";
 
 const CallbackPage = () => {
 
+    const router = useRouter();
+    const searchParams = useSearchParams();
 
-    return <div>로그인 처리 중...</div>;
+    useEffect(() => {
+        if (searchParams.get('code')) {
+            router.push('/account-seller');
+        }
+    }, [searchParams, router]);
+
+    return null;
 };
 
 export default CallbackPage;

@@ -62,3 +62,39 @@ export async function findByUserAward(): Promise<AwardModel[]> {
         throw new Error("낙찰 내역을 가져오는 중 에러가 발생했습니다.");
     }
 }
+
+// awardIds 배열을 기반으로 각 awardId로 fetchAwardOne을 호출해 sizeId를 추출하는 함수
+export async function fetchSizeIdsFromAwards(awardIds: number[]): Promise<number[]> {
+
+
+    const userToken = Cookies.get("userToken");
+    if (!userToken) {
+        throw new Error("쿠키 접근 불가");
+        // 추후 error enum 변경
+    }
+
+    try {
+        // Promise.all을 사용하여 모든 awardId에 대해 fetchAwardOne 호출
+        const awards = await Promise.all(
+            awardIds.map(async (awardId) => {
+                const options = {
+                    params: { awardId },  // 개별 awardId를 전달
+                    userToken: userToken,
+                };
+
+                // 각 awardId에 대해 fetchAwardOne 호출
+                const award = await awardAPI.findById(options);
+                return award;  // 반환된 award 데이터 반환
+            })
+        );
+
+        // awards 배열에서 AuctionDto의 sizeId를 추출
+        const sizeIds = awards.map((award) => award?.auction?.sizeId).filter((sizeId) => sizeId !== undefined);
+
+        // 추출된 sizeIds 반환
+        return sizeIds as number[]; // number 타입으로 강제 변환하여 반환
+    } catch (error) {
+        console.error("sizeId를 추출하는 도중 오류 발생: ", error);
+        throw new Error("sizeId 추출 실패");
+    }
+}

@@ -5,6 +5,7 @@ import {fetchAuctionsBySize} from "@/service/auction/auction.service";
 import {setLoading} from "@/lib/features/products.slice";
 import {fetchAllProductImage} from "@/service/ftp/image.service";
 import {defaultImage, ImageType} from "@/model/ftp/image.model";
+import {SizeModel} from "@/model/product/size.model";
 
 export async function fetchAllProductsWithImages(): Promise<ProductWithImageModel[]> {
     try {
@@ -32,6 +33,7 @@ export async function fetchAllProductsWithImages(): Promise<ProductWithImageMode
         throw new Error("")
     }
 }
+
 
 export async function fetchAllProducts() {
     try {
@@ -86,6 +88,7 @@ export async function fetchProductOne(productId: string): Promise<ProductModel> 
     } catch (error) {
         console.error("fetchProductOne 에러 발생", error);
         throw new Error();
+        // TODO error enum
     }
 }
 
@@ -109,6 +112,7 @@ export async function fetchProduct(productId: number): Promise<ProductModel[]> {
     } catch (error) {
         console.error("fetchProduct 에러 발생", error);
         throw new Error("");
+        // TODO error enum
     }
 }
 
@@ -149,5 +153,30 @@ export async function fetchProductDetails(id: number): Promise<{
     } catch (error) {
         console.error("fetchProductDetail", error);
         throw new Error("fetchProductError");
+        // TODO error enum
     }
 }
+
+
+export async function fetchProductBySizeId(sizeId: number): Promise<SizeModel[]> {
+    try {
+        const options = {
+            params: {
+                sizeId: sizeId
+            }
+        };
+
+        const productDictArray: SizeModel[] = await productAPI.findBySizeId(options);
+
+        if (productDictArray.length === 0) {
+            return [];
+        }
+
+        return productDictArray;
+    } catch (error) {
+        console.error("fetchProduct 에러 발생", error);
+        throw new Error("");
+        // TODO error enum
+    }
+}
+

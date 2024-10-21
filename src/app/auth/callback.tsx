@@ -1,3 +1,5 @@
+//src/app/auth/callback.tsx
+
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import axiosInstance from "@/app/api/axiosInstance/axiosInstance";

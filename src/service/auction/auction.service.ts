@@ -1,11 +1,10 @@
-import {RequestOptions} from "@/model/api/RequestOptions";
+//src/service/auction/auction.service.ts
+
 import {auctionAPI} from "@/api/auction/auction.api";
 import {AddressModel} from "@/model/user/address.model";
 import Cookies from "js-cookie";
 import {addressAPI} from "@/api/user/address.api";
-import {AuctionModel, SaveAuctionModel} from "@/model/auction/auction.model";
-import {fetchImage} from "@/service/ftp/image.service";
-import {defaultImage, ImageType} from "@/model/ftp/image.model";
+import {AuctionModel} from "@/model/auction/auction.model";
 
 
 export async function fetchAuction(auctionId: string) {

@@ -8,7 +8,7 @@ export interface PricesProps {
 
 const Prices: FC<PricesProps> = ({
   className = "",
-  price = 33,
+  price = 0,
   contentClass = "py-1 px-2 md:py-1.5 md:px-2.5 text-sm font-medium",
 }) => {
   return (

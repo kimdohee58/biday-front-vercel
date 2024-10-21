@@ -1,7 +1,7 @@
 // src/api/payment/payment.api.ts
 import {api} from "../request";
 import {strategy} from "../api.strategy";
-import {PaymentModel} from "@/model/order/payment.model";
+import {PaymentModel, PaymentRequestModel} from "@/model/order/payment.model";
 import {PaymentTempModel} from "@/model/order/paymentTemp.model";
 import {RequestOptions} from "@/model/api/RequestOptions";
 import {PaymentConfirmModel} from "@/model/order/paymentConfirm.model";
@@ -24,7 +24,7 @@ const findPaymentByPaymentKey = async (id: number): Promise<PaymentModel> => {
 };
 
 // 사용자 기준 결제 내역 조회 (GET 요청)
-const findByUser = async (options:RequestOptions<{}, null>): Promise<PaymentModel[]> => {
+const findByUser = async (options:Omit<RequestOptions<any, null>, "params">): Promise<PaymentRequestModel[]> => {
     return await strategy.GET(`${api.payment}/findByUser`, options);
 };
 
