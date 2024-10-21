@@ -26,7 +26,6 @@ export const renderProductItem = (product: any, index: number) => {
             {/* ImageFetcher 컴포넌트를 사용하여 이미지 가져오기 */}
             <ImageFetcher id={id} altText={productName} />
 
-
             <div className="ml-4 flex flex-1 flex-col">
                 <div>
                     <div className="flex justify-between ">

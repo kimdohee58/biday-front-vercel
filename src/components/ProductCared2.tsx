@@ -21,6 +21,7 @@ import {ImageType} from "@/model/ftp/image.model";
 import {useQuery} from "@tanstack/react-query";
 import {ProductModel} from "@/model/product/product.model";
 import WishDeleteButton from "@/components/WishDeleteButton";
+import {fetchAllProductsWithImages} from "@/service/product/product.service";
 
 export interface ProductCardProps {
     wishId: number;
@@ -49,18 +50,23 @@ const ProductCard: FC<ProductCardProps> = ({ wishId, className = "", data = PROD
 
     const [image, setImage] = useState(initialImage);
 
-    const {data: images, isLoading, error} = useQuery({
-        queryKey: ["image", id],
-        queryFn: () => fetchImageOne(ImageType.PRODUCT, String(id))
-    });
-
     useEffect(() => {
-        if (!isLoading && !error && images?.uploadUrl) {
-            setImage(images.uploadUrl);
-        } else {
-            setImage(initialImage);
-        }
-    }, [id, isLoading, error, images]);
+        const fetchImages = async () => {
+            try {
+                const productsWithImages = await fetchAllProductsWithImages();
+                const productWithImage = productsWithImages.find(product => product.product.id === id);
+
+                if (productWithImage) {
+                    setImage(productWithImage.image.uploadUrl || initialImage); // uploadUrl을 가져와서 이미지 설정
+                }
+            } catch (error) {
+                console.error("이미지 가져오기 실패", error);
+                setImage(initialImage); // 초기 이미지를 설정
+            }
+        };
+
+        fetchImages();
+    }, [id, initialImage]);
 
     const imageSrc = image || "https://kr.object.ncloudstorage.com/biday/products/ad87ead6-1682-4059-99d2-a5486d024ab2.jpg";
 
@@ -281,11 +287,8 @@ const ProductCard: FC<ProductCardProps> = ({ wishId, className = "", data = PROD
 
     return (
         <>
-            <div
-                className={`nc-ProductCard relative flex flex-col bg-transparent ${className}`}
-            >
-                <div
-                    className="relative flex-shrink-0 bg-slate-50 dark:bg-slate-300 rounded-3xl overflow-hidden z-1 group">
+            <div className={`nc-ProductCard relative flex flex-col bg-transparent ${className}`}>
+                <div className="relative flex-shrink-0 bg-slate-50 dark:bg-slate-300 rounded-3xl overflow-hidden z-1 group">
                     <Link href={"/product-detail"} className="block" onClick={(event) => event.stopPropagation()}>
                         <NcImage
                             containerClassName="flex aspect-w-11 aspect-h-12 w-full h-0"

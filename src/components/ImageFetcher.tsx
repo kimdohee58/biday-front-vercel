@@ -16,6 +16,16 @@ const ImageFetcher = ({ id, altText }: { id: string, altText: string }) => {
         enabled: !!id, // id가 있을 때만 쿼리 실행
     });
 
+
+
+    /**
+     * 컴포넌트 자체에서 가져와서
+     * 최상위 페이지에서 패치해온것을
+     * product fetch 를 전부 서비스 .ts
+     * fetch all products with imges 이거로 수정 하고
+     * 프로덕트 카드 3을 만들어서
+     */
+
     // 이미지 데이터가 있으면 상태에 설정하고, 없으면 기본 이미지로 설정
     useEffect(() => {
         if (!isLoading && !error && images?.uploadUrl) {

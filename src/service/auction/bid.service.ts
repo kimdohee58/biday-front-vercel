@@ -1,7 +1,8 @@
-//src/service/auction/bid.service.ts
-
+import {BidModel} from "@/model/BidModel";
+import {useSelector} from "react-redux";
+import {getToken} from "@/lib/features/user.slice";
+import Cookies from "js-cookie";
 import {bidAPI} from "@/api/auction/bid.api";
-import {BidModel} from "@/model/auction/bid.model";
 
 const link = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/bids`
 

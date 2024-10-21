@@ -48,7 +48,7 @@ export async function checkPasswordService(): Promise<boolean> {
     }
 
     const options: RequestOptions<{  }, null> = {
-            userToken: userToken
+        userToken: userToken
     }
 
 
