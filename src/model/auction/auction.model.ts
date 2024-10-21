@@ -16,6 +16,19 @@ export interface AuctionModel {
     award:AwardModel,
 }
 
+export interface SaveAuctionModel {
+    sizeId: number;
+    description: string;
+    startingBid: number;
+    currentBid: number;
+    startedAt: Date;
+    endedAt: Date;
+    userId: any;
+    createdAt: any;
+    updatedAt: any;
+    status: any;
+}
+
 export interface AwardAuctionModel {
     id: number;
     userId: string;

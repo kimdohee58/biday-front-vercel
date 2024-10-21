@@ -1,55 +1,58 @@
 'use client';
 
-import { useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import {useEffect, useState} from "react";
+import {useRouter, useSearchParams} from "next/navigation";
+import {useMutation} from "@tanstack/react-query";
+import {confirmPayment} from "@/service/order/payment.service";
+import {PaymentSaveModel} from "@/model/order/paymentSave.model";
 
-export function SuccessPage() {
-    const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
+/**
+ * 추후 패러렐 라우트로 처리
+ * @constructor
+ */
+
+export default function SuccessPage() {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const [paymentInfo, setPaymentInfo] = useState<PaymentSaveModel>();
+    const mutation = useMutation({mutationFn: confirmPayment})
+    /* const mutation = useMutation({
+         mutationFn: confirmPayment,
+         onSuccess: (data) => {
+                 setPaymentInfo(data);
+         }
+     });
+ */
+    const awardId = searchParams.get("awardId") || "";
+    const orderId = searchParams.get("orderId") || "";
+    const amount = searchParams.get("amount") || "";
 
     useEffect(() => {
-        // 쿼리 파라미터 값이 결제 요청할 때 보낸 데이터와 동일한지 반드시 확인하세요.
-        // 클라이언트에서 결제 금액을 조작하는 행위를 방지할 수 있습니다.
-        const requestData = {
-            orderId: searchParams.get("orderId"),
-            amount: searchParams.get("amount"),
-            paymentKey: searchParams.get("paymentKey"),
+        const processPayment = async () => {
+            console.log("processPatment 진입");
+            const requestData = {
+                awardId: Number(awardId),
+                orderId: orderId,
+                amount: Number(searchParams.get("amount")),
+                paymentKey: searchParams.get("paymentKey") || "",
+            };
+
+            try {
+                const data = await mutation.mutateAsync(requestData);
+
+                setPaymentInfo(data);
+                sessionStorage.setItem("paymentData", JSON.stringify(data));
+
+                router.push("/checkout/payment/complete");
+            } catch (error) {
+                console.error("결제 처리 중 오류 발생", error);
+            }
         };
 
-        async function confirm() {
-            const response = await fetch("/confirm", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(requestData),
-            });
-
-            const json = await response.json();
-
-            if (!response.ok) {
-                // 결제 실패 비즈니스 로직을 구현하세요.
-                navigate(`/fail?message=${json.message}&code=${json.code}`);
-                return;
-            }
-
-            // 결제 성공 비즈니스 로직을 구현하세요.
-        }
-        confirm();
-    }, []);
+        processPayment();
+    }, [orderId, awardId]);
 
     return (
-        <div className="result wrapper">
-            <div className="box_section">
-                <h2>
-                    결제 성공
-                </h2>
-                <p>{`주문번호: ${searchParams.get("orderId")}`}</p>
-                <p>{`결제 금액: ${Number(
-                    searchParams.get("amount")
-                ).toLocaleString()}원`}</p>
-                <p>{`paymentKey: ${searchParams.get("paymentKey")}`}</p>
-            </div>
-        </div>
-    );
+        <>옝레~</>
+    )
 }

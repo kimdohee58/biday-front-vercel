@@ -1,12 +1,39 @@
 import {productAPI} from "@/api/product/product.api";
 import {ProductDictionary, ProductModel, ProductWithImageModel, SearchFilter} from "@/model/product/product.model";
-import {auctionAPI} from "@/api/auction/auction.api";
 import {AuctionModel} from "@/model/auction/auction.model";
 import {fetchAuctionsBySize} from "@/service/auction/auction.service";
 import {setLoading} from "@/lib/features/products.slice";
-import {SizeModel} from "@/model/product/size.model";
-import {defaultImage, ImageType} from "@/model/ftp/image.model";
 import {fetchAllProductImage} from "@/service/ftp/image.service";
+import {defaultImage, ImageType} from "@/model/ftp/image.model";
+import {SizeModel} from "@/model/product/size.model";
+
+export async function fetchAllProductsWithImages(): Promise<ProductWithImageModel[]> {
+    try {
+        const products = await fetchAllProducts();
+        const images = await fetchAllProductImage();
+
+        if (!products) {
+            console.error("products 값이 undefined");
+            throw new Error("");
+        }
+
+        return products.map(product => {
+            const productImages = images.find(image => (
+                image.referencedId === product.id.toString() && image.type === ImageType.PRODUCT
+            )) || defaultImage;
+
+            return {
+                product,
+                image: productImages,
+            };
+        });
+
+    } catch (error) {
+        console.error("fetchAllProductsWithImages 중 오류 발생");
+        throw new Error("")
+    }
+}
+
 
 export async function fetchAllProducts() {
     try {
@@ -94,7 +121,7 @@ export async function fetchProductDetails(id: number): Promise<{
     product: ProductModel,
     size: string[],
     auctions: AuctionModel[]
-}>{
+}> {
     try {
         console.log("fetchProductDetails 진입");
 
@@ -152,32 +179,4 @@ export async function fetchProductBySizeId(sizeId: number): Promise<SizeModel[]>
         // TODO error enum
     }
 }
-
-export async function fetchAllProductsWithImages(): Promise<ProductWithImageModel[]> {
-    try {
-        const products = await fetchAllProducts();
-        const images = await fetchAllProductImage();
-
-        if (!products) {
-            console.error("products 값이 undefined");
-            throw new Error("");
-        }
-
-        return products.map(product => {
-            const productImages = images.find(image => (
-                image.referencedId === product.id.toString() && image.type === ImageType.PRODUCT
-            )) || defaultImage;
-
-            return {
-                product,
-                image: productImages,
-            };
-        });
-
-    } catch (error) {
-        console.error("fetchAllProductsWithImages 중 오류 발생");
-        throw new Error("")
-    }
-}
-
 

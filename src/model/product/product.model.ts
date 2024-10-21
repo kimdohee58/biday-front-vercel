@@ -74,5 +74,5 @@ export const defaultProduct: ProductModel = {
     createdAt: new Date(),
     updatedAt: new Date(),
     wishes:0,
-    sizes: {} as SizeModel[],
+    sizes: [] as SizeModel[],
 };

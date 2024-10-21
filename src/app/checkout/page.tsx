@@ -36,8 +36,6 @@ type ShippingProps = {
     address: AddressModel;
 }
 
-type RequiredSome<T, K extends keyof T> = Required<Pick<T, K>> & Omit<T, K>;
-
 export default function CheckoutPage() {
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -405,7 +403,7 @@ export default function CheckoutPage() {
                             결제하기</ButtonPrimary>
                         <CustomModal isOpen={isModalOpen} onClose={handleCloseModal}>
                             <Checkout value={amount} product={product.data.name} orderId={orderId}
-                                      customerKey={user.id!}/>
+                                      customerKey={user.id!} awardId={awardId}/>
                         </CustomModal>
 
                         <div

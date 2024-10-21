@@ -4,22 +4,6 @@ import {PrismaClient} from "@prisma/client";
 const baseUrl = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/images`;
 const prisma = new PrismaClient();
 
-
-export async function fetchAllProductImage(): Promise<ImageModel[]> {
-
-    const url = `${process.env.NEXT_PUBLIC_API_CLIENT_URL}/api/images?type=${ImageType.PRODUCT}`;
-
-    try {
-        const response = await fetch(url, {
-            method: "GET"
-        })
-
-        return await response.json();
-    } catch (error) {
-        console.error("이미지 로드 중 오류 발생", error);
-        throw new Error("상품 이미지 전체 로드 실패");
-    }
-}
 // 이미지 업로드
 export async function uploadImage({filePath, type, referenceId, files}: UploadImageParams) {
 
@@ -56,7 +40,6 @@ export async function uploadImage({filePath, type, referenceId, files}: UploadIm
     } catch (error) {
         console.error("이미지 업로드 중 에러 발생: image.api.ts : uploadImage", error);
         throw new Error("이미지 업로드 실패");
-        // TODO error enum
     }
 }
 
@@ -73,6 +56,7 @@ export async function deleteImage(id: number) {
 
 // 이미지 업데이트
 
+
 // 클라이언트 컴포넌트에서 이미지 불러오기
 export async function fetchImage(type: ImageType, id?: string): Promise<ImageModel[]> {
     const url = `${process.env.NEXT_PUBLIC_API_CLIENT_URL}/api/images?id=${id}&type=${type}`;
@@ -81,55 +65,25 @@ export async function fetchImage(type: ImageType, id?: string): Promise<ImageMod
      * id 없는 경우 전체 이미지 부르는걸로 변경
      */
 
-    if (typeof window !== "undefined") {
-        // 클라이언트 컴포넌트
-        try {
-            const response = await fetch(url, {
-                method: "GET",
-            });
+    try {
+        const response = await fetch(url, {
+            method: "GET",
+        });
 
-            if (!response.ok) {
-                return [];
-            }
-
-            const data: ImageModel[] = await response.json();
-
-            console.log("fetchImageFromClient 이미지 확인: ", data);
-
-
-            return data;
-
-        } catch (error) {
-            console.error("이미지 로드 중 오류 발생", error);
-            throw new Error("이미지 로드 실패");
-            // TODO error enum
+        if (!response.ok) {
+            return [];
         }
 
-    } else {
-        // 클라이언트 컴포넌트
-        try {
-            const image = await prisma.image.findMany({
-                where: {
-                    AND: [
-                        {type: type},
-                        {referencedId: id}
-                    ]
-                },
-                take: 3,
-                orderBy: {
-                    id: "desc",
-                }
-            });
+        const data: ImageModel[] = await response.json();
 
-            console.log("이미지 확인", image);
+        console.log("fetchImageFromClient 이미지 확인: ", data);
 
-            return image;
 
-        } catch (error) {
-            console.error("이미지 로드 중 에러 발생: image.api.ts: fetchImage", error);
-            throw new Error("이미지 로드 실패");
-            // TODO error enum
-        }
+        return data;
+
+    } catch (error) {
+        console.error("이미지 로드 중 오류 발생", error);
+        throw new Error("이미지 로드 실패");
     }
 
 }
@@ -144,16 +98,26 @@ export async function fetchImageOne(type: ImageType, id: string) {
             cache: "no-store",
         });
 
-        const data: ImageModel = await response.json();
-
-        // console.log("fetchImageFromClient 이미지 확인: ", data);
-
-
-        return data;
+        return await response.json();
 
     } catch (error) {
         console.error("이미지 로드 중 오류 발생", error);
         throw new Error("이미지 로드 실패");
-        // TODO error enum
+    }
+}
+
+export async function fetchAllProductImage(): Promise<ImageModel[]> {
+
+    const url = `${process.env.NEXT_PUBLIC_API_CLIENT_URL}/api/images?type=${ImageType.PRODUCT}`;
+
+    try {
+        const response = await fetch(url, {
+            method: "GET"
+        })
+
+        return await response.json();
+    } catch (error) {
+        console.error("이미지 로드 중 오류 발생", error);
+        throw new Error("상품 이미지 전체 로드 실패");
     }
 }

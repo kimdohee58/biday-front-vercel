@@ -12,6 +12,7 @@ import SectionPromo1 from "@/components/SectionPromo1";
 import ProductCard from "@/components/ProductCard3";
 import { fetchAllProductsWithImages } from "@/service/product/product.service";
 import {checkPasswordService} from "@/service/user/user.serivce";
+import {defaultImage} from "@/model/ftp/image.model";
 
 interface ClientComponentProps {
     authorizationToken: string;
@@ -54,9 +55,9 @@ export default function ClientComponent({ authorizationToken, filter }: ClientCo
         setSelectedColors(newSelectedColors);
         setSelectedOrder(newSelectedOrder);
     };
-    const getProductImage = (item: ProductModel): string | undefined => {
+    const getProductImage = (item: ProductModel): string => {
         const productImage = productsWithImages.find(img => img.product.id === item.id);
-        return productImage && productImage.image ? productImage.image.uploadUrl : undefined; // URL로 변환
+        return productImage && productImage.image ? productImage.image.uploadUrl : defaultImage.uploadUrl; // URL로 변환
     };
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
@@ -141,7 +142,7 @@ export default function ClientComponent({ authorizationToken, filter }: ClientCo
         <div className="nc-PageCollection">
             <div className="container py-16 lg:pb-28 lg:pt-20 space-y-16 sm:space-y-20 lg:space-y-28">
                 <div className="space-y-10 lg:space-y-14">
-                    <hr className="border-slate-200 dark:border-slate-700" />
+                    <hr className="border-slate-200 dark:border-slate-700"/>
                     <main>
                         <TabFiltersProduct
                             selectedPrices={selectedPrices}
@@ -152,8 +153,8 @@ export default function ClientComponent({ authorizationToken, filter }: ClientCo
                         />
                         <div
                             className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-x-8 gap-y-10 mt-8 lg:mt-10">
-                            {selectedProducts.map((item, index) => (
-                                <ProductCard data={item} image={getProductImage(item)} key={index} />
+                            {selectedProducts.map((item) => (
+                                <ProductCard data={item} image={getProductImage(item)} key={item.id}/>
                             ))}
                         </div>
                         <div

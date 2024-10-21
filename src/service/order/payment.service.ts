@@ -3,6 +3,8 @@ import {paymentAPI} from "@/api/order/payment.api";
 import {PaymentTempModel} from "@/model/order/paymentTemp.model";
 import {PaymentConfirmModel} from "@/model/order/paymentConfirm.model";
 import {PaymentRequestModel} from "@/model/order/payment.model";
+import {PaymentModel} from "@/model/order/payment.model";
+import {PaymentSaveModel} from "@/model/order/paymentSave.model";
 
 export async function savePaymentTemp(
     paymentTemp: PaymentTempModel
@@ -57,7 +59,7 @@ export async function fetchAllPaymentByUserId(): Promise<PaymentRequestModel[]> 
     }
 }
 
-export async function confirmPayment(payment: PaymentConfirmModel) {
+export async function confirmPayment(payment: PaymentConfirmModel): Promise<PaymentSaveModel> {
     const userToken = Cookies.get("userToken");
     if (!userToken) throw new Error("유저토큰 없음");
     // TODO error enum
@@ -69,7 +71,9 @@ export async function confirmPayment(payment: PaymentConfirmModel) {
 
     try {
         return await paymentAPI.savePayment(options);
-    } catch (error) {
 
+    } catch (error) {
+        console.log("confirmPayment 오류", error);
+        throw new Error();
     }
 }

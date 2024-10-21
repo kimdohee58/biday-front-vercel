@@ -5,6 +5,7 @@ import {useRouter, useSearchParams} from "next/navigation";
 import {useEffect} from "react";
 
 const CallbackPage = () => {
+
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -14,7 +15,7 @@ const CallbackPage = () => {
         }
     }, [searchParams, router]);
 
-    return <div>로그인 처리 중...</div>;
+    return null;
 };
 
 export default CallbackPage;

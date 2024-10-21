@@ -3,7 +3,7 @@
 import {useSearchParams} from "next/navigation";
 
 export function FailPage() {
-    const [searchParams] = useSearchParams();
+    const searchParams = useSearchParams();
 
     return (
         <div className="result wrapper">
