@@ -16,19 +16,20 @@ export default function SuccessPage() {
     const searchParams = useSearchParams();
     const [paymentInfo, setPaymentInfo] = useState<PaymentSaveModel>();
     const mutation = useMutation({mutationFn: confirmPayment})
-   /* const mutation = useMutation({
-        mutationFn: confirmPayment,
-        onSuccess: (data) => {
-                setPaymentInfo(data);
-        }
-    });
-*/
+    /* const mutation = useMutation({
+         mutationFn: confirmPayment,
+         onSuccess: (data) => {
+                 setPaymentInfo(data);
+         }
+     });
+ */
     const awardId = searchParams.get("awardId") || "";
     const orderId = searchParams.get("orderId") || "";
     const amount = searchParams.get("amount") || "";
 
     useEffect(() => {
         const processPayment = async () => {
+            console.log("processPatment 진입");
             const requestData = {
                 awardId: Number(awardId),
                 orderId: orderId,
@@ -41,14 +42,17 @@ export default function SuccessPage() {
 
                 setPaymentInfo(data);
                 sessionStorage.setItem("paymentData", JSON.stringify(data));
-                console.log("paymentData 세션 스토리지에 저장: ", data);
+
+                router.push("/checkout/payment/complete");
             } catch (error) {
                 console.error("결제 처리 중 오류 발생", error);
             }
         };
 
         processPayment();
-    }, [awardId, orderId, amount]);
+    }, [orderId, awardId]);
 
-    return null;
+    return (
+        <>옝레~</>
+    )
 }

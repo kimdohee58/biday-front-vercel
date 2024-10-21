@@ -1,12 +1,12 @@
 import {productAPI} from "@/api/product/product.api";
-import {ProductDictionary, ProductModel, SearchFilter} from "@/model/product/product.model";
+import {ProductDictionary, ProductModel, ProductWithImageModel, SearchFilter} from "@/model/product/product.model";
 import {AuctionModel} from "@/model/auction/auction.model";
 import {fetchAuctionsBySize} from "@/service/auction/auction.service";
 import {setLoading} from "@/lib/features/products.slice";
 import {fetchAllProductImage} from "@/service/ftp/image.service";
-import {ImageType} from "@/model/ftp/image.model";
+import {defaultImage, ImageModel, ImageType} from "@/model/ftp/image.model";
 
-export async function fetchAllProductsWithImages() {
+export async function fetchAllProductsWithImages(): Promise<ProductWithImageModel[]> {
     try {
         const products = await fetchAllProducts();
         const images = await fetchAllProductImage();
@@ -17,15 +17,17 @@ export async function fetchAllProductsWithImages() {
         }
 
         const productsWithImages = products.map(product => {
-            const productImages = images.filter(image => (
+            const productImages = images.find(image => (
                 image.referencedId === product.id.toString() && image.type === ImageType.PRODUCT
-            ));
+            )) || defaultImage;
 
             return {
-                ...product,
-                images: productImages,
+                product,
+                image: productImages,
             };
         });
+
+        console.log("productWithImages", productsWithImages);
 
         return productsWithImages;
 
@@ -65,10 +67,6 @@ export async function fetchProducts(searchFilter: SearchFilter) {
         setLoading(false); // 로딩 완료
     }
 }
-
-// 데이터 변환을 여기서 해야한다. 인수로 필요한 것을 받아서,
-// 서비스에서 데이터 변환을 자바 스프링을 서비스에서 했잖아. 변환을 똑같이 서비스를 여기에서 해야한다.
-
 
 export async function fetchProductOne(productId: string): Promise<ProductModel> {
 

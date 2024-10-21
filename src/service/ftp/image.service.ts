@@ -125,15 +125,26 @@ export async function fetchImageOne(type: ImageType, id: string) {
             cache: "no-store",
         });
 
-        const data: ImageModel = await response.json();
-
-        // console.log("fetchImageFromClient 이미지 확인: ", data);
-
-
-        return data;
+        return await response.json();
 
     } catch (error) {
         console.error("이미지 로드 중 오류 발생", error);
         throw new Error("이미지 로드 실패");
+    }
+}
+
+export async function fetchAllProductImage(): Promise<ImageModel[]> {
+
+    const url = `${process.env.NEXT_PUBLIC_API_CLIENT_URL}/api/images?type=${ImageType.PRODUCT}`;
+
+    try {
+        const response = await fetch(url, {
+            method: "GET"
+        })
+
+        return await response.json();
+    } catch (error) {
+        console.error("이미지 로드 중 오류 발생", error);
+        throw new Error("상품 이미지 전체 로드 실패");
     }
 }

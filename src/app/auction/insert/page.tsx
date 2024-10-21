@@ -1,90 +1,88 @@
 'use client';
 
 import Label from "@/components/Label/Label";
-import React, {ChangeEvent, FC, FormEvent, useEffect, useState} from "react";
-import {ProductModel} from "@/model/product/product.model";
+import React, {ChangeEvent, FormEvent, useEffect, useState} from "react";
+import {defaultProduct, ProductWithImageModel} from "@/model/product/product.model";
 import {useQuery} from "@tanstack/react-query";
-import {fetchAllProducts} from "@/service/product/product.api";
-import {ImageType} from "@/model/ftp/image.model";
-import {fetchImage} from "@/service/ftp/image.service";
+import {fetchAllProductsWithImages} from "@/service/product/product.service";
+import {defaultImage, ImageType} from "@/model/ftp/image.model";
+import ProductModal from "@/app/auction/insert/ProductModal";
+import {useSearchParams} from "next/navigation";
+import ProductSection from "@/app/auction/insert/productSection";
+import ImageCard from "@/app/auction/insert/imageCard";
+import ImageModal from "@/app/auction/insert/imageModal";
 
-const productCard = () => {
 
-};
+/**
+ * productCode, productColor, productSize, productImage
+ */
 
-type ModalProps = {
-    isOpen: boolean,
-    onClose: any,
-    onSelectProduct: ProductModel,
-    products: ProductModel[];
-}
 
-const Modal = ({isOpen, onClose, onSelectProduct, products}: ModalProps) => {
-    if (!isOpen) return null;
+export default function InsertAuction() {
 
-    return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white p-6 rounded-md w-1/3">
-                <h3 className="text-lg font-semibold mb-4"> 상품 선택 </h3>
-                <ul>
-                    {products.map((product: ProductModel) => (
-                        <li
-                            key={product.id}
-                            className="py-2 cursor-pointer hover:bg-grey-100"
-                            // onClick={onSelectProduct(product)}
-                            value={product.id}
-                        >
-                            {product.name}
-                        </li>
-                    ))}
-                </ul>
-                <button
-                    className="mt-4 bg-red-500 text-white py-2 px-4 rounded">
-                    닫기
-                </button>
-            </div>
-        </div>
-    );
-};
+    const searchParams = useSearchParams();
 
-export default function InsertAuction(productId?: number) {
-    const [selectedProduct, setSelectedProduct] = useState<ProductModel>();
+    const productId = searchParams.get("productId");
+    const [selectedProduct, setSelectedProduct] = useState<ProductWithImageModel>({
+        product: defaultProduct,
+        image: defaultImage,
+    });
     const [description, setDescription] = useState("");
     const [endDate, setEndDate] = useState();
     const [isOpen, setIsOpen] = useState(false);
+    const [currentModal, setCurrentModal] = useState<"product" | "image" | null>(null);
     const [duration, setDuration] = useState<number>(3);
-    const [files, setFiles] = useState<File[]>([])
+    const [files, setFiles] = useState<File[]>([]);
 
-    const productList= useQuery({queryKey: ["products"], queryFn: fetchAllProducts});
-    const productImages = useQuery({queryKey: ["products"], queryFn: () => fetchImage(ImageType.PRODUCT) });
-
+    const productList = useQuery({queryKey: ["allProductsWithImages"], queryFn: () => fetchAllProductsWithImages()});
 
     useEffect(() => {
-        if (!productList.isLoading && productId) {
-            const foundProduct = productList.data!.find((item) => item.id === productId);
-            foundProduct ? setSelectedProduct(foundProduct) : null;
-        }
-    }, [productList, productId]);
+        console.log("selectedProduct: ", selectedProduct);
+    }, [selectedProduct]);
+
+
+    if (productList.isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (!productList || !productList.data) {
+        return <div>프로덕트 리스트를 불러올 수 없습니다.</div>;
+        //TODO error enum
+    }
+
+
+    /*    useEffect(() => {
+            if (!productList.isLoading && productList.data && productId) {
+                const foundProduct = productList.data.find((item) => item.product.id === productId);
+                if (foundProduct) {
+                    setSelectedProduct(foundProduct);
+                }
+            }
+        }, [productList.data, productId]);*/
+
 
     if (productList.error instanceof Error) return <div>Error: {productList.error.message}</div>;
     // 에러 페이지로 변경
 
-    if (!productList.isLoading) {
-        console.log(productList);
-    }
 
-    const openModal = () => {
+    // 모달 핸들러
+    const openModalProduct = () => {
+        setCurrentModal("product");
+        setIsOpen(true);
+    };
+
+    const openModalImage = () => {
+        setCurrentModal("image");
         setIsOpen(true);
     };
 
     const closeModal = () => {
         setIsOpen(false);
+        setCurrentModal(null);
     };
 
-    const handleProductSelect = () => {
-        closeModal();
-    };
 
+    // 파일 업로드 핸들러
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             const selectedFiles = Array.from(e.target.files).slice(0, 3);
@@ -92,7 +90,13 @@ export default function InsertAuction(productId?: number) {
         }
     };
 
+    // 제품 선택 핸들러
+    const handleSelectProduct = (product: ProductWithImageModel) => {
+        setSelectedProduct(product);
+        closeModal();
+    }
 
+    // 기간 선택 핸들러
     const durationSelectButton = () => {
         const durations = [3, 5, 7];
 
@@ -125,7 +129,7 @@ export default function InsertAuction(productId?: number) {
         const endDate = currentDate.getDate() + days;
 
         return (
-                `${currentDate.toLocaleDateString()} ${String(currentDate.getHours()).padStart(2, '0')} : ${String(currentDate.getMinutes()).padStart(2, '0')} -
+            `${currentDate.toLocaleDateString()} ${String(currentDate.getHours()).padStart(2, '0')} : ${String(currentDate.getMinutes()).padStart(2, '0')} -
                 ${endDate.toLocaleString()}`
 
         );
@@ -195,19 +199,18 @@ export default function InsertAuction(productId?: number) {
                 className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                 type="button"
                 id="product"
-                onClick={openModal}
+                onClick={openModalProduct}
             >
                 {selectedProduct ? (
                         <>
-                            <img src={selectedProduct.image.uploadUrl} alt={selectedProduct.name}/>
-                            <span>{selectedProduct.name}</span>
+                            <img src={selectedProduct.image.uploadUrl} alt={selectedProduct.image.uploadName}/>
+                            <span>{selectedProduct.product.name}</span>
                         </>
                     ) :
                     <div>상품 선택</div>
                 }
-            </button>
+            </button>;
         }
-
     };
 
     const renderDescription = () => {
@@ -225,14 +228,20 @@ export default function InsertAuction(productId?: number) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="flex justify-center items-center h-screen mx-auto">
+        <form onSubmit={handleSubmit} className="flex justify-center items-center min-h-screen mx-auto">
             <div className="w-3/4 items-center mt-10 mb-10 ml-10">
+                <Label className="block">
+                    상품:
+                </Label>
                 <div className="w-full mb-6">
-                    <Label className="block">
-                        상품:
-                    </Label>
-                    {renderSelectProductButton()}
-                    <input type="hidden" name="productId" value={selectedProduct?.id}/>
+                    <ProductSection openModal={openModalProduct}/>
+                    {isOpen && currentModal === "product" && (
+                        <ProductModal
+                            onClose={closeModal}
+                            productList={productList.data}
+                            onClick={handleSelectProduct}/>
+                    )}
+                    <input type="hidden" name="productId" value={selectedProduct?.product.id}/>
                 </div>
                 <div className="w-full mb-6">
                     <Label>
@@ -247,17 +256,18 @@ export default function InsertAuction(productId?: number) {
                     <Label>
                         업로드 이미지:
                     </Label>
-                    {renderUploadBox()}
+                    <div className="flex gap-4 mt-6">
+                        <ImageCard/>
+                        <ImageCard/>
+                        <ImageCard/>
+                    </div>
+                    {isOpen && currentModal === "image" && (
+                        <ImageModal
+                            onClose={closeModal}
+                            openModal={openModalImage}/>
+                    )}
                 </div>
                 {renderDescription()}
-
-                {/*<Modal
-                    isOpen={isOpen}
-                    onClose={closeModal}
-                    onSelectProduct={handleProductSelect}
-                    products={productList}
-                />
-*/}
                 <button type="submit"
                         className={`mt-4 py-2 px-4 rounded text-white ${isFormValid ? 'bg-blue-500 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'}`}
                         disabled={!isFormValid}>

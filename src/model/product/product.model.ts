@@ -32,7 +32,8 @@ export interface ProductDTO {
     wishes: number;
 }
 
-export interface ProductWithImageModel extends ProductModel {
+export interface ProductWithImageModel {
+    product: ProductModel;
     image: ImageModel;
 }
 
@@ -55,6 +56,21 @@ export const initialProduct: ProductModel = {
     price: 0,
     color: '',
     description: '',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    wishes:0,
+    sizes: {} as SizeModel[],
+};
+
+export const defaultProduct: ProductModel = {
+    id: 0,
+    brand: 'default',
+    category: 'default',
+    name: 'default',
+    productCode: "default",
+    price: 0,
+    color: 'default',
+    description: 'default',
     createdAt: new Date(),
     updatedAt: new Date(),
     wishes:0,

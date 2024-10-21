@@ -25,7 +25,6 @@ export default function CompletePage() {
     }, []);
 
 
-
     return (
         <section className="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
             <div className="mx-auto max-w-2xl px-4 2xl:px-0">
@@ -50,21 +49,23 @@ export default function CompletePage() {
                         <dd className="font-medium text-gray-900 dark:text-white sm:text-end">Flowbite Studios LLC</dd>
                     </dl>
                     <dl className="sm:flex items-center justify-between gap-4">
-                        <dt className="font-normal mb-1 sm:mb-0 text-gray-500 dark:text-gray-400">Address</dt>
+                        <dt className="font-normal mb-1 sm:mb-0 text-gray-500 dark:text-gray-400">배송지</dt>
                         <dd className="font-medium text-gray-900 dark:text-white sm:text-end">34 Scott Street, San
                             Francisco, California, USA
                         </dd>
                     </dl>
                     <dl className="sm:flex items-center justify-between gap-4">
-                        <dt className="font-normal mb-1 sm:mb-0 text-gray-500 dark:text-gray-400">Phone</dt>
+                        <dt className="font-normal mb-1 sm:mb-0 text-gray-500 dark:text-gray-400">핸드폰 번호</dt>
                         <dd className="font-medium text-gray-900 dark:text-white sm:text-end">+(123) 456 7890</dd>
                     </dl>
                 </div>
                 <div className="flex items-center space-x-4">
-                    <ButtonPrimary>
+                    <ButtonPrimary
+                        onClick={() => router.push("/account-order")}>
                         결제 내역으로 돌아가기
                     </ButtonPrimary>
-                    <ButtonPrimary>
+                    <ButtonPrimary
+                        onClick={() => router.push("/")}>
                         메인 화면으로
                     </ButtonPrimary>
                 </div>

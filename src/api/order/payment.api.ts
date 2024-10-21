@@ -14,7 +14,7 @@ const savePaymentTemp = async (options: Omit<RequestOptions<any,PaymentTempModel
 
 // 결제 승인 (POST 요청)
 const savePayment = async (options: Omit<RequestOptions<any, PaymentConfirmModel>, "params">): Promise<PaymentSaveModel> => {
-    return (await strategy.POST(`${api.payment}`, options)).data;
+    return (await strategy.POST(`${api.payment}`, options));
 };
 
 // 결제 조회 (GET 요청)
