@@ -1,9 +1,10 @@
-import {RequestOptions} from "@/model/api/RequestOptions";
+//src/service/auction/auction.service.ts
+
 import {auctionAPI} from "@/api/auction/auction.api";
-import {AddressModel} from "@/model/user/address.model";
 import Cookies from "js-cookie";
-import {addressAPI} from "@/api/user/address.api";
 import {AuctionModel} from "@/model/auction/auction.model";
+import {fetchImage} from "@/service/ftp/image.service";
+import {ImageType} from "@/model/ftp/image.model";
 
 
 export async function fetchAuction(auctionId: string) {
@@ -65,5 +66,23 @@ export async function findByUserAuction(): Promise<AuctionModel[]> {
     } catch (error) {
         console.error("findByUserAuction 에러 발생", error);
         throw new Error("경매 내역을 가져오는 중 에러가 발생했습니다.");
+    }
+}
+
+export async function fetchAuctionWithImages(auctionId: string) {
+    try {
+        const auction = await fetchAuction(auctionId);
+        if (!auction) {
+            console.error('auction 값이 undefined');
+            new Error('');
+        }
+
+        const images = await fetchImage(ImageType.AUCTION, auctionId);
+
+        return { auction, images };
+    } catch (error) {
+        console.error('fetchAuctionWithImages 중 오류 발생');
+        throw new Error('fetchAuctionWithImages 중 오류 발생');
+        // TODO error enum
     }
 }

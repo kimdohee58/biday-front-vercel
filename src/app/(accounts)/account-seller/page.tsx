@@ -1,43 +1,32 @@
-import React, {ChangeEvent} from "react";
+"use client"
+
+import React, {ChangeEvent, useState} from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
-import {accountAPI} from "@/api/user/account.api"
-import {Suspense} from "react";
-
-import {
-    Input,
-    Typography,
-    Select,
-    Option,
-    Popover,
-    PopoverHandler,
-    PopoverContent,
-} from "@material-tailwind/react";
-
-
-import {AccountModel, BankCode} from "@/model/user/account.model";
+import {Input, Select, Typography,} from "@material-tailwind/react";
+import {AccountModel} from "@/model/user/account.model";
 import {useMutation, useQuery} from "@tanstack/react-query";
 import useRandomId from "@/hooks/useRandomId";
-import {getAccount, saveAccount} from "@/service/account/account.service";
-import {ApiError} from "@/utils/error";
-import { cookies } from "next/headers";
+import {getAccount, saveAccount} from "@/service/user/account.service";
+import Cookies from "js-cookie";
 
 
-async function AccountDetails() {
-
-    const accountData = useQuery({queryKey: ["account"], queryFn: () => getAccount()});
-    const cookieStore = cookies();
-    const userToken = cookieStore.get("userToken");
+const getUserToken = () => {
+    const userToken = Cookies.get("userToken");
     if (!userToken) {
-        return;
+        throw new Error('');
+        //TODO error enum
     }
 
-    const user = JSON.parse(userToken.value);
+    return JSON.parse(userToken);
+}
 
-    if (!accountData.data) {
+async function AccountDetails({accountData, userName}) {
+    if (!accountData || Object.keys(accountData).length === 0) {
         return (
             <div>
                 <div>
                     계좌 정보가 존재하지 않습니다.
+                    <br/>
                     계좌를 등록하고 판매를 시작해 보세요.
                 </div>
             </div>
@@ -57,7 +46,7 @@ async function AccountDetails() {
                     </Typography>
                     <Input
                         size="lg"
-                        value={user.userName}
+                        value={userName}
                         labelProps={{
                             className: "hidden",
                         }}
@@ -101,9 +90,9 @@ async function AccountDetails() {
                         }}
                         className="border-t-blue-gray-200 aria-[expanded=true]:border-t-primary"
                         disabled
-                        value={accountData.data!.bankName}
+                        value={accountData.bankName}
                     >
-                        {accountData.data!.bankName}
+                        {accountData.bankName}
                     </Select>
                 </div>
                 <div className="w-full">
@@ -120,19 +109,17 @@ async function AccountDetails() {
                             className: "hidden",
                         }}
                         disabled
-                        value={accountData.data!.accountNum}
+                        value={accountData.accountNum}
                         className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
                     />
                 </div>
             </div>
         </div>
     );
-
 }
 
 
 export default function Account1() {
-    const [date, setDate] = useState();
     const [bankCode, setBankCode] = useState<string>("");
     const [name, setName] = useState<string>("");
     const [birth, setBirth] = useState<string>("");
@@ -148,30 +135,7 @@ export default function Account1() {
     const AUTH_TYPE = '0';
 
     const accountData = useQuery({queryKey: ["account"], queryFn: () => getAccount()});
-
-    if (!accountData.isLoading) {
-        console.log(accountData.data);
-    }
-
-    if (accountData.error) {
-        switch (accountData.error.message) {
-            case ApiError.NOT_FOUND :
-                return (<div>
-                    <Typography variant="h5" color="blue-gray">
-                        아직 등록된 계좌가 없습니다.
-                    </Typography>
-                    <Typography
-                        variant="small"
-                        className="text-gray-600 font-normal mt-1"
-                    >
-                        계좌를 등록하면 판매를 시작할 수 있습니다.
-                    </Typography>
-                    <ButtonPrimary> 판매자 등록 </ButtonPrimary>
-                </div>);
-        }
-
-    }
-
+    const user = getUserToken();
 
     /*useEffect(() => {
         switch (bankCode) {
@@ -244,14 +208,13 @@ export default function Account1() {
     });
 
     const handleLogin = () => {
+        savedAccount();
         window.location.href = `${AUTH_URL}?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(SCOPE)}&state=${STATE}&auth_type=${AUTH_TYPE}`;
     };
 
-    const onClickSubmit = () => {
-        const userToken = JSON.parse(localStorage.getItem("userToken")!);
-
+    const savedAccount = () => {
         const account: AccountModel = {
-            userId: userToken.userId,
+            userId: user.userId,
             bankTranId: bankTranId,
             bankCode: bankCode,
             bankName: bankName,
@@ -263,39 +226,17 @@ export default function Account1() {
         };
 
         mutation.mutate(account);
-
     };
 
     return (
-
         <div className="space-y-10 sm:space-y-12">
             <h2 className="text-2xl sm:text-3xl font-semibold">계좌 정보</h2>
-            <Typography
-                variant="small"
-                className="text-gray-600 font-normal mt-1"
-            >
-                Update your profile information below.
-            </Typography>
-                <AccountDetails/>
-            <ButtonPrimary
-                onClick={handleLogin}>판매자 등록</ButtonPrimary>
+            <AccountDetails accountData={accountData.data} userName={user.userName}/>
+            {accountData.data && Object.keys(accountData.data).length === 0 && (
+                <ButtonPrimary onClick={handleLogin}>
+                    판매자 등록
+                </ButtonPrimary>
+            )}
         </div>
     );
 }
-
-export function AccountBilling() {
-
-    return (
-        <div className="space-y-10 sm:space-y-12">
-            {/* HEADING */}
-            <h2 className="text-2xl sm:text-3xl font-semibold">계좌 등록</h2>
-            <div className="max-w-2xl prose prose-slate dark:prose-invert">
-
-                <div className="pt-10">
-                    <ButtonPrimary>판매자 등록</ButtonPrimary>
-                </div>
-            </div>
-        </div>
-    );
-}
-

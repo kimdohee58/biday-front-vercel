@@ -1,11 +1,11 @@
-//src/componets/ProductCard.tsx
+//src/components/ProductCard.tsx
 "use client";
 
 import React, {FC, useEffect, useState} from "react";
 import LikeButton from "./LikeButton";
 import Prices from "./Prices";
 import {ArrowsPointingOutIcon} from "@heroicons/react/24/outline";
-import {Product, PRODUCTS} from "@/data/data";
+import {PRODUCTS} from "@/data/data";
 import {StarIcon} from "@heroicons/react/24/solid";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
@@ -307,7 +307,13 @@ const ProductCard: FC<ProductCardProps> = ({
                         />
                     </Link>
                     <ProductStatus status={status}/>
-                    <LikeButton liked={isLiked} className="absolute top-3 end-3 z-10"/>
+
+                    {/*기존코드랑 여기가 좀 다름.*/}
+                    <LikeButton
+                        className="absolute top-3 end-3 z-10"
+                        productId={data.id}
+                        liked={isLiked}
+                    />
                     {sizes ? renderSizeList() : renderGroupButtons()}
                 </div>
 

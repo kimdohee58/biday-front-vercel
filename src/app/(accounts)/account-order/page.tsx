@@ -1,241 +1,106 @@
+//src/app/(account)/account-order/page.tsx
 "use client";
-import React, { useState, useEffect } from "react";
-import ButtonSecondary from "@/shared/Button/ButtonSecondary";
-import { useUserContext } from "@/utils/userContext";
-import { findByUserAuction } from "@/service/auction/auction.service";
-import { findByUserAward } from "@/service/auction/award.service";
-import { AuctionModel } from "@/model/auction/auction.model";
-import { AwardModel } from "@/model/auction/award.model";
-import {fetchAllPaymentByUserId} from "@/service/order/payment.service";
-import {PaymentModel} from "@/model/order/payment.model";
+import React, {useEffect, useState} from "react";
+import {useFetchData} from "@/hooks/useAccountOrderData";
+import {
+    useFetchAuctionProducts,
+    useFetchAwardProducts,
+    useFetchBidProducts,
+    useFetchPaymentProducts
+} from "@/components/AccountuseQuery/useQuery";
 
-// HistoryType을 세분화
-enum HistoryType {
-    AUCTION = "AUCTION", // 경매 내역
-    AWARD = "AWARD",     // 낙찰 내역
-}
+import {
+    renderAuctionHistory,
+    renderBidHistory,
+    renderAwardHistory,
+    renderPaymentHistory
+} from "@/components/RenderAccountOrder";
+import {
+    mapDataWithAuctionModel,
+    mapDataWithAwardModel,
+    mapDataWithPaymentModel
+} from "@/utils/mapDataWithProducts";
+import {PaymentRequestModel} from "@/model/order/payment.model";
 
-enum AuctionSubType {
-    AUCTION_SELL = "AUCTION_SELL", // 판매 내역
-    AUCTION_BID = "AUCTION_BID",   // 입찰 내역
-}
+const AccountOrder = () => {
+    const [activeTab, setActiveTab] = useState("auction");
+    const [mappedPaymentData, setMappedPaymentData] = useState<PaymentRequestModel[]>([]);
 
-enum AwardSubType {
-    AWARD_AWARD = "AWARD_AWARD",  // 낙찰 내역
-    PAYMENT = "PAYMENT",          // 결제 내역
-}
-
-export default function AccountOrder() {
-    const [selectedHistory, setSelectedHistory] = useState<HistoryType | null>(null);
-    const [selectedAuctionSubType, setSelectedAuctionSubType] = useState<AuctionSubType | null>(null);
-    const [selectedAwardSubType, setSelectedAwardSubType] = useState<AwardSubType | null>(null);
-    const [auctionData, setAuctionData] = useState<AuctionModel[]>([]);
-    const [awardData, setAwardData] = useState<AwardModel[]>([]);
-    const [loading, setLoading] = useState(false);
-    const [paymentData, setPaymentData] = useState<PaymentModel[]>([]);
-    const { user } = useUserContext();
-    // 유즈서스펜스
-    // 경매 데이터를 가져오는 함수
-    const fetchAuctionData = async () => {
-        setLoading(true);
-        try {
-            const data = await findByUserAuction();
-            console.log("auctionData: ",data)
-            setAuctionData(data);
-        } catch (error) {
-            console.error("경매 데이터를 가져오는 중 오류가 발생했습니다.", error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // 페이먼트 데이터를 가져오는 함수
-    const fetchPaymentData= async ()  => {
-        setLoading(true);
-        try{
-            const data = await fetchAllPaymentByUserId();
-            console.log("paymentData: " , data)
-            setPaymentData(data);
-        }catch (error){
-            console.error("결제 데이터를 가져오는 중 오류 발생 : " , error)
-        }finally {
-            setLoading(false);
-        }
-    }
+    // useFetchData 훅을 사용하여 데이터를 가져옴
+    const {
+        auctionData,
+        awardData,
+        paymentData,
+        loading
+    } = useFetchData(activeTab);
 
 
-    // 낙찰 데이터를 가져오는 함수
-    const fetchAwardData = async () => {
-        setLoading(true);
-        try {
-            const data = await findByUserAward();
-            console.log("awardData: ",data)
-            setAwardData(data);
-        } catch (error) {
-            console.error("낙찰 데이터를 가져오는 중 오류가 발생했습니다.", error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    // 각 데이터 훅 사용
+    const { data: auctionProductList } = useFetchAuctionProducts(auctionData);
+    const { data: bidProductList } = useFetchBidProducts();
+    const { data: awardProductList } = useFetchAwardProducts(awardData);
+    const { data: paymentProductList } = useFetchPaymentProducts(paymentData);
 
+    // 비동기 데이터 매핑 처리
     useEffect(() => {
-        if (selectedAuctionSubType) {
-            fetchAuctionData(); // 판매 내역 또는 입찰 내역 선택 시 경매 데이터를 가져오기
-        } else if (selectedAwardSubType) {
-            if (selectedAwardSubType === AwardSubType.PAYMENT) {
-                fetchPaymentData(); // 결제 내역 선택 시 결제 데이터를 가져오기
-            } else {
-                fetchAwardData(); // 낙찰 내역 선택 시 낙찰 데이터를 가져오기
+        const fetchMappedPaymentData = async () => {
+            if (paymentData && paymentProductList) {
+                const mappedData = await mapDataWithPaymentModel(paymentData, paymentProductList);
+                setMappedPaymentData(mappedData); // 비동기 데이터 매핑 후 상태에 저장
             }
-        }
-    }, [selectedAuctionSubType, selectedAwardSubType]);
+        };
 
-    // 경매 내역 렌더링
-    const renderAuctionHistory = () => {
-        if (loading) {
-            return <div>Loading...</div>;
-        }
+        fetchMappedPaymentData(); // 함수 호출
+    }, [paymentData, paymentProductList]); // paymentData나 paymentProductList가 변경될 때 실행
 
-        return auctionData.length > 0 ? (
-            auctionData.map((product, index) => (
-                <div key={index} className="flex py-4 sm:py-7 last:pb-0 first:pt-0">
-                    <div className="ml-4 flex flex-1 flex-col">
-                        <div>
-                            <h3 className="text-base font-medium">{product.id}</h3>
-                        </div>
-                    </div>
-                </div>
-            ))
-        ) : (
-            <p>내역이 없습니다.</p>
-        );
-    };
-
-    // 낙찰 내역 렌더링
-    const renderAwardHistory = () => {
-        if (loading) {
-            return <div>Loading...</div>;
-        }
-
-        return awardData.length > 0 ? (
-            awardData.map((award, index) => (
-                <div key={index} className="flex py-4 sm:py-7 last:pb-0 first:pt-0">
-                    <div className="ml-4 flex flex-1 flex-col">
-                        <div>
-                            <h3 className="text-base font-medium">{award.id}</h3>
-                        </div>
-                    </div>
-                </div>
-            ))
-        ) : (
-            <p>내역이 없습니다.</p>
-        );
-
-
-    };
-
-    // 결제 내역 렌더링
-    const renderPaymentHistory = () => {
-
-        if (loading) {
-            return <div>Loading...</div>;
-        }
-
-        return paymentData.length > 0 ? (
-            paymentData.map((payment, index) => (
-                <div key={index} className="flex py-4 sm:py-7 last:pb-0 first:pt-0">
-                    <div className="ml-4 flex flex-1 flex-col">
-                        <div>
-                            <h3 className="text-base font-medium">결제 ID: {payment.orderId}</h3>
-                            <p>Amount: {}원</p>{/*무슨 값을 넣어야 할지 모르겠음. */}
-                            <p>Date: {}</p>{/*무슨 값을 넣어야 할지 모르겠음. */}
-                        </div>
-                    </div>
-                </div>
-            ))
-        ) : (
-            <p>결제 내역이 없습니다.</p>
-        );
-    };
-
-    // 전체 내역 렌더링
-    const renderHistoryContent = () => {
-        if (selectedHistory === HistoryType.AUCTION) {
-            // 경매 내역 선택 시
-            return (
-                <div>
-                    <div className="flex space-x-4">
-                        <ButtonSecondary onClick={() => setSelectedAuctionSubType(AuctionSubType.AUCTION_SELL)}>
-                            판매 내역
-                        </ButtonSecondary>
-                        <ButtonSecondary onClick={() => setSelectedAuctionSubType(AuctionSubType.AUCTION_BID)}>
-                            입찰 내역
-                        </ButtonSecondary>
-                    </div>
-                    {selectedAuctionSubType === AuctionSubType.AUCTION_SELL && (
-                        <div>
-                            <h2 className="text-2xl sm:text-3xl font-semibold">판매 내역</h2>
-                            {renderAuctionHistory()}
-                        </div>
-                    )}
-                    {selectedAuctionSubType === AuctionSubType.AUCTION_BID && (
-                        <div>
-                            <h2 className="text-2xl sm:text-3xl font-semibold">입찰 내역</h2>
-                            {renderAuctionHistory()}
-                        </div>
-                    )}
-                </div>
-            );
-        }
-
-        if (selectedHistory === HistoryType.AWARD) {
-            // 낙찰 내역 선택 시
-            return (
-                <div>
-                    <div className="flex space-x-4">
-                        <ButtonSecondary onClick={() => setSelectedAwardSubType(AwardSubType.AWARD_AWARD)}>
-                            낙찰 내역
-                        </ButtonSecondary>
-                        <ButtonSecondary onClick={() => setSelectedAwardSubType(AwardSubType.PAYMENT)}>
-                            결제 내역
-                        </ButtonSecondary>
-                    </div>
-                    {selectedAwardSubType === AwardSubType.AWARD_AWARD && (
-                        <div>
-                            <h2 className="text-2xl sm:text-3xl font-semibold">낙찰 내역</h2>
-                            {renderAwardHistory()}
-                        </div>
-                    )}
-                    {selectedAwardSubType === AwardSubType.PAYMENT && (
-                        <div>
-                            <h2 className="text-2xl sm:text-3xl font-semibold">결제 내역</h2>
-                            {renderAwardHistory()}
-                        </div>
-                    )}
-                    {selectedAwardSubType === AwardSubType.PAYMENT && (
-                        <div>
-                            <h2 className="text-2xl sm:text-3xl font-semibold">결제 내역</h2>
-                            {renderPaymentHistory()}
-                        </div>
-                    )}
-                </div>
-            );
-        }
-
-        return null;
-    };
 
     return (
         <div className="space-y-10 sm:space-y-12">
-            <div className="flex space-x-4">
-                <ButtonSecondary onClick={() => setSelectedHistory(HistoryType.AUCTION)}>
-                    경매 내역
-                </ButtonSecondary>
-                <ButtonSecondary onClick={() => setSelectedHistory(HistoryType.AWARD)}>
-                    낙찰 내역
-                </ButtonSecondary>
+            <div>
+                <div className="flex space-x-8 mb-8">
+                    <h2
+                        className={`text-2xl sm:text-3xl font-semibold cursor-pointer ${activeTab === "auction" ? "text-indigo-600 border-b-2 border-indigo-600" : "text-gray-800"}`}
+                        onClick={() => {setActiveTab("auction")}}
+                    >
+                        경매 내역
+                    </h2>
+                    <h2
+                        className={`text-2xl sm:text-3xl font-semibold cursor-pointer ${activeTab === "award" ? "text-indigo-600 border-b-2 border-indigo-600" : "text-gray-800"}`}
+                        onClick={() => {setActiveTab("award")}}
+                    >
+                        낙찰 내역
+                    </h2>
+                </div>
+                {loading ? <div>Loading...</div> : (
+                    <>
+                        {activeTab === "auction" && (
+                            <>
+                                <div className="mb-8">
+                                    {renderAuctionHistory(mapDataWithAuctionModel(auctionData, auctionProductList!!))}
+                                </div>
+                                <div className="mb-8">
+                                    {renderBidHistory(bidProductList!!)}  {/* bidProductList 전달 */}
+                                </div>
+                            </>
+                        )}
+                        {activeTab === "award" && (
+                            <>
+                                <div className="mb-8">
+                                    {renderAwardHistory(mapDataWithAwardModel(awardData, awardProductList!!))}  {/* awardProductList 전달 */}
+                                </div>
+                                <div className="mb-8">
+                                    {renderPaymentHistory(mappedPaymentData)}  {/* 비동기 처리된 mappedPaymentData 사용 */}
+                                </div>
+                            </>
+                        )}
+                    </>
+                )}
+
             </div>
-            {renderHistoryContent()}
         </div>
     );
-}
+};
+
+export default AccountOrder;
+
+//mapDataWithModel,mapDataWithoutModel

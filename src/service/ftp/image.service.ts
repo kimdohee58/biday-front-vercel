@@ -4,6 +4,22 @@ import {PrismaClient} from "@prisma/client";
 const baseUrl = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/images`;
 const prisma = new PrismaClient();
 
+
+export async function fetchAllProductImage(): Promise<ImageModel[]> {
+
+    const url = `${process.env.NEXT_PUBLIC_API_CLIENT_URL}/api/images?type=${ImageType.PRODUCT}`;
+
+    try {
+        const response = await fetch(url, {
+            method: "GET"
+        })
+
+        return await response.json();
+    } catch (error) {
+        console.error("이미지 로드 중 오류 발생", error);
+        throw new Error("상품 이미지 전체 로드 실패");
+    }
+}
 // 이미지 업로드
 export async function uploadImage({filePath, type, referenceId, files}: UploadImageParams) {
 
@@ -40,6 +56,7 @@ export async function uploadImage({filePath, type, referenceId, files}: UploadIm
     } catch (error) {
         console.error("이미지 업로드 중 에러 발생: image.api.ts : uploadImage", error);
         throw new Error("이미지 업로드 실패");
+        // TODO error enum
     }
 }
 
@@ -85,6 +102,7 @@ export async function fetchImage(type: ImageType, id?: string): Promise<ImageMod
         } catch (error) {
             console.error("이미지 로드 중 오류 발생", error);
             throw new Error("이미지 로드 실패");
+            // TODO error enum
         }
 
     } else {
@@ -110,6 +128,7 @@ export async function fetchImage(type: ImageType, id?: string): Promise<ImageMod
         } catch (error) {
             console.error("이미지 로드 중 에러 발생: image.api.ts: fetchImage", error);
             throw new Error("이미지 로드 실패");
+            // TODO error enum
         }
     }
 
@@ -135,5 +154,6 @@ export async function fetchImageOne(type: ImageType, id: string) {
     } catch (error) {
         console.error("이미지 로드 중 오류 발생", error);
         throw new Error("이미지 로드 실패");
+        // TODO error enum
     }
 }

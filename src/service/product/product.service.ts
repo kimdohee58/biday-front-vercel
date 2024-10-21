@@ -1,26 +1,20 @@
 import {productAPI} from "@/api/product/product.api";
-import {ProductDictionary, ProductModel, SearchFilter} from "@/model/product/product.model";
+import {ProductDictionary, ProductModel, ProductWithImageModel, SearchFilter} from "@/model/product/product.model";
 import {auctionAPI} from "@/api/auction/auction.api";
 import {AuctionModel} from "@/model/auction/auction.model";
 import {fetchAuctionsBySize} from "@/service/auction/auction.service";
 import {setLoading} from "@/lib/features/products.slice";
+import {SizeModel} from "@/model/product/size.model";
+import {defaultImage, ImageType} from "@/model/ftp/image.model";
+import {fetchAllProductImage} from "@/service/ftp/image.service";
 
 export async function fetchAllProducts() {
     try {
 
-        const productDictArray: ProductModel[] = await productAPI.findAll();
+        return Object.values(await productAPI.findAll());
 
-        // if (productDictArray.length === 0) {
-        //     return [];
-        // }
-
-        return productDictArray.map((item) => Object.values(item)).flat();
-
-        // API 호출
     } catch (error) {
         console.error("상품 데이터를 가져오는 데 오류가 발생했습니다:", error);
-    } finally {
-        setLoading(false); // 로딩 완료
     }
 }
 
@@ -45,10 +39,6 @@ export async function fetchProducts(searchFilter: SearchFilter) {
     }
 }
 
-// 데이터 변환을 여기서 해야한다. 인수로 필요한 것을 받아서,
-// 서비스에서 데이터 변환을 자바 스프링을 서비스에서 했잖아. 변환을 똑같이 서비스를 여기에서 해야한다.
-
-
 export async function fetchProductOne(productId: string): Promise<ProductModel> {
 
     try {
@@ -71,6 +61,7 @@ export async function fetchProductOne(productId: string): Promise<ProductModel> 
     } catch (error) {
         console.error("fetchProductOne 에러 발생", error);
         throw new Error();
+        // TODO error enum
     }
 }
 
@@ -94,6 +85,7 @@ export async function fetchProduct(productId: number): Promise<ProductModel[]> {
     } catch (error) {
         console.error("fetchProduct 에러 발생", error);
         throw new Error("");
+        // TODO error enum
     }
 }
 
@@ -134,5 +126,58 @@ export async function fetchProductDetails(id: number): Promise<{
     } catch (error) {
         console.error("fetchProductDetail", error);
         throw new Error("fetchProductError");
+        // TODO error enum
     }
 }
+
+
+export async function fetchProductBySizeId(sizeId: number): Promise<SizeModel[]> {
+    try {
+        const options = {
+            params: {
+                sizeId: sizeId
+            }
+        };
+
+        const productDictArray: SizeModel[] = await productAPI.findBySizeId(options);
+
+        if (productDictArray.length === 0) {
+            return [];
+        }
+
+        return productDictArray;
+    } catch (error) {
+        console.error("fetchProduct 에러 발생", error);
+        throw new Error("");
+        // TODO error enum
+    }
+}
+
+export async function fetchAllProductsWithImages(): Promise<ProductWithImageModel[]> {
+    try {
+        const products = await fetchAllProducts();
+        const images = await fetchAllProductImage();
+
+        if (!products) {
+            console.error("products 값이 undefined");
+            throw new Error("");
+        }
+
+        return products.map(product => {
+            const productImages = images.find(image => (
+                image.referencedId === product.id.toString() && image.type === ImageType.PRODUCT
+            )) || defaultImage;
+
+            return {
+                product,
+                image: productImages,
+            };
+        });
+
+    } catch (error) {
+        console.error("fetchAllProductsWithImages 중 오류 발생");
+        throw new Error("")
+    }
+}
+
+

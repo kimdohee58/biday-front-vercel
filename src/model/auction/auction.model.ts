@@ -29,7 +29,6 @@ export interface AwardAuctionModel {
     updatedAt: Date;
     sizeId: number;
 }
-//     award: {} as AwardModel, 여기서 이게 new 생성자이다. new AwardModel() x
 
 
 
