@@ -23,7 +23,7 @@ export default function AvatarDropdown() {
 
 
     return (
-        <div className="AvatarDropdown border border-rose-500">
+        <div className="AvatarDropdown">
             <Popover className="relative">
                 {({ open, close }) => (
                     <>

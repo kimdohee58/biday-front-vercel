@@ -4,6 +4,7 @@ import {auctionAPI} from "@/api/auction/auction.api";
 import {AuctionModel} from "@/model/auction/auction.model";
 import {fetchAuctionsBySize} from "@/service/auction/auction.service";
 import {setLoading} from "@/lib/features/products.slice";
+import {SizeModel} from "@/model/product/size.model";
 
 export async function fetchAllProducts() {
     try {
@@ -45,10 +46,6 @@ export async function fetchProducts(searchFilter: SearchFilter) {
     }
 }
 
-// 데이터 변환을 여기서 해야한다. 인수로 필요한 것을 받아서,
-// 서비스에서 데이터 변환을 자바 스프링을 서비스에서 했잖아. 변환을 똑같이 서비스를 여기에서 해야한다.
-
-
 export async function fetchProductOne(productId: string): Promise<ProductModel> {
 
     try {
@@ -71,6 +68,7 @@ export async function fetchProductOne(productId: string): Promise<ProductModel> 
     } catch (error) {
         console.error("fetchProductOne 에러 발생", error);
         throw new Error();
+        // TODO error enum
     }
 }
 
@@ -94,6 +92,7 @@ export async function fetchProduct(productId: number): Promise<ProductModel[]> {
     } catch (error) {
         console.error("fetchProduct 에러 발생", error);
         throw new Error("");
+        // TODO error enum
     }
 }
 
@@ -134,5 +133,31 @@ export async function fetchProductDetails(id: number): Promise<{
     } catch (error) {
         console.error("fetchProductDetail", error);
         throw new Error("fetchProductError");
+        // TODO error enum
     }
 }
+
+
+export async function fetchProductBySizeId(sizeId: number): Promise<SizeModel[]> {
+    try {
+        const options = {
+            params: {
+                sizeId: sizeId
+            }
+        };
+
+        const productDictArray: SizeModel[] = await productAPI.findBySizeId(options);
+
+        if (productDictArray.length === 0) {
+            return [];
+        }
+
+        return productDictArray;
+    } catch (error) {
+        console.error("fetchProduct 에러 발생", error);
+        throw new Error("");
+        // TODO error enum
+    }
+}
+
+

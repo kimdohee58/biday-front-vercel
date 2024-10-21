@@ -17,3 +17,4 @@ export const initialSize: SizeModel = {
     createdAt: new Date(),
     updatedAt:  new Date(),
 };
+

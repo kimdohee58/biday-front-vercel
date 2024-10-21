@@ -35,10 +35,6 @@ const pages: {
         name: "계좌정보",
         link: "/account-seller",
     },
-    {
-        name: "내역",
-        link: "/#"
-    }
 ];
 
 const CommonLayout: FC<CommonLayoutProps> = ({children}) => {

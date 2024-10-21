@@ -1,7 +1,8 @@
 import {UserModel} from "@/model/user/user.model";
 import {strategy} from "../api.strategy"; // 전략 패턴을 사용하는 공통 모듈 import
 import {api} from "../request";
-import {RequestOptions} from "@/model/api/RequestOptions"; // 공통 API 경로 설정 import
+import {RequestOptions} from "@/model/api/RequestOptions";
+import {AwardModel} from "@/model/auction/award.model"; // 공통 API 경로 설정 import
 
 // 회원 한 명의 정보를 가져오는 API
 /*
@@ -75,9 +76,14 @@ const changePassword = async (options: RequestOptions<{}, { password: string, ne
     return response;
 };
 
+const checkPassword = async (options: RequestOptions<{}, null>): Promise<boolean> => {
+    const response = await strategy.POST(`${api.user}/password`, options);
+    return response;
+}
 
 
 export const userAPI = {
-    changePassword
+    changePassword,
+    checkPassword
 }
 

@@ -40,6 +40,7 @@ export async function uploadImage({filePath, type, referenceId, files}: UploadIm
     } catch (error) {
         console.error("이미지 업로드 중 에러 발생: image.api.ts : uploadImage", error);
         throw new Error("이미지 업로드 실패");
+        // TODO error enum
     }
 }
 
@@ -85,6 +86,7 @@ export async function fetchImage(type: ImageType, id?: string): Promise<ImageMod
         } catch (error) {
             console.error("이미지 로드 중 오류 발생", error);
             throw new Error("이미지 로드 실패");
+            // TODO error enum
         }
 
     } else {
@@ -110,6 +112,7 @@ export async function fetchImage(type: ImageType, id?: string): Promise<ImageMod
         } catch (error) {
             console.error("이미지 로드 중 에러 발생: image.api.ts: fetchImage", error);
             throw new Error("이미지 로드 실패");
+            // TODO error enum
         }
     }
 
@@ -135,5 +138,6 @@ export async function fetchImageOne(type: ImageType, id: string) {
     } catch (error) {
         console.error("이미지 로드 중 오류 발생", error);
         throw new Error("이미지 로드 실패");
+        // TODO error enum
     }
 }

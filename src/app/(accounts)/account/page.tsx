@@ -16,7 +16,6 @@ import OrderList from "@/components/OrderList";
 import {getAddresses} from "@/lib/features/user.slice";
 import {saveUserTokenToCookie} from "@/utils/cookie/cookie.api";
 
-// 주소 유형 매핑 함수
 const mapAddressType = (type: string) => {
     switch (type) {
         case "HOME":
@@ -41,10 +40,8 @@ export default function AccountPage() {
     const [error, setError] = useState<string | null>(null); // 에러 상태 관리
 
     const address = useSelector(getAddresses);
-    console.log("마이페이지에 있는 주소 확인 하는 코드 : 2222", address);
 
     saveUserTokenToCookie(userToken); // 유저인포 === 유저토큰
-    console.log("유저토큰유저토큰유저토큰유저토큰유저토큰유저토큰유저토큰유저토큰유저토큰",saveUserTokenToCookie)
 
     const [formData, setFormData] = useState({
         addressId: "",
@@ -54,16 +51,15 @@ export default function AccountPage() {
         addressType: "",  // 기본 주소 유형
     });
    
-    const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // 주소 검색 완료 후 처리하는 함수
     const handleAddressComplete = (data: any) => {
         setFormData({
             ...formData,
             selectedAddress: data.address,
             zipcode: data.zonecode,
         });
-        setIsModalOpen(false); // 주소 검색 완료 후 모달 닫기
+        setIsModalOpen(false);
     };
 
     // 주소 유형 변경 처리
@@ -143,7 +139,7 @@ export default function AccountPage() {
 
     // useEffect로 주소 목록 로드
     useEffect(() => {
-        // loadAddresses();
+         loadAddresses();
     }, []);
 
     const [activeTab, setActiveTab] = useState<"order" | "bid" | "auction" | "win">("order");
@@ -262,11 +258,8 @@ export default function AccountPage() {
                                 modalTitle="주소 검색"
                                 triggerText="주소 추가하기"
                                 renderContent={() => (
-                                    <div> {/* 모든 요소를 하나의 부모 div로 감쌈 */}
-                                        <Postcode
-                                            onComplete={handleAddressComplete}
-                                            onClose={() => console.log("모달 닫기")}
-                                        />
+                                    <div>
+                                        <Postcode onComplete={handleAddressComplete} onClose={() => console.log("모달 닫기")} />
 
                                         {/* 주소 입력란 */}
                                         <div>
@@ -285,9 +278,7 @@ export default function AccountPage() {
                                             <Input
                                                 className="mt-1.5"
                                                 value={formData.addressDetail}
-                                                onChange={(e) =>
-                                                    setFormData({...formData, addressDetail: e.target.value})
-                                                }
+                                                onChange={(e) => setFormData({...formData, addressDetail: e.target.value})}
                                             />
                                         </div>
 
@@ -305,63 +296,39 @@ export default function AccountPage() {
                                         {/* 주소 유형 선택 */}
                                         <div>
                                             <Label>주소 유형</Label>
-                                            <RadioGroup value={formData.addressType} onChange={handleAddressTypeChange}>
-                                                <Stack spacing={4}>
-                                                    <Radio
+                                            <div>
+                                                <label>
+                                                    <input
+                                                        type="radio"
+                                                        name="addressType"
                                                         value="HOME"
-                                                        _checked={{
-                                                            bg: "green.500", // 선택 시 배경색
-                                                            color: "white",   // 선택 시 텍스트 색상
-                                                            _before: {
-                                                                content: '"✔"',
-                                                                color: "red",
-                                                                marginRight: "10px"
-                                                            }, // 선택 시 체크 아이콘 추가
-                                                        }}
-                                                        px={4}
-                                                        py={2}
-                                                        borderRadius="md"
-                                                    >
-                                                        집
-                                                    </Radio>
-                                                    <Radio
+                                                        checked={formData.addressType === "HOME"}
+                                                        onChange={(e) => handleAddressTypeChange(e.target.value)}
+                                                    />
+                                                    집
+                                                </label>
+                                                <label>
+                                                    <input
+                                                        type="radio"
+                                                        name="addressType"
                                                         value="WORK"
-                                                        _checked={{
-                                                            bg: "blue.500",
-                                                            color: "white",
-                                                            _before: {
-                                                                content: '"✔"',
-                                                                color: "red",
-                                                                marginRight: "10px"
-                                                            },
-                                                        }}
-                                                        px={4}
-                                                        py={2}
-                                                        borderRadius="md"
-                                                    >
-                                                        회사
-                                                    </Radio>
-                                                    <Radio
+                                                        checked={formData.addressType === "WORK"}
+                                                        onChange={(e) => handleAddressTypeChange(e.target.value)}
+                                                    />
+                                                    회사
+                                                </label>
+                                                <label>
+                                                    <input
+                                                        type="radio"
+                                                        name="addressType"
                                                         value="OTHER"
-                                                        _checked={{
-                                                            bg: "purple.500",
-                                                            color: "white",
-                                                            _before: {
-                                                                content: '"✔"',
-                                                                color: "red",
-                                                                marginRight: "10px"
-                                                            },
-                                                        }}
-                                                        px={4}
-                                                        py={2}
-                                                        borderRadius="md"
-                                                    >
-                                                        기본
-                                                    </Radio>
-                                                </Stack>
-                                            </RadioGroup>
+                                                        checked={formData.addressType === "OTHER"}
+                                                        onChange={(e) => handleAddressTypeChange(e.target.value)}
+                                                    />
+                                                    기본
+                                                </label>
+                                            </div>
                                         </div>
-
 
                                         {/* 업데이트 버튼 */}
                                         <div className="pt-4">

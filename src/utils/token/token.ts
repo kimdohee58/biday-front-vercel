@@ -35,7 +35,8 @@ const extractAccessTokenFromHeader = (authorizationHeader: string | null): strin
 // JWT 토큰 남은 시간 기반으로 토큰 재발급을 체크하는 함수
 export const checkTokenAndReissueIfNeeded = async (authorizationHeader: string | null) => {
 
-    console.log("ㅇㅁㅇ리ㅏㅓauthorizationHeaderauthorizationHeader",authorizationHeader)
+    console.log("authorizationHeader",authorizationHeader)
+    console.log("authorizationHeader 있는지 확인하는 코드 : " , authorizationHeader)
     // const token = extractAccessTokenFromHeader(authorizationHeader);
     const token = authorizationHeader
 

@@ -1,15 +1,15 @@
+//src/servcie/auction/award.service.ts
+
 import {awardAPI} from "@/api/auction/award.api";
 import Cookies from "js-cookie";
 import {AwardModel} from "@/model/auction/award.model";
-import {AuctionModel} from "@/model/auction/auction.model";
-import {auctionAPI} from "@/api/auction/auction.api";
 
 // awardId: number
 export async function fetchAwardOne (awardId: number): Promise<AwardModel> {
     const userToken = Cookies.get("userToken");
     if (!userToken) {
         throw new Error("쿠키 접근 불가");
-        // 추후 error enum 변경
+        // TODO error enum
     }
 
     const options = {
@@ -30,12 +30,13 @@ export async function fetchAwardOne (awardId: number): Promise<AwardModel> {
     } catch (error) {
         console.log("fetchAwardOne 도중 오류 발생", error);
         throw new Error("fetchAwardOne  도중 오류 발생");
+        // TODO error enum
     }
 }
 
 export async function findByUserAward(): Promise<AwardModel[]> {
     try {
-        // 쿠키에서 userToken 가져오기
+
         const userToken = Cookies.get('userToken')
 
         if (!userToken) {
@@ -43,11 +44,10 @@ export async function findByUserAward(): Promise<AwardModel[]> {
         }
 
         const options = {
-            userToken : userToken, // 쿠키에서 가져온 userToken을 사용
+            userToken : userToken,
             params: {}
         };
 
-        // findByUser API 호출
         const awardArray: AwardModel[] = await awardAPI.findByUser(options);
 
 
@@ -60,5 +60,38 @@ export async function findByUserAward(): Promise<AwardModel[]> {
     } catch (error) {
         console.error("findByUserAward 에러 발생", error);
         throw new Error("낙찰 내역을 가져오는 중 에러가 발생했습니다.");
+        // TODO error enum
+    }
+}
+
+export async function fetchSizeIdsFromAwards(awardIds: number[]): Promise<number[]> {
+    const userToken = Cookies.get("userToken");
+
+    if (!userToken) {
+        throw new Error("쿠키 접근 불가");
+        // TODO error enum
+    }
+
+    try {
+        const awards = await Promise.all(
+            awardIds.map(async (awardId) => {
+                const options = {
+                    params: { awardId },
+                    userToken: userToken,
+                };
+
+                const award = await awardAPI.findById(options);
+                return award;
+            })
+        );
+
+        const sizeIds = awards.map((award) => award?.auction?.sizeId).filter((sizeId) => sizeId !== undefined);
+
+
+        return sizeIds as number[];
+    } catch (error) {
+        console.error("sizeId를 추출하는 도중 오류 발생: ", error);
+        throw new Error("sizeId 추출 실패");
+        // TODO error enum
     }
 }
