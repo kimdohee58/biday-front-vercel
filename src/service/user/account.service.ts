@@ -1,4 +1,3 @@
-import fetchWithToken from "@/lib/fetchWithToken";
 import Cookies from "js-cookie";
 import {AccountModel} from "@/model/user/account.model";
 import {accountAPI} from "@/api/user/account.api";

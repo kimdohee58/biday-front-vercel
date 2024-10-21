@@ -30,6 +30,7 @@ import {fetchImage} from "@/service/ftp/image.service";
 import Cookies from "js-cookie";
 import {saveBid} from "@/service/auction/bid.service";
 import {fetchAuction} from "@/service/auction/auction.service";
+import {Timer} from "@/components/dohee/Timer";
 
 const LIST_IMAGES_GALLERY_DEMO: (string | StaticImageData)[] = [
     detail21JPG,
@@ -58,25 +59,13 @@ export default function AuctionDetailPage() {
     const {id} = useParams();
 
     const auction = useQuery({queryKey: ["auction"], queryFn: () => fetchAuction(String(id))});
-    const auctionImage = useQuery({queryKey: ["auctionImage"], queryFn: () => fetchImage(ImageType.AUCTION, id)});
+    const auctionImage = useQuery({queryKey: ["auctionImage"], queryFn: () => fetchImage(ImageType.AUCTION, String(id))});
     const product = useQuery({queryKey: ["product"], queryFn: () => fetchProductOne(productId)});
     const productImage = useQuery({queryKey: ["productImage"], queryFn: () => fetchImage(ImageType.PRODUCT, productId)});
-
-    if (!productImage.isLoading) {
-        console.log("프로덕트 이미지", productImage.data);
-    }
-
-    if (!!auction.data) {
-        console.log("불러온 옥션 id", auction.data.id);
-    }
 
     // 이미지
 
     const {sizes, variants, status, allOfSizes, image} = PRODUCTS[0];
-
-    const [message, setMessage] = useState();
-
-    const [currentBid, setCurrentBid] = useState();
 
     const [highestBid, setHighestBid] = useState<number>();
     const [adjustBid, setAdjustBid] = useState<number>();
@@ -487,6 +476,10 @@ export default function AuctionDetailPage() {
 
                 {/* SIDEBAR */}
                 <div className="flex-grow">
+                    <div className="mb-4">
+                        {/*<Timer endedTime="2024-10-22T10:32:37Z" />*/}
+                        <Timer endedTime={auction.data?.endedAt ? new Date(auction.data.endedAt).toISOString() : "2024-01-01T00:00:00.000Z"} />
+                    </div>
                     <div className="hidden lg:block sticky top-28">
                         {renderSectionSidebar()}
                     </div>

@@ -14,7 +14,7 @@ type ModalProps = {
 
 function ProductListCard({product, image, onClick}: ProductWithImageModel & { onClick: () => void }) {
     return (
-        <div className="flex items-center justify-between !mt-4 " onClick={onClick}>
+        <div className="flex items-center justify-between !mt-4 cursor-pointer" onClick={onClick}>
             <div className="flex items-center gap-3">
                 <Avatar src={image.uploadUrl} alt={image.uploadName} size="md"/>
                 <div>

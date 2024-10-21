@@ -1,7 +1,8 @@
-import {AuctionModel} from "@/model/auction/auction.model";
+import {AuctionModel, SaveAuctionModel} from "@/model/auction/auction.model";
 import {api} from "../request";
 import {strategy} from "../api.strategy";
 import {RequestOptions} from "@/model/api/RequestOptions";
+import {PaymentTempModel} from "@/model/order/paymentTemp.model";
 
 // 경매 상세보기 (GET 요청)
 const findById = async (options: RequestOptions<{ id: string }, null>): Promise<AuctionModel> => {
@@ -35,9 +36,8 @@ const findByUser = async (options: RequestOptions<findByUserProps,null>): Promis
 };
 
 // 경매 등록 (POST 요청)
-const save = async (auctionData: Partial<AuctionModel>): Promise<AuctionModel> => {
-    const response = await strategy.POST(`${api.auction}`, auctionData);
-    return response;
+const save = async (options: Omit<RequestOptions<any, SaveAuctionModel>, "params">): Promise<AuctionModel> => {
+    return await strategy.POST(`${api.auction}`, options);
 };
 
 // 경매 수정 (PATCH 요청)

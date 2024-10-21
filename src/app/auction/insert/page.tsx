@@ -11,6 +11,9 @@ import {useSearchParams} from "next/navigation";
 import ProductSection from "@/app/auction/insert/productSection";
 import ImageCard from "@/app/auction/insert/imageCard";
 import ImageModal from "@/app/auction/insert/imageModal";
+import {useMutation} from "@tanstack/react-query";
+import {saveAuction} from "@/service/auction/auction.service";
+import {SaveAuctionModel} from "@/model/auction/auction.model";
 
 
 /**
@@ -31,24 +34,48 @@ export default function InsertAuction() {
     const [endDate, setEndDate] = useState();
     const [isOpen, setIsOpen] = useState(false);
     const [currentModal, setCurrentModal] = useState<"product" | "image" | null>(null);
+    const [currentFileIndex, setCurrentFileIndex] = useState<number | null>(null);
     const [duration, setDuration] = useState<number>(3);
-    const [files, setFiles] = useState<File[]>([]);
+    const [files, setFiles] = useState<(File | null)[]>([null, null, null]);
+    const [size, setSize] = useState<number>(0);
+    const [startedAt, setStartedAt] = useState<Date>();
+    const [endedAt, setEndedAt] = useState<Date>();
+    const [auctionId, setAuctionId] = useState();
+    // const [startingBid, setStartingBid] = useState();
 
     const productList = useQuery({queryKey: ["allProductsWithImages"], queryFn: () => fetchAllProductsWithImages()});
+
+    const auctionMutate = useMutation({mutationFn: saveAuction});
 
     useEffect(() => {
         console.log("selectedProduct: ", selectedProduct);
     }, [selectedProduct]);
+
+    useEffect(() => {
+        console.log("file: ", files);
+    }, [files]);
+    useEffect(() => {
+        console.log("size", size);
+    }, [size]);
+    useEffect(() => {
+        console.log("description", description);
+    }, [description]);
 
 
     if (productList.isLoading) {
         return <div>Loading...</div>;
     }
 
+    console.log("productList", productList);
+
     if (!productList || !productList.data) {
         return <div>프로덕트 리스트를 불러올 수 없습니다.</div>;
         //TODO error enum
     }
+
+
+
+    // const imageMutate = useMutation({mutationFn: });
 
 
     /*    useEffect(() => {
@@ -64,6 +91,10 @@ export default function InsertAuction() {
     if (productList.error instanceof Error) return <div>Error: {productList.error.message}</div>;
     // 에러 페이지로 변경
 
+    // 사이즈 핸들러
+    const handleSize = (size: number) => {
+        setSize(size);
+    };
 
     // 모달 핸들러
     const openModalProduct = () => {
@@ -71,10 +102,23 @@ export default function InsertAuction() {
         setIsOpen(true);
     };
 
-    const openModalImage = () => {
-        setCurrentModal("image");
-        setIsOpen(true);
+    // 설명 핸들러
+    const handleDescription = (e: ChangeEvent<HTMLTextAreaElement>) => {
+        setDescription(e.target.value);
     };
+
+    /*    // 입찰시작가 핸들러
+        const handleStartingBid = (price: number) => {
+            setStartingBid()
+        };*/
+
+    const openModal = (type: "image" | "product", index?: number) => {
+        if (type === "image" && index !== undefined) {
+            setCurrentFileIndex(index);
+        }
+        setCurrentModal(type);
+        setIsOpen(true);
+    }
 
     const closeModal = () => {
         setIsOpen(false);
@@ -83,11 +127,30 @@ export default function InsertAuction() {
 
 
     // 파일 업로드 핸들러
-    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            const selectedFiles = Array.from(e.target.files).slice(0, 3);
-            setFiles(selectedFiles);
-        }
+    /*    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+            if (e.target.files) {
+                const selectedFiles = Array.from(e.target.files).slice(0, 3);
+                setFiles(selectedFiles);
+            }
+        };*/
+
+    const handleImageSubmit = (newFiles: File[]) => {
+        setFiles((prevFiles) => {
+            const updatedFiles = [...prevFiles];
+
+            newFiles.slice(0, 3).forEach((file, index) => {
+                updatedFiles[index] = file;
+            });
+
+            for (let i = updatedFiles.length; i < 3; i++) {
+                updatedFiles[i] = null;
+            }
+
+            return updatedFiles.slice(0, 3);
+
+        });
+        setIsOpen(false);
+        setCurrentModal(null);
     };
 
     // 제품 선택 핸들러
@@ -102,6 +165,21 @@ export default function InsertAuction() {
 
         const handleClick = (days: number) => {
             setDuration(days);
+
+            const currentDate = new Date();
+
+            const minutes = currentDate.getMinutes();
+            const roundedMinutes = Math.ceil(minutes / 5) * 5;
+
+            if (roundedMinutes !== minutes) {
+                currentDate.setMinutes(roundedMinutes);
+            }
+
+            const endDate = new Date(currentDate);
+            endDate.setDate(currentDate.getDate() + days);
+
+            setStartedAt(currentDate);
+            setEndedAt(endDate);
         };
 
         return ((
@@ -123,94 +201,76 @@ export default function InsertAuction() {
         ))
     };
 
-    const getDuration = (days: number) => {
-        const currentDate = new Date();
-        currentDate.setMinutes(Math.round(currentDate.getMinutes() / 5) * 5);
-        const endDate = currentDate.getDate() + days;
+    const getDuration = () => {
+        if (!startedAt || !endedAt) {
+            return <div>기간을 선택해 주세요.</div>;
+        }
 
         return (
-            `${currentDate.toLocaleDateString()} ${String(currentDate.getHours()).padStart(2, '0')} : ${String(currentDate.getMinutes()).padStart(2, '0')} -
-                ${endDate.toLocaleString()}`
+            `${startedAt.toLocaleDateString()} ${String(startedAt.getHours()).padStart(2, '0')} : ${String(startedAt.getMinutes()).padStart(2, '0')} -
+                ${endedAt.toLocaleString()}`
 
         );
     };
 
-    const renderUploadBox = () => {
-        return (
-            <div className="flex items-center justify-center">
-                <label htmlFor="dropzone-file"
-                       className="flex flex-col items-center justify-center w-1/2 h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                        <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
-                                  strokeWidth="2"
-                                  d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-                        </svg>
-                        <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span
-                            className="font-semibold">Click to upload</span> or drag and drop</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">PNG, JPG or GIF (MAX.
-                            800x400px)</p>
-                    </div>
-                    <input
-                        id="dropzone-file"
-                        type="file"
-                        className="hidden"
-                        multiple
-                        accept="image/png, image/jpeg, image/gif"
-                        onChange={handleFileChange}
-                    />
-                </label>
-            </div>
-        );
-    };
-
-    const isFormValid = !!(selectedProduct && description && duration && files.length > 0);
+    const isFormValid = !!(selectedProduct && description && duration && files.length > 0 && startedAt && endedAt && size != 0
+        && files.every((file) => file !== null));
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
 
-        const formData = new FormData();
+        // const formData = new FormData();
+        const imageData = new FormData();
+        /*if (isFormValid) {
+            formData.append("productId", selectedProduct.product.id.toString());
+            formData.append("sizeId", size.toString());
+            formData.append("description", description);
+            formData.append("startingBid", "10000");
+            formData.append("currentBid", "10000");
+            formData.append("startedAt", startedAt.toString());
+            formData.append("endedAt", endedAt.toString());
+
+            auctionMutate.mutate(formData);
+            console.log("AuctionMutate 실행");
+        }*/
+
         if (isFormValid) {
-            // formData.append("productId", selectedProduct.id.toString());
-            // formData.append("duration", duration.toString());
-        }
+            const body: SaveAuctionModel = {
+                userId: "6700e19686d1ce6cd1fc6f25",
+                sizeId: size,
+                description: description,
+                startingBid: 10000,
+                currentBid: 10000,
+                startedAt: startedAt,
+                endedAt: endedAt,
+                createdAt: null,
+                updatedAt: null,
+                status: null,
+            };
 
-    };
+            try {
+                const data = await auctionMutate.mutateAsync(body);
 
-    const renderSelectProductButton = () => {
-        if (productList.isLoading) {
-            return <button disabled type="button"
-                           className="justify-center py-2.5 px-5 me-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 inline-flex items-center">
-                <svg aria-hidden="true" role="status"
-                     className="inline w-4 h-4 me-3 text-gray-200 animate-spin dark:text-gray-600"
-                     viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                        fill="currentColor"/>
-                    <path
-                        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                        fill="#1C64F2"/>
-                </svg>
-                Loading...
-            </button>
-        } else {
-            return <button
-                className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                type="button"
-                id="product"
-                onClick={openModalProduct}
-            >
-                {selectedProduct ? (
-                        <>
-                            <img src={selectedProduct.image.uploadUrl} alt={selectedProduct.image.uploadName}/>
-                            <span>{selectedProduct.product.name}</span>
-                        </>
-                    ) :
-                    <div>상품 선택</div>
+                console.log("뭐가나오니", data);
+
+            } catch (error) {
+                console.error("옥션 등록 중 오류 발생", error);
+            }
+
+            const image = {
+                data: {
+                    files: files,
+                },
+                params: {
+                    filePath: "auctions",
+                    type: ImageType.AUCTION,
                 }
-            </button>;
+            }
         }
+
+
+
+
     };
 
     const renderDescription = () => {
@@ -218,7 +278,9 @@ export default function InsertAuction() {
             <div className="itmes-end">
                 <div className="relative w-full min-w-[200px]">
                 <textarea placeholder="상품설명"
-                          className="peer h-full min-h-[100px] w-full resize-none border-b border-blue-gray-200 bg-transparent pt-4 pb-1.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border-blue-gray-200 focus:border-gray-900 focus:outline-0 disabled:resize-none disabled:border-0 disabled:bg-blue-gray-50"></textarea>
+                          className="peer h-full min-h-[100px] w-full resize-none border-b border-blue-gray-200 bg-transparent pt-4 pb-1.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border-blue-gray-200 focus:border-gray-900 focus:outline-0 disabled:resize-none disabled:border-0 disabled:bg-blue-gray-50"
+                          value={description}
+                          onChange={handleDescription}></textarea>
                     <label
                         className="after:content[' '] pointer-events-none absolute left-0 -top-2.5 flex h-full w-full select-none text-sm font-normal leading-tight text-blue-gray-500 transition-all after:absolute after:-bottom-1 after:block after:w-full after:scale-x-0 after:border-b-2 after:border-gray-900 after:transition-transform after:duration-300 peer-placeholder-shown:leading-tight peer-placeholder-shown:text-blue-gray-500 peer-focus:text-sm peer-focus:leading-tight peer-focus:text-gray-900 peer-focus:after:scale-x-100 peer-focus:after:border-gray-900 peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
                     </label>
@@ -234,7 +296,8 @@ export default function InsertAuction() {
                     상품:
                 </Label>
                 <div className="w-full mb-6">
-                    <ProductSection openModal={openModalProduct}/>
+                    <ProductSection openModal={openModalProduct} selectedProduct={selectedProduct}
+                                    handleSize={handleSize}/>
                     {isOpen && currentModal === "product" && (
                         <ProductModal
                             onClose={closeModal}
@@ -247,7 +310,7 @@ export default function InsertAuction() {
                     <Label>
                         경매 기간:
                     </Label>
-                    <span className="ml-2 rfont-light accent-gray-400">{getDuration(duration)}</span>
+                    <span className="ml-2 rfont-light accent-gray-400">{getDuration()}</span>
                     {durationSelectButton()}
                     <input type="hidden" name="duration"/>
                     {/* input value 설정 필요 */}
@@ -257,14 +320,19 @@ export default function InsertAuction() {
                         업로드 이미지:
                     </Label>
                     <div className="flex gap-4 mt-6">
-                        <ImageCard/>
-                        <ImageCard/>
-                        <ImageCard/>
+                        {files.map((file, index) => (
+                            <ImageCard
+                                key={index}
+                                file={file}
+                                onClick={() => openModal("image", index)}/>
+                        ))}
                     </div>
                     {isOpen && currentModal === "image" && (
                         <ImageModal
                             onClose={closeModal}
-                            openModal={openModalImage}/>
+                            isOpen={isOpen}
+                            onSubmit={handleImageSubmit}
+                            files={files}/>
                     )}
                 </div>
                 {renderDescription()}

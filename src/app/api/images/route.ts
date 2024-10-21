@@ -15,6 +15,8 @@ export async function GET(request: Request) {
             return NextResponse.json({error: "잘못된 요청 : type 누락 "}, {status: 400});
         }
 
+        console.log("type", type);
+        console.log("searchParams", searchParams);
 
         if (type === ImageType.PRODUCT && !id) {
             const productImages = await prisma.image.findMany({
@@ -55,6 +57,27 @@ export async function GET(request: Request) {
                 ...productImage,
                 referencedId: productImage.referencedId.toString(),
             });
+        }
+
+        if (type === ImageType.AUCTION && id) {
+
+            const images = await prisma.image.findMany({
+                where: {
+                    AND: [
+                        {type: type},
+                        {referencedId: id}
+                    ]
+                },
+                take: 3,
+                orderBy: {
+                    id: "desc",
+                }
+            });
+
+            return NextResponse.json(images.map((image) => ({
+                ...image,
+                referencedId: image.referencedId.toString(),
+            })));
         }
 
 

@@ -4,7 +4,7 @@ import {AuctionModel} from "@/model/auction/auction.model";
 import {fetchAuctionsBySize} from "@/service/auction/auction.service";
 import {setLoading} from "@/lib/features/products.slice";
 import {fetchAllProductImage} from "@/service/ftp/image.service";
-import {defaultImage, ImageModel, ImageType} from "@/model/ftp/image.model";
+import {defaultImage, ImageType} from "@/model/ftp/image.model";
 
 export async function fetchAllProductsWithImages(): Promise<ProductWithImageModel[]> {
     try {
@@ -16,7 +16,7 @@ export async function fetchAllProductsWithImages(): Promise<ProductWithImageMode
             throw new Error("");
         }
 
-        const productsWithImages = products.map(product => {
+        return products.map(product => {
             const productImages = images.find(image => (
                 image.referencedId === product.id.toString() && image.type === ImageType.PRODUCT
             )) || defaultImage;
@@ -26,10 +26,6 @@ export async function fetchAllProductsWithImages(): Promise<ProductWithImageMode
                 image: productImages,
             };
         });
-
-        console.log("productWithImages", productsWithImages);
-
-        return productsWithImages;
 
     } catch (error) {
         console.error("fetchAllProductsWithImages 중 오류 발생");

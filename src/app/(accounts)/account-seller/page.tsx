@@ -1,4 +1,6 @@
-import React, {ChangeEvent} from "react";
+"use client";
+
+import React, {ChangeEvent, useState} from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import {accountAPI} from "@/api/user/account.api"
 import {Suspense} from "react";
@@ -17,21 +19,20 @@ import {
 import {AccountModel, BankCode} from "@/model/user/account.model";
 import {useMutation, useQuery} from "@tanstack/react-query";
 import useRandomId from "@/hooks/useRandomId";
-import {getAccount, saveAccount} from "@/service/account/account.service";
+import {getAccount, saveAccount} from "@/service/user/account.service";
 import {ApiError} from "@/utils/error";
-import { cookies } from "next/headers";
+import Cookies from "js-cookie";
 
 
 async function AccountDetails() {
 
     const accountData = useQuery({queryKey: ["account"], queryFn: () => getAccount()});
-    const cookieStore = cookies();
-    const userToken = cookieStore.get("userToken");
+    const userToken = Cookies.get("userToken");
     if (!userToken) {
         return;
     }
 
-    const user = JSON.parse(userToken.value);
+    const user = JSON.parse(userToken);
 
     if (!accountData.data) {
         return (

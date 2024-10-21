@@ -15,13 +15,17 @@ import {
 } from "@material-tailwind/react";
 import {ProductWithImageModel} from "@/model/product/product.model";
 import {getColor} from "@/utils/productUtils";
+import {ChangeEvent} from "react";
 
 type ProductSectionProps = {
-    openModal: () => void;
-    selectedProduct: ProductWithImageModel | null;
+    openModal: () => void,
+    selectedProduct: ProductWithImageModel | null,
+    handleSize: (size: number) => void
 }
-export default function ProductSection({openModal, selectedProduct}: ProductSectionProps) {
-
+export default function ProductSection({openModal, selectedProduct, handleSize}: ProductSectionProps) {
+    const handleSizeChange = (value) => {
+        handleSize(Number(value));
+    }
     return (
         <div>
             <div className="flex items-center flex-col md:flex-row gap-4">
@@ -35,7 +39,6 @@ export default function ProductSection({openModal, selectedProduct}: ProductSect
                     </Typography>
                     <Input
                         color="gray"
-                        placeholder="Laptop"
                         labelProps={{
                             className: "hidden",
                         }}
@@ -53,7 +56,7 @@ export default function ProductSection({openModal, selectedProduct}: ProductSect
                     >
                         카테고리
                     </Typography>
-                    <Select
+                    <Input
                         labelProps={{
                             className: "hidden",
                         }}
@@ -61,11 +64,7 @@ export default function ProductSection({openModal, selectedProduct}: ProductSect
                         disabled
                         onClick={openModal}
                         value={selectedProduct?.product?.category || ""}
-                    >
-                        <Option>Device 1</Option>
-                        <Option>Device 2</Option>
-                        <Option>Device 3</Option>
-                    </Select>
+                    />
                 </div>
             </div>
             <div className="flex items-center flex-col md:flex-row gap-4 my-4">
@@ -97,7 +96,7 @@ export default function ProductSection({openModal, selectedProduct}: ProductSect
                     >
                         브랜드
                     </Typography>
-                    <Select
+                    <Input
                         labelProps={{
                             className: "hidden",
                         }}
@@ -105,11 +104,7 @@ export default function ProductSection({openModal, selectedProduct}: ProductSect
                         disabled
                         onClick={openModal}
                         value={selectedProduct?.product?.brand || ""}
-                    >
-                        <Option>Microsoft</Option>
-                        <Option>Andriod</Option>
-                        <Option>Windows</Option>
-                    </Select>
+                    />
                 </div>
             </div>
             <div className="flex items-center flex-col md:flex-row gap-4 my-4">
@@ -121,7 +116,7 @@ export default function ProductSection({openModal, selectedProduct}: ProductSect
                     >
                         색상
                     </Typography>
-                    <Select
+                    <Input
                         labelProps={{
                             className: "hidden",
                         }}
@@ -129,11 +124,7 @@ export default function ProductSection({openModal, selectedProduct}: ProductSect
                         disabled
                         onClick={openModal}
                         value={selectedProduct ? getColor(selectedProduct.product.name) : ""}
-                    >
-                        <Option>Microsoft</Option>
-                        <Option>Andriod</Option>
-                        <Option>Windows</Option>
-                    </Select>
+                    />
                 </div>
                 <div className="w-full">
                     <Typography
@@ -148,14 +139,14 @@ export default function ProductSection({openModal, selectedProduct}: ProductSect
                             className: "hidden",
                         }}
                         className="border-t-blue-gray-200 aria-[expanded=true]:border-t-primary"
-                        disabled={!selectedProduct}
-                        onClick={openModal}
+                        disabled={selectedProduct.product.id == 0}
+                        onChange={handleSizeChange}
                     >
 
-                        {!selectedProduct? (
+                        {selectedProduct?.product.id == 0 ? (
                             <Option value="default">상품을 선택해 주세요</Option>
                         ) : (
-                            selectedProduct.product.sizes.map((size) => (
+                            selectedProduct?.product.sizes.map((size) => (
                                 <Option key={size.id} value={size.id.toString()}>
                                     {size.size}
                                 </Option>
