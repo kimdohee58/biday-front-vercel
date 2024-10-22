@@ -15,7 +15,6 @@ export default function AuctionTable({auctions, product}: { auctions: AuctionMod
 
     const router = useRouter();
 
-
     return (
         <div className="">
             <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -41,7 +40,7 @@ export default function AuctionTable({auctions, product}: { auctions: AuctionMod
                 </thead>
                 <tbody>
                 {auctions.map((auction) => (
-                    <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
+                    <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 cursor-pointer"
                         key={auction.id}
                         onClick={() => router.push(`/auction/${auction.id}?productId=${product.id}`)}>
                         <th scope="row"
