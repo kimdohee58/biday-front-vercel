@@ -13,8 +13,7 @@ export default function PageHome({params}: {params:{filter:string}}) {
 
     return (
         <div>
-            <h2>{params.filter}카테코리의 상품 목록</h2>
-            <ClientComponent authorizationToken={authorizationToken} filter={params.filter} />
+            <ClientComponent authorizationToken={authorizationToken}/>
             <TokenManager />
         </div>
     );

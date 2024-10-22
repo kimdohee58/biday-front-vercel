@@ -44,6 +44,7 @@ const rootReducer = combineReducers({
     faq: faqSlice,
     loginHistory: loginHistorySlice,
     rating: ratingSlice,
+    products:productSlice
 });
 
 
