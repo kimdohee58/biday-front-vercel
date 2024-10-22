@@ -5,7 +5,7 @@ import {RequestOptions} from "@/model/api/RequestOptions";
 import {PaymentTempModel} from "@/model/order/paymentTemp.model";
 
 // 경매 상세보기 (GET 요청)
-const findById = async (options: RequestOptions<{ id: string }, null>): Promise<AuctionModel> => {
+const findById = async (options: RequestOptions<{ auctionId: string }, null>): Promise<AuctionModel> => {
     return await strategy.GET(`${api.auction}/findById`, options);
 };
 

@@ -17,13 +17,14 @@ import ListingImageGallery from "@/components/listing-image-gallery/ListingImage
 import {useParams, usePathname, useRouter, useSearchParams} from "next/navigation";
 import {Route} from "next";
 import {useMutation, useQuery} from "@tanstack/react-query";
-import {ImageType} from "@/model/ftp/image.model";
+import {ImageModel, ImageType} from "@/model/ftp/image.model";
 import {fetchProductOne} from "@/service/product/product.service";
 import {BidStreamModel} from "@/model/auction/bid.model";
 import {fetchImage} from "@/service/ftp/image.service";
 import Cookies from "js-cookie";
 import {saveBid} from "@/service/auction/bid.service";
 import {fetchAuctionWithImages} from "@/service/auction/auction.service";
+import {getColor} from "@/utils/productUtils";
 
 export default function AuctionDetailPage() {
 
@@ -32,7 +33,7 @@ export default function AuctionDetailPage() {
     const router = useRouter();
     const {id} :{id : string }= useParams();
 
-    const auctionData = useQuery({queryKey: ["auctionData", id], queryFn: () => fetchAuctionWithImages(id)});
+    const auctionData = useQuery({queryKey: ["auction", id], queryFn: () => fetchAuctionWithImages(id)});
     const product = useQuery({queryKey: ["product"], queryFn: () => fetchProductOne(productId)});
     const productImage = useQuery({queryKey: ["productImage"], queryFn: () => fetchImage(ImageType.PRODUCT, productId)});
     console.log('productImage >>> ', productImage);
@@ -50,20 +51,9 @@ export default function AuctionDetailPage() {
 
     const {sizes, variants, status, allOfSizes, image} = PRODUCTS[0];
 
-    const [message, setMessage] = useState();
-
-    const [currentBid, setCurrentBid] = useState();
-
     const [highestBid, setHighestBid] = useState<number>();
     const [adjustBid, setAdjustBid] = useState<number>();
 
-    const getColor = (productName: string) => {
-        const parts = productName.split(`(`);
-        if (parts.length > 1) {
-            return parts[1].replace(')', '').trim();
-        }
-        return "";
-    };
 
     const renderHighestBid = () => {
         const url = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/bids/stream?auctionId=${Number(id)}`;
@@ -140,7 +130,7 @@ export default function AuctionDetailPage() {
           <span className="text-sm font-medium">
             Color:
             <span className="ml-1 font-semibold">
-              {product.isLoading? "" : getColor(product.data.name)}
+               {product.isLoading || !product.data ? "" : getColor(product.data.name)}
             </span>
           </span>
                 </label>
@@ -197,7 +187,7 @@ export default function AuctionDetailPage() {
                     <label htmlFor="">
             <span className="">
               Size:
-              <span className="ml-1 font-semibold">{auctionData.isLoading? "" : auctionData.data!!.size}</span>
+              <span className="ml-1 font-semibold"> {auctionData.isLoading || !auction ? "" : auction.size}</span>
             </span>
                     </label>
                     <a
@@ -353,7 +343,7 @@ export default function AuctionDetailPage() {
                 <h2 className="text-2xl font-semibold">Product details</h2>
                 {/* <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div> */}
                 <div className="prose prose-sm sm:prose dark:prose-invert sm:max-w-4xl">
-                    {auctionData.isLoading? "" : auctionData.data!!.description}
+                    {auctionData.isLoading || !auction ? "" : auction.description}
                 </div>
                 {/* ---------- 6 ----------  */}
             </div>
@@ -377,7 +367,7 @@ export default function AuctionDetailPage() {
                                     containerClassName="aspect-w-3 aspect-h-4 relative md:aspect-none md:absolute md:inset-0"
                                     className="object-cover rounded-md sm:rounded-xl"
                                     priority
-                                    src={productImage.data ? productImage.data.uploadUrl : ""}
+                                    src={productImage.data ? (productImage.data as ImageModel).uploadUrl : ""}
                                 />
                                 <div
                                     className="absolute inset-0 bg-neutral-900/20 opacity-0 hover:opacity-40 transition-opacity rounded-md sm:rounded-xl">
@@ -395,36 +385,38 @@ export default function AuctionDetailPage() {
                                     sizes="(max-width: 640px) 100vw, 50vw"
                                     containerClassName="absolute inset-0"
                                     className="object-cover w-full h-full rounded-md sm:rounded-xl"
-                                    src={auctionImages.length > 0 ? auctionImages[0].uploadUrl : ""}
+                                    src={Array.isArray(auctionImages) && auctionImages.length > 0
+                                        ? auctionImages[0].uploadUrl : ""}
                                 />
                                 <div
                                     className="absolute inset-0 bg-neutral-900/20 opacity-0 hover:opacity-40 transition-opacity">
 
                                 </div>
                             </div>
-                            {auctionImages && [auctionImages[1], auctionImages[2]].map((item, index) => (
-                                <div
-                                    key={index}
-                                    className={`relative rounded-md sm:rounded-xl overflow-hidden z-0 ${
-                                        index >= 2 ? "block" : ""
-                                    }`}
-                                >
-                                    <NcImage
-                                        alt=""
-                                        fill
-                                        sizes="(max-width: 640px) 100vw, 33vw"
-                                        containerClassName="aspect-w-6 aspect-h-5 lg:aspect-h-4"
-                                        className="object-cover w-full h-full rounded-md sm:rounded-xl "
-                                        src={item?.uploadUrl || ""}
-                                    />
-
-                                    {/* OVERLAY */}
+                            {(Array.isArray(auctionImages) && auctionImages) &&
+                                [auctionImages[1], auctionImages[2]].map((item, index) => (
                                     <div
-                                        className="absolute inset-0 bg-slate-900/20 opacity-0 hover:opacity-60 transition-opacity cursor-pointer"
-                                        onClick={handleOpenModalImageGallery}
-                                    />
-                                </div>
-                            ))}
+                                        key={index}
+                                        className={`relative rounded-md sm:rounded-xl overflow-hidden z-0 ${
+                                            index >= 2 ? "block" : ""
+                                        }`}
+                                    >
+                                        <NcImage
+                                            alt=""
+                                            fill
+                                            sizes="(max-width: 640px) 100vw, 33vw"
+                                            containerClassName="aspect-w-6 aspect-h-5 lg:aspect-h-4"
+                                            className="object-cover w-full h-full rounded-md sm:rounded-xl "
+                                            src={item?.uploadUrl || ""}
+                                        />
+
+                                        {/* OVERLAY */}
+                                        <div
+                                            className="absolute inset-0 bg-slate-900/20 opacity-0 hover:opacity-60 transition-opacity cursor-pointer"
+                                            onClick={handleOpenModalImageGallery}
+                                        />
+                                    </div>
+                                ))}
                         </div>
                         <div
                             className="absolute hidden md:flex md:items-center md:justify-center left-3 bottom-3 px-4 py-2 rounded-xl bg-white text-slate-500 cursor-pointer hover:bg-slate-200 z-10"
@@ -481,11 +473,12 @@ export default function AuctionDetailPage() {
             {/* MODAL VIEW ALL REVIEW */}
 
             <Suspense>
+                {/*TODO type error 수정*/}
                 <ListingImageGallery
                     onClose={handleCloseModalImageGallery}
                     images={[
-                        ...(productImage.data ? [productImage.data] : []),
-                        ...auctionImages,
+                        ...((!Array.isArray(productImage.data) && productImage.data) ? [productImage.data] : []),
+                        ...((Array.isArray(auctionImages) ? auctionImages : [auctionImages])),
                     ].map((item, index) => {
                         return {
                             id: index,

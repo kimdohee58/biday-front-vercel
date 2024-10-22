@@ -60,11 +60,8 @@ export async function deleteImage(id: number) {
     }
 }
 
-// 이미지 업데이트
-
-
 // 클라이언트 컴포넌트에서 이미지 불러오기
-export async function fetchImage(type: ImageType, id?: string): Promise<ImageModel[]> {
+export async function fetchImage(type: ImageType, id?: string): Promise<ImageModel[] | ImageModel> {
     const url = `${process.env.NEXT_PUBLIC_API_CLIENT_URL}/api/images?id=${id}&type=${type}`;
 
     /**TODO
