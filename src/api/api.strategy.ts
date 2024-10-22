@@ -19,13 +19,15 @@ const apiRequest = async (url: string, method: HttpMethod, {params, data, header
     const options: RequestInit = {
         method: method,
         headers: {
-            'Content-Type': contentType || 'application/json',
+            ...(contentType !== "multipart/form-data" && {'Content-Type': contentType || 'application/json'}),
             ...(token && {'Authorization': `Bearer ${token}`}),
             ...(userToken && {'UserInfo': HTTPRequest(userToken)}),
             ...(headers || {}),
         },
         ...(cache && {cache: {cache}}),
-        ...(data && {body: JSON.stringify(data)}),
+        ...(data && !contentType && {body: JSON.stringify(data)}),
+        ...(data && contentType === "multipart/form-data" && {body: data}),
+
     };
 
     console.log("options", options);
