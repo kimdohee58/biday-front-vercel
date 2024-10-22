@@ -56,6 +56,7 @@ export default function ClientComponent({ authorizationToken }: ClientComponentP
         }
     };
 
+
     const getProductImage = (item: ProductModel): string => {
         const productImage = productsWithImages.find(img => img.product.id === item.id);
         return productImage && productImage.image ? productImage.image.uploadUrl : defaultImage.uploadUrl;
