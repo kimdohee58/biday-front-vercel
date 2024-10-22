@@ -17,10 +17,10 @@ const TokenCheck = () => {
                 const access = Cookies.get("token");
 
                 // 토큰이 없으면 로그인 페이지로 이동
-                if (!access) {
-                    router.push("/login");
-                    return;
-                }
+                //if (!access) {
+                //    router.push("/login");
+                 //   return;
+                //}
 
                 try {
                     // 서버에 액세스 토큰 유효성 확인을 위해 간단한 API 호출

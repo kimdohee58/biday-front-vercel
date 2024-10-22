@@ -10,7 +10,6 @@ const ClientReduxProvider = ({ children }: { children: React.ReactNode }) => {
     return (
         <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
-                <TokenCheck />
                 {children}
             </PersistGate>
         </Provider>
