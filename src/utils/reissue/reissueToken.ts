@@ -8,6 +8,7 @@ import axiosInstance from "@/app/api/axiosInstance/axiosInstance";
 export const handleReissueToken = async () => {
     try {
         const refreshToken = Cookies.get('refresh');
+        console.log("handleReissueToken" ,refreshToken)
         if (!refreshToken) {
             throw new Error('리프레시 토큰이 없습니다.');
         }
