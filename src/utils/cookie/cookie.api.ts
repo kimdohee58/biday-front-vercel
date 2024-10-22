@@ -26,7 +26,7 @@ export const saveToken = (token: string) => {
     }
 
     Cookies.set('token', token, {
-        expires: 100,
+        expires:7,
         path: '/',
         secure: false, // 로컬 테스트 시 false
         sameSite: 'Lax', // 필요에 따라 조정

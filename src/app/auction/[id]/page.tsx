@@ -24,17 +24,21 @@ import {fetchImage} from "@/service/ftp/image.service";
 import Cookies from "js-cookie";
 import {saveBid} from "@/service/auction/bid.service";
 import {fetchAuctionWithImages} from "@/service/auction/auction.service";
+import {Timer} from "@/components/dohee/Timer";
 
 export default function AuctionDetailPage() {
 
     const searchParams = useSearchParams();
     const productId = searchParams.get("productId" || "0") as string;
     const router = useRouter();
-    const {id} :{id : string }= useParams();
+    const {id}: { id: string } = useParams();
 
     const auctionData = useQuery({queryKey: ["auctionData", id], queryFn: () => fetchAuctionWithImages(id)});
     const product = useQuery({queryKey: ["product"], queryFn: () => fetchProductOne(productId)});
-    const productImage = useQuery({queryKey: ["productImage"], queryFn: () => fetchImage(ImageType.PRODUCT, productId)});
+    const productImage = useQuery({
+        queryKey: ["productImage"],
+        queryFn: () => fetchImage(ImageType.PRODUCT, productId)
+    });
     console.log('productImage >>> ', productImage);
     if (!productImage.isLoading) {
         console.log("프로덕트 이미지", productImage.data);
@@ -44,7 +48,7 @@ export default function AuctionDetailPage() {
         console.log('로딩 중,,,,');
     }
 
-    const { auction, images: auctionImages = [] } = auctionData.data || { auction: null, images: [] };
+    const {auction, images: auctionImages = []} = auctionData.data || {auction: null, images: []};
 
     // 이미지
 
@@ -140,7 +144,7 @@ export default function AuctionDetailPage() {
           <span className="text-sm font-medium">
             Color:
             <span className="ml-1 font-semibold">
-              {product.isLoading? "" : getColor(product.data.name)}
+              {product.isLoading ? "" : getColor(product.data.name)}
             </span>
           </span>
                 </label>
@@ -197,7 +201,7 @@ export default function AuctionDetailPage() {
                     <label htmlFor="">
             <span className="">
               Size:
-              <span className="ml-1 font-semibold">{auctionData.isLoading? "" : auctionData.data!!.size}</span>
+              <span className="ml-1 font-semibold">{auctionData.isLoading ? "" : auctionData.data!!.size}</span>
             </span>
                     </label>
                     <a
@@ -310,7 +314,7 @@ export default function AuctionDetailPage() {
             <div className="listingSection__wrap !space-y-6">
                 <div>
                     <h2 className="text-2xl md:text-3xl font-semibold">
-                        {product.isLoading? "Loading..." : product.data!!.name}
+                        {product.isLoading ? "Loading..." : product.data!!.name}
                     </h2>
                     <div className="flex items-center mt-4 sm:mt-5">
                         <a
@@ -353,7 +357,7 @@ export default function AuctionDetailPage() {
                 <h2 className="text-2xl font-semibold">Product details</h2>
                 {/* <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div> */}
                 <div className="prose prose-sm sm:prose dark:prose-invert sm:max-w-4xl">
-                    {auctionData.isLoading? "" : auctionData.data!!.description}
+                    {auctionData.isLoading ? "" : auctionData.data!!.description}
                 </div>
                 {/* ---------- 6 ----------  */}
             </div>
@@ -460,6 +464,9 @@ export default function AuctionDetailPage() {
 
                 {/* SIDEBAR */}
                 <div className="flex-grow">
+                    <div className="mb-4">
+                        <Timer endedTime={auction.data?.endedAt ? new Date(auction.data.endedAt).toISOString() : "2024-01-01T00:00:00.000Z"}/>
+                    </div>
                     <div className="hidden lg:block sticky top-28">
                         {renderSectionSidebar()}
                     </div>
