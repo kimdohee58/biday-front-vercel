@@ -14,7 +14,7 @@ interface Props {
   phoneNum: string;
   email: string;
   name: string;
-  onSave: () => void;
+  onSave: (a: string, b: string) => void;
 }
 
 const ContactInfo: FC<Props> = ({isActive, onCloseActive, onOpenActive, phoneNum, email, name, onSave}) => {

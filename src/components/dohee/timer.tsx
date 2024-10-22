@@ -8,44 +8,38 @@ export interface Time {
 }
 
 interface TimerProps {
-    endedTime: string; // expected to be a date string like '2024-09-24T06:40:15.000Z'
+    endedTime: string;
 }
 
 export const Timer = ({ endedTime }: TimerProps) => {
-    console.log("endedTime", endedTime)
-    // Function to calculate the remaining time until the endTime
     const calculateRemainingTime = (endTime: Date): Time => {
         const now = new Date();
         const difference = endTime.getTime() - now.getTime();
 
-        // If the difference is less than or equal to zero, return zero values
         if (difference <= 0) {
             return { day: 0, hour: 0, min: 0, sec: 0 };
         }
 
-        const totalSeconds = Math.floor(difference / 1000); // Total seconds remaining
-        const day = Math.floor(totalSeconds / (3600 * 24)); // Full days remaining
-        const hour = Math.floor((totalSeconds % (3600 * 24)) / 3600); // Hours remaining after days
-        const min = Math.floor((totalSeconds % 3600) / 60); // Minutes remaining after hours
-        const sec = totalSeconds % 60; // Seconds remaining after minutes
+        const totalSeconds = Math.floor(difference / 1000);
+        const day = Math.floor(totalSeconds / (3600 * 24));
+        const hour = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+        const min = Math.floor((totalSeconds % 3600) / 60);
+        const sec = totalSeconds % 60;
 
         return { day, hour, min, sec };
     };
 
-    // State to store the time remaining
     const [time, setTime] = useState<Time>(() => calculateRemainingTime(new Date(endedTime)));
 
-    // Effect to set up the countdown timer
     useEffect(() => {
-        const endTimeDate = new Date(endedTime); // Parse the endedTime into a Date object
+        const endTimeDate = new Date(endedTime);
 
         const intervalId = setInterval(() => {
-            // Calculate the remaining time every second
             setTime(calculateRemainingTime(endTimeDate));
         }, 1000);
 
-        return () => clearInterval(intervalId); // Clean up the interval on unmount
-    }, [endedTime]); // Depend on endedTime to re-run the effect if it changes
+        return () => clearInterval(intervalId);
+    }, [endedTime]);
 
     return (
         <div className="relative rounded-md bg-white p-6 shadow-lg border border-gray-200 sm:rounded-xl text-center">

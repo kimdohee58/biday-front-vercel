@@ -49,3 +49,10 @@ export const initialPaymentModel : PaymentModel = {
     code: "",
     message:  "",
 }
+
+export interface PaymentRequestModel {
+    awardId: number;
+    paymentKey: string;
+    amount: number;
+    orderId: string;
+}

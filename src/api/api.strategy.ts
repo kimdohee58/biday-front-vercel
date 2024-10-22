@@ -46,7 +46,12 @@ const apiRequest = async (url: string, method: HttpMethod, {params, data, header
 
         response = await fetchAPI(`${url}${queryString}`, options);
     }
-    const responseType = response.headers.get("content-type");
+    const responseType = response.headers.get("Content-Type");
+
+    const contentLength = response.headers.get("Content-Length");
+    if (contentLength === '0') {
+        return {};
+    }
     if (responseType && responseType.includes("application/json")) {
         return response.json();
     } else {
