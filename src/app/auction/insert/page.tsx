@@ -15,6 +15,7 @@ import {useMutation} from "@tanstack/react-query";
 import {saveAuction} from "@/service/auction/auction.service";
 import {SaveAuctionModel} from "@/model/auction/auction.model";
 import {uploadImages} from "@/service/ftp/image.service";
+import {useRouter} from "next/navigation";
 
 
 /**
@@ -25,6 +26,7 @@ import {uploadImages} from "@/service/ftp/image.service";
 export default function InsertAuction() {
 
     const searchParams = useSearchParams();
+    const router = useRouter();
 
     const productId = searchParams.get("productId");
     const [selectedProduct, setSelectedProduct] = useState<ProductWithImageModel>({
@@ -254,6 +256,10 @@ export default function InsertAuction() {
                 }
 
                 const message = await imageMutate.mutateAsync(image);
+
+                if (message) {
+                    router.push("/auction/insert/success");
+                }
 
             } catch (error) {
                 console.error("옥션 등록 중 오류 발생", error);

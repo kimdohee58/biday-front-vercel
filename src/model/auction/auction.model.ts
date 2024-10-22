@@ -23,10 +23,6 @@ export interface SaveAuctionModel {
     currentBid: number;
     startedAt: Date;
     endedAt: Date;
-    userId: any;
-    createdAt: any;
-    updatedAt: any;
-    status: any;
 }
 
 export interface AwardAuctionModel {
