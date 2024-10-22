@@ -8,7 +8,12 @@ const link = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/bids`
 
 
 export async function saveBid(bid: BidModel) {
-    const userToken = localStorage.getItem("userToken")!;
+    const userToken = Cookies.get("userToken");
+
+    if (!userToken) {
+        throw new Error("유저토큰 없음");
+        //TODO error enum
+    }
 
     try {
         const options = {

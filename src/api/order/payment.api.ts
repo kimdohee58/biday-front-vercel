@@ -19,8 +19,7 @@ const savePayment = async (options: Omit<RequestOptions<any, PaymentConfirmModel
 
 // 결제 조회 (GET 요청)
 const findPaymentByPaymentKey = async (id: number): Promise<PaymentModel> => {
-    const response = await strategy.GET(`${api.payment}?id=${id}`, {});
-    return response;
+    return await strategy.GET(`${api.payment}?id=${id}`, {});
 };
 
 // 사용자 기준 결제 내역 조회 (GET 요청)
