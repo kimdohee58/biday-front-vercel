@@ -2,9 +2,11 @@
 
 import {AuctionModel} from "@/model/auction/auction.model";
 import {useRouter} from "next/navigation";
+import {getColor} from "@/utils/productUtils";
+import {ProductModel} from "@/model/product/product.model";
 
 
-export default function BidsTable({auctions}: { auctions: AuctionModel[] }) {
+export default function AuctionTable({auctions, product}: { auctions: AuctionModel[], product: ProductModel }) {
 
 
     if (auctions === null || auctions.length === 0) {
@@ -13,30 +15,6 @@ export default function BidsTable({auctions}: { auctions: AuctionModel[] }) {
 
     const router = useRouter();
 
-    const getColor = (productName: string) => {
-        const parts = productName.split(`(`);
-        if (parts.length > 1) {
-            return parts[1].replace(')', '').trim();
-        }
-        return "";
-    };
-
-
-    /* const {
-         data: auction,
-         isLoading,
-         isError,
-     }: UseQueryResult<AuctionModel> = useQuery<AuctionModel>({queryKey: [productId], queryFn: () => getAuction(productId)})
-
-
-     if (isLoading) {
-         return <div>Loading...</div>;
-     }
-     if (isError) {
-         return <div>Error occurred while fetching auction data</div>;
-     }*/
-
-    /* const auctions: AuctionModel[] = auction ? [auction] : [];*/
 
     return (
         <div className="">
@@ -65,19 +43,21 @@ export default function BidsTable({auctions}: { auctions: AuctionModel[] }) {
                 {auctions.map((auction) => (
                     <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
                         key={auction.id}
-                        onClick={() => router.push(`/auction/${auction.id}`)}>
+                        onClick={() => router.push(`/auction/${auction.id}?productId=${product.id}`)}>
                         <th scope="row"
                             className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {getColor(auction.product.name)}
+                            {getColor(product.name)}
                         </th>
                         <td className="px-6 py-4">
                             {auction.size}
                         </td>
                         <td className="px-6 py-4">
-                            {auction.userId}
+                            {auction.user}
                         </td>
-                        <td className="px-6 py-4">
-                            {auction.endedAt.toLocaleDateString()}
+                        <td className="px-6 py-4 whitespace-nowrap">
+                            {auction.endedAt && !isNaN(new Date(auction.endedAt).getTime())
+                                ? new Date(auction.endedAt).toLocaleDateString()
+                                : "N/A"}
                         </td>
                         <td className="px-6 py-4">
                             {auction.currentBid}
