@@ -1,17 +1,17 @@
 //src/service/auction/auction.service.ts
 
 import {auctionAPI} from "@/api/auction/auction.api";
-import {AddressModel} from "@/model/user/address.model";
 import Cookies from "js-cookie";
-import {addressAPI} from "@/api/user/address.api";
 import {AuctionModel} from "@/model/auction/auction.model";
+import {fetchImage} from "@/service/ftp/image.service";
+import {ImageType} from "@/model/ftp/image.model";
 
 
 export async function fetchAuction(auctionId: string) {
     try {
         const options = {
             params: {
-                id: auctionId,
+                auctionId: auctionId,
             },
         };
 
@@ -24,13 +24,14 @@ export async function fetchAuction(auctionId: string) {
 export async function fetchAuctionWithImages(auctionId: string) {
 
     try {
-        const auction = fetchAuction(auctionId);
-        const images = fetchImage(ImageType.AUCTION, auctionId);
+        const auction = await fetchAuction(auctionId);
 
         if (!auction) {
             console.error("auction 값이 undefined");
             throw new Error("");
         }
+
+        const images = await fetchImage(ImageType.AUCTION, auctionId);
 
         return {
             auction: auction,

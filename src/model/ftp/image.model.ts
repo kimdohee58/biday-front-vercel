@@ -19,7 +19,7 @@ export enum ImageType {
 export interface UploadImageParams {
     filePath: string;
     type: ImageType;
-    referenceId: number;
+    referencedId: number;
     files: File[];
 }
 

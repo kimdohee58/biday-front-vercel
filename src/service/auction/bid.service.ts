@@ -1,4 +1,4 @@
-import {BidModel} from "@/model/BidModel";
+import {BidModel} from "@/model/auction/bid.model";
 import {useSelector} from "react-redux";
 import {getToken} from "@/lib/features/user.slice";
 import Cookies from "js-cookie";
