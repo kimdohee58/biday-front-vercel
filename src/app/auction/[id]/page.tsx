@@ -24,6 +24,7 @@ import {fetchImage} from "@/service/ftp/image.service";
 import Cookies from "js-cookie";
 import {saveBid} from "@/service/auction/bid.service";
 import {fetchAuctionWithImages} from "@/service/auction/auction.service";
+import {Timer} from "@/app/auction/[id]/timer";
 import {getColor} from "@/utils/productUtils";
 
 export default function AuctionDetailPage() {
@@ -452,6 +453,9 @@ export default function AuctionDetailPage() {
 
                 {/* SIDEBAR */}
                 <div className="flex-grow">
+                    <div className="mb-4">
+                        <Timer endedTime={auction?.endedAt ? new Date(auction.endedAt).toISOString() : "2024-01-01T00:00:00.000Z"}/>
+                    </div>
                     <div className="hidden lg:block sticky top-28">
                         {renderSectionSidebar()}
                     </div>
@@ -473,7 +477,6 @@ export default function AuctionDetailPage() {
             {/* MODAL VIEW ALL REVIEW */}
 
             <Suspense>
-                {/*TODO type error 수정*/}
                 <ListingImageGallery
                     onClose={handleCloseModalImageGallery}
                     images={[
