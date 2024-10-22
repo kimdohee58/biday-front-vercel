@@ -2,7 +2,6 @@ import {AuctionModel, SaveAuctionModel} from "@/model/auction/auction.model";
 import {api} from "../request";
 import {strategy} from "../api.strategy";
 import {RequestOptions} from "@/model/api/RequestOptions";
-import {PaymentTempModel} from "@/model/order/paymentTemp.model";
 
 // 경매 상세보기 (GET 요청)
 const findById = async (options: RequestOptions<{ auctionId: string }, null>): Promise<AuctionModel> => {
@@ -42,13 +41,12 @@ const save = async (options: Omit<RequestOptions<any, SaveAuctionModel>, "params
 
 // 경매 수정 (PATCH 요청)
 const update = async (auctionData: Partial<AuctionModel>): Promise<AuctionModel> => {
-    const response = await strategy.PATCH(`${api.auction}`, auctionData);
-    return response;
+    return await strategy.PATCH(`${api.auction}`, {});
 };
 
 // 경매 삭제 (DELETE 요청)
 const delete_ = async (id: number): Promise<void> => {
-    await strategy.DELETE(`${api.auction}?id=${id}`);
+    await strategy.DELETE(`${api.auction}?id=${id}`, {});
 };
 
 export const auctionAPI = {

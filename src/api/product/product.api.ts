@@ -42,7 +42,7 @@ const searchByFilter = async (
 };
 
 // 상품 수정 (PATCH 요청)
-const updateProduct = async (options: RequestOptions<Partial<ProductModel>>): Promise<ProductModel> => {
+const updateProduct = async (options: RequestOptions<any, any>): Promise<ProductModel> => {
     return await strategy.PATCH(`${api.product}`, options);
 };
 

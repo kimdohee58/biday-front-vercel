@@ -1,9 +1,7 @@
 //src/service/auction/auction.service.ts
 
 import {auctionAPI} from "@/api/auction/auction.api";
-import {AddressModel} from "@/model/user/address.model";
 import Cookies from "js-cookie";
-import {addressAPI} from "@/api/user/address.api";
 import {AuctionModel} from "@/model/auction/auction.model";
 import {fetchImage} from "@/service/ftp/image.service";
 import {ImageType} from "@/model/ftp/image.model";
