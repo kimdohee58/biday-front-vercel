@@ -18,7 +18,7 @@ const TokenCheck = () => {
 
                 // 토큰이 없으면 로그인 페이지로 이동
                 if (!access) {
-                    router.push("/login");
+                    router.push("/");
                     return;
                 }
 

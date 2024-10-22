@@ -17,7 +17,7 @@ const initialState: UserState = { // 초기 상태
     user: initialUser,
     token: null,
     userInfo: initialUserToken,
-    addresses: [], // 주소 초기 값 설정
+    addresses: [],
 };
 
 // 로그인을 해서 리턴을 해서 사용을
