@@ -13,7 +13,7 @@ export const useFetchData = (activeTab: string) => {
     const [auctionData, setAuctionData] = useState<AuctionModel[]>([]);
     const [awardData, setAwardData] = useState<AwardModel[]>([]);
     const [paymentData, setPaymentData] = useState<PaymentRequestModel[]>([]);
-    const [loading, setLoading] = useState(true);auctionData
+    const [loading, setLoading] = useState(true);
 
     // 경매 데이터를 가져오는 함수 Service.ts
     const fetchAuctionData = async () => {

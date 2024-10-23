@@ -20,6 +20,7 @@ export interface ProductModel {
 
 export interface ProductDTO {
     id: number;
+    //description: string;
     brand: string;
     category: string;
     name: string;
