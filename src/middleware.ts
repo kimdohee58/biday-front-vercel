@@ -34,7 +34,7 @@ export async function middleware(req: NextRequest) {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${authorizationToken?.value}`, // 헤더에 리프레시 토큰 추가
+                        'Authorization': `Bearer ${authorizationToken?.value}`,
                     },
                     credentials: 'include', // 쿠키 포함
                 });

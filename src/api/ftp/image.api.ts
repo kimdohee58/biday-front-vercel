@@ -22,7 +22,7 @@ const uploadImage = async (options: Omit<RequestOptions<any, FormData>, "params"
 
 // 이미지 업
 const updateImages = async (): Promise<ImageModel[]> => {
-    return await strategy.GET(`${api.image}`, {}); // response.json()이 이미 처리되어 반환됩니다.
+    return await strategy.GET(`${api.image}`, {});
 };
 
 const deleteImages = async (id: number): Promise<void> => {
@@ -42,6 +42,6 @@ export const imageAPI = {
     uploadImage,
     updateImages,
     deleteImages,
-    updateImages2, // 오버로딩 컨트롤러 두개
-    deleteImages2 // 오버로딩 컨트롤러 두개
+    updateImages2,
+    deleteImages2
 };

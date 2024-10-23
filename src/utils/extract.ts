@@ -7,7 +7,6 @@ export const extractSizeIds = (data: any) => {
     return [];
 };
 
-
 // paymentData에서 awardId를 추출하는 함수
 export const extractAwardIdsFromPaymentData = (paymentData: any[]) => {
     return paymentData.map((payment) => payment.awardId);
