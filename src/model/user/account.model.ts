@@ -6,7 +6,7 @@ export interface AccountModel {
     bankTranId:string;
     bankCode : string;
     bankName : string;
-    accountNum:string;
+    accountNumber:string;
     accountName:string;
     bankRspCode:string;
     bankTranDate : Date;

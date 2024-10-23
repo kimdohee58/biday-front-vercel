@@ -1,131 +1,116 @@
 "use client"
 
-import React, {ChangeEvent, useState} from "react";
+import React, {Suspense} from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import {Input, Select, Typography,} from "@material-tailwind/react";
 import {AccountModel} from "@/model/user/account.model";
-import {useMutation, useQuery, useSuspenseQuery} from "@tanstack/react-query";
+import {useSuspenseQuery} from "@tanstack/react-query";
 import useRandomId from "@/hooks/useRandomId";
 import {getAccount, saveAccount} from "@/service/user/account.service";
-import Cookies from "js-cookie";
+import {useSelector} from "react-redux";
+import {getUser} from "@/lib/features/user.slice";
+import {UserModel, UserRole} from "@/model/user/user.model";
+import {getBankName, getRandomBankCode} from "@/utils/accountUtils";
 
 
-const getUserToken = () => {
-    const userToken = Cookies.get("userToken");
-    if (!userToken) {
-        throw new Error('');
-        //TODO error enum
-    }
+function AccountDetails({user, onClick}: { user: UserModel, onClick: () => void }) {
+    const accountData = useSuspenseQuery({
+        queryKey: ["account", user.id],
+        queryFn: () => getAccount(),
+    });
 
-    return JSON.parse(userToken);
-}
+    const renderButton = () => (
+        <ButtonPrimary onClick={onClick}>
+            {user.role === UserRole.SELLER && accountData.data ? "계좌정보 수정" : "계좌 등록"}
+        </ButtonPrimary>
+    );
 
-async function AccountDetails({accountData, userName}: {accountData: AccountModel, userName: string}) {
-    if (!accountData || Object.keys(accountData).length === 0) {
-        return (
-            <div>
-                <div>
-                    계좌 정보가 존재하지 않습니다.
-                    <br/>
-                    계좌를 등록하고 판매를 시작해 보세요.
-                </div>
-            </div>
-        )
-    }
 
     return (
-        <div className="flex flex-col mt-8">
-            <div className="mb-6 flex flex-col items-end gap-4 md:flex-row">
-                <div className="w-full">
-                    <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="mb-2 font-medium"
-                    >
-                        이름
-                    </Typography>
-                    <Input
-                        size="lg"
-                        value={userName}
-                        labelProps={{
-                            className: "hidden",
-                        }}
-                        disabled
-                        className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
-                    />
+        <div>
+            {accountData.data && Object.keys(accountData.data).length > 0 ? (
+                <div className="flex flex-col mt-8">
+                    <div className="mb-6 flex flex-col items-end gap-4 md:flex-row">
+                        <div className="w-full">
+                            <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
+                                이름
+                            </Typography>
+                            <Input
+                                size="lg"
+                                value={user.name}
+                                labelProps={{
+                                    className: "hidden",
+                                }}
+                                disabled
+                                className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
+                            />
+                        </div>
+                        <div className="w-full">
+                            <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
+                                생년월일
+                            </Typography>
+                            <Input
+                                size="lg"
+                                value={"19990919"}
+                                labelProps={{
+                                    className: "hidden",
+                                }}
+                                disabled
+                                className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
+                            />
+                        </div>
+                    </div>
+                    <div className="mb-6 flex flex-col items-end gap-4 md:flex-row">
+                        <div className="w-full">
+                            <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
+                                은행
+                            </Typography>
+                            <Input
+                                size="lg"
+                                labelProps={{
+                                    className: "hidden",
+                                }}
+                                className="border-t-blue-gray-200 aria-[expanded=true]:border-t-primary"
+                                disabled
+                                value={accountData.data.bankName}
+                            />
+                        </div>
+                        <div className="w-full">
+                            <Typography variant="small" color="blue-gray" className="mb-2 font-medium">
+                                계좌번호
+                            </Typography>
+                            <Input
+                                size="lg"
+                                labelProps={{
+                                    className: "hidden",
+                                }}
+                                disabled
+                                value={accountData.data.accountNumber}
+                                className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
+                            />
+                        </div>
+                    </div>
+                    {renderButton()}
                 </div>
-                <div className="w-full">
-                    <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="mb-2 font-medium"
-                    >
-                        생년월일
-                    </Typography>
-                    <Input
-                        size="lg"
-                        placeholder="Roberts"
-                        labelProps={{
-                            className: "hidden",
-                        }}
-                        value={"990919"}
-                        disabled
-                        className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
-                    />
+            ) : (
+                <div>
+                    <div>
+                        계좌 정보가 존재하지 않습니다.
+                        <br/>
+                        계좌를 등록하고 판매를 시작해 보세요.
+                    </div>
+                    <div className="mt-4">{renderButton()}</div>
                 </div>
-            </div>
-            <div className="mb-6 flex flex-col items-end gap-4 md:flex-row">
-                <div className="w-full">
-                    <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="mb-2 font-medium"
-                    >
-                        은행
-                    </Typography>
-                    <Select
-                        size="lg"
-                        labelProps={{
-                            className: "hidden",
-                        }}
-                        className="border-t-blue-gray-200 aria-[expanded=true]:border-t-primary"
-                        disabled
-                        value={accountData.bankName}
-                    >
-                        {accountData.bankName}
-                    </Select>
-                </div>
-                <div className="w-full">
-                    <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="mb-2 font-medium"
-                    >
-                        계좌번호
-                    </Typography>
-                    <Input
-                        size="lg"
-                        labelProps={{
-                            className: "hidden",
-                        }}
-                        disabled
-                        value={accountData.accountNum}
-                        className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
-                    />
-                </div>
-            </div>
+            )}
         </div>
     );
 }
 
 
 export default function Account1() {
-    const [bankCode, setBankCode] = useState<string>("");
-    const [name, setName] = useState<string>("");
-    const [birth, setBirth] = useState<string>("");
-    const [accountNum, setAccountNum] = useState("");
-    const [bankName, setBankName] = useState("");
     const bankTranId = useRandomId(16);
+    const bankCode = getRandomBankCode();
+    const bankName = getBankName(bankCode);
 
     const AUTH_URL = 'https://testapi.openbanking.or.kr/oauth/2.0/authorize';
     const CLIENT_ID = 'fce251a9-d76a-449c-8024-021ec51dc4eb';
@@ -134,8 +119,8 @@ export default function Account1() {
     const STATE = '12341234123412341234123412341234';
     const AUTH_TYPE = '0';
 
-    const accountData = useSuspenseQuery({queryKey: ["account"], queryFn: () => getAccount()});
-    const user = getUserToken();
+
+    const user: UserModel = useSelector(getUser);
 
     /*useEffect(() => {
         switch (bankCode) {
@@ -185,58 +170,33 @@ export default function Account1() {
         }
     }, []);*/
 
-    const onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
-        setName(e.target.value);
-    };
 
-    const onChangeBankCode = (value: string) => {
-        const [selectedKey, selectedValue] = value.split(':');
-        setBankCode(selectedValue);
-        setBankName(selectedKey);
-    };
+    const onClickButton = () => {
 
-    const onChangeBirth = (e: ChangeEvent<HTMLInputElement>) => {
-        setBirth(e.target.value);
-    }
-
-    const onChangeAccountNum = (e: ChangeEvent<HTMLInputElement>) => {
-        setAccountNum(e.target.value);
-    }
-
-    const mutation = useMutation({
-        mutationFn: saveAccount
-    });
-
-    const handleLogin = () => {
-        savedAccount();
-        window.location.href = `${AUTH_URL}?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(SCOPE)}&state=${STATE}&auth_type=${AUTH_TYPE}`;
-    };
-
-    const savedAccount = () => {
         const account: AccountModel = {
-            userId: user.userId,
+            userId: user.id!,
             bankTranId: bankTranId,
             bankCode: bankCode,
             bankName: bankName,
-            accountName: name,
-            accountNum: accountNum,
+            accountName: user.name!,
+            accountNumber: "111-222-3333",
             bankRspCode: "000",
             bankTranDate: new Date(),
             bankRspMessage: "너무멋져용~!",
         };
 
-        mutation.mutate(account);
+        sessionStorage.setItem("account", JSON.stringify(account));
+
+        window.location.href = `${AUTH_URL}?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(SCOPE)}&state=${STATE}&auth_type=${AUTH_TYPE}`;
     };
+
 
     return (
         <div className="space-y-10 sm:space-y-12">
             <h2 className="text-2xl sm:text-3xl font-semibold">계좌 정보</h2>
-            <AccountDetails accountData={accountData.data} userName={user.userName}/>
-            {accountData.data && Object.keys(accountData.data).length === 0 && (
-                <ButtonPrimary onClick={handleLogin}>
-                    판매자 등록
-                </ButtonPrimary>
-            )}
+            <Suspense fallback={<div>Loading...</div>}>
+                <AccountDetails user={user} onClick={onClickButton}/>
+            </Suspense>
         </div>
     );
 }
