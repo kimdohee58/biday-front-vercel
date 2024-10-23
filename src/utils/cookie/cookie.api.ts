@@ -37,16 +37,12 @@ export const saveToken = (token: string) => {
 // JWT 토큰을 로컬 스토리지와 쿠키에서 삭제하는 함수 (로그아웃 시 사용)
 export const clearToken = () => {
     localStorage.removeItem('persist:root');
-    console.log(" localStorage.removeItem삭제 , " , localStorage.removeItem)
-
-    localStorage.removeItem('refreshToken');
-    console.log(" localStorage.removeItem 삭제 ",  localStorage.removeItem)
-
+    localStorage.removeItem('refresh');
     localStorage.removeItem("userToken");
-    console.log("localStorage.removeItem 삭제 ", localStorage.removeItem)
 
     Cookies.remove('token', { path: '/', secure: true, sameSite: 'strict' });
-    Cookies.remove('refreshToken', { path: '/', secure: true, sameSite: 'strict' });
+    Cookies.remove('refresh', { path: '/', secure: true, sameSite: 'strict' });
+    console.log("클리어 토큰 실행 완료  : " , clearToken)
 };
 
 

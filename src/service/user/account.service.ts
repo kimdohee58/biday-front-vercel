@@ -1,6 +1,8 @@
 import Cookies from "js-cookie";
 import {AccountModel} from "@/model/user/account.model";
 import {accountAPI} from "@/api/user/account.api";
+import {api} from "@/api/request";
+import { clearToken } from "@/utils/cookie/cookie.api";
 
 const getUserToken = () => {
     const userToken = Cookies.get("userToken");
@@ -48,3 +50,16 @@ export async function getAccount() {
     }
 }
 
+
+export const apiCall = async () => {
+    try {
+        const response = await fetch('http://localhost:8000/api/account');
+
+        if (response.status === 401) {
+            clearToken();
+            window.location.href='/loing'
+        }
+    } catch (error){
+        console.log("/api/account 호출 중 에러 발생 : " , error)
+    }
+}

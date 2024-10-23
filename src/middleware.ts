@@ -18,14 +18,15 @@ export async function middleware(req: NextRequest) {
 
     // 리프레시 토큰이 없으면 로그인 페이지로 리다이렉트
     if (!authorizationToken) {
-        return NextResponse.redirect(new URL('/login', req.url));
+     return NextResponse.redirect(new URL('/login', req.url));
+
     }
 
     const token = tokenCookie?.value;
     if (token) {
         const timeRemaining = getTokenRemainingTime(token);
 
-        if (timeRemaining !== null && timeRemaining <= 10) { // 남은 시간이 5분 이하일 때
+        if (timeRemaining !== null && timeRemaining <= 580) { // 남은 시간이 5분 이하일 때
             console.log("토큰 만료 임박, 재발급 요청");
 
             // 토큰 재발급 요청 수행
