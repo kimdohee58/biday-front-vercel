@@ -5,6 +5,7 @@ import {useRouter, useSearchParams} from "next/navigation";
 import {useMutation} from "@tanstack/react-query";
 import {confirmPayment} from "@/service/order/payment.service";
 import {PaymentSaveModel} from "@/model/order/paymentSave.model";
+import {Spinner} from "@/shared/Spinner/Spinner";
 
 /**
  * 추후 패러렐 라우트로 처리
@@ -53,6 +54,6 @@ export default function SuccessPage() {
     }, [orderId, awardId]);
 
     return (
-        <>옝레~</>
+        <Spinner/>
     )
 }
