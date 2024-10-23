@@ -3,7 +3,7 @@ import {ProductDictionary, ProductModel, ProductWithImageModel, SearchFilter} fr
 import {AuctionModel} from "@/model/auction/auction.model";
 import {fetchAuctionsBySize} from "@/service/auction/auction.service";
 import {setLoading} from "@/lib/features/products.slice";
-import {fetchAllProductImage} from "@/service/ftp/image.service";
+import {fetchAllProductImage, fetchImageOne} from "@/service/ftp/image.service";
 import {defaultImage, ImageType} from "@/model/ftp/image.model";
 import {SizeModel} from "@/model/product/size.model";
 
@@ -92,8 +92,35 @@ export async function fetchProductOne(productId: string): Promise<ProductModel> 
     }
 }
 
+// 상품 (색상 포함) 들을 이미지와 함께 불러오는 함수
+export async function fetchProductWithImages(productId: number): Promise<ProductWithImageModel[]> {
+    try {
+        const products = await fetchProduct(productId);
+
+        console.log("products", products);
+
+        const images = await Promise.all(products.map((product) => {
+            return fetchImageOne(ImageType.PRODUCT, String(product.id));
+        }))
+
+        return products.map(product => {
+            const productImages = images.find(image => (
+                image.referencedId === product.id.toString() && image.type === ImageType.PRODUCT
+            )) || defaultImage;
+
+            return {
+                product,
+                image: productImages,
+            };
+        });
+
+    } catch (error) {
+        console.error("fetchProductWithImages 중 오류 발생");
+        throw new Error();
+    }
+}
+
 export async function fetchProduct(productId: number): Promise<ProductModel[]> {
-    console.log("fetchProduct 진입")
     try {
         const options = {
             params: {
@@ -118,9 +145,10 @@ export async function fetchProduct(productId: number): Promise<ProductModel[]> {
 
 export async function fetchProductDetails(id: number): Promise<{
     colorIds: number[],
-    product: ProductModel,
+    product: ProductWithImageModel,
     size: string[],
     auctions: AuctionModel[]
+    productWithImagesArray: ProductWithImageModel[];
 }> {
     try {
         console.log("fetchProductDetails 진입");
@@ -131,23 +159,23 @@ export async function fetchProductDetails(id: number): Promise<{
             }
         };
 
-        const productArray = await fetchProduct(id);
-        const product = productArray.find((item) => item.id === id);
+        const productWithImagesArray = await fetchProductWithImages(id);
+        const product = productWithImagesArray.find((item) => item.product.id === id);
         if (product === undefined) {
             throw new Error(`해당 product를 찾을 수 없습니다. id: ${id}`);
         }
-        const colorIds = productArray.map((item) => item.id);
-        const sizes = product.sizes.map((size) => size.id);
+        const colorIds = productWithImagesArray.map((item) => item.product.id);
+        const sizes = product.product.sizes.map((size) => size.id);
 
         const auctionArray = await Promise.all(sizes.map((size) => {
             return fetchAuctionsBySize(size);
         }));
         const auctions = auctionArray.flat(Infinity).filter((auction) => auction !== undefined) as unknown as AuctionModel[];
-        const size = product.sizes.map((size) => size.size);
+        const size = product.product.sizes.map((size) => size.size);
 
         console.log("auctions", auctions);
 
-        return {colorIds, product, size, auctions};
+        return {colorIds, product, size, auctions, productWithImagesArray};
 
 
     } catch (error) {
@@ -158,21 +186,16 @@ export async function fetchProductDetails(id: number): Promise<{
 }
 
 
-export async function fetchProductBySizeId(sizeId: number): Promise<SizeModel[]> {
+export async function fetchProductBySizeId(sizeId: number): Promise<SizeModel> {
     try {
         const options = {
             params: {
                 sizeId: sizeId
             }
         };
+        console.log("패치프로덕트바이사이즈아이디 : " , sizeId)
+        return await productAPI.findBySizeId(options);
 
-        const productDictArray: SizeModel[] = await productAPI.findBySizeId(options);
-
-        if (productDictArray.length === 0) {
-            return [];
-        }
-
-        return productDictArray;
     } catch (error) {
         console.error("fetchProduct 에러 발생", error);
         throw new Error("");

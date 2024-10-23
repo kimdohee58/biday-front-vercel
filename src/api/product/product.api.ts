@@ -42,7 +42,7 @@ const searchByFilter = async (
 };
 
 // 상품 수정 (PATCH 요청)
-const updateProduct = async (options: RequestOptions<Partial<ProductModel>>): Promise<ProductModel> => {
+const updateProduct = async (options: RequestOptions<any, any>): Promise<ProductModel> => {
     return await strategy.PATCH(`${api.product}`, options);
 };
 
@@ -52,7 +52,7 @@ const findOneById = async (options: RequestOptions<ProductParams,null>):Promise<
 }
 
 // sizeId를 가지고 있는 상품 1개를 반환, 마이페이지에서 내역보기 등 사이즈 id 기준으로 불러오는 상품 정보
-const findBySizeId = async (options: RequestOptions<ProductSizeParams,null>):Promise<SizeModel[]> => {
+const findBySizeId = async (options: RequestOptions<ProductSizeParams,null>):Promise<SizeModel> => {
     return await strategy.GET(`${api.product}/findBySizeId`, options);
 }
 

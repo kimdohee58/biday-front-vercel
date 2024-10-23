@@ -38,7 +38,7 @@ function ProductListCard({product, image, onClick}: ProductWithImageModel & { on
     );
 }
 
-const ProductModal = ({ onClose, productList, onClick}: ModalProps) => {
+export default function ProductModal ({ onClose, productList, onClick}: ModalProps){
     const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
@@ -67,14 +67,14 @@ const ProductModal = ({ onClose, productList, onClick}: ModalProps) => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full p-2 mb-4 border"
                 />
-                <div style={{ height: '300px' }}>
+                <div style={{height: '300px'}}>
                     <List
-                        height={300} // 모달의 높이와 맞춤
-                        itemCount={productList.length} // 렌더링할 항목 수
-                        itemSize={70} // 각 항목의 높이 (픽셀 단위)
+                        height={300}
+                        itemCount={productList.length}
+                        itemSize={70}
                         width={'100%'}
                     >
-                        {({ index, style }) => {
+                        {({index, style}) => {
                             const product = productList[index];
                             return (
                                 <div style={style} key={product.product.id}>
@@ -89,5 +89,3 @@ const ProductModal = ({ onClose, productList, onClick}: ModalProps) => {
         </div>
     );
 };
-
-export default ProductModal;

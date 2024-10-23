@@ -14,7 +14,6 @@ import {UserToken} from "@/model/user/userToken";
 
 export const saveUserTokenToCookie = (userToken: UserToken) => {
     Cookies.set('userToken', JSON.stringify(userToken), { path: '/', secure: true, sameSite: 'Lax' });
-    console.log("유저객체가 쿠키에 저장되었습니다.");
 };
 
 
@@ -38,16 +37,12 @@ export const saveToken = (token: string) => {
 // JWT 토큰을 로컬 스토리지와 쿠키에서 삭제하는 함수 (로그아웃 시 사용)
 export const clearToken = () => {
     localStorage.removeItem('persist:root');
-    console.log(" localStorage.removeItem삭제 , " , localStorage.removeItem)
-
-    localStorage.removeItem('refreshToken');
-    console.log(" localStorage.removeItem 삭제 ",  localStorage.removeItem)
-
+    localStorage.removeItem('refresh');
     localStorage.removeItem("userToken");
-    console.log("localStorage.removeItem 삭제 ", localStorage.removeItem)
 
     Cookies.remove('token', { path: '/', secure: true, sameSite: 'strict' });
-    Cookies.remove('refreshToken', { path: '/', secure: true, sameSite: 'strict' });
+    Cookies.remove('refresh', { path: '/', secure: true, sameSite: 'strict' });
+    console.log("클리어 토큰 실행 완료  : " , clearToken)
 };
 
 
@@ -130,7 +125,7 @@ export const getTokenRemainingTime = (token: string | undefined): number | null 
         const timeRemaining = decoded.exp - currentTime;
         console.log("남은 시간", timeRemaining);
 
-        return timeRemaining > 0 ? timeRemaining : 0; // 남은 시간 반환, 없으면 0
+        return timeRemaining ; // 남은 시간 반환, 없으면 0
     } catch (error) {
         console.error('토큰 디코딩 실패:', error);
         return null;

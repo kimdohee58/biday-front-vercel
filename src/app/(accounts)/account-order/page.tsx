@@ -1,4 +1,3 @@
-//src/app/(account)/account-order/page.tsx
 "use client";
 import React, {useEffect, useState} from "react";
 import {useFetchData} from "@/hooks/useAccountOrderData";
@@ -26,7 +25,6 @@ const AccountOrder = () => {
     const [activeTab, setActiveTab] = useState("auction");
     const [mappedPaymentData, setMappedPaymentData] = useState<PaymentRequestModel[]>([]);
 
-    // useFetchData 훅을 사용하여 데이터를 가져옴
     const {
         auctionData,
         awardData,
@@ -34,25 +32,30 @@ const AccountOrder = () => {
         loading
     } = useFetchData(activeTab);
 
-
-    // 각 데이터 훅 사용
     const { data: auctionProductList } = useFetchAuctionProducts(auctionData);
     const { data: bidProductList } = useFetchBidProducts();
     const { data: awardProductList } = useFetchAwardProducts(awardData);
     const { data: paymentProductList } = useFetchPaymentProducts(paymentData);
 
-    // 비동기 데이터 매핑 처리
+    console.log("auctionProductList : " ,auctionProductList )
+    console.log(" bidProductList: " , bidProductList)
+    console.log(" awardProductList: " , awardProductList)
+    console.log("paymentProductList : " , paymentProductList)
+
+    console.log("경매 데이터 :    ,   " , auctionData)
+
+
+
     useEffect(() => {
         const fetchMappedPaymentData = async () => {
             if (paymentData && paymentProductList) {
                 const mappedData = await mapDataWithPaymentModel(paymentData, paymentProductList);
-                setMappedPaymentData(mappedData); // 비동기 데이터 매핑 후 상태에 저장
+                setMappedPaymentData(mappedData);
             }
         };
 
-        fetchMappedPaymentData(); // 함수 호출
-    }, [paymentData, paymentProductList]); // paymentData나 paymentProductList가 변경될 때 실행
-
+        fetchMappedPaymentData();
+    }, [paymentData, paymentProductList]);
 
     return (
         <div className="space-y-10 sm:space-y-12">
@@ -76,20 +79,20 @@ const AccountOrder = () => {
                         {activeTab === "auction" && (
                             <>
                                 <div className="mb-8">
-                                    {renderAuctionHistory(mapDataWithAuctionModel(auctionData, auctionProductList!!))}
+                                    {renderAuctionHistory(mapDataWithAuctionModel({ content: auctionData }, auctionProductList!!))}
                                 </div>
                                 <div className="mb-8">
-                                    {renderBidHistory(bidProductList!!)}  {/* bidProductList 전달 */}
+                                    {renderBidHistory(bidProductList!!)}
                                 </div>
                             </>
                         )}
                         {activeTab === "award" && (
                             <>
                                 <div className="mb-8">
-                                    {renderAwardHistory(mapDataWithAwardModel(awardData, awardProductList!!))}  {/* awardProductList 전달 */}
+                                    {renderAwardHistory(mapDataWithAwardModel({ content: awardData }, awardProductList!!))}
                                 </div>
                                 <div className="mb-8">
-                                    {renderPaymentHistory(mappedPaymentData)}  {/* 비동기 처리된 mappedPaymentData 사용 */}
+                                    {renderPaymentHistory(mappedPaymentData)}
                                 </div>
                             </>
                         )}
@@ -102,5 +105,3 @@ const AccountOrder = () => {
 };
 
 export default AccountOrder;
-
-//mapDataWithModel,mapDataWithoutModel

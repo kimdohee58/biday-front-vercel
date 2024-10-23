@@ -1,30 +1,26 @@
 // src/api/category/category.api.ts
-import { api } from "../request";
-import { strategy } from "../api.strategy";
+import {api} from "../request";
+import {strategy} from "../api.strategy";
 import {CategoryModel} from "@/model/product/category.model";
 
 const findAll = async (): Promise<CategoryModel[]> => {
-    const response = await strategy.GET(`${api.category}`);
-    return response;
+    return await strategy.GET(`${api.category}`, {});
 };
 
 const findById = async (id: number): Promise<CategoryModel> => {
-    const response = await strategy.GET(`${api.category}/findById`, { id: String(id) });
-    return response;
+    return await strategy.GET(`${api.category}/findById`, {});
 };
 
 const create = async (categoryData: Partial<CategoryModel>): Promise<CategoryModel> => {
-    const response = await strategy.POST(`${api.category}`, categoryData);
-    return response;
+    return await strategy.POST(`${api.category}`, {});
 };
 
 const update = async (categoryData: Partial<CategoryModel>): Promise<CategoryModel> => {
-    const response = await strategy.PATCH(`${api.category}`, categoryData);
-    return response;
+    return await strategy.PATCH(`${api.category}`, {});
 };
 
 const delete_ = async (id: number): Promise<void> => {
-    await strategy.DELETE(`${api.address}/${id}`);
+    await strategy.DELETE(`${api.address}/${id}`, {});
 };
 
 export const categoryAPI = {

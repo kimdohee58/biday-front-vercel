@@ -71,12 +71,8 @@ const PageLogin = () => {
 
                         localStorage.setItem("userToken", JSON.stringify(userInfo));
 
-                        saveUserTokenToCookie(userInfo); // 유저인포 === 유저토큰
+                        saveUserTokenToCookie(userInfo);
                     }
-
-
-
-
                     router.push('/');
                 }
             } catch (error) {

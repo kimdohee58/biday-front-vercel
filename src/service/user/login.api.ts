@@ -16,7 +16,6 @@ export const handleLogin = async (username: string, password: string): Promise<A
         });
 
         if (response.status === 200) {
-
             return response;
         } else {
             throw new Error(response.statusText);

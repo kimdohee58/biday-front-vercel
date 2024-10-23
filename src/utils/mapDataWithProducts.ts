@@ -1,7 +1,7 @@
 import { AuctionModel } from "@/model/auction/auction.model";
 import { AwardModel } from "@/model/auction/award.model";
 import { PaymentRequestModel} from "@/model/order/payment.model";
-import { ProductModel } from "@/model/product/product.model";
+import {ProductDTO, ProductModel} from "@/model/product/product.model";
 import {extractAwardIdsFromPaymentData} from "@/utils/extract";
 import {fetchSizeIdsFromAwards} from "@/service/auction/award.service"; // ProductModel 경로는 가정입니다.
 
@@ -78,7 +78,7 @@ export const mapDataWithAwardModel = (
 
 export const mapDataWithPaymentModel = async (
     paymentData: PaymentRequestModel[], // PaymentRequestModel 배열
-    productList: ProductModel[] // ProductModel 리스트
+    productList: ProductDTO[] // ProductModel 리스트
 ): Promise<PaymentRequestModel[]> => {
     if (!paymentData || !productList) {
         return [];
@@ -102,7 +102,7 @@ export const mapDataWithPaymentModel = async (
 
         // productList에서 sizeId와 매칭되는 product 찾기
         const matchedProduct = productList.find(
-            (product: ProductModel) => product.id === sizeId
+            (product: ProductDTO) => product.id === sizeId
         );
 
         // PaymentRequestModel과 ProductModel을 결합한 객체

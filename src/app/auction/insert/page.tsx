@@ -14,16 +14,13 @@ import ImageModal from "@/app/auction/insert/imageModal";
 import {useMutation} from "@tanstack/react-query";
 import {saveAuction} from "@/service/auction/auction.service";
 import {SaveAuctionModel} from "@/model/auction/auction.model";
-
-
-/**
- * productCode, productColor, productSize, productImage
- */
-
+import {uploadImages} from "@/service/ftp/image.service";
+import {useRouter} from "next/navigation";
 
 export default function InsertAuction() {
 
     const searchParams = useSearchParams();
+    const router = useRouter();
 
     const productId = searchParams.get("productId");
     const [selectedProduct, setSelectedProduct] = useState<ProductWithImageModel>({
@@ -46,21 +43,7 @@ export default function InsertAuction() {
     const productList = useQuery({queryKey: ["allProductsWithImages"], queryFn: () => fetchAllProductsWithImages()});
 
     const auctionMutate = useMutation({mutationFn: saveAuction});
-
-    useEffect(() => {
-        console.log("selectedProduct: ", selectedProduct);
-    }, [selectedProduct]);
-
-    useEffect(() => {
-        console.log("file: ", files);
-    }, [files]);
-    useEffect(() => {
-        console.log("size", size);
-    }, [size]);
-    useEffect(() => {
-        console.log("description", description);
-    }, [description]);
-
+    const imageMutate = useMutation({mutationFn: uploadImages});
 
     if (productList.isLoading) {
         return <div>Loading...</div>;
@@ -72,10 +55,6 @@ export default function InsertAuction() {
         return <div>프로덕트 리스트를 불러올 수 없습니다.</div>;
         //TODO error enum
     }
-
-
-
-    // const imageMutate = useMutation({mutationFn: });
 
 
     /*    useEffect(() => {
@@ -213,7 +192,7 @@ export default function InsertAuction() {
         );
     };
 
-    const isFormValid = !!(selectedProduct && description && duration && files.length > 0 && startedAt && endedAt && size != 0
+    const isFormValid = !!(selectedProduct && description && duration && files.length > 0 && files && startedAt && endedAt && size != 0
         && files.every((file) => file !== null));
 
     const handleSubmit = async (e: FormEvent) => {
@@ -236,39 +215,36 @@ export default function InsertAuction() {
 
         if (isFormValid) {
             const body: SaveAuctionModel = {
-                userId: "6700e19686d1ce6cd1fc6f25",
                 sizeId: size,
                 description: description,
                 startingBid: 10000,
                 currentBid: 10000,
                 startedAt: startedAt,
                 endedAt: endedAt,
-                createdAt: null,
-                updatedAt: null,
-                status: null,
             };
+
 
             try {
                 const data = await auctionMutate.mutateAsync(body);
 
-                console.log("뭐가나오니", data);
+                const image = {
+                    filePath: "auctions",
+                    type: ImageType.AUCTION,
+                    referencedId: data.id as number,
+                    files: files as File[],
+                }
+
+                const message = await imageMutate.mutateAsync(image);
+
+                if (message) {
+                    router.push("/auction/insert/success");
+                }
 
             } catch (error) {
                 console.error("옥션 등록 중 오류 발생", error);
             }
 
-            const image = {
-                data: {
-                    files: files,
-                },
-                params: {
-                    filePath: "auctions",
-                    type: ImageType.AUCTION,
-                }
-            }
         }
-
-
 
 
     };

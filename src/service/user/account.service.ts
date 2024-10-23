@@ -36,11 +36,14 @@ export async function getAccount() {
     };
 
     try {
-        return await accountAPI.findById(options);
+        const result =  await accountAPI.findById(options);
+
+        console.log("getAccount", result);
+        return result;
+
     } catch (error) {
         console.error("getAccount 도중 오류 발생", error);
         throw new Error('');
         // TODO error num
     }
 }
-

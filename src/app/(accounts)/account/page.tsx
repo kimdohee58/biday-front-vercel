@@ -3,12 +3,12 @@ import Label from "@/components/Label/Label";
 import React, {useEffect, useState} from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import Input from "@/shared/Input/Input";
-import {AppDispatch, RootState} from "@/lib/store";
-import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "@/lib/store";
+import {useSelector} from "react-redux";
 import {initialUser} from "@/model/user/user.model";
 import {AddressModel} from "@/model/user/address.model";
 import {insertAddress} from "@/service/user/address.api";
-import Postcode from "@/components/Postcode"; // 주소 검색 컴포넌트
+import Postcode from "@/components/Postcode";
 import {RadioGroup, Radio, Stack} from "@chakra-ui/react";
 import NcModal from "@/shared/NcModal/NcModal";
 import {fetchAllAddressesByUserId, fetchDeleteAddress, fetchPickAddress} from "@/service/user/address.service";

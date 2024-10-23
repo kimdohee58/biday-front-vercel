@@ -3,8 +3,8 @@
 
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-import { store, persistor } from "@/lib/store"; // 기존에 전역으로 생성된 store 사용
-import TokenCheck from "@/components/TokenCheck";
+import { store, persistor } from "@/lib/store";
+import TokenCheck from "@/components/TokenCheck"; // 기존에 전역으로 생성된 store 사용
 
 const ClientReduxProvider = ({ children }: { children: React.ReactNode }) => {
     return (

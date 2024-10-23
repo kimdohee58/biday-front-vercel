@@ -43,14 +43,13 @@ const streamBid = async (auctionId: number): Promise<BidModel[]> => {
 
 
 // 입찰 저장 (POST 요청)
-const save = async (options: RequestOptions<BidModel>): Promise<BidModel> => {
+const save = async (options: Omit<RequestOptions<any, BidModel>, "params">): Promise<BidModel> => {
     return await strategy.POST(`${api.bid}`, options);
 };
 
 
 const doOnClose = async (bidData: Partial<BidModel>): Promise<BidModel> => {
-    const response = await strategy.POST(`${api.bid}`, bidData);
-    return response;
+    return await strategy.POST(`${api.bid}`, {});
     // 안에 내부 53번 임시로 사용을 한 소스 고쳐야한다.
 };
 export const bidAPI = {
