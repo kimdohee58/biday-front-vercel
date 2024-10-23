@@ -19,9 +19,6 @@ function AccountDetails({user, onClick}: { user: UserModel, onClick: () => void 
         queryFn: () => getAccount(),
     });
 
-    console.log("accountData", accountData.data);
-    console.log("accountData Type ", typeof accountData.data);
-
     const renderButton = () => (
         <ButtonPrimary onClick={onClick}>
             {user.role === UserRole.SELLER && accountData.data ? "계좌정보 수정" : "계좌 등록"}
