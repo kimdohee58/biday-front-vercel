@@ -24,5 +24,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-    matcher: ['/', '/account'], // 인덱스 페이지와 '/account' 페이지에 미들웨어 적용
+    matcher: ['/auction/insert', '/account'], // 인덱스 페이지와 '/account' 페이지에 미들웨어 적용
 };

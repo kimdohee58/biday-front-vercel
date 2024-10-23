@@ -91,12 +91,12 @@ const OTHER_PAGE_CHILD: NavItemType[] = [
 export const NAVIGATION_DEMO_2: NavItemType[] = [
   {
     id: ncNanoId(),
-    href: `/outer`,
+    href: "/outer",
     name: "Outer",
   },
   {
     id: ncNanoId(),
-    href: `/top`,
+    href: "/top",
     name: "Top",
   },
   {
