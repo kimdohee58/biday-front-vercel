@@ -17,12 +17,6 @@ import {SaveAuctionModel} from "@/model/auction/auction.model";
 import {uploadImages} from "@/service/ftp/image.service";
 import {useRouter} from "next/navigation";
 
-
-/**
- * productCode, productColor, productSize, productImage
- */
-
-
 export default function InsertAuction() {
 
     const searchParams = useSearchParams();
@@ -50,21 +44,6 @@ export default function InsertAuction() {
 
     const auctionMutate = useMutation({mutationFn: saveAuction});
     const imageMutate = useMutation({mutationFn: uploadImages});
-
-    useEffect(() => {
-        console.log("selectedProduct: ", selectedProduct);
-    }, [selectedProduct]);
-
-    useEffect(() => {
-        console.log("file: ", files);
-    }, [files]);
-    useEffect(() => {
-        console.log("size", size);
-    }, [size]);
-    useEffect(() => {
-        console.log("description", description);
-    }, [description]);
-
 
     if (productList.isLoading) {
         return <div>Loading...</div>;

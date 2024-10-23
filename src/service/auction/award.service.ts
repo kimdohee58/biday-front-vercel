@@ -1,8 +1,6 @@
 import {awardAPI} from "@/api/auction/award.api";
 import Cookies from "js-cookie";
 import {AwardModel} from "@/model/auction/award.model";
-import {AuctionModel} from "@/model/auction/auction.model";
-import {auctionAPI} from "@/api/auction/auction.api";
 
 // awardId: number
 export async function fetchAwardOne (awardId: number): Promise<AwardModel> {
@@ -83,8 +81,7 @@ export async function fetchSizeIdsFromAwards(awardIds: number[]): Promise<number
                 };
 
                 // 각 awardId에 대해 fetchAwardOne 호출
-                const award = await awardAPI.findById(options);
-                return award;  // 반환된 award 데이터 반환
+                return await awardAPI.findById(options);  // 반환된 award 데이터 반환
             })
         );
 

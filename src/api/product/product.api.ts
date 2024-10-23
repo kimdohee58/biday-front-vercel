@@ -52,7 +52,7 @@ const findOneById = async (options: RequestOptions<ProductParams,null>):Promise<
 }
 
 // sizeId를 가지고 있는 상품 1개를 반환, 마이페이지에서 내역보기 등 사이즈 id 기준으로 불러오는 상품 정보
-const findBySizeId = async (options: RequestOptions<ProductSizeParams,null>):Promise<SizeModel[]> => {
+const findBySizeId = async (options: RequestOptions<ProductSizeParams,null>):Promise<SizeModel> => {
     return await strategy.GET(`${api.product}/findBySizeId`, options);
 }
 

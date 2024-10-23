@@ -23,9 +23,11 @@ type ProductSectionProps = {
     handleSize: (size: number) => void
 }
 export default function ProductSection({openModal, selectedProduct, handleSize}: ProductSectionProps) {
-    const handleSizeChange = (value) => {
-        handleSize(Number(value));
-    }
+    const handleSizeChange = (value: string | undefined) => {
+        if (value !== undefined) {
+            handleSize(Number(value));
+        }
+    };
     return (
         <div>
             <div className="flex items-center flex-col md:flex-row gap-4">
@@ -139,7 +141,7 @@ export default function ProductSection({openModal, selectedProduct, handleSize}:
                             className: "hidden",
                         }}
                         className="border-t-blue-gray-200 aria-[expanded=true]:border-t-primary"
-                        disabled={selectedProduct.product.id == 0}
+                        disabled={selectedProduct?.product.id == 0}
                         onChange={handleSizeChange}
                     >
 

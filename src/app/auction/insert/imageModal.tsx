@@ -102,7 +102,7 @@ export default function ImageModal({isOpen, onClose, onSubmit, files}: ImageModa
             finalFiles.push(null);
         }
 
-        onSubmit(finalFiles);
+        onSubmit(finalFiles as File[]);
         onClose();
     };
 
