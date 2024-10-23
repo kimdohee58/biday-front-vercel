@@ -42,8 +42,6 @@ export default function PageClient({ authorizationToken }: ClientComponentProps)
             const productsArray = productsWithImagesData.map((item) => item.product);
 
             dispatch(setProductImage(productsArray));
-            console.log("저장이 됐는지 확인하는 코드 : ", setProductImage)
-            console.log("저장이 됐는지 확인하는 코드 : ", dispatch)
             setProducts(
                 productsArray
                     .filter((product) => product.category.toLowerCase().includes(category))

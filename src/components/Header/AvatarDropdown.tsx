@@ -3,13 +3,10 @@
 import {
     Popover,
     PopoverButton,
-    PopoverOverlay,
     PopoverPanel,
     Transition,
 } from "@/app/headlessui";
-import {avatarImgs} from "@/contains/fakeData";
 import {Fragment} from "react";
-import Avatar from "@/shared/Avatar/Avatar";
 import SwitchDarkMode2 from "@/shared/SwitchDarkMode/SwitchDarkMode2";
 import Link from "next/link";
 import {useDispatch, useSelector} from "react-redux";
@@ -20,7 +17,6 @@ export default function AvatarDropdown() {
     const dispatch = useDispatch();
     const { handleLogout } = useLogout(); // useLogout 훅 사용
     const user = useSelector((state: RootState) => state.user.user);
-
 
     return (
         <div className="AvatarDropdown">
