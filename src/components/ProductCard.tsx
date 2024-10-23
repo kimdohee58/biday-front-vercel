@@ -30,15 +30,13 @@ export interface ProductCardProps {
 
 const ProductCard: FC<ProductCardProps> = ({
                                                className = "",
-                                               data = PRODUCTS[0],
+                                               data,
                                                isLiked,
                                            }) => {
     const {
         name,
         price,
         description,
-        variants,
-        variantType,
         status,
         image: initialImage,
         rating,
