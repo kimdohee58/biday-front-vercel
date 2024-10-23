@@ -69,13 +69,13 @@ export const useFetchPaymentProducts = (paymentData: any) => {
                 brand: size.sizeProduct.brand,
                 category: size.sizeProduct.category,
                 name: size.sizeProduct.name,
+                subName: size.sizeProduct.subName,
                 productCode: size.sizeProduct.productCode,
                 price: size.sizeProduct.price || 0, // 기본값 설정
                 color: size.sizeProduct.color || "unknown", // 기본값 설정
                 createdAt: new Date(), // 필요에 따라 size.sizeProduct.createdAt 사용 가능
                 updatedAt: new Date(), // 필요에 따라 size.sizeProduct.updatedAt 사용 가능
-                wishes: 0, // 기본값 설정
-                sizes: [size], // 현재 SizeModel 배열로 설정
+                wishes: 0 // 기본값 설정
             });
 
             // SizeModel 리스트를 ProductModel 리스트로 변환

@@ -19,13 +19,6 @@ function AccountDetails({user, onClick}: { user: UserModel, onClick: () => void 
         queryFn: () => getAccount(),
     });
 
-    const renderButton = () => (
-        <ButtonPrimary onClick={onClick}>
-            {user.role === UserRole.SELLER && accountData.data ? "계좌정보 수정" : "계좌 등록"}
-        </ButtonPrimary>
-    );
-
-
     return (
         <div>
             {accountData.data && Object.keys(accountData.data).length > 0 ? (
@@ -90,7 +83,9 @@ function AccountDetails({user, onClick}: { user: UserModel, onClick: () => void 
                             />
                         </div>
                     </div>
-                    {renderButton()}
+                    <ButtonPrimary onClick={onClick}>
+                        계좌 정보 변경
+                    </ButtonPrimary>
                 </div>
             ) : (
                 <div>
@@ -99,7 +94,11 @@ function AccountDetails({user, onClick}: { user: UserModel, onClick: () => void 
                         <br/>
                         계좌를 등록하고 판매를 시작해 보세요.
                     </div>
-                    <div className="mt-4">{renderButton()}</div>
+                    <div className="mt-4">
+                        <ButtonPrimary onClick={onClick}>
+                            계좌 등록하기
+                        </ButtonPrimary>
+                    </div>
                 </div>
             )}
         </div>
