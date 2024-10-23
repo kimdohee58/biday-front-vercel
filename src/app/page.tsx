@@ -1,5 +1,5 @@
 // src/app/page.tsx (서버 컴포넌트)
-import ClientComponent from './client-component'; // 클라이언트 컴포넌트 import
+import PageClient from './page-client'; // 클라이언트 컴포넌트 import
 import {cookies, headers} from 'next/headers';
 import TokenManager from "@/components/TestToken";
 
@@ -12,7 +12,7 @@ export default function PageHome({params}: {params:{filter:string}}) {
 
     return (
         <div>
-            <ClientComponent authorizationToken={authorizationToken}/>
+            <PageClient authorizationToken={authorizationToken}/>
             <TokenManager />
         </div>
     );
