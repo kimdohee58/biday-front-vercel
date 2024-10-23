@@ -192,12 +192,12 @@ console.log("product/{id}", params.id)
                     <hr className="border-slate-200 dark:border-slate-700"/>
 
                     {/* OTHER SECTION */}
-                    <SectionSliderProductCard
+                   {/* <SectionSliderProductCard
                         heading="Customers also purchased"
                         subHeading=""
                         headingFontClassName="text-2xl font-semibold"
                         headingClassName="mb-10 text-neutral-900 dark:text-neutral-50"
-                    />
+                    />*/}
 
                     {/* SECTION */}
                     <div className="pb-20 xl:pb-28 lg:pt-14">
