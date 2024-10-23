@@ -11,7 +11,6 @@ import toast from "react-hot-toast";
 import {StarIcon} from "@heroicons/react/24/solid";
 import SectionSliderProductCard from "@/components/SectionSliderProductCard";
 import NotifyAddTocart from "@/components/NotifyAddTocart";
-import LikeSaveBtns from "@/components/LikeSaveBtns";
 import AccordionInfo from "@/components/AccordionInfo";
 import ListingImageGallery from "@/components/listing-image-gallery/ListingImageGallery";
 import {useParams, usePathname, useRouter, useSearchParams} from "next/navigation";
@@ -56,7 +55,7 @@ export default function AuctionDetailPage() {
     const [adjustBid, setAdjustBid] = useState<number>();
 
 
-    const renderHighestBid = () => {
+    const RenderHighestBid = () => {
         const url = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/bids/stream?auctionId=${Number(id)}`;
 
         useEffect(() => {
@@ -254,7 +253,7 @@ export default function AuctionDetailPage() {
                         {/* ---------- 1 HEADING ----------  */}
                         <div className="flex items-center justify-between space-x-5">
                             <div className="flex text-2xl font-semibold">
-                                {renderHighestBid()}원
+                                {RenderHighestBid()}원
                             </div>
                             <a
                                 className="flex items-center text-sm font-medium"

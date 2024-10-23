@@ -7,13 +7,11 @@ import {ProductModel} from "@/model/product/product.model";
 
 
 export default function AuctionTable({auctions, product}: { auctions: AuctionModel[], product: ProductModel }) {
-
+    const router = useRouter();
 
     if (auctions === null || auctions.length === 0) {
         return <div>현재 진행중인 경매가 없습니다.</div>
     }
-
-    const router = useRouter();
 
     return (
         <div className="">
