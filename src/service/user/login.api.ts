@@ -16,7 +16,6 @@ export const handleLogin = async (username: string, password: string): Promise<A
         });
 
         if (response.status === 200) {
-            console.log("일반 로그인 api ", response)
             return response;
         } else {
             throw new Error(response.statusText);

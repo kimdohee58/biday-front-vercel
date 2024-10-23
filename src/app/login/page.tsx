@@ -37,7 +37,7 @@ const PageLogin = () => {
     }, []);
 
     const handleRedirect = async () => {
-        const authToken = Cookies.get("authorization");
+        const authToken = Cookies.get("Authorization");
         console.log('handleRedirect token!!!!!!', authToken);
 
         if (authToken) {

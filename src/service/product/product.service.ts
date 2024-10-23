@@ -193,7 +193,7 @@ export async function fetchProductBySizeId(sizeId: number): Promise<SizeModel> {
                 sizeId: sizeId
             }
         };
-
+        console.log("패치프로덕트바이사이즈아이디 : " , sizeId)
         return await productAPI.findBySizeId(options);
 
     } catch (error) {
