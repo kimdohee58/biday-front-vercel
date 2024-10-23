@@ -32,6 +32,29 @@ export interface ProductDTO {
     wishes: number;
 }
 
+export enum Color {
+    CHARCOAL = "CHARCOAL",
+    GRAY = "GRAY",
+    BEIGE = "BEIGE",
+    OLIVE = "OLIVE",
+    PURPLE = "PURPLE",
+    IVORY = "IVORY",
+    GREEN = "GREEN",
+    MELANGE = "MELANGE",
+    BLUE = "BLUE",
+    WHITE = "WHITE",
+    CREAM = "CREAM",
+    YELLOW = "YELLOW",
+    BROWN = "BROWN",
+    RED = "RED",
+    NAVY = "NAVY",
+    PINK = "PINK",
+    ORANGE = "ORANGE",
+    KHAKI = "KHAKI",
+    BURGUNDY = "BURGUNDY",
+    BLACK = "BLACK"
+}
+
 export interface ProductWithImageModel {
     product: ProductModel;
     image: ImageModel;
