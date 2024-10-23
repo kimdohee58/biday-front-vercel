@@ -4,7 +4,7 @@ import React, {ChangeEvent, useState} from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import {Input, Select, Typography,} from "@material-tailwind/react";
 import {AccountModel} from "@/model/user/account.model";
-import {useMutation, useQuery} from "@tanstack/react-query";
+import {useMutation, useQuery, useSuspenseQuery} from "@tanstack/react-query";
 import useRandomId from "@/hooks/useRandomId";
 import {getAccount, saveAccount} from "@/service/user/account.service";
 import Cookies from "js-cookie";
@@ -20,7 +20,7 @@ const getUserToken = () => {
     return JSON.parse(userToken);
 }
 
-async function AccountDetails({accountData, userName}) {
+async function AccountDetails({accountData, userName}: {accountData: AccountModel, userName: string}) {
     if (!accountData || Object.keys(accountData).length === 0) {
         return (
             <div>
@@ -134,7 +134,7 @@ export default function Account1() {
     const STATE = '12341234123412341234123412341234';
     const AUTH_TYPE = '0';
 
-    const accountData = useQuery({queryKey: ["account"], queryFn: () => getAccount()});
+    const accountData = useSuspenseQuery({queryKey: ["account"], queryFn: () => getAccount()});
     const user = getUserToken();
 
     /*useEffect(() => {

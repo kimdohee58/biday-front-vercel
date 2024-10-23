@@ -186,7 +186,7 @@ export async function fetchProductDetails(id: number): Promise<{
 }
 
 
-export async function fetchProductBySizeId(sizeId: number): Promise<SizeModel[]> {
+export async function fetchProductBySizeId(sizeId: number): Promise<SizeModel> {
     try {
         const options = {
             params: {
@@ -194,13 +194,8 @@ export async function fetchProductBySizeId(sizeId: number): Promise<SizeModel[]>
             }
         };
 
-        const productDictArray: SizeModel[] = await productAPI.findBySizeId(options);
+        return await productAPI.findBySizeId(options);
 
-        if (productDictArray.length === 0) {
-            return [];
-        }
-
-        return productDictArray;
     } catch (error) {
         console.error("fetchProduct 에러 발생", error);
         throw new Error("");

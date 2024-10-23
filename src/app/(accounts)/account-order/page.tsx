@@ -70,7 +70,7 @@ const AccountOrder = () => {
                         {activeTab === "auction" && (
                             <>
                                 <div className="mb-8">
-                                    {renderAuctionHistory(mapDataWithAuctionModel(auctionData, auctionProductList!!))}
+                                    {renderAuctionHistory(mapDataWithAuctionModel({ content: auctionData }, auctionProductList!!))}
                                 </div>
                                 <div className="mb-8">
                                     {renderBidHistory(bidProductList!!)}
@@ -80,7 +80,7 @@ const AccountOrder = () => {
                         {activeTab === "award" && (
                             <>
                                 <div className="mb-8">
-                                    {renderAwardHistory(mapDataWithAwardModel(awardData, awardProductList!!))}
+                                    {renderAwardHistory(mapDataWithAwardModel({ content: awardData }, awardProductList!!))}
                                 </div>
                                 <div className="mb-8">
                                     {renderPaymentHistory(mappedPaymentData)}
