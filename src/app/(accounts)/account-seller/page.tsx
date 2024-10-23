@@ -1,10 +1,10 @@
 "use client"
 
-import React, {ChangeEvent, Suspense, useState} from "react";
+import React, {Suspense} from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import {Input, Select, Typography,} from "@material-tailwind/react";
 import {AccountModel} from "@/model/user/account.model";
-import {useMutation, useSuspenseQuery, useQuery} from "@tanstack/react-query";
+import {useSuspenseQuery} from "@tanstack/react-query";
 import useRandomId from "@/hooks/useRandomId";
 import {getAccount, saveAccount} from "@/service/user/account.service";
 import {useSelector} from "react-redux";
