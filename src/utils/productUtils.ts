@@ -1,4 +1,7 @@
 import {SizeModel} from "@/model/product/size.model";
+import {ColorType} from "@/model/product/product.model";
+import {types} from "node:util";
+import {Colors} from "@/data/color";
 
 export const getColor = (productName: string) => {
     const parts = productName.split(`(`);
@@ -13,3 +16,7 @@ export const getSizeById = (sizeId: number, sizeModels: SizeModel[]) => {
     console.log(matchingSizeModel)
     return matchingSizeModel ? matchingSizeModel.size : "";
 };
+
+export const getColorsByTypes = (types: ColorType[]): typeof Colors[ColorType][] => {
+    return types.map(type => Colors[type]);
+}

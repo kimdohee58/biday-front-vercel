@@ -4,7 +4,6 @@ import React, {FC, useEffect, useState} from "react";
 import LikeButton from "./LikeButton";
 import Prices from "./Prices";
 import {ArrowsPointingOutIcon} from "@heroicons/react/24/outline";
-import {PRODUCTS} from "@/data/data";
 import {StarIcon} from "@heroicons/react/24/solid";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
@@ -17,57 +16,33 @@ import {useRouter} from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import NcImage from "@/shared/NcImage/NcImage";
-import {fetchImageOne} from "@/service/ftp/image.service";
-import {ImageType} from "@/model/ftp/image.model";
-import {useQuery} from "@tanstack/react-query";
-import {ProductModel} from "@/model/product/product.model";
+import {ColorType, ProductWithImageModel} from "@/model/product/product.model";
+import {getColorsByTypes} from "@/utils/productUtils";
 
 export interface ProductCardProps {
     className?: string;
-    data?: ProductModel;
-    isLiked?: boolean;
+    data: ProductWithImageModel;
+    isLiked: boolean;
+    colors: ColorType[];
 }
 
 const ProductCard: FC<ProductCardProps> = ({
                                                className = "",
                                                data,
                                                isLiked,
+                                               colors,
                                            }) => {
     const {
-        name,
-        price,
-        description,
-        status,
-        image: initialImage,
-        rating,
-        id,
-        numberOfReviews,
-        wishes,
-        sizes,
+        product,
+        image
     } = data;
 
-    const [variantActive, setVariantActive] = useState(0);
-    const [showModalQuickView, setShowModalQuickView] = useState(false);
     const router = useRouter();
+    const [colorActive, setColorActive] = useState(0);
+    const [showModalQuickView, setShowModalQuickView] = useState(false);
+    const colorArray = getColorsByTypes(colors);
 
-    const [image, setImage] = useState(initialImage);  // 초기값으로 data.image 사용
-    // 컴포넌트가 로드될 때 fetchModel 호출
-
-    const {data: images, isLoading, error} = useQuery({
-        queryKey: ["image", id],
-        queryFn: () => fetchImageOne(ImageType.PRODUCT, String(id))
-    });
-
-    useEffect(() => {
-        if (!isLoading && !error && images?.uploadUrl) {
-            setImage(images.uploadUrl);
-        } else {
-            setImage(initialImage); // If no images are fetched, fall back to the initialImage
-        }
-    }, [id, isLoading, error, images]);
-
-    // const imageSrc = image || "https://kr.object.ncloudstorage.com/biday/error/ee5af342-be8f-4b1a-919e-064826a96eb8.png";
-    const imageSrc = image || "/—Pngtree—loading icon vector_6629917.png";
+    const imageSrc = image.uploadUrl || "/—Pngtree—loading icon vector_6629917.png";
 
     const notifyAddTocart = ({size}: { size?: string }) => {
         toast.custom(
@@ -93,7 +68,7 @@ const ProductCard: FC<ProductCardProps> = ({
             ),
             {
                 position: "top-right",
-                id: String(id) || `/product/${id}`,
+                id: String(product.id) || `/product/${product.id}`,
                 duration: 3000,
             }
         );
@@ -106,8 +81,8 @@ const ProductCard: FC<ProductCardProps> = ({
                     <Image
                         width={80}
                         height={96}
-                        src={image}
-                        alt={name}
+                        src={image.uploadUrl}
+                        alt={image.uploadName}
                         className="absolute object-cover object-center"
                     />
                 </div>
@@ -116,16 +91,16 @@ const ProductCard: FC<ProductCardProps> = ({
                     <div>
                         <div className="flex justify-between ">
                             <div>
-                                <h3 className="text-base font-medium ">{name}</h3>
+                                <h3 className="text-base font-medium ">{product.name}</h3>
                                 <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                   <span>
-                    {variants ? variants[variantActive].name : `Natural`}
+                    {colorArray ? colorArray[colorActive].name : `Natural`}
                   </span>
                                     <span className="mx-2 border-s border-slate-200 dark:border-slate-700 h-4"></span>
                                     <span>{size || "XL"}</span>
                                 </p>
                             </div>
-                            <Prices price={price} className="mt-0.5"/>
+                            <Prices price={product.price} className="mt-0.5"/>
                         </div>
                     </div>
                     <div className="flex flex-1 items-end justify-between text-sm">
@@ -175,57 +150,28 @@ const ProductCard: FC<ProductCardProps> = ({
     };
 
     const renderVariants = () => {
-        if (!variants || !variants.length || !variantType) {
+        if (!colorArray || !colorArray.length) {
             return null;
-        }
-
-        if (variantType === "color") {
-            return (
-                <div className="flex gap-1.5">
-                    {variants.map((variant, index) => (
-                        <div
-                            key={index}
-                            onClick={() => setVariantActive(index)}
-                            className={`relative w-6 h-6 rounded-full overflow-hidden z-10 border cursor-pointer ${
-                                variantActive === index
-                                    ? getBorderClass(variant.color)
-                                    : "border-transparent"
-                            }`}
-                            title={variant.name}
-                        >
-                            <div
-                                className={`absolute inset-0.5 rounded-full z-0 ${variant.color}`}
-                            ></div>
-                        </div>
-                    ))}
-                </div>
-            );
         }
 
         return (
             <div className="flex ">
-                {variants.map((variant, index) => (
+                {colorArray.map((color, index) => (
                     <div
                         key={index}
-                        onClick={() => setVariantActive(index)}
+                        onClick={() => setColorActive(index)}
                         className={`relative w-11 h-6 rounded-full overflow-hidden z-10 border cursor-pointer ${
-                            variantActive === index
+                            colorActive === index
                                 ? "border-black dark:border-slate-300"
                                 : "border-transparent"
                         }`}
-                        title={variant.name}
+                        title={color.name}
                     >
                         <div
                             className="absolute inset-0.5 rounded-full overflow-hidden z-0 bg-cover"
                             style={{
                                 backgroundImage: `url(${
-                                    // @ts-ignore
-                                    typeof variant.thumbnail?.src === "string"
-                                        ? // @ts-ignore
-                                        variant.thumbnail?.src
-                                        : typeof variant.thumbnail === "string"
-                                            ? variant.thumbnail
-                                            : ""
+                                    color.thumbnail
                                 })`,
                             }}
                         ></div>
@@ -262,21 +208,21 @@ const ProductCard: FC<ProductCardProps> = ({
     };
 
     const renderSizeList = () => {
-        if (!sizes || !sizes.length) {
+        if (!product.sizes || !product.sizes.length) {
             return null;
         }
 
         return (
             <div
                 className="absolute bottom-0 inset-x-1 gap-2 flex flex-wrap justify-center opacity-0 invisible group-hover:bottom-4 group-hover:opacity-100 group-hover:visible transition-all">
-                {sizes.map((size, index) => {
+                {product.sizes.map((size, index) => {
                     return (
                         <div
                             key={index}
                             className="nc-shadow-lg w-10 h-10 rounded-xl bg-white hover:bg-slate-900 hover:text-white transition-colors cursor-pointer flex items-center justify-center uppercase font-semibold tracking-tight text-sm text-slate-900"
-                            onClick={() => notifyAddTocart({size})}
+                            onClick={() => router.push(`/product/${product.id}?size=${size.id}`)}
                         >
-                            {size}
+                            {size.size}
                         </div>
                     );
                 })}
@@ -284,16 +230,33 @@ const ProductCard: FC<ProductCardProps> = ({
         );
     };
 
+    const HeartIcon = ({className}: { className?: string}) => {
+        return (
+            <div className={className}>
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
+                    <path
+                        d="M12.62 20.81C12.28 20.93 11.72 20.93 11.38 20.81C8.48 19.82 2 15.69 2 8.68998C2 5.59998 4.49 3.09998 7.56 3.09998C9.38 3.09998 10.99 3.97998 12 5.33998C13.01 3.97998 14.63 3.09998 16.44 3.09998C19.51 3.09998 22 5.59998 22 8.68998C22 15.69 15.52 19.82 12.62 20.81Z"
+                        fill="#ef4444"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                    />
+                </svg>
+            </div>
+
+        )
+    };
+
     return (
         <>
             <div
                 className={`nc-ProductCard relative flex flex-col bg-transparent ${className}`}
             >
-                <Link href={`/product/${id}`} className="absolute inset-0"></Link>
+                <Link href={`/product/${product.id}`} className="absolute inset-0"></Link>
 
                 <div
                     className="relative flex-shrink-0 bg-slate-50 dark:bg-slate-300 rounded-3xl overflow-hidden z-1 group">
-                    <Link href={`/product/${id}`} className="block">
+                    <Link href={`/product/${product.id}`} className="block">
                         <NcImage
                             containerClassName="flex aspect-w-11 aspect-h-12 w-full h-0"
                             src={imageSrc}
@@ -303,41 +266,40 @@ const ProductCard: FC<ProductCardProps> = ({
                             alt="product"
                         />
                     </Link>
-                    <ProductStatus status={status}/>
+                    {/*<ProductStatus status={status}/>*/}
 
                     {/*기존코드랑 여기가 좀 다름.*/}
                     <LikeButton
                         className="absolute top-3 end-3 z-10"
-                        productId={data.id}
+                        productId={product.id}
                         liked={isLiked}
                     />
-                    {sizes ? renderSizeList() : renderGroupButtons()}
+                    {product.sizes ? renderSizeList() : renderGroupButtons()}
                 </div>
 
                 <div className="space-y-4 px-2.5 pt-5 pb-2.5">
                     {renderVariants()}
                     <div>
                         <h2 className="nc-ProductCard__title text-base font-semibold transition-colors">
-                            {name}
+                            {product.name}
                         </h2>
                         <p className={`text-sm text-slate-500 dark:text-slate-400 mt-1 `}>
-                            {description}
+                            {product.subName}
                         </p>
                     </div>
 
                     <div className="flex justify-between items-end ">
-                        <Prices price={price}/>
+                        <Prices price={product.price}/>
                         <div className="flex items-center mb-0.5">
-                            <StarIcon className="w-5 h-5 pb-[1px] text-amber-400"/>
+                            <HeartIcon className="w-5 h-5 pb-[1px] text-amber-400"/>
                             <span className="text-sm ms-1 text-slate-500 dark:text-slate-400">
-                                {wishes || "0"} ({numberOfReviews || 0} reviewes)
+                                ({product.wishes || 0} wishes)
                             </span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* QUICKVIEW */}
             <ModalQuickView
                 show={showModalQuickView}
                 onCloseModalQuickView={() => setShowModalQuickView(false)}

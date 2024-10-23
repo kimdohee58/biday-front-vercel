@@ -32,7 +32,7 @@ export interface ProductDTO {
     wishes: number;
 }
 
-export enum Color {
+export enum ColorType {
     CHARCOAL = "CHARCOAL",
     GRAY = "GRAY",
     BEIGE = "BEIGE",
