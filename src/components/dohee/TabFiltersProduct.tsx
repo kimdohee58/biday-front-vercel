@@ -10,6 +10,7 @@ import Radio from "@/shared/Radio/Radio";
 import ButtonClose from "@/shared/ButtonClose/ButtonClose";
 import Slider from "rc-slider";
 import MySwitch from "@/components/MySwitch";
+import path from "path";
 
 const PRICE_RANGE = [10000, 1000000];
 
@@ -673,7 +674,7 @@ const TabFiltersProduct = ({
         );
     };
 
-    // TODO 반응형 웹 처리 하기 위해서 처리 해야함, 선택된 애들 filter 페이지로 넘어가게만 하면 완료
+    // TODO 도희 : 반응형 웹 처리 하기 위해서 처리 해야함, 선택된 애들 filter 페이지로 넘어가게만 하면 완료
     // const renderMoreFilterItem = (
     //     data: {
     //         name: string;
