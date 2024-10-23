@@ -1,86 +1,232 @@
+// "use client";
+//
+// import React, { FC, useEffect, useState } from "react";
+// import Nav from "@/shared/Nav/Nav";
+// import { ChevronDownIcon } from "@heroicons/react/24/outline";
+// import ButtonPrimary from "@/shared/Button/ButtonPrimary";
+// import { Transition } from "@/app/headlessui";
+// import TabFiltersProduct from "@/components/dohee/TabFiltersProduct";
+// import { ProductModel, ProductWithImageModel } from "@/model/product/product.model";
+//
+// export interface HeaderFilterSearchPageProps {
+//     className?: string;
+//     products: ProductModel[];
+//     onFilteredProductsChange: (filteredProducts: ProductModel[]) => void;
+// }
+//
+// const HeaderFilterSearchPage: FC<HeaderFilterSearchPageProps> = ({
+//                                                                      className = "mb-12",
+//                                                                      products,
+//                                                                      onFilteredProductsChange
+//                                                                  }) => {
+//     const [isOpen, setIsOpen] = useState(true);
+//     const [filteredProducts, setFilteredProducts] = useState<ProductModel[]>(products);
+//     const [selectedPrices, setSelectedPrices] = useState<number[]>([100000, 500000]);
+//     const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+//     const [selectedColors, setSelectedColors] = useState<string[]>([]);
+//     const [selectedOrder, setSelectedOrder] = useState<string>("");
+//
+//     useEffect(() => {
+//         console.log('Received products:', products);
+//     }, [products]);
+//
+//     // 선택된 필터에 따라 필터링된 제품을 업데이트
+//     useEffect(() => {
+//         const applyFilters = () => {
+//             let filtered = [...products];
+//
+//             if (selectedPrices[0] !== null || selectedPrices[1] !== null) {
+//                 filtered = filtered.filter((product) => {
+//                     const price = product.price;
+//                     return (
+//                         (selectedPrices[0] === null || price >= selectedPrices[0]) &&
+//                         (selectedPrices[1] === null || price <= selectedPrices[1])
+//                     );
+//                 });
+//             }
+//
+//             if (selectedColors.length > 0) {
+//                 filtered = filtered.filter((product) =>
+//                     selectedColors.some((color) => product.color.toLowerCase().trim() === color.toLowerCase().trim())
+//                 );
+//             }
+//
+//             if (selectedBrands.length > 0) {
+//                 filtered = filtered.filter((product) =>
+//                     selectedBrands.some((brand) => product.brand.toLowerCase().trim() === brand.toLowerCase().trim())
+//                 );
+//             }
+//
+//             if (selectedOrder) {
+//                 filtered = sortProductsByOrder(filtered, selectedOrder);
+//             }
+//
+//             // 필터링된 데이터가 변경된 경우에만 상태 업데이트
+//             if (JSON.stringify(filtered) !== JSON.stringify(filteredProducts)) {
+//                 setFilteredProducts(filtered);
+//                 onFilteredProductsChange(filtered); // 부모 컴포넌트에 필터링된 제품 전달
+//             }
+//         };
+//
+//         applyFilters(); // 필터 적용
+//     }, [products, selectedPrices, selectedBrands, selectedColors, selectedOrder]);
+//
+//     const sortProductsByOrder = (products: ProductModel[], order: string): ProductModel[] => {
+//         switch (order) {
+//             case "newest":
+//                 return [...products].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+//             case "oldest":
+//                 return [...products].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+//             case "price-low-to-high":
+//                 return [...products].sort((a, b) => a.price - b.price);
+//             case "price-high-to-low":
+//                 return [...products].sort((a, b) => b.price - a.price);
+//             case "wishlist-low-to-high":
+//                 return [...products].sort((a, b) => a.wishes - b.wishes);
+//             case "wishlist-high-to-low":
+//                 return [...products].sort((a, b) => b.wishes - a.wishes);
+//             default:
+//                 return products;
+//         }
+//     };
+//
+//     const handleFilterChange = (newSelectedPrices: number[], newSelectedBrands: string[], newSelectedColors: string[], newSelectedOrder: string) => {
+//         setSelectedPrices(newSelectedPrices);
+//         setSelectedBrands(newSelectedBrands);
+//         setSelectedColors(newSelectedColors);
+//         setSelectedOrder(newSelectedOrder);
+//
+//         // 선택된 필터 값 콘솔에 출력
+//         console.log('Selected Prices:', newSelectedPrices);
+//         console.log('Selected Brands:', newSelectedBrands);
+//         console.log('Selected Colors:', newSelectedColors);
+//         console.log('Selected Order:', newSelectedOrder);
+//     };
+//
+//     return (
+//         <div className={`flex flex-col relative ${className}`}>
+//             <div className="flex flex-col lg:flex-row lg:items-center justify-between space-y-6 lg:space-y-0 lg:space-x-2 ">
+//                 <Nav className="sm:space-x-2" containerClassName="relative flex w-full overflow-x-auto text-sm md:text-base hiddenScrollbar">
+//                     {/* Nav items can be added here */}
+//                 </Nav>
+//                 <span className="block flex-shrink-0 text-right">
+//                     <ButtonPrimary
+//                         className="w-auto !pr-16"
+//                         sizeClass="pl-4 py-2.5 sm:pl-6"
+//                         onClick={() => setIsOpen(!isOpen)}
+//                     >
+//                         <svg
+//                             className={`w-4 h-4 sm:w-6 sm:h-6`}
+//                             viewBox="0 0 24 24"
+//                             fill="none"
+//                         >
+//                             {/* SVG path goes here */}
+//                         </svg>
+//                         <span className="block truncate ml-2.5">Filter</span>
+//                         <span className="absolute top-1/2 -translate-y-1/2 right-5">
+//                             <ChevronDownIcon
+//                                 className={`w-4 h-4 sm:w-5 sm:h-5 ${isOpen ? "rotate-180" : ""}`}
+//                                 aria-hidden="true"
+//                             />
+//                         </span>
+//                     </ButtonPrimary>
+//                 </span>
+//             </div>
+//
+//             <Transition
+//                 show={isOpen}
+//                 as={"div"}
+//                 enter="transition-opacity duration-150"
+//                 enterFrom="opacity-0"
+//                 enterTo="opacity-100"
+//                 leave="transition-opacity duration-150"
+//                 leaveFrom="opacity-100"
+//                 leaveTo="opacity-0"
+//             >
+//                 <div className="w-full border-b border-neutral-200/70 dark:border-neutral-700 my-8"></div>
+//                 <TabFiltersProduct
+//                     selectedPrices={selectedPrices}
+//                     selectedBrands={selectedBrands}
+//                     selectedColors={selectedColors}
+//                     selectedOrder={selectedOrder}
+//                     onFilterChange={handleFilterChange}
+//                 />
+//             </Transition>
+//         </div>
+//     );
+// };
+//
+// export default HeaderFilterSearchPage;
 "use client";
 
-import React, {FC, useEffect, useState} from "react";
+import React, { FC, useEffect, useState } from "react";
 import Nav from "@/shared/Nav/Nav";
-import NavItem from "@/shared/NavItem/NavItem";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
-import TabFilters from "@/components/TabFilters";
 import { Transition } from "@/app/headlessui";
 import TabFiltersProduct from "@/components/dohee/TabFiltersProduct";
-import {ProductModel, ProductWithImageModel} from "@/model/product/product.model";
-import {fetchAllProductsWithImages} from "@/service/product/product.service";
-import {defaultImage} from "@/model/ftp/image.model";
+import { ProductModel } from "@/model/product/product.model";
 
 export interface HeaderFilterSearchPageProps {
     className?: string;
+    products: ProductModel[];
+    onFilteredProductsChange: (filteredProducts: ProductModel[]) => void;
 }
 
 const HeaderFilterSearchPage: FC<HeaderFilterSearchPageProps> = ({
                                                                      className = "mb-12",
+                                                                     products,
+                                                                     onFilteredProductsChange
                                                                  }) => {
     const [isOpen, setIsOpen] = useState(true);
-    const [tabActive, setTabActive] = useState("All items");
-    const itemsPerPage = 20;
-    const [products, setProducts] = useState<ProductModel[]>([]);
-    const [filteredProducts, setFilteredProducts] = useState<ProductModel[]>([]);
-    const [productsWithImages, setProductsWithImages] = useState<ProductWithImageModel[]>([]);
-
+    const [filteredProducts, setFilteredProducts] = useState<ProductModel[]>(products);
     const [selectedPrices, setSelectedPrices] = useState<number[]>([100000, 500000]);
     const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
     const [selectedColors, setSelectedColors] = useState<string[]>([]);
     const [selectedOrder, setSelectedOrder] = useState<string>("");
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
-    const selectedProducts = filteredProducts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+    useEffect(() => {
+        console.log('Received products:', products);
+    }, [products]);
 
     useEffect(() => {
-        const loadProducts = async () => {
-            try {
-                const productsWithImagesData = await fetchAllProductsWithImages();
-                const productsArray = productsWithImagesData.map((item) => item.product);
-                setProducts(productsArray);
-                setFilteredProducts(productsArray);
-                setProductsWithImages(productsWithImagesData);
-            } catch (error) {
-                console.error("Error fetching products:", error);
+        const applyFilters = () => {
+            let filtered = [...products];
+
+            if (selectedPrices[0] !== null || selectedPrices[1] !== null) {
+                filtered = filtered.filter((product) => {
+                    const price = product.price;
+                    return (
+                        (selectedPrices[0] === null || price >= selectedPrices[0]) &&
+                        (selectedPrices[1] === null || price <= selectedPrices[1])
+                    );
+                });
+            }
+
+            if (selectedColors.length > 0) {
+                filtered = filtered.filter((product) =>
+                    selectedColors.some((color) => product.color.toLowerCase().trim() === color.toLowerCase().trim())
+                );
+            }
+
+            if (selectedBrands.length > 0) {
+                filtered = filtered.filter((product) =>
+                    selectedBrands.some((brand) => product.brand.toLowerCase().trim() === brand.toLowerCase().trim())
+                );
+            }
+
+            if (selectedOrder) {
+                filtered = sortProductsByOrder(filtered, selectedOrder);
+            }
+
+            if (JSON.stringify(filtered) !== JSON.stringify(filteredProducts)) {
+                setFilteredProducts(filtered);
+                onFilteredProductsChange(filtered);
             }
         };
-        loadProducts();
-    }, []);
 
-    useEffect(() => {
-        let filtered = products;
-
-        if (selectedPrices[0] !== null || selectedPrices[1] !== null) {
-            filtered = filtered.filter((product) => {
-                const price = product.price;
-                return (
-                    (selectedPrices[0] === null || price >= selectedPrices[0]) &&
-                    (selectedPrices[1] === null || price <= selectedPrices[1])
-                );
-            });
-        }
-
-        if (selectedColors.length > 0) {
-            filtered = filtered.filter((product) =>
-                selectedColors.some((color) => product.color.toLowerCase().trim() === color.toLowerCase().trim())
-            );
-        }
-
-        if (selectedBrands.length > 0) {
-            filtered = filtered.filter((product) =>
-                selectedBrands.some((brand) => product.brand.toLowerCase().trim() === brand.toLowerCase().trim())
-            );
-        }
-
-        if (selectedOrder) {
-            filtered = sortProductsByOrder(filtered, selectedOrder);
-        }
-
-        setFilteredProducts(filtered);
-    }, [selectedPrices, selectedColors, selectedBrands, selectedOrder, products]);
+        applyFilters();
+    }, [products, selectedPrices, selectedBrands, selectedColors, selectedOrder]);
 
     const sortProductsByOrder = (products: ProductModel[], order: string): ProductModel[] => {
         switch (order) {
@@ -101,79 +247,38 @@ const HeaderFilterSearchPage: FC<HeaderFilterSearchPageProps> = ({
         }
     };
 
-    const getProductImage = (item: ProductModel): string => {
-        const productImage = productsWithImages.find((img) => img.product.id === item.id);
-        return productImage && productImage.image ? productImage.image.uploadUrl : defaultImage.uploadUrl;
-    };
-
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-    };
-
     const handleFilterChange = (newSelectedPrices: number[], newSelectedBrands: string[], newSelectedColors: string[], newSelectedOrder: string) => {
         setSelectedPrices(newSelectedPrices);
         setSelectedBrands(newSelectedBrands);
         setSelectedColors(newSelectedColors);
         setSelectedOrder(newSelectedOrder);
+
+        console.log('Selected Prices:', newSelectedPrices);
+        console.log('Selected Brands:', newSelectedBrands);
+        console.log('Selected Colors:', newSelectedColors);
+        console.log('Selected Order:', newSelectedOrder);
     };
 
     return (
         <div className={`flex flex-col relative ${className}`}>
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between space-y-6 lg:space-y-0 lg:space-x-2 ">
-                <Nav
-                    className="sm:space-x-2"
-                    containerClassName="relative flex w-full overflow-x-auto text-sm md:text-base hiddenScrollbar"
-                >
-
-                </Nav>
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between space-y-6 lg:space-y-0 lg:space-x-2">
+                <Nav className="sm:space-x-2" containerClassName="relative flex w-full overflow-x-auto text-sm md:text-base hiddenScrollbar" />
                 <span className="block flex-shrink-0 text-right">
-          <ButtonPrimary
-              className="w-auto !pr-16"
-              sizeClass="pl-4 py-2.5 sm:pl-6"
-              onClick={() => {
-                  setIsOpen(!isOpen);
-              }}
-          >
-            <svg
-                className={`w-4 h-4 sm:w-6 sm:h-6`}
-                viewBox="0 0 24 24"
-                fill="none"
-            >
-              <path
-                  d="M14.3201 19.07C14.3201 19.68 13.92 20.48 13.41 20.79L12.0001 21.7C10.6901 22.51 8.87006 21.6 8.87006 19.98V14.63C8.87006 13.92 8.47006 13.01 8.06006 12.51L4.22003 8.47C3.71003 7.96 3.31006 7.06001 3.31006 6.45001V4.13C3.31006 2.92 4.22008 2.01001 5.33008 2.01001H18.67C19.78 2.01001 20.6901 2.92 20.6901 4.03V6.25C20.6901 7.06 20.1801 8.07001 19.6801 8.57001"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeMiterlimit="10"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-              />
-              <path
-                  d="M16.07 16.52C17.8373 16.52 19.27 15.0873 19.27 13.32C19.27 11.5527 17.8373 10.12 16.07 10.12C14.3027 10.12 12.87 11.5527 12.87 13.32C12.87 15.0873 14.3027 16.52 16.07 16.52Z"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-              />
-              <path
-                  d="M19.87 17.12L18.87 16.12"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-              />
-            </svg>
-
-            <span className="block truncate ml-2.5">Filter</span>
-            <span className="absolute top-1/2 -translate-y-1/2 right-5">
-              <ChevronDownIcon
-                  className={`w-4 h-4 sm:w-5 sm:h-5 ${
-                      isOpen ? "rotate-180" : ""
-                  }`}
-                  aria-hidden="true"
-              />
-            </span>
-          </ButtonPrimary>
-        </span>
+                    <ButtonPrimary
+                        className="w-auto !pr-16"
+                        sizeClass="pl-4 py-2.5 sm:pl-6"
+                        onClick={() => setIsOpen(!isOpen)}
+                    >
+                        <svg className={`w-4 h-4 sm:w-6 sm:h-6`} viewBox="0 0 24 24" fill="none" />
+                        <span className="block truncate ml-2.5">Filter</span>
+                        <span className="absolute top-1/2 -translate-y-1/2 right-5">
+                            <ChevronDownIcon
+                                className={`w-4 h-4 sm:w-5 sm:h-5 ${isOpen ? "rotate-180" : ""}`}
+                                aria-hidden="true"
+                            />
+                        </span>
+                    </ButtonPrimary>
+                </span>
             </div>
 
             <Transition
