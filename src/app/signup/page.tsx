@@ -1,5 +1,4 @@
 "use client";
-// src/app/signup/page.tsx
 
 import React, { useState } from "react";
 import facebookSvg from "@/images/Facebook.svg";
@@ -9,13 +8,11 @@ import Input from "@/shared/Input/Input";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import Image from "next/image";
 import Link from "next/link";
-import { signUpSchema } from "@/schema/userValidationSchema";
-import { FormControl, FormLabel } from "@chakra-ui/react";
 import { UserModel } from "@/model/user/user.model";
 import { useRouter } from "next/navigation";
 import btnG_official from "@/images/btnG_official.png";
 import useSignInUser from "@/hooks/useSignInUser";
-import {checkEmailDuplication, checkPhoneDuplication} from "@/service/user/user.api";
+import { checkEmailDuplication, checkPhoneDuplication } from "@/service/user/user.api";
 
 const loginSocials = [
   {
@@ -41,8 +38,8 @@ const loginSocials = [
 ];
 
 export default function PageSignUp() {
-  const { status, handleSignUp, errorMessage, fieldErrors, fieldSuccess, setFieldError, setFieldSuccessMessage } = useSignInUser(); // 커스텀 훅 사용
-  const router = useRouter(); // useRouter 훅 선언
+  const { handleSignUp, errorMessage, fieldErrors, fieldSuccess, setFieldError, setFieldSuccessMessage } = useSignInUser();
+  const router = useRouter();
 
   const [formData, setFormData] = useState<Partial<UserModel & { confirmPassword: string }>>({
     name: '',
@@ -52,38 +49,99 @@ export default function PageSignUp() {
     phoneNum: '',
   });
 
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
-    // 실시간 유효성 검사
-    const validation = signUpSchema.safeParse({ ...formData, [name]: value });
-
-    if (!validation.success) {
-      const errorMessages = validation.error.issues.map((issue) => issue.message).join(", ");
-      setFieldError(name, errorMessages);
-    } else {
-      setFieldError(name, "");
+    // 각 필드에 대한 유효성 검사 직접 구현
+    switch (name) {
+      case "name":
+        if (value.length > 6) {
+          setFieldError(name, "이름은 6글자 이하로 입력해야 합니다.");
+        } else {
+          setFieldError(name, "");
+        }
+        break;
+      case "email":
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) {
+          setFieldError(name, "유효하지 않은 이메일 형식입니다.");
+        } else {
+          setFieldError(name, "");
+        }
+        break;
+      case "password":
+        if (value.length < 8) {
+          setFieldError(name, "비밀번호는 최소 8글자 이상이어야 합니다.");
+        } else if (!/[A-Z]/.test(value)) {
+          setFieldError(name, "비밀번호에는 최소 1개 이상의 대문자가 포함되어야 합니다.");
+        } else if (!/[^A-Za-z0-9]/.test(value)) {
+          setFieldError(name, "비밀번호에는 최소 1개 이상의 특수문자가 포함되어야 합니다.");
+        } else if (!/[0-9]/.test(value)) {
+          setFieldError(name, "비밀번호에는 최소 1개 이상의 숫자가 포함되어야 합니다.");
+        } else {
+          setFieldError(name, "");
+        }
+        break;
+      case "confirmPassword":
+        if (value !== formData.password) {
+          setFieldError(name, "비밀번호가 일치하지 않습니다.");
+        } else {
+          setFieldError(name, "");
+        }
+        break;
+      case "phoneNum":
+        const phoneRegex = /^010-\d{4}-\d{4}$/;
+        if (!phoneRegex.test(value)) {
+          setFieldError(name, "전화번호는 010-1234-5678 형식으로 입력해야 합니다.");
+        } else {
+          setFieldError(name, "");
+        }
+        break;
+      default:
+        break;
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Zod 스키마를 이용한 유효성 검사
-    const validation = signUpSchema.safeParse(formData);
-    if (!validation.success) {
-      const errorMessages = validation.error.issues.map((issue) => issue.message).join(", ");
-      alert(errorMessages);
+    // 전체 유효성 검사
+    if (!formData.name || formData.name.length > 6) {
+      alert("이름은 6글자 이하로 입력해주세요.");
       return;
     }
 
-    // 유효성 검사를 통과하고 데이터를 커스텀 훅의 handleSignUp 함수에 전달
-    const isSignUpSuccessful = await handleSignUp(validation.data as UserModel);
+    if (!formData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      alert("유효하지 않은 이메일 형식입니다.");
+      return;
+    }
+
+    if (
+        !formData.password ||
+        formData.password.length < 8 ||
+        !/[A-Z]/.test(formData.password) ||
+        !/[^A-Za-z0-9]/.test(formData.password) ||
+        !/[0-9]/.test(formData.password)
+    ) {
+      alert("비밀번호를 확인해주세요.");
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
+    if (!formData.phoneNum || !/^010-\d{4}-\d{4}$/.test(formData.phoneNum)) {
+      alert("전화번호 형식이 잘못되었습니다.");
+      return;
+    }
+
+    // 유효성 검사를 통과한 후 회원가입 처리
+    const isSignUpSuccessful = await handleSignUp(formData as UserModel);
     if (isSignUpSuccessful) {
       alert("회원가입 성공");
-      // 회원가입 성공 후 인덱스 페이지 이동.
       router.push('/');
     } else {
       alert(`회원가입 실패: ${errorMessage}`);
@@ -142,6 +200,7 @@ export default function PageSignUp() {
                     className="mt-1"
                 />
                 <span className="text-sm text-gray-500">이름은 6글자 이하로 입력해주세요.</span>
+                {fieldErrors.name && <span className="text-sm text-red-500">{fieldErrors.name}</span>}
               </label>
 
               {/* 이메일 입력 필드 */}
@@ -168,7 +227,7 @@ export default function PageSignUp() {
                           setFieldError("email", "이메일이 이미 사용중입니다.");
                         } else {  // false -> 사용 가능
                           setFieldError("email", "");
-                          setFieldSuccessMessage("email", "사용이 가능한 이메일입니다.");
+                          setFieldSuccessMessage("email", "사용 가능한 이메일입니다.");
                         }
                       }}
                       className="ml-2 px-4 py-2 bg-green-600 text-white rounded-md whitespace-nowrap"
@@ -184,8 +243,7 @@ export default function PageSignUp() {
 
               {/* 비밀번호 입력 필드 */}
               <label className="block">
-              <span
-                  className="flex justify-between items-center text-neutral-800 dark:text-neutral-200">Password</span>
+                <span className="flex justify-between items-center text-neutral-800 dark:text-neutral-200">Password</span>
                 <Input
                     type="password"
                     name="password"
@@ -194,9 +252,8 @@ export default function PageSignUp() {
                     className="mt-1"
                     placeholder="비밀번호 입력"
                 />
-                <span className="text-sm text-gray-500">
-                비밀번호는 최소 8글자 이상이어야 하며, 대문자와 특수문자를 포함해야 합니다.
-              </span>
+                <span className="text-sm text-gray-500">비밀번호는 최소 8글자 이상이어야 하며, 대문자와 특수문자를 포함해야 합니다.</span>
+                {fieldErrors.password && <span className="text-sm text-red-500">{fieldErrors.password}</span>}
               </label>
 
               {/* 비밀번호 재확인 필드 */}
@@ -210,50 +267,46 @@ export default function PageSignUp() {
                     className="mt-1"
                     placeholder="비밀번호 재입력"
                 />
-                {fieldErrors.confirmPassword && (
-                    <span className="text-sm text-red-500">{fieldErrors.confirmPassword}</span>
-                )}
+                {fieldErrors.confirmPassword && <span className="text-sm text-red-500">{fieldErrors.confirmPassword}</span>}
               </label>
 
               {/* 핸드폰 번호 입력 필드 */}
-              <FormControl mb={4} isInvalid={!!fieldErrors.phoneNum}>
-                <FormLabel htmlFor="phoneNum">전화번호</FormLabel>
-                <div className="flex">
-                  <Input
-                      type="tel"
-                      id="phoneNum"
-                      name="phoneNum"
-                      value={formData.phoneNum}
-                      onChange={handleChange}
-                      placeholder="010-1234-5678"
-                      required
-                      className="flex-grow"
-                  />
-                  <button
-                      type="button"
-                      onClick={async () => {
-                        if (!formData.phoneNum) {
-                          setFieldError("phoneNum", "전화번호를 입력해주세요.");
-                          return;
-                        }
-                        const isAvailable = await checkPhoneDuplication(formData.phoneNum!);
-                        if (isAvailable) {  // true -> 이미 사용 중
-                          setFieldError("phoneNum", "핸드폰 번호가 이미 사용 중입니다.");
-                        } else {  // false -> 사용 가능
-                          setFieldError("phoneNum", "");
-                          setFieldSuccessMessage("phoneNum", "사용 가능한 번호입니다.");
-                        }
-                      }}
-                      className="ml-2 px-4 py-2 bg-green-600 text-white rounded-md whitespace-nowrap"
-                  >
-                    중복확인
-                  </button>
-                </div>
-                {fieldErrors.phoneNum && <span className="text-sm text-red-500">{fieldErrors.phoneNum}</span>}
-                {!fieldErrors.phoneNum && fieldSuccess.phoneNum && (
-                    <span className="text-sm text-green-400">{fieldSuccess.phoneNum}</span>
-                )}
-              </FormControl>
+              <label htmlFor="phoneNum">전화번호</label>
+              <div className="flex">
+                <Input
+                    type="tel"
+                    id="phoneNum"
+                    name="phoneNum"
+                    value={formData.phoneNum}
+                    onChange={handleChange}
+                    placeholder="010-1234-5678"
+                    required
+                    className="flex-grow"
+                />
+                <button
+                    type="button"
+                    onClick={async () => {
+                      if (!formData.phoneNum) {
+                        setFieldError("phoneNum", "전화번호를 입력해주세요.");
+                        return;
+                      }
+                      const isAvailable = await checkPhoneDuplication(formData.phoneNum!);
+                      if (isAvailable) {  // true -> 이미 사용 중
+                        setFieldError("phoneNum", "핸드폰 번호가 이미 사용 중입니다.");
+                      } else {  // false -> 사용 가능
+                        setFieldError("phoneNum", "");
+                        setFieldSuccessMessage("phoneNum", "사용 가능한 번호입니다.");
+                      }
+                    }}
+                    className="ml-2 px-4 py-2 bg-green-600 text-white rounded-md whitespace-nowrap"
+                >
+                  중복확인
+                </button>
+              </div>
+              {fieldErrors.phoneNum && <span className="text-sm text-red-500">{fieldErrors.phoneNum}</span>}
+              {!fieldErrors.phoneNum && fieldSuccess.phoneNum && (
+                  <span className="text-sm text-green-400">{fieldSuccess.phoneNum}</span>
+              )}
 
               {/* 제출 버튼 */}
               <ButtonPrimary type="submit">Continue</ButtonPrimary>

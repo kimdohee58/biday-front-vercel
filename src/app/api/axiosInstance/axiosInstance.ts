@@ -17,6 +17,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
     (config) => {
         const accessToken = Cookies.get('token');  // 쿠키에서 액세스 토큰 가져오기
+        console.log("accessToken : 액시오스 인스턴ㅅ으 : " , accessToken)
         if (accessToken) {
             config.headers['Authorization'] = `Bearer ${accessToken}`;
         }

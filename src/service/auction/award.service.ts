@@ -88,11 +88,9 @@ export async function fetchSizeIdsFromAwards(awardIds: number[]): Promise<number
             })
         );
 
-        // awards 배열에서 AuctionDto의 sizeId를 추출
         const sizeIds = awards.map((award) => award?.auction?.sizeId).filter((sizeId) => sizeId !== undefined);
 
-        // 추출된 sizeIds 반환
-        return sizeIds as number[]; // number 타입으로 강제 변환하여 반환
+        return sizeIds
     } catch (error) {
         console.error("sizeId를 추출하는 도중 오류 발생: ", error);
         throw new Error("sizeId 추출 실패");

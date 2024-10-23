@@ -18,7 +18,7 @@ interface ClientComponentProps {
     authorizationToken: string;
 }
 
-export default function ClientComponent({ authorizationToken }: ClientComponentProps) {
+export default function PageClient({ authorizationToken }: ClientComponentProps) {
     const router = useRouter();
     const dispatch = useDispatch();
     const topItemsToShow = 5;
