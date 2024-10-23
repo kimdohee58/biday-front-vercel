@@ -10,7 +10,7 @@ const TokenManager = () => {
     useEffect(() => {
         const checkTokenExpiry = () => {
             const accessToken = Cookies.get('token') || null;
-            const remainingTime = getTokenRemainingTime(accessToken);
+            const remainingTime = getTokenRemainingTime(accessToken!);
 
             if (remainingTime !== null && remainingTime <= 60) {
                 handleReissueToken();  // 리프레시 토큰을 사용해 액세스 토큰 재발급
