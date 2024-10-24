@@ -7,7 +7,8 @@ export const MEGAMENU_TEMPLATES: NavItemType[] = [
     href: "/#",
     name: "홈 페이지",
     children: [
-      { id: ncNanoId(), href: "/search", name: "검색 페이지" },
+      { id: ncNanoId(), href: "/dohee/search", name: "검색 페이지" },
+      // { id: ncNanoId(), href: "/search", name: "검색 페이지" },
     ],
   },
   {
@@ -60,7 +61,8 @@ const OTHER_PAGE_CHILD: NavItemType[] = [
   },
   {
     id: ncNanoId(),
-    href: "/search",
+    href: "/dohee/search",
+    // href: "/search",
     name: "검색 페이지",
   },
   {
@@ -91,12 +93,12 @@ const OTHER_PAGE_CHILD: NavItemType[] = [
 export const NAVIGATION_DEMO_2: NavItemType[] = [
   {
     id: ncNanoId(),
-    href: `/outer`,
+    href: "/outer",
     name: "Outer",
   },
   {
     id: ncNanoId(),
-    href: `/top`,
+    href: "/top",
     name: "Top",
   },
   {
@@ -119,7 +121,8 @@ export const NAVIGATION_DEMO_2: NavItemType[] = [
   },
   {
     id: ncNanoId(),
-    href: "/search",
+    href: "/dohee/search",
+    // href: "/search",
     name: "탐색",
     type: "dropdown",
     children: OTHER_PAGE_CHILD,

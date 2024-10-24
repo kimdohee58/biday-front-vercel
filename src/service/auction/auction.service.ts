@@ -2,7 +2,7 @@
 
 import {auctionAPI} from "@/api/auction/auction.api";
 import Cookies from "js-cookie";
-import {AuctionModel} from "@/model/auction/auction.model";
+import {AuctionModel, SaveAuctionModel} from "@/model/auction/auction.model";
 import {fetchImage} from "@/service/ftp/image.service";
 import {ImageType} from "@/model/ftp/image.model";
 
@@ -63,6 +63,29 @@ export async function saveAuction(auction: SaveAuctionModel) {
     } catch (error) {
         console.error("saveAuction 도중 오류 발생", error);
         throw new Error("saveAuction 도중 오류 발생");
+    }
+}
+
+export async function deleteAuction(id: number) {
+    const userToken = Cookies.get("userToken");
+
+    if (!userToken) {
+        throw new Error("유저토큰 찾을 수 없음");
+        //TODO error enum
+    }
+
+    console.log("전달된 auction id", id);
+
+    const options = {
+        userToken: userToken,
+        params: { auctionId: id.toString() },
+    };
+
+    try {
+        return await auctionAPI.delete_(options);
+    } catch (error) {
+        console.error("deleteAuction 도중 오류 발생", error);
+        throw new Error("deleteAuction 도중 오류 발생");
     }
 }
 
