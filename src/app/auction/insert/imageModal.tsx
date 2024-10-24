@@ -107,24 +107,19 @@ export default function ImageModal({isOpen, onClose, onSubmit, files}: ImageModa
     };
 
     return (
-        <Dialog className="p-4" open={isOpen}>
-            <DialogHeader className="justify-between pb-0">
-                <Typography color="blue-gray" className="mb-1 font-bold">
+        <Dialog className="max-w-lg mx-auto p-6" open={isOpen}>
+            <DialogHeader className="justify-between pb-0 border-b border-gray-300">
+                <Typography color="blue-gray" className="mb-1 font-bold text-lg">
                     사진 등록
                 </Typography>
-                <IconButton
-                    color="gray"
-                    size="sm"
-                    variant="text"
-                    onClick={onClose}
-                >
+                <IconButton color="gray" size="sm" variant="text" onClick={onClose}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
                         strokeWidth={2}
-                        className="h-4 w-4"
+                        className="h-5 w-5"
                     >
                         <path
                             strokeLinecap="round"
@@ -134,56 +129,59 @@ export default function ImageModal({isOpen, onClose, onSubmit, files}: ImageModa
                     </svg>
                 </IconButton>
             </DialogHeader>
-            <DialogBody className="overflow-y-scroll pt-0">
-                <Typography
-                    variant="small"
-                    className="font-normal text-gray-600"
-                >
+            <DialogBody className="overflow-y-auto pt-4">
+                <Typography variant="small" className="font-normal text-gray-600 mb-4">
                     파일을 선택하세요. 최대 3개의 파일을 등록할 수 있습니다.
                 </Typography>
                 <label
                     htmlFor="upload"
-                    className="grid place-items-center py-10 rounded-lg border border-dashed border-gray-300 mt-6"
+                    className="flex flex-col items-center py-10 rounded-lg border border-dashed border-gray-300 mt-4 cursor-pointer hover:border-blue-500 transition-all duration-200"
                 >
-                    <input type="file" id="upload" className="hidden" multiple
-                           accept="image/png, image/jpeg, image/svg+xml" onChange={handleFileChange}/>
+                    <input
+                        type="file"
+                        id="upload"
+                        className="hidden"
+                        multiple
+                        accept="image/png, image/jpeg, image/svg+xml"
+                        onChange={handleFileChange}
+                    />
                     <IconButton variant="text" className="mb-4">
-                        <ArrowUpTrayIcon
-                            className="h-8 w-8 text-gray-900"
-                            strokeWidth={2}
-                        />
+                        <ArrowUpTrayIcon className="h-8 w-8 text-gray-900" strokeWidth={2} />
                     </IconButton>
                     <Typography color="blue-gray" className="mb-1 font-bold">
                         드래그 앤 드롭 또는{" "}
-                        <a href="#" className="underline">
-                            파일 선택
-                        </a>
+                        <span className="underline text-blue-500 cursor-pointer">파일 선택</span>
                     </Typography>
-                    <Typography
-                        variant="small"
-                        className="font-normal text-gray-600"
-                    >
+                    <Typography variant="small" className="font-normal text-gray-600">
                         지원되는 포맷: .png, .jpg, .svg
                     </Typography>
                 </label>
-                <div className="!mt-4 flex flex-col md:flex-row justify-between gap-4">
+                <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                     {tempFile.map((file, index) => (
                         file && (
-                        <ImageCard key={index} img={URL.createObjectURL(file)} name={file.name}
-                                   size={(file.size / 1024).toFixed(2)}
-                                   onDelete={() => handleDelete(index)}/>
+                            <ImageCard
+                                key={index}
+                                img={URL.createObjectURL(file)}
+                                name={file.name}
+                                size={(file.size / 1024).toFixed(2)}
+                                onDelete={() => handleDelete(index)}
+                            />
                         )
                     ))}
                 </div>
-            </DialogBody>wj
-            <DialogFooter className="gap-2">
+            </DialogBody>
+            <DialogFooter className="flex justify-end gap-2 mt-4">
                 <Button onClick={onClose} variant="outlined">
                     취소
                 </Button>
-                <Button onClick={handleConfirm}
-                        className="bg-blue-500 text-white hover:bg-blue-600"
-                >저장</Button>
+                <Button
+                    onClick={handleConfirm}
+                    className="bg-blue-500 text-white hover:bg-blue-600 transition-all duration-200"
+                >
+                    저장
+                </Button>
             </DialogFooter>
         </Dialog>
     );
+
 };

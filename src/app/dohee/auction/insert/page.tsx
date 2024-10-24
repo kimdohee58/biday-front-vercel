@@ -205,6 +205,9 @@ export default function InsertAuction() {
         e.preventDefault();
 
         if (isFormValid) {
+            // errorMessage 초기화
+            setErrorMessage("");
+
             const body: SaveAuctionModel = {
                 sizeId: size,
                 description: description,
@@ -226,11 +229,12 @@ export default function InsertAuction() {
                 const message = await imageMutate.mutateAsync(image);
 
                 // 성공적인 경우 리다이렉트
-                if (message && message.status === 200) {
+                if (message === "success" && message.status === 200) {
                     router.push("/auction/insert/success");
                 } else {
                     if (data.id != null) {
                         await auctionDelete.mutateAsync(data.id);
+                        console.log("image message", message);
                     }
                     // 오류 메시지를 URL에 담아 리다이렉트
                     router.push(`/dohee/auction/insert/fail?message=이미지%20업로드에%20실패했습니다.`);
@@ -245,6 +249,7 @@ export default function InsertAuction() {
 
                 console.error("옥션 등록 중 오류 발생", error);
             }
+
         } else {
             setErrorMessage("모든 필드를 올바르게 입력해주세요.");
             // router.push(`/dohee/auction/insert/fail?message=모든%20필드를%20올바르게%20입력해주세요.`);
