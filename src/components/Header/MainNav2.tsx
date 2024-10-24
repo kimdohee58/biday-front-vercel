@@ -52,7 +52,7 @@ const MainNav2: FC<MainNav2Props> = ({ className = "" }) => {
         className="flex-1 py-2 text-slate-900 dark:text-slate-100"
         onSubmit={(e) => {
           e.preventDefault();
-          router.push("/dohee-search");
+          router.push("/dohee/search");
           // router.push("/search");
         }}
       >

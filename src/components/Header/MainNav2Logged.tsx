@@ -49,7 +49,7 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
         className="flex-1 py-2 text-slate-900 dark:text-slate-100"
         onSubmit={(e) => {
           e.preventDefault();
-            router.push("/dohee-search");
+            router.push("/dohee/search");
             // router.push("/search");
           inputRef.current?.blur();
         }}

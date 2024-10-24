@@ -71,5 +71,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-    matcher: ['/account'], // 미들웨어 적용 경로
+    matcher: [], // 미들웨어 적용 경로
 };

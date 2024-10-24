@@ -81,7 +81,7 @@ const SectionSliderLargeProduct: FC<SectionSliderLargeProductProps> = ({
             ))}
 
             <li className={`glide__slide   `}>
-              <Link href={"/dohee-search"} className="block relative group">
+              <Link href={"/dohee/search"} className="block relative group">
                 {/*<Link href={"/search"} className="block relative group">*/}
                 <div className="relative rounded-2xl overflow-hidden h-[410px]">
                   <div className="h-[410px] bg-black/5 dark:bg-neutral-800"></div>

@@ -57,7 +57,7 @@ const MainNav2Dohee: FC<MainNav2Props> = ({ className = "" }) => {
         console.log("Search keyword:", keyword); // 디버깅용
 
         if (keyword.trim()) {  // keyword가 비어있지 않을 경우에만 이동
-            router.push(`/dohee-search?keyword=${encodeURIComponent(keyword)}`); // URL 변경
+            router.push(`/dohee/search?keyword=${encodeURIComponent(keyword)}`); // URL 변경
             setShowSearchForm(false); // 검색 폼 닫기
         } else {
             console.log("No keyword entered");

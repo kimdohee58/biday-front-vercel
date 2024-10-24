@@ -39,7 +39,7 @@ const MainNav2LoggedDohee: FC<MainNav2LoggedProps> = () => {
     const handleSearchSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (keyword.trim()) {
-            router.push(`/dohee-search?keyword=${encodeURIComponent(keyword)}`);
+            router.push(`/dohee/search?keyword=${encodeURIComponent(keyword)}`);
         } else {
             console.log("No keyword entered");
         }

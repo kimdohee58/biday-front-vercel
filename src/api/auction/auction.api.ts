@@ -45,8 +45,8 @@ const update = async (auctionData: Partial<AuctionModel>): Promise<AuctionModel>
 };
 
 // 경매 삭제 (DELETE 요청)
-const delete_ = async (id: number): Promise<void> => {
-    await strategy.DELETE(`${api.auction}?id=${id}`, {});
+const delete_ = async (options:RequestOptions<{auctionId:string},null>): Promise<void> => {
+    return await strategy.DELETE(`${api.auction}`, options);
 };
 
 export const auctionAPI = {

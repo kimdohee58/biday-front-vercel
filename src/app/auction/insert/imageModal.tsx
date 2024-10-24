@@ -180,7 +180,9 @@ export default function ImageModal({isOpen, onClose, onSubmit, files}: ImageModa
                 <Button onClick={onClose} variant="outlined">
                     취소
                 </Button>
-                <Button onClick={handleConfirm}>저장</Button>
+                <Button onClick={handleConfirm}
+                        className="bg-blue-500 text-white hover:bg-blue-600"
+                >저장</Button>
             </DialogFooter>
         </Dialog>
     );
