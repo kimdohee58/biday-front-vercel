@@ -51,7 +51,7 @@ export const Timer = ({ endedTime }: TimerProps) => {
         <div className="relative rounded-md bg-white p-6 shadow-lg border border-gray-200 sm:rounded-xl text-center">
             <h2 className="text-lg font-semibold text-gray-800">Time Remaining</h2>
             <p className="mt-2 text-3xl text-gray-700">
-                {time.day > 0 && `${time.day} day `}
+                {time.day > 0 && `D-${time.day} `}
                 {`${time.hour.toString().padStart(2, "0")}:${time.min.toString().padStart(2, "0")}:${time.sec.toString().padStart(2, "0")}`}
             </p>
         </div>
