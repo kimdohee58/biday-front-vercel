@@ -11,6 +11,7 @@ import { MEGAMENU_TEMPLATES } from "@/data/navigation";
 import CardCategory3 from "@/components/CardCategories/CardCategory3";
 import { NavItemType } from "@/shared/Navigation/NavigationItem";
 import Link from "next/link";
+import {getCookie} from "@/utils/cookie/cookie.api";
 
 export default function TemplatesDropdown() {
   const renderMegaMenuNavlink = (item: NavItemType) => {
@@ -56,23 +57,23 @@ export default function TemplatesDropdown() {
               <PopoverPanel className="absolute z-20 w-full mt-3.5 inset-x-0">
                 <div className="bg-white dark:bg-neutral-900 shadow-lg">
                   <div className="container">
-                    <div className="flex text-sm border-t border-slate-200 dark:border-slate-700 py-14">
-                      <div className="flex-1 grid grid-cols-4 gap-6 xl:gap-8 pr-6 xl:pr-8">
-                        {MEGAMENU_TEMPLATES.map((item, index) => (
-                          <div key={index}>
-                            <p className="font-medium text-slate-900 dark:text-neutral-200">
-                              {item.name}
-                            </p>
-                            <ul className="grid space-y-4 mt-4">
-                              {item.children?.map(renderMegaMenuNavlink)}
-                            </ul>
+                      <div className="flex text-sm border-t border-slate-200 dark:border-slate-700 py-14">
+                          <div className="flex-1 grid grid-cols-4 gap-6 xl:gap-8 pr-6 xl:pr-8">
+                            {MEGAMENU_TEMPLATES.map((item, index) => (
+                              <div key={index}>
+                                <p className="font-medium text-slate-900 dark:text-neutral-200">
+                                  {item.name}
+                                </p>
+                                <ul className="grid space-y-4 mt-4">
+                                  {item.children?.map(renderMegaMenuNavlink)}
+                                </ul>
+                              </div>
+                            ))}
                           </div>
-                        ))}
+                          <div className="w-[40%] xl:w-[35%]">
+                              <CardCategory3/>
+                          </div>
                       </div>
-                      <div className="w-[40%] xl:w-[35%]">
-                        <CardCategory3 />
-                      </div>
-                    </div>
                   </div>
                 </div>
               </PopoverPanel>
