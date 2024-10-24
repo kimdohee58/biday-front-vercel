@@ -168,32 +168,34 @@ export default function InsertAuction() {
         };
 
         return (
-            <div className="flex items-center space-x-4">
-                {durations.map((days) => (
-                    <button
-                        className={`rounded-md border border-gray-300 py-2 px-4 text-center text-sm font-semibold transition-all duration-200 shadow-sm
-                    hover:shadow-lg hover:text-white hover:bg-slate-800 
-                    focus:text-white focus:bg-slate-800 focus:border-slate-800
-                    active:border-slate-800 active:bg-slate-800
-                    disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none
-                    ${duration === days ? `border-slate-800 text-white bg-slate-800` : `border-gray-300`}`}
-                        key={days}
-                        onClick={() => handleClick(days)}
-                    >
-                        {days}일
-                    </button>
-                ))}
+            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+                <div className="flex items-center justify-center space-x-4">
+                    {durations.map((days) => (
+                        <button
+                            className={`rounded-md border border-gray-300 py-2 px-4 text-sm font-semibold transition-all duration-200 shadow-sm
+                hover:shadow-lg hover:text-white hover:bg-slate-800 
+                focus:text-white focus:bg-slate-800 focus:border-slate-800
+                active:border-slate-800 active:bg-slate-800
+                disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none
+                ${duration === days ? `border-slate-800 text-white bg-slate-800` : `border-gray-300`}`}
+                            key={days}
+                            onClick={() => handleClick(days)}
+                        >
+                            {days}일
+                        </button>
+                    ))}
+                </div>
+
                 {startedAt && endedAt ? (
-                    <div className="font-bold">
+                    <div className="font-bold mt-2">
                         {`${startedAt.toLocaleDateString()} ${String(startedAt.getHours()).padStart(2, '0')} : ${String(startedAt.getMinutes()).padStart(2, '0')} - ${endedAt.toLocaleString()}`}
                     </div>
                 ) : (
-                    <span className="text-gray-500">기간을 선택해 주세요.</span>
+                    <span className="text-gray-500 mt-2">기간을 선택해 주세요.</span>
                 )}
             </div>
         );
     };
-
 
 
     const isFormValid = !!(selectedProduct && description && duration && files.length > 0 && files && startedAt && endedAt && size != 0
@@ -348,37 +350,52 @@ export default function InsertAuction() {
             <form onSubmit={handleSubmit} className="flex flex-col space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="w-full">
-                        <Label className="block text-lg font-bold text-gray-800">상품:</Label>
-                        <ProductSection openModal={openModalProduct} selectedProduct={selectedProduct} handleSize={handleSize} />
+                        <Label className="block text-lg font-bold text-gray-800">상품</Label>
+                        <p className="mt-2 text-sm text-gray-600">
+                            경매하고자 하는 상품을 선택해주세요.
+                        </p>
+                        <ProductSection openModal={openModalProduct} selectedProduct={selectedProduct}
+                                        handleSize={handleSize}/>
                         {isOpen && currentModal === "product" && (
-                            <ProductModal onClose={closeModal} productList={productList.data} onClick={handleSelectProduct} />
+                            <ProductModal onClose={closeModal} productList={productList.data}
+                                          onClick={handleSelectProduct}/>
                         )}
-                        <input type="hidden" name="productId" value={selectedProduct?.product.id} />
+                        <input type="hidden" name="productId" value={selectedProduct?.product.id}/>
                     </div>
 
                     <div className="w-full">
-                        <Label className="block text-lg font-bold text-gray-800">경매 기간:</Label>
-                        {durationSelectButton()}
-                        <input type="hidden" name="duration" />
+                        <Label className="block text-lg font-bold text-gray-800">경매 기간</Label>
+                        <p className="mt-2 text-sm text-gray-600">
+                            선택한 경매 기간에 따라 경매가 진행됩니다.
+                        </p>
+                        <div className="mt-2 p-4 border rounded-lg shadow-sm">
+                            <div className="max-w-lg mx-auto flex flex-col items-center justify-center space-y-4 text-center">
+                                {durationSelectButton()}
+                            </div>
+                        </div>
+                        <input type="hidden" name="duration"/>
                     </div>
                 </div>
 
                 <div className="w-full">
-                    <Label className="block text-lg font-bold text-gray-800">업로드 이미지:</Label>
+                    <Label className="block text-lg font-bold text-gray-800">업로드 이미지</Label>
+                    <p className="mt-2 text-sm text-gray-600">
+                        내가 가진 상품의 사진과 상세 설명을 적어주세요.
+                    </p>
                     <div className="flex gap-4 mt-4">
                         {files.map((file, index) => (
-                            <ImageCard key={index} file={file} onClick={() => openModal("image", index)} />
+                            <ImageCard key={index} file={file} onClick={() => openModal("image", index)}/>
                         ))}
                     </div>
                     {isOpen && currentModal === "image" && (
-                        <ImageModal onClose={closeModal} isOpen={isOpen} onSubmit={handleImageSubmit} files={files} />
+                        <ImageModal onClose={closeModal} isOpen={isOpen} onSubmit={handleImageSubmit} files={files}/>
                     )}
                 </div>
 
                 {renderDescription()}
 
                 <div className="flex justify-end items-center mt-4 w-full">
-                    {errorMessage && (
+                {errorMessage && (
                         <div className="text-red-500 text-sm font-medium mr-4">
                             {errorMessage}
                         </div>
