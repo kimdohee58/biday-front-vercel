@@ -9,8 +9,15 @@ const getUserToken = () => {
 }
 
 export const fetchWishes = async (): Promise<WishModel[]> => {
+
+    const userToken = getUserToken();
+
+    if (!userToken) {
+        return [];
+    }
+
     const options = {
-        userToken: getUserToken(),
+        userToken: userToken,
     };
 
     try {
