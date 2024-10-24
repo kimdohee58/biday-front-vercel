@@ -34,7 +34,6 @@ export async function fetchAllProductsWithImages(): Promise<ProductWithImageMode
     }
 }
 
-
 export async function fetchAllProducts() {
     try {
 
@@ -95,6 +94,7 @@ export async function fetchProductOne(productId: string): Promise<ProductModel> 
 // 상품 (색상 포함) 들을 이미지와 함께 불러오는 함수
 export async function fetchProductWithImages(productId: number): Promise<ProductWithImageModel[]> {
     try {
+
         const products = await fetchProduct(productId);
 
         console.log("products", products);
@@ -120,6 +120,7 @@ export async function fetchProductWithImages(productId: number): Promise<Product
     }
 }
 
+// productId의 색상만 다른 product 들도 함께 불러오는 함수
 export async function fetchProduct(productId: number): Promise<ProductModel[]> {
     try {
         const options = {
@@ -129,7 +130,6 @@ export async function fetchProduct(productId: number): Promise<ProductModel[]> {
         };
 
         const productDictArray: ProductDictionary[] = await productAPI.findById(options);
-        console.log("productDictArray", productDictArray);
         if (productDictArray.length === 0) {
             return [];
         }
