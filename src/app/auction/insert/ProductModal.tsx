@@ -55,7 +55,8 @@ export default function ProductModal ({ onClose, productList, onClick}: ModalPro
     }
 
     return (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50"
+             onClick={onClose}>
             <div className="bg-white p-6 rounded-lg max-w-md w-full">
                 <button className="mb-4" onClick={onClose}>
                     Close

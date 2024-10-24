@@ -18,6 +18,8 @@ export default function AvatarDropdown() {
     const { handleLogout } = useLogout(); // useLogout 훅 사용
     const user = useSelector((state: RootState) => state.user.user);
 
+
+
     return (
         <div className="AvatarDropdown">
             <Popover className="relative">
@@ -25,6 +27,7 @@ export default function AvatarDropdown() {
                     <>
                         <PopoverButton
                             className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none flex items-center justify-center`}
+                            // onClick={() => close()} // 드롭다운 바깥쪽 누르면 닫히기, 바깥쪽 누럴승ㄹ 때 닫혀야하는데 안쪽이 닫힘,,
                         >
                             <svg
                                 className=" w-6 h-6"
