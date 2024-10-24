@@ -3,9 +3,14 @@ import {api} from "../request";
 import {strategy} from "../api.strategy";
 import {ProductDictionary, ProductModel, SearchFilter} from "@/model/product/product.model";
 import {RequestOptions} from "@/model/api/RequestOptions";
+import {SizeModel} from "@/model/product/size.model";
 
 type ProductParams = {
     productId: number;
+}
+
+type ProductSizeParams = {
+    sizeId: number;
 }
 
 // 상품 상세 조회 (params: productId)
@@ -37,13 +42,18 @@ const searchByFilter = async (
 };
 
 // 상품 수정 (PATCH 요청)
-const updateProduct = async (options: RequestOptions<Partial<ProductModel>>): Promise<ProductModel> => {
+const updateProduct = async (options: RequestOptions<any, any>): Promise<ProductModel> => {
     return await strategy.PATCH(`${api.product}`, options);
 };
 
 // 상품 1개 상세보기 (GET 요청)
 const findOneById = async (options: RequestOptions<ProductParams,null>):Promise<ProductDictionary> => {
     return await strategy.GET(`${api.product}/findOne`, options);
+}
+
+// sizeId를 가지고 있는 상품 1개를 반환, 마이페이지에서 내역보기 등 사이즈 id 기준으로 불러오는 상품 정보
+const findBySizeId = async (options: RequestOptions<ProductSizeParams,null>):Promise<SizeModel> => {
+    return await strategy.GET(`${api.product}/findBySizeId`, options);
 }
 
 
@@ -55,4 +65,5 @@ export const productAPI = {
     updateProduct,
     deleteProduct,
     findOneById,
+    findBySizeId,
 };

@@ -1,5 +1,15 @@
-import {testAPI} from "@/api/test/test.api";
+"use client";
 
-export default async function TestPage() {
-    await testAPI.cacheTest();
+import {useQuery} from "@tanstack/react-query";
+import {fetchProductBySizeId} from "@/service/product/product.service";
+
+export default function TestPage() {
+
+    const productData = useQuery({queryKey: ["product", "test"], queryFn: () => fetchProductBySizeId(1)})
+
+    if (!productData.isLoading) {
+        console.log("productData", productData.data);
+    }
+
+    return <div></div>;
 };

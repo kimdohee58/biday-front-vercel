@@ -3,113 +3,42 @@ import LikeButton from "@/components/LikeButton";
 import {StarIcon} from "@heroicons/react/24/solid";
 import BagIcon from "@/components/BagIcon";
 
-import {ClockIcon, NoSymbolIcon, SparklesIcon,} from "@heroicons/react/24/outline";
+import {SparklesIcon} from "@heroicons/react/24/outline";
 import Prices from "@/components/Prices";
 import SectionSliderProductCard from "@/components/SectionSliderProductCard";
 import Policy from "./Policy";
 import SectionPromo2 from "@/components/SectionPromo2";
 import Image from "next/image";
 import {Route} from "@/routers/types";
-import Link from "next/link";
 import {fetchProductDetails} from "@/service/product/product.service";
-import {fetchImage} from "@/service/ftp/image.service";
-import {ImageModel, ImageType} from "@/model/ftp/image.model"
+import {ImageModel} from "@/model/ftp/image.model"
 import {Suspense} from "react";
 import {PhotoPlaceholderSkeleton} from "@/components/skeleton/PhotoPlaceholderSkeleton";
 import {AuctionModel} from "@/model/auction/auction.model"
+import {getColor} from "@/utils/productUtils";
+import AuctionTable from "@/app/product/[id]/AuctionTable";
 
-async function RenderImage({id}: { id: string}) {
-
-    const productImageArray = await fetchImage(ImageType.PRODUCT, id);
-
-    const productImage = productImageArray[0];
+async function RenderImage({image}: { image: ImageModel}) {
 
     return (
         <div className="aspect-w-16 aspect-h-16 relative">
             <Image
                 fill
                 sizes="(max-width: 640px) 100vw, 33vw"
-                src={productImage? `${productImage.uploadUrl}` : "/error.jpg"}
+                src={image ? `${image.uploadUrl}` : "/error.jpg"}
                 className="w-full rounded-2xl object-cover"
                 alt={"test"}
-                />
+            />
         </div>
     );
 }
 
 export default async function ProductDetailPage({params}: { params: { id: string } }) {
+console.log("product/{id}", params.id)
 
-    const {colorIds, product, size, auctions} = await fetchProductDetails(Number(params.id));
+    const {colorIds, product, size, auctions, productWithImagesArray} = await fetchProductDetails(Number(params.id));
 
     const insertAuctionUrl = `/auction/insert?productId=${params.id}`;
-
-    const getColor = () => {
-        const parts = product.name.split("(");
-        if (parts.length > 1) {
-            return parts[1].replace(")", "").trim();
-        }
-        return "";
-    };
-
-    const renderAuctionTable = () => {
-        if (!auctions || auctions.length == 0) {
-            return <div>현재 진행중인 경매가 없습니다.</div>;
-        }
-
-        return (
-            <div className="">
-                <table className="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead
-                        className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 whitespace-nowrap">
-                    <tr>
-                        <th scope="col" className="px-6 py-3">
-                            색상
-                        </th>
-                        <th scope="col" className="px-6 py-3">
-                            사이즈
-                        </th>
-                        <th scope="col" className="px-6 py-3">
-                            판매자
-                        </th>
-                        <th scope="col" className="px-6 py-3">
-                            경매종료일
-                        </th>
-                        <th scope="col" className="px-6 py-3">
-                            최고입찰가
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {auctions.map((auction: AuctionModel) => (
-                        <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
-                            key={auction.id}>
-                            <Link href={`/auction/${auction.id}`}>
-                                <th scope="row"
-                                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {getColor()}
-                                </th>
-                                <td className="px-6 py-4">
-                                    {auction.size}
-                                </td>
-                                <td className="px-6 py-4">
-                                    {auction.user}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                    {auction.endedAt && !isNaN(new Date(auction.endedAt).getTime())
-                                        ? new Date(auction.endedAt).toLocaleDateString()
-                                        : "N/A"}
-                                </td>
-                                <td className="px-6 py-4">
-                                    {auction.currentBid}
-                                </td>
-                            </Link>
-                        </tr>
-                    ))}
-                    </tbody>
-                </table>
-            </div>
-        );
-    };
 
     /* const renderStatus = () => {
          if (!status) {
@@ -158,17 +87,17 @@ export default async function ProductDetailPage({params}: { params: { id: string
                 {/* ---------- 1 HEADING ----------  */}
                 <div>
                     <h2 className="text-2xl sm:text-3xl font-semibold">
-                        {product.name}
+                        {product.product.name}
                     </h2>
                     <h6 className="text-gray-300 text-left">
-                        {product.subName}
+                        {product.product.subName}
                     </h6>
 
                     <div className="flex items-center mt-5 space-x-4 sm:space-x-5">
                         {/* <div className="flex text-xl font-semibold">$112.00</div> */}
                         <Prices
                             contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold"
-                            price={product.price}
+                            price={product.product.price}
                         />
 
                         <div className="h-7 border-l border-slate-300 dark:border-slate-700"></div>
@@ -180,7 +109,7 @@ export default async function ProductDetailPage({params}: { params: { id: string
                                 <StarIcon className="w-5 h-5 pb-[1px] text-yellow-400"/>
                                 <div className="ml-1.5 flex">
                   <span className="text-slate-600 dark:text-slate-400">
-                    {product.wishes} wishes
+                    {product.product.wishes} wishes
                   </span>
                                 </div>
                             </a>
@@ -193,7 +122,6 @@ export default async function ProductDetailPage({params}: { params: { id: string
                     </div>
                 </div>
 
-                {/*  ---------- 4  QTY AND ADD TO CART BUTTON */}
                 <div className="flex space-x-3.5">
                     <ButtonPrimary
                         className="flex-1 flex-shrink-0"
@@ -205,13 +133,12 @@ export default async function ProductDetailPage({params}: { params: { id: string
                 </div>
                 <hr className=" 2xl:!my-10 border-slate-200 dark:border-slate-700"></hr>
                 <div className="flex-1 items-center justify-center mt-5 space-x-3.5">
-                    {renderAuctionTable()}
+                    <AuctionTable auctions={auctions} product={product.product}/>
                 </div>
 
                 {/* ---------- 5 ----------  */}
                 {/*<AccordionInfo />*/}
 
-                {/* ---------- 6 ----------  */}
                 <div className="hidden xl:block">
                     <Policy/>
                 </div>
@@ -224,7 +151,7 @@ export default async function ProductDetailPage({params}: { params: { id: string
             <div className="">
                 <h2 className="text-2xl font-semibold">Product Details</h2>
                 <div className="prose prose-sm sm:prose dark:prose-invert sm:max-w-4xl mt-7">
-                    {product.description}
+                    <p dangerouslySetInnerHTML={{__html: product.product.description.replace(/\\n/g, '<br/>')}}/>
                 </div>
             </div>
         );
@@ -240,11 +167,12 @@ export default async function ProductDetailPage({params}: { params: { id: string
                         {/* HEADING */}
                         <div className="relative">
                             <Suspense fallback={<PhotoPlaceholderSkeleton/>}>
-                                <RenderImage id={params.id}/>
+                                <RenderImage image={product.image}/>
                             </Suspense>
                             {/*{renderStatus()}*/}
                             {/* META FAVORITES */}
-                            <LikeButton className="absolute right-3 top-3 "/>
+                            <LikeButton className="absolute right-3 top-3 "
+                                        productId={Number(params.id)}/>
                         </div>
                     </div>
 
@@ -264,12 +192,12 @@ export default async function ProductDetailPage({params}: { params: { id: string
                     <hr className="border-slate-200 dark:border-slate-700"/>
 
                     {/* OTHER SECTION */}
-                    <SectionSliderProductCard
+                   {/* <SectionSliderProductCard
                         heading="Customers also purchased"
                         subHeading=""
                         headingFontClassName="text-2xl font-semibold"
                         headingClassName="mb-10 text-neutral-900 dark:text-neutral-50"
-                    />
+                    />*/}
 
                     {/* SECTION */}
                     <div className="pb-20 xl:pb-28 lg:pt-14">

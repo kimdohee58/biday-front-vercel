@@ -1,10 +1,10 @@
-import {AuctionModel} from "@/model/AuctionModel";
+import {AuctionModel, SaveAuctionModel} from "@/model/auction/auction.model";
 import {api} from "../request";
 import {strategy} from "../api.strategy";
 import {RequestOptions} from "@/model/api/RequestOptions";
 
 // 경매 상세보기 (GET 요청)
-const findById = async (options: RequestOptions<{ id: string }, null>): Promise<AuctionModel> => {
+const findById = async (options: RequestOptions<{ auctionId: string }, null>): Promise<AuctionModel> => {
     return await strategy.GET(`${api.auction}/findById`, options);
 };
 
@@ -23,31 +23,30 @@ const findAllBySize = async (options: RequestOptions<Omit<findBySizeParams, "cur
     return await strategy.GET(`${api.auction}/findAllBySize`, options);
 };
 
+type findByUserProps = {
+    size?: number;
+    cursor?: number;
+    period? : string;
+    page?: number
+}
 // 마이페이지 경매 목록 조회 (GET 요청)
-const findByUser = async (userId: string, period: string, cursor?: number): Promise<AuctionModel[]> => {
-    const response = await strategy.GET(`${api.auction}`, {
-        userId,
-        period,
-        cursor: cursor?.toString() || '',  // undefined일 경우 빈 문자열로 처리
-    });
-    return response;
+const findByUser = async (options: RequestOptions<findByUserProps,null>): Promise<AuctionModel[]> => {
+    return await strategy.GET(`${api.auction}`, options);
 };
 
 // 경매 등록 (POST 요청)
-const save = async (auctionData: Partial<AuctionModel>): Promise<AuctionModel> => {
-    const response = await strategy.POST(`${api.auction}`, auctionData);
-    return response;
+const save = async (options: Omit<RequestOptions<any, SaveAuctionModel>, "params">): Promise<AuctionModel> => {
+    return await strategy.POST(`${api.auction}`, options);
 };
 
 // 경매 수정 (PATCH 요청)
 const update = async (auctionData: Partial<AuctionModel>): Promise<AuctionModel> => {
-    const response = await strategy.PATCH(`${api.auction}`, auctionData);
-    return response;
+    return await strategy.PATCH(`${api.auction}`, {});
 };
 
 // 경매 삭제 (DELETE 요청)
 const delete_ = async (id: number): Promise<void> => {
-    await strategy.DELETE(`${api.auction}?id=${id}`);
+    await strategy.DELETE(`${api.auction}?id=${id}`, {});
 };
 
 export const auctionAPI = {

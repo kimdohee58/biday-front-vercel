@@ -11,14 +11,13 @@ export interface UserState {
     token: string | null;
     userInfo : UserToken;
     addresses: AddressModel[];  // 주소 정보를 별도로 관리
-
 }
 
 const initialState: UserState = { // 초기 상태
     user: initialUser,
-    token:null,
+    token: null,
     userInfo: initialUserToken,
-    addresses: [], // 주소 초기 값 설정
+    addresses: [],
 };
 
 // 로그인을 해서 리턴을 해서 사용을
@@ -28,6 +27,7 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         saveUser: (state, action: PayloadAction<{ user: UserModel, token: string }>) => {
+            console.log("유저슬라이스 유저정보 리덕스에 저장 : " , saveUser)
             state.user = action.payload.user;  // 유저 정보 저장
             state.token = action.payload.token;  // 토큰 저장
         },
@@ -40,7 +40,10 @@ const userSlice = createSlice({
             state.userInfo = initialUserToken; // 유저토큰초기화
         },
         addAddress: (state, action: PayloadAction<AddressModel>) => {
-            state.addresses.push(action.payload);  // 새로운 주소 추가
+            // 주소 배열에 새 주소 추가
+            if (state.addresses) {
+                state.addresses.push(action.payload);
+            }
         },
         removeAddress: (state, action: PayloadAction<string>) => {
             state.addresses = state.addresses.filter(address => address.id !== action.payload);  // 특정 주소 삭제

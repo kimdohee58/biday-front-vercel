@@ -9,20 +9,25 @@ type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | "PATCH" ;
 
 const apiRequest = async (url: string, method: HttpMethod, {params, data, headers, token, userToken, contentType, cache}: RequestOptions<any,any>) => {
     console.log("strategy 진입");
-    console.log("token", HTTPRequest(method, url));
+
+    if (userToken) {
+        console.log("token", HTTPRequest(userToken));
+    }
 
     const queryString = params ? `?${new URLSearchParams(params)}` : '';
 
     const options: RequestInit = {
         method: method,
         headers: {
-            'Content-Type': contentType || 'application/json',
+            ...(contentType !== "multipart/form-data" && {'Content-Type': contentType || 'application/json'}),
             ...(token && {'Authorization': `Bearer ${token}`}),
-            ...(userToken && {'UserInfo': HTTPRequest(method,url)}),
+            ...(userToken && {'UserInfo': HTTPRequest(userToken)}),
             ...(headers || {}),
         },
         ...(cache && {cache: {cache}}),
-        ...(data && {body: JSON.stringify(data)}),
+        ...(data && !contentType && {body: JSON.stringify(data)}),
+        ...(data && contentType === "multipart/form-data" && {body: data}),
+
     };
 
     console.log("options", options);
@@ -43,7 +48,12 @@ const apiRequest = async (url: string, method: HttpMethod, {params, data, header
 
         response = await fetchAPI(`${url}${queryString}`, options);
     }
-    const responseType = response.headers.get("content-type");
+    const responseType = response.headers.get("Content-Type");
+
+    const contentLength = response.headers.get("Content-Length");
+    if (contentLength === '0') {
+        return {};
+    }
     if (responseType && responseType.includes("application/json")) {
         return response.json();
     } else {

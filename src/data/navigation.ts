@@ -126,7 +126,7 @@ export const NAVIGATION_DEMO_2: NavItemType[] = [
   },
   {
     id: ncNanoId(),
-    href: "/",
+    href: "/auction/insert",
     name: "경매 등록"
-  }
+  },
 ];

@@ -3,7 +3,6 @@ import {configureStore} from '@reduxjs/toolkit';
 import userSlice from '@/lib/features/user.slice';
 import productSlice from "@/lib/features/product.slice";
 import wishSlice from "@/lib/features/wish.slice";
-import accountSlice from "@/lib/features/account.slice";
 import addressSlice from "@/lib/features/address.slice";
 import brandSlice from "@/lib/features/brand.slice";
 import categorySlice from "@/lib/features/category.slice";
@@ -14,11 +13,24 @@ import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'; // 기본적으로 localStorage 사용
 import { combineReducers } from 'redux';
 
+// 무한 스크롤 실패
+// import productsReducer from '@/features/dohee/products.slice';
+//
+// export const storeProduct = configureStore({
+//     reducer: {
+//         products: productsReducer,
+//     },
+// });
+//
+// export type RootStateProduct = ReturnType<typeof storeProduct.getState>;
+// export type AppDispatchProduct = typeof storeProduct.dispatch;
+
+
 // redux-persist 설정
 const persistConfig = {
     key: 'root',
     storage,      // localStorage 사용
-    whitelist: ['user'],  // user만 persist에 저장
+    whitelist: ['user'],
 };
 
 // 루트 리듀서 정의 (combineReducers 사용)
@@ -26,18 +38,19 @@ const rootReducer = combineReducers({
     user: userSlice,
     product: productSlice,
     wish: wishSlice,
-    account: accountSlice,
     address: addressSlice,
     brand: brandSlice,
     category: categorySlice,
     faq: faqSlice,
     loginHistory: loginHistorySlice,
     rating: ratingSlice,
+    products:productSlice
 });
 
 
 // persistReducer로 루트 리듀서를 감싸줌
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+const persistedReducer
+    = persistReducer(persistConfig, rootReducer);
 
 // 스토어 생성
 export const store = configureStore({

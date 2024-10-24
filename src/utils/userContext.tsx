@@ -20,7 +20,6 @@ export const UserProvider = ({children}: {children:ReactNode}) => {
     );
 }
 
-// 유저 정보를 사용하는 커스텀 훅
 export const useUserContext = () => {
     const context = useContext(UserContext);
     if (!context) {

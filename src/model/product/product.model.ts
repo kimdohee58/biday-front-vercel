@@ -1,4 +1,6 @@
+//src/model/product/product.model.ts
 import {SizeModel} from "@/model/product/size.model";
+import {ImageModel} from "@/model/ftp/image.model";
 
 export interface ProductModel {
     id: number;
@@ -15,6 +17,26 @@ export interface ProductModel {
     wishes:number;
     sizes: SizeModel[];
 }
+
+export interface ProductDTO {
+    id: number;
+    brand: string;
+    category: string;
+    name: string;
+    subName: string;
+    productCode: string;
+    price: number;
+    color: string;
+    createdAt: Date;
+    updatedAt: Date;
+    wishes: number;
+}
+
+export interface ProductWithImageModel {
+    product: ProductModel;
+    image: ImageModel;
+}
+
 export type ProductDictionary = { [key: string]: ProductModel; };
 
 export interface SearchFilter {
@@ -37,5 +59,20 @@ export const initialProduct: ProductModel = {
     createdAt: new Date(),
     updatedAt: new Date(),
     wishes:0,
-    size: {} as SizeModel[],
+    sizes: {} as SizeModel[],
+};
+
+export const defaultProduct: ProductModel = {
+    id: 0,
+    brand: 'default',
+    category: 'default',
+    name: 'default',
+    productCode: "default",
+    price: 0,
+    color: 'default',
+    description: 'default',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    wishes:0,
+    sizes: [] as SizeModel[],
 };

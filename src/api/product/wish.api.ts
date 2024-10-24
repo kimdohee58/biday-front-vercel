@@ -10,12 +10,12 @@ const findByUser = async (options: RequestOptions<any, null>): Promise<WishModel
 };
 
 // 위시 토글 (GET 요청, 위시 생성/삭제)
-const toggleWish = async (options: RequestOptions<{productId: string}, null>) => {
+const toggleWish = async (options: RequestOptions<{productId: number}, null>): Promise<boolean> => {
     return await strategy.GET(`${api.wish}`, options);
 };
 
 // 위시 삭제 (DELETE 요청)
-const deleteWish = async (options: RequestOptions<{id:number}, null>): Promise<string> => {
+const deleteWish = async (options: RequestOptions<{id:number}, null>): Promise<boolean> => {
     return await strategy.DELETE(`${api.wish}`, options);
 };
 

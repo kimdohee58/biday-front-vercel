@@ -1,41 +1,107 @@
-"use client"
-import Prices from "@/components/Prices";
-import {PRODUCTS} from "@/data/data";
-import ButtonSecondary from "@/shared/Button/ButtonSecondary";
-import Image from "next/image";
-import {RootState} from "@/lib/store";
-import {useUserContext} from "@/utils/userContext";
-import {useState} from "react";
+"use client";
+import React, {useEffect, useState} from "react";
+import {useFetchData} from "@/hooks/useAccountOrderData";
+import {
+    useFetchAuctionProducts,
+    useFetchAwardProducts,
+    useFetchBidProducts,
+    useFetchPaymentProducts
+} from "@/components/AccountuseQuery/useQuery";
 
-export default function AccountOrder() {
+import {
+    renderAuctionHistory,
+    renderBidHistory,
+    renderAwardHistory,
+    renderPaymentHistory
+} from "@/components/RenderAccountOrder";
+import {
+    mapDataWithAuctionModel,
+    mapDataWithAwardModel,
+    mapDataWithPaymentModel
+} from "@/utils/mapDataWithProducts";
+import {PaymentRequestModel} from "@/model/order/payment.model";
 
-    const renderProductItem = (product: any, index: number) => {
-        const {image, name} = product;
-        const {user} = useUserContext();
+const AccountOrder = () => {
+    const [activeTab, setActiveTab] = useState("auction");
+    const [mappedPaymentData, setMappedPaymentData] = useState<PaymentRequestModel[]>([]);
 
-        const [activeTab, setActiveTab] = useState<"order" | "bid" | "auction" | "win">("order");
+    const {
+        auctionData,
+        awardData,
+        paymentData,
+        loading
+    } = useFetchData(activeTab);
 
-        const renderContent = () => {
-            switch (activeTab) {
-                case "order":
-                    return <OrderList/>;
-                case "bid":
-                    return <BidList/>;
-                case "auction":
-                    return <AuctionList/>;
-                case "win":
-                    return <WinList/>;
-                default:
-                    return null;
+    const { data: auctionProductList } = useFetchAuctionProducts(auctionData);
+    const { data: bidProductList } = useFetchBidProducts();
+    const { data: awardProductList } = useFetchAwardProducts(awardData);
+    const { data: paymentProductList } = useFetchPaymentProducts(paymentData);
+
+    console.log("auctionProductList : " ,auctionProductList )
+    console.log(" bidProductList: " , bidProductList)
+    console.log(" awardProductList: " , awardProductList)
+    console.log("paymentProductList : " , paymentProductList)
+
+    console.log("경매 데이터 :    ,   " , auctionData)
+
+
+
+    useEffect(() => {
+        const fetchMappedPaymentData = async () => {
+            if (paymentData && paymentProductList) {
+                const mappedData = await mapDataWithPaymentModel(paymentData, paymentProductList);
+                setMappedPaymentData(mappedData);
             }
         };
 
+        fetchMappedPaymentData();
+    }, [paymentData, paymentProductList]);
 
-        return (
-            <div className="space-y-6 sm:space-y-8">
-            <h2 className="text-2xl sm:text-3xl font-semiblod">내역 확인</h2>
+    return (
+        <div className="space-y-10 sm:space-y-12">
+            <div>
+                <div className="flex space-x-8 mb-8">
+                    <h2
+                        className={`text-2xl sm:text-3xl font-semibold cursor-pointer ${activeTab === "auction" ? "text-indigo-600 border-b-2 border-indigo-600" : "text-gray-800"}`}
+                        onClick={() => {setActiveTab("auction")}}
+                    >
+                        경매 내역
+                    </h2>
+                    <h2
+                        className={`text-2xl sm:text-3xl font-semibold cursor-pointer ${activeTab === "award" ? "text-indigo-600 border-b-2 border-indigo-600" : "text-gray-800"}`}
+                        onClick={() => {setActiveTab("award")}}
+                    >
+                        낙찰 내역
+                    </h2>
+                </div>
+                {loading ? <div>Loading...</div> : (
+                    <>
+                        {activeTab === "auction" && (
+                            <>
+                                <div className="mb-8">
+                                    {renderAuctionHistory(mapDataWithAuctionModel({ content: auctionData }, auctionProductList!!))}
+                                </div>
+                                <div className="mb-8">
+                                    {renderBidHistory(bidProductList!!)}
+                                </div>
+                            </>
+                        )}
+                        {activeTab === "award" && (
+                            <>
+                                <div className="mb-8">
+                                    {renderAwardHistory(mapDataWithAwardModel({ content: awardData }, awardProductList!!))}
+                                </div>
+                                <div className="mb-8">
+                                    {renderPaymentHistory(mappedPaymentData)}
+                                </div>
+                            </>
+                        )}
+                    </>
+                )}
+
             </div>
-        )
+        </div>
+    );
+};
 
-    }
-}
+export default AccountOrder;

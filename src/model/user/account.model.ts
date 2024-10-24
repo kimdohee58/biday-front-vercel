@@ -2,11 +2,11 @@
 
 export interface AccountModel {
     id?: string;
-    userId: string; // 단순작엄이다. useModel 타입으로 하지 말라고 하심.
+    userId: string;
     bankTranId:string;
     bankCode : string;
     bankName : string;
-    accountNum:string;
+    accountNumber:string;
     accountName:string;
     bankRspCode:string;
     bankTranDate : Date;

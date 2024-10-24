@@ -2,6 +2,7 @@ import { _getPersonNameRd } from "@/contains/fakeData";
 import React from "react";
 import { FC } from "react";
 import Avatar from "@/shared/Avatar/Avatar";
+import Link from "next/link";
 
 export interface CommentProps {
   isSmall?: boolean;
@@ -15,12 +16,13 @@ const Comment: FC<CommentProps> = ({ isSmall }) => {
       </div>
       <div className="flex-grow flex flex-col p-4 ml-2 text-sm border border-neutral-200 rounded-xl sm:ml-3 sm:text-base dark:border-neutral-700">
         <div className="relative flex items-center pr-6">
-          <a
-            className="flex-shrink-0 font-semibold text-neutral-800 dark:text-neutral-100"
-            href="/ncmaz/author/the-demo-author-slug"
+          <Link
+              href={{ pathname: "/ncmaz/author/[slug]", query: { slug: "the-demo-author-slug" } }}
+              className="flex-shrink-0 font-semibold text-neutral-800 dark:text-neutral-100"
           >
             {_getPersonNameRd()}
-          </a>
+          </Link>
+
           <span className="mx-2">·</span>
           <span className="text-neutral-500 dark:text-neutral-400 text-xs line-clamp-1 sm:text-sm">
             May 20, 2021

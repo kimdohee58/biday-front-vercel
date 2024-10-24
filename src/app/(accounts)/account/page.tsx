@@ -8,12 +8,13 @@ import {useSelector} from "react-redux";
 import {initialUser} from "@/model/user/user.model";
 import {AddressModel} from "@/model/user/address.model";
 import {insertAddress} from "@/service/user/address.api";
-import Postcode from "@/components/Postcode"; // 주소 검색 컴포넌트
+import Postcode from "@/components/Postcode";
 import {RadioGroup, Radio, Stack} from "@chakra-ui/react";
 import NcModal from "@/shared/NcModal/NcModal";
 import {fetchAllAddressesByUserId, fetchDeleteAddress, fetchPickAddress} from "@/service/user/address.service";
-import {useUserContext} from "@/utils/userContext";
-import {getAddresses} from "@/lib/features/user.slice"; // fetchPickAddress 추가
+import OrderList from "@/components/OrderList";
+import {getAddresses} from "@/lib/features/user.slice";
+import {saveUserTokenToCookie} from "@/utils/cookie/cookie.api";
 
 // 주소 유형 매핑 함수
 const mapAddressType = (type: string) => {
@@ -23,7 +24,6 @@ const mapAddressType = (type: string) => {
         case "WORK":
             return "회사";
         case "OTHER":
-        default:
             return "기본";
     }
 };
@@ -39,14 +39,10 @@ export default function AccountPage() {
     const [showDropdown, setShowDropdown] = useState(false);
     const [addresses, setAddresses] = useState<AddressModel[]>([]); // 주소 목록 상태 관리
     const [error, setError] = useState<string | null>(null); // 에러 상태 관리
-    const reduxAddresses1 = useSelector(getAddresses);
 
-    // 리덕스에 있는 유저 주소 갖고오기
-    const reduxAddresses = useSelector((state: RootState) => getAddresses(state));
-    console.log("리덕스에 있는 주소 확인하는 코드1111111111 : " , reduxAddresses1)
-    console.log("리덕스에 있는 주소 확인하는 코드 : " , reduxAddresses)
-    const rdeux111 = useSelector(getAddresses);
-    console.log("FLEJRTM리덕스,ㅇㅁㅇㄴ러ㅏㅣ",rdeux111)
+    const address = useSelector(getAddresses);
+
+    saveUserTokenToCookie(userToken); // 유저인포 === 유저토큰
 
     const [formData, setFormData] = useState({
         addressId: "",
@@ -55,6 +51,7 @@ export default function AccountPage() {
         zipcode: "",
         addressType: "",  // 기본 주소 유형
     });
+   
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
 
     // 주소 검색 완료 후 처리하는 함수
@@ -83,8 +80,6 @@ export default function AccountPage() {
             type: formData.addressType,
             pick: false,
             email: user.email || "",  // Redux에서 유저 이메일 가져오기
-            address1: formData.selectedAddress || "", // 어드레스 1, 2 지워도 되는데 이거 지우면 에러가 나와
-            address2: formData.addressDetail || "", //
         };
 
         try {
@@ -146,8 +141,20 @@ export default function AccountPage() {
 
     // useEffect로 주소 목록 로드
     useEffect(() => {
-        loadAddresses();
+         loadAddresses();
     }, []);
+
+    const [activeTab, setActiveTab] = useState<"order" | "bid" | "auction" | "win">("order");
+
+    const renderContent = () => {
+        switch (activeTab) {
+            case "order":
+                return <OrderList />;
+
+        }
+    };
+
+
     return (
         <div className={`nc-AccountPage`}>
             <div className="space-y-10 sm:space-y-12">
@@ -355,16 +362,12 @@ export default function AccountPage() {
 
 
                                         {/* 업데이트 버튼 */}
-                                        <div className="pt-4">
+                                        <div className="pt-2">
                                             <ButtonPrimary onClick={handleUpdate}>주소 추가하기</ButtonPrimary>
                                         </div>
                                     </div>
                                 )}
                             />
-                        </div>
-
-                        <div className="pt-2">
-                            <ButtonPrimary>회원정보수정</ButtonPrimary>
                         </div>
                     </div>
                 </div>

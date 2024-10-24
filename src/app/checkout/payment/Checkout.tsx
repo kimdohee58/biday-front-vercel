@@ -1,7 +1,7 @@
 "use client";
 
 import {loadTossPayments, ANONYMOUS, TossPaymentsWidgets} from "@tosspayments/tosspayments-sdk";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 
 const clientKey = `${process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY}`;
 
@@ -10,7 +10,13 @@ interface Amount {
     value: number;
 }
 
-export default function Checkout({value, product, orderId, customerKey}: {value: number, product: string, orderId: string, customerKey: string}) {
+export default function Checkout({value, product, orderId, customerKey, awardId}: {
+    value: number,
+    product: string,
+    orderId: string,
+    customerKey: string,
+    awardId: string
+}) {
     const [ready, setReady] = useState<boolean>(false);
     const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
     const amount: Amount = {
@@ -18,10 +24,14 @@ export default function Checkout({value, product, orderId, customerKey}: {value:
         value: value,
     };
 
+    console.log("1");
+
     useEffect(() => {
         async function fetchPaymentWidgets() {
+            console.log("2")
             // ------  결제위젯 초기화 ------
             const tossPayments = await loadTossPayments(clientKey);
+            console.log("toss", tossPayments);
             // 회원 결제
             const widgets = tossPayments.widgets({
                 customerKey,
@@ -71,12 +81,13 @@ export default function Checkout({value, product, orderId, customerKey}: {value:
     }, [widgets, amount]);
 
     return (
-        <div className="wrapper w-1/3 mx-auto">
+        <div className="wrapper mx-auto">
             <div className="box_section">
+
                 {/* 결제 UI */}
-                <div id="payment-method" />
+                <div id="payment-method"/>
                 {/* 이용약관 UI */}
-                <div id="agreement" />
+                <div id="agreement"/>
 
                 {/* 결제하기 버튼 */}
                 <button
@@ -90,7 +101,7 @@ export default function Checkout({value, product, orderId, customerKey}: {value:
                             await widgets!.requestPayment({
                                 orderId: orderId,
                                 orderName: product,
-                                successUrl: window.location.origin + "/success",
+                                successUrl: window.location.origin + `/checkout/payment/success?awardId=${awardId}`,
                                 failUrl: window.location.origin + "/fail",
                             });
                         } catch (error) {
@@ -99,7 +110,7 @@ export default function Checkout({value, product, orderId, customerKey}: {value:
                         }
                     }}
                 >
-                    결제하기
+                    야이새끼야
                 </button>
             </div>
         </div>
