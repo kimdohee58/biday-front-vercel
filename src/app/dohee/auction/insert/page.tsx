@@ -230,7 +230,7 @@ export default function InsertAuction() {
 
                 // 성공적인 경우 리다이렉트
                 if (message === "success" && message.status === 200) {
-                    router.push("/auction/insert/success");
+                    router.push("/dohee/auction/insert/success");
                 } else {
                     if (data.id != null) {
                         await auctionDelete.mutateAsync(data.id);
