@@ -1,18 +1,4 @@
 'use client';
-import {
-    Button,
-    Dialog,
-    DialogHeader,
-    DialogBody,
-    IconButton,
-    Typography,
-    DialogFooter,
-    Input,
-    Select,
-    Option,
-    Textarea,
-} from "@material-tailwind/react";
-import {TrashIcon} from "@heroicons/react/24/solid";
 
 type CardProps = {
     onClick: () => void;

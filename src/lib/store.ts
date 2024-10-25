@@ -12,6 +12,7 @@ import ratingSlice from "@/lib/features/rating.slice";
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'; // 기본적으로 localStorage 사용
 import { combineReducers } from 'redux';
+import productCardSlice from "@/lib/features/productCard.slice";
 
 // 무한 스크롤 실패
 // import productsReducer from '@/features/dohee/products.slice';
@@ -44,7 +45,9 @@ const rootReducer = combineReducers({
     faq: faqSlice,
     loginHistory: loginHistorySlice,
     rating: ratingSlice,
-    products:productSlice
+    products: productSlice,
+    productCards: productCardSlice,
+
 });
 
 
