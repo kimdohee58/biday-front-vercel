@@ -19,6 +19,7 @@ function AccountDetails({user, onClick}: { user: UserModel, onClick: () => void 
         queryFn: () => getAccount(),
     });
 
+
     return (
         <div>
             {accountData.data && Object.keys(accountData.data).length > 0 ? (

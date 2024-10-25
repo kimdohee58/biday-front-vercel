@@ -175,7 +175,7 @@ export default function ImageModal({isOpen, onClose, onSubmit, files}: ImageModa
                         )
                     ))}
                 </div>
-            </DialogBody>wj
+            </DialogBody>
             <DialogFooter className="gap-2">
                 <Button onClick={onClose} variant="outlined">
                     취소
