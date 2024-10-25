@@ -2,19 +2,8 @@
 import {SizeModel} from "@/model/product/size.model";
 import {ImageModel} from "@/model/ftp/image.model";
 
-export interface ProductModel {
-    id: number;
-    brand: string;
-    category: string;
-    name: string;
-    subName?: string;
-    productCode: string;
-    price: number;
-    color: string;
+export interface ProductModel extends ProductDTO {
     description: string;
-    createdAt: Date;
-    updatedAt: Date;
-    wishes:number;
     sizes: SizeModel[];
 }
 
@@ -23,13 +12,36 @@ export interface ProductDTO {
     brand: string;
     category: string;
     name: string;
-    subName: string;
+    subName?: string;
     productCode: string;
     price: number;
-    color: string;
+    color: ColorType;
     createdAt: Date;
     updatedAt: Date;
     wishes: number;
+}
+
+export enum ColorType {
+    CHARCOAL = "CHARCOAL",
+    GRAY = "GRAY",
+    BEIGE = "BEIGE",
+    OLIVE = "OLIVE",
+    PURPLE = "PURPLE",
+    IVORY = "IVORY",
+    GREEN = "GREEN",
+    MELANGE = "MELANGE",
+    BLUE = "BLUE",
+    WHITE = "WHITE",
+    CREAM = "CREAM",
+    YELLOW = "YELLOW",
+    BROWN = "BROWN",
+    RED = "RED",
+    NAVY = "NAVY",
+    PINK = "PINK",
+    ORANGE = "ORANGE",
+    KHAKI = "KHAKI",
+    BURGUNDY = "BURGUNDY",
+    BLACK = "BLACK"
 }
 
 export interface ProductWithImageModel {
@@ -37,7 +49,14 @@ export interface ProductWithImageModel {
     image: ImageModel;
 }
 
-export type ProductDictionary = { [key: string]: ProductModel; };
+export interface ProductCardModel {
+    product: ProductModel,
+    image: ImageModel,
+    isLiked: boolean,
+    colors: ColorType[],
+}
+
+export type ProductDictionary = { [key: string]: ProductModel};
 
 export interface SearchFilter {
     brand?: string,
@@ -54,7 +73,7 @@ export const initialProduct: ProductModel = {
     name: '',
     productCode: "",
     price: 0,
-    color: '',
+    color: '' as ColorType,
     description: '',
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -69,7 +88,7 @@ export const defaultProduct: ProductModel = {
     name: 'default',
     productCode: "default",
     price: 0,
-    color: 'default',
+    color: 'default' as ColorType,
     description: 'default',
     createdAt: new Date(),
     updatedAt: new Date(),
