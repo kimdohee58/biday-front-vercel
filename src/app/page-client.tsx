@@ -65,12 +65,8 @@ export default function PageClient({products}: ClientComponentProps) {
     const categoryArray = ["outer", "top", "bottom"];
     const [isLoading, setIsLoading] = React.useState(true);
 
-    console.log("products", products);
-    console.log("productsInRedux", productsInRedux);
-
     useEffect(() => {
         if (productsInRedux.length === 0 && products.length > 0) {
-            console.log("프로덕트리덕스", productsInRedux);
             dispatch(setProductCards(products));
             setIsLoading(false);
         } else {
@@ -79,7 +75,6 @@ export default function PageClient({products}: ClientComponentProps) {
     }, [productsInRedux, products, dispatch]);
 
     const {data: wishList, isLoading: isWishLoading, isError} = useWishlist();
-    console.log("wishList", wishList);
 
     useEffect(() => {
         if (wishList && !isWishLoading && !isError) {
