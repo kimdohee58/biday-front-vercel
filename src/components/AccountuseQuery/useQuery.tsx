@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchProductBySizeId } from "@/service/product/product.service";
 import {extractAwardIdsFromPaymentData, extractSizeIds} from "@/utils/extract";
 import {fetchSizeIdsFromAwards} from "@/service/auction/award.service";
-import {ProductDTO, ProductModel} from "@/model/product/product.model";
+import {ColorType, ProductDTO, ProductModel} from "@/model/product/product.model";
 import {SizeModel} from "@/model/product/size.model"; // sizeId 추출 유틸리티 함수 가져오기
 
 // auctionSizeIds를 사용하여 상품 데이터 가져오기
@@ -72,7 +72,7 @@ export const useFetchPaymentProducts = (paymentData: any) => {
                 subName: size.sizeProduct.subName,
                 productCode: size.sizeProduct.productCode,
                 price: size.sizeProduct.price || 0, // 기본값 설정
-                color: size.sizeProduct.color || "unknown", // 기본값 설정
+                color: size.sizeProduct.color || "unknown" as ColorType, // 기본값 설정
                 createdAt: new Date(), // 필요에 따라 size.sizeProduct.createdAt 사용 가능
                 updatedAt: new Date(), // 필요에 따라 size.sizeProduct.updatedAt 사용 가능
                 wishes: 0 // 기본값 설정

@@ -1,6 +1,5 @@
 import {SizeModel} from "@/model/product/size.model";
 import {ColorType, ProductModel} from "@/model/product/product.model";
-import {types} from "node:util";
 import {Colors} from "@/data/color";
 
 export const getColor = (productName: string) => {
@@ -26,3 +25,8 @@ export const getColorsArray = (products: ProductModel[]) => {
         return product.color;
     })
 };
+
+export const getRandomItems = <T>(arr: T[], count: number): T[] => {
+    const shuffled = [...arr].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+}

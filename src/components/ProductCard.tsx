@@ -3,7 +3,6 @@
 import React, {FC, useState} from "react";
 import LikeButton from "./LikeButton";
 import Prices from "./Prices";
-import ModalQuickView from "./ModalQuickView";
 import {useRouter} from "next/navigation";
 import Link from "next/link";
 import NcImage from "@/shared/NcImage/NcImage";
@@ -30,7 +29,6 @@ const ProductCard: FC<ProductCardProps> = ({
     const colorArray = getColorsByTypes(colors);
     const router = useRouter();
     const [colorActive, setColorActive] = useState(colors.findIndex(c => c === product.color));
-    const [showModalQuickView, setShowModalQuickView] = useState(false);
 
     const imageSrc = image.uploadUrl || "/—Pngtree—loading icon vector_6629917.png";
 
@@ -94,7 +92,10 @@ const ProductCard: FC<ProductCardProps> = ({
 
     const renderSizeList = () => {
         if (!product.sizes || !product.sizes.length) {
-            return null;
+            return <div
+                className="absolute bottom-0 inset-x-1 gap-2 flex flex-wrap justify-center opacity-0 invisible group-hover:bottom-4 group-hover:opacity-100 group-hover:visible transition-all">
+                {"free"}
+            </div>;
         }
 
         return (

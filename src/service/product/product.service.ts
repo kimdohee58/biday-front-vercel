@@ -1,11 +1,51 @@
 import {productAPI} from "@/api/product/product.api";
-import {ProductDictionary, ProductModel, ProductWithImageModel, SearchFilter} from "@/model/product/product.model";
+import {
+    ProductCardModel,
+    ProductDictionary,
+    ProductModel,
+    ProductWithImageModel,
+    SearchFilter
+} from "@/model/product/product.model";
 import {AuctionModel} from "@/model/auction/auction.model";
 import {fetchAuctionsBySize} from "@/service/auction/auction.service";
 import {setLoading} from "@/lib/features/products.slice";
 import {fetchAllProductImage, fetchImageOne} from "@/service/ftp/image.service";
 import {defaultImage, ImageType} from "@/model/ftp/image.model";
 import {SizeModel} from "@/model/product/size.model";
+import {getColorsArray, getColorsByTypes} from "@/utils/productUtils";
+
+export async function fetchAllProductCards(): Promise<ProductCardModel[]> {
+    try {
+        const products = await fetchAllProducts();
+        const images = await fetchAllProductImage();
+
+        if (!products) {
+            console.error("products 값이 undefined");
+            throw new Error("");
+            // TODO error enum
+        }
+
+        return await Promise.all(products.map(async (product) => {
+            const productGroup = await fetchProduct(product.id);
+            const colors = getColorsArray(productGroup);
+            const productImages = images.find(image => (
+                image.referencedId === product.id.toString() && image.type === ImageType.PRODUCT
+            )) || defaultImage;
+
+            return {
+                product,
+                image: productImages,
+                colors,
+                isLiked: false,
+            };
+        }));
+
+    } catch (error) {
+        console.error("fetchAllProductCards 중 오류 발생", error);
+        throw new Error("");
+    }
+
+}
 
 export async function fetchAllProductsWithImages(): Promise<ProductWithImageModel[]> {
     try {
@@ -193,7 +233,7 @@ export async function fetchProductBySizeId(sizeId: number): Promise<SizeModel> {
                 sizeId: sizeId
             }
         };
-        console.log("패치프로덕트바이사이즈아이디 : " , sizeId)
+        console.log("패치프로덕트바이사이즈아이디 : ", sizeId)
         return await productAPI.findBySizeId(options);
 
     } catch (error) {
