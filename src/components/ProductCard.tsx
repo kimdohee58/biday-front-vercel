@@ -9,6 +9,7 @@ import NcImage from "@/shared/NcImage/NcImage";
 import {ColorType, ProductModel} from "@/model/product/product.model";
 import {getColorsByTypes} from "@/utils/productUtils";
 import {ImageModel} from "@/model/ftp/image.model";
+import WishDeleteButton from "@/components/WishDeleteButton";
 
 export interface ProductCardProps {
     className?: string;
@@ -64,31 +65,31 @@ const ProductCard: FC<ProductCardProps> = ({
         );
     };
 
-   /* const renderGroupButtons = () => {
-        return (
-            <div
-                className="absolute bottom-0 group-hover:bottom-4 inset-x-1 flex justify-center opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-                <ButtonPrimary
-                    className="shadow-lg"
-                    fontSize="text-xs"
-                    sizeClass="py-2 px-4"
-                    onClick={() => notifyAddTocart({size: "XL"})}
-                >
-                    <BagIcon className="w-3.5 h-3.5 mb-0.5"/>
-                    <span className="ms-1">Add to bag</span>
-                </ButtonPrimary>
-                <ButtonSecondary
-                    className="ms-1.5 bg-white hover:!bg-gray-100 hover:text-slate-900 transition-colors shadow-lg"
-                    fontSize="text-xs"
-                    sizeClass="py-2 px-4"
-                    onClick={() => setShowModalQuickView(true)}
-                >
-                    <ArrowsPointingOutIcon className="w-3.5 h-3.5"/>
-                    <span className="ms-1">Quick view</span>
-                </ButtonSecondary>
-            </div>
-        );
-    };*/
+    /* const renderGroupButtons = () => {
+         return (
+             <div
+                 className="absolute bottom-0 group-hover:bottom-4 inset-x-1 flex justify-center opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                 <ButtonPrimary
+                     className="shadow-lg"
+                     fontSize="text-xs"
+                     sizeClass="py-2 px-4"
+                     onClick={() => notifyAddTocart({size: "XL"})}
+                 >
+                     <BagIcon className="w-3.5 h-3.5 mb-0.5"/>
+                     <span className="ms-1">Add to bag</span>
+                 </ButtonPrimary>
+                 <ButtonSecondary
+                     className="ms-1.5 bg-white hover:!bg-gray-100 hover:text-slate-900 transition-colors shadow-lg"
+                     fontSize="text-xs"
+                     sizeClass="py-2 px-4"
+                     onClick={() => setShowModalQuickView(true)}
+                 >
+                     <ArrowsPointingOutIcon className="w-3.5 h-3.5"/>
+                     <span className="ms-1">Quick view</span>
+                 </ButtonSecondary>
+             </div>
+         );
+     };*/
 
     const renderSizeList = () => {
         if (!product.sizes || !product.sizes.length) {

@@ -1,13 +1,12 @@
 'use client';
 
-import {fetchWishes} from '@/service/product/wish.service';
 import ButtonSecondary from '@/shared/Button/ButtonSecondary';
-import {useQuery} from '@tanstack/react-query';
 import React from "react";
-import ProductCard2 from "@/components/ProductCared2";
-
+import {useWishlistWithImages} from "@/hooks/react-query/useWishlist";
+import ProductCard from "@/components/ProductCard";
+import WishCard from "@/components/WishCard";
 export default function AccountSavelists() {
-    const wishes = useQuery({queryKey: ['fetchWishes'], queryFn: () => fetchWishes()});
+    const wishes = useWishlistWithImages();
 
     if (wishes.isLoading) {
         return <div className="flex h-screen items-center justify-center">
@@ -50,11 +49,14 @@ export default function AccountSavelists() {
 
                 <div className="grid grid-cols-1 gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-3 ">
                     {wishes.data.map((wish) => (
-                        wish.id !== undefined && (
-                            <ProductCard2
-                                key={wish.id}
-                                wishId={wish.id}
-                                data={wish.product}
+                        wish.wish.id !== undefined && (
+                            <WishCard
+                                key={wish.wish.id}
+                                wishId={wish.wish.id}
+                                product={wish.wish.product}
+                                image={wish.image}
+                                colors={wish.colors}
+                                isLiked={false}
                             />
                         )
                     ))}

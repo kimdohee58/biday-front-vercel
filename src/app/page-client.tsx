@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {ProductCardModel} from "@/model/product/product.model";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import SectionSliderCollections from "@/components/SectionSliderLargeProduct";
@@ -14,7 +14,7 @@ import {
     setRandomCategoryProducts,
     updateIsLiked
 } from "@/lib/features/productCard.slice";
-import {useWishlist} from "@/lib/hooks/react-query/useWishlist";
+import {useWishlist} from "@/hooks/react-query/useWishlist";
 import {ProductCardSkeleton} from "@/components/skeleton/ProductCardSkeleton";
 
 interface ClientComponentProps {
@@ -63,7 +63,7 @@ export default function PageClient({products}: ClientComponentProps) {
     const dispatch = useDispatch();
     const productsInRedux = useSelector(getProductCards);
     const categoryArray = ["outer", "top", "bottom"];
-    const [isLoading, setIsLoading] = React.useState(true);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         if (productsInRedux.length === 0 && products.length > 0) {
