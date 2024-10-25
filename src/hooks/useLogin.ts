@@ -23,7 +23,7 @@ export const useLogin = () => {
             const response = await handleLogin(username, password);
 
             if (response) {
-                const authorizationHeader = response.headers["authorization"];
+                const authorizationHeader = response.headers["Authorization"];
 
                 if (authorizationHeader) {
                     const accessToken = authorizationHeader.split(" ")[1]; // Bearer {token} 형태이므로 토큰만 추출
