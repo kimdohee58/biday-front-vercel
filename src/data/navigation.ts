@@ -1,5 +1,6 @@
 import { NavItemType } from "@/shared/Navigation/NavigationItem";
 import ncNanoId from "@/utils/ncNanoId";
+import {Route} from "next";
 
 export const MEGAMENU_TEMPLATES: NavItemType[] = [
   {
@@ -93,28 +94,28 @@ const OTHER_PAGE_CHILD: NavItemType[] = [
 export const NAVIGATION_DEMO_2: NavItemType[] = [
   {
     id: ncNanoId(),
-    href: "/outer",
+    href: "/outer" as Route,
     name: "Outer",
   },
   {
     id: ncNanoId(),
-    href: "/top",
+    href: "/top" as Route,
     name: "Top",
   },
   {
     id: ncNanoId(),
-    href: "/bottom",
+    href: "/bottom" as Route,
     name: "Bottom",
   },
   {
     id: ncNanoId(),
-    href: "/acc",
+    href: "/acc" as Route,
     name: "Acc",
   },
 
   {
     id: ncNanoId(),
-    href: "/collection",
+    href: "/collection" as Route,
     name: "템플릿",
     type: "megaMenu",
     children: MEGAMENU_TEMPLATES,
