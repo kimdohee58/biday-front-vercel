@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useMemo} from "react";
 import {ProductCardModel} from "@/model/product/product.model";
 import TabFiltersProduct from "@/components/dohee/TabFiltersProduct";
 import Pagination from "@/shared/Pagination/Pagination";
@@ -9,15 +9,21 @@ import SectionSliderCollections from "@/components/SectionSliderLargeProduct";
 import SectionPromo1 from "@/components/SectionPromo1";
 import ProductCard from "@/components/ProductCard";
 import {useDispatch, useSelector} from "react-redux";
-import {getProductCards, updateIsLiked} from "@/lib/features/productCard.slice";
+import {getCategoryProducts, getProductCards, isProductsInRedux, updateIsLiked} from "@/lib/features/productCard.slice";
 import {useWishlist} from "@/hooks/react-query/useWishlist";
 import {setProductCards} from "@/lib/features/productCard.slice";
 import {useProductCardList} from "@/hooks/react-query/useProductlist";
 
 export default function PageCollection({params}: { params: { filter: string } }) {
-    const productsInRedux = useSelector(getProductCards);
     const dispatch = useDispatch();
-    const allProducts = useProductCardList(productsInRedux.length);
+
+    const productsInRedux = useSelector(isProductsInRedux);
+    console.log("productInRedux", productsInRedux);
+
+    const categoryProducts = useSelector(getCategoryProducts(params.filter));
+    console.log("categoryProducts", categoryProducts);
+
+    const allProducts = useProductCardList(productsInRedux);
     const [isLoading, setIsLoading] = useState(true);
 
     const itemsPerPage = 20;
@@ -34,17 +40,23 @@ export default function PageCollection({params}: { params: { filter: string } })
     const selectedProducts = filteredProducts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
     useEffect(() => {
-        if (productsInRedux.length === 0 && allProducts.data && allProducts.data.length > 0) {
+        console.log("첫번째 useEffect 진입")
+        if (!productsInRedux && allProducts.data && allProducts.data.length > 0) {
             dispatch(setProductCards(allProducts.data));
-            setProducts(allProducts.data);
-            setFilteredProducts(allProducts.data)
             setIsLoading(false);
-        } else if (allProducts.data && allProducts.data.length > 0){
-            setProducts(allProducts.data);
-            setFilteredProducts(allProducts.data);
+        } else {
             setIsLoading(false);
         }
-    }, [productsInRedux, dispatch, allProducts.data]);
+    }, [productsInRedux, allProducts.data, dispatch]);
+
+    useEffect(() => {
+        console.log("두번째 useEffect 진입");
+        if (categoryProducts.length > 0) {
+            setProducts(categoryProducts);
+            setFilteredProducts(categoryProducts);
+            setIsLoading(false);
+        }
+    }, [productsInRedux]);
 
     const {data: wishList, isLoading: isWishLoading, isError} = useWishlist();
 

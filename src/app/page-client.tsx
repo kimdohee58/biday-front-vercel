@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {ProductCardModel} from "@/model/product/product.model";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import SectionSliderCollections from "@/components/SectionSliderLargeProduct";
@@ -9,7 +9,7 @@ import ProductCard from "@/components/ProductCard";
 import {useRouter} from "next/navigation";
 import {useDispatch, useSelector} from "react-redux";
 import {
-    getProductCards, getRandomCategoryProducts,
+    getProductCards, getRandomCategoryProducts, isProductsInRedux,
     setProductCards,
     setRandomCategoryProducts,
     updateIsLiked
@@ -27,8 +27,10 @@ function RandomProductsByCategory({category}: { category: string }) {
     const router = useRouter();
     const products = useSelector(getRandomCategoryProducts(category));
 
+
     useEffect(() => {
-        dispatch(setRandomCategoryProducts(category));
+        dispatch(setRandomCategoryProducts(category))
+
     }, [category, dispatch]);
 
     const handleShowMoreClick = (filter: string) => {
@@ -61,12 +63,12 @@ function RandomProductsByCategory({category}: { category: string }) {
 
 export default function PageClient({products}: ClientComponentProps) {
     const dispatch = useDispatch();
-    const productsInRedux = useSelector(getProductCards);
+    const productsInRedux = useSelector(isProductsInRedux);
     const categoryArray = ["outer", "top", "bottom"];
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        if (productsInRedux.length === 0 && products.length > 0) {
+        if (!productsInRedux && products.length > 0) {
             dispatch(setProductCards(products));
             setIsLoading(false);
         } else {
