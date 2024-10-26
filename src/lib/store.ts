@@ -1,4 +1,3 @@
-//src/lib/store.ts
 import {configureStore} from '@reduxjs/toolkit';
 import userSlice from '@/lib/features/user.slice';
 import productSlice from "@/lib/features/product.slice";
