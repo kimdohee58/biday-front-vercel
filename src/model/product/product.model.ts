@@ -19,6 +19,7 @@ export interface ProductDTO {
     createdAt: Date;
     updatedAt: Date;
     wishes: number;
+    image?:any;
 }
 
 export enum ColorType {
@@ -79,6 +80,7 @@ export const initialProduct: ProductModel = {
     updatedAt: new Date(),
     wishes:0,
     sizes: {} as SizeModel[],
+    image:"",
 };
 
 export const defaultProduct: ProductModel = {
