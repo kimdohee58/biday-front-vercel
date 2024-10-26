@@ -37,6 +37,9 @@ const AccountOrder = () => {
     const { data: awardProductList } = useFetchAwardProducts(awardData);
     const { data: paymentProductList } = useFetchPaymentProducts(paymentData);
 
+    console.log("auctionProductList : ", auctionProductList)
+    console.log("awardProductList : ", awardProductList)
+    console.log("paymentProductList : ", paymentProductList)
 
 
 
