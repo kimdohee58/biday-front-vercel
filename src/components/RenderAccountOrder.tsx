@@ -1,6 +1,7 @@
 // src/components/RenderAccountOrder.tsx
 import Prices from "@/components/Prices";
 import ImageFetcher from "@/components/ImageFetcher";
+import { format } from "date-fns";
 
 // 재귀적으로 특정 키를 찾는 유틸리티 함수
 function findNestedProperty<T = any>(obj: any, key: string): T | undefined {
@@ -20,11 +21,18 @@ function findNestedProperty<T = any>(obj: any, key: string): T | undefined {
 
 function formatDate(dateString: string): string {
     const date = new Date(dateString);
-    return date.toLocaleDateString("ko-KR"); // 한국어 날짜 형식으로 변환
+
+    // 날짜가 유효하지 않은 경우 처리
+    if (isNaN(date.getTime())) {
+        console.warn("Invalid date string provided:", dateString);
+        return "Invalid Date"; // 기본값 또는 에러 메시지 설정
+    }
+
+    return format(date, "yyyy-MM-dd HH:mm:ss");
 }
 
+
 export const renderProductItem = (product: any, index: number) => {
-    //console.log("📦 product 데이터: ", product);
 
     const productId = findNestedProperty<string>(product, "id") || `product-${index}`;
     const productName = findNestedProperty<string>(product, "name") || "No name available";
@@ -32,9 +40,13 @@ export const renderProductItem = (product: any, index: number) => {
     const brand = findNestedProperty<string>(product, "brand") || "No brand available";
     const originalPrice = findNestedProperty<number>(product, "price") || 0;
     const size = findNestedProperty<string>(product, "size") || "No size available";
+    const price = product.amount || product.currentBid || 0;
+
     const createdAt = formatDate(product.createdAt); // createdAt 날짜 포맷팅
 
-    const price = product.amount || product.currentBid || 0;
+    // 날짜 포맷팅
+    const startedAt = formatDate(product.startedAt);
+    const endedAt = formatDate(product.endedAt);
 
     return (
         <div key={index} className="flex py-4 sm:py-7 last:pb-0 first:pt-0 mb-2">
@@ -51,11 +63,18 @@ export const renderProductItem = (product: any, index: number) => {
                                 <span className="mx-2 border-l border-slate-200 dark:border-slate-700 h-4"></span>
                                 <span>{size}</span>
                             </p>
-                            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                                경매 생성 날짜: {createdAt}
-                            </p>
                         </div>
 
+                        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                            낙찰 생성 날짜: {createdAt}
+                        </p>
+
+                        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                            시작 시간: {startedAt}
+                        </p>
+                        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                            종료 시간: {endedAt}
+                        </p>
                         <Prices className="mt-0.5 ml-2" price={price} contentClass="py-2 px-3"/>
                     </div>
                 </div>
@@ -130,7 +149,6 @@ export const renderBidHistory = (bidProductList: any[]) => {
 
 // 낙찰 내역 렌더링
 export const renderAwardHistory = (awardProductList: any[]) => {
-    console.log("awardProductList :입찰내역 ", awardProductList)
     return (
         <div className="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden z-0">
             <div
@@ -143,6 +161,7 @@ export const renderAwardHistory = (awardProductList: any[]) => {
                     <div>
                         <p className="text-lg font-semibold mt-4">낙찰상품 정보</p>
                         {awardProductList.map((product, index) => renderProductItem(product, index))}
+
                     </div>
                 ) : (
                     <p>내역이 없습니다.</p>
