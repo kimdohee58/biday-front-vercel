@@ -5,7 +5,6 @@ import {fetchSizeIdsFromAwards} from "@/service/auction/award.service";
 import {ColorType, ProductDTO} from "@/model/product/product.model";
 import {SizeModel} from "@/model/product/size.model";
 
-// auctionSizeIds를 사용하여 상품 데이터 가져오기
 export const useFetchAuctionProducts = (auctionData: any) => {
     const auctionSizeIds = extractSizeIds(auctionData);
     return useQuery({
@@ -20,7 +19,6 @@ export const useFetchAuctionProducts = (auctionData: any) => {
     });
 };
 
-// bidSizeIds를 사용하여 상품 데이터 가져오기
 export const useFetchBidProducts = () => {
     const bidSizeIds = [0]; // 고정된 값 사용
     return useQuery({
@@ -35,7 +33,6 @@ export const useFetchBidProducts = () => {
     });
 };
 
-// awardSizeIds를 사용하여 상품 데이터 가져오기
 export const useFetchAwardProducts = (awardData: any) => {
     const awardSizeIds = extractSizeIds(awardData);
     return useQuery({
@@ -52,6 +49,8 @@ export const useFetchAwardProducts = (awardData: any) => {
 
 export const useFetchPaymentProducts = (paymentData: any) => {
     const awardIds = extractAwardIdsFromPaymentData(paymentData);
+    console.log("useFetchPaymentProducts :",paymentData)
+    console.log("extractAwardIdsFromPaymentData :",awardIds)
     return useQuery({
         queryKey: ["paymentSizeIds", awardIds],
         queryFn: async () => {

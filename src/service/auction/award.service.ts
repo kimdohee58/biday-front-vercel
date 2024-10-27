@@ -64,7 +64,6 @@ export async function findByUserAward(): Promise<AwardModel[]> {
 // awardIds 배열을 기반으로 각 awardId로 fetchAwardOne을 호출해 sizeId를 추출하는 함수
 export async function fetchSizeIdsFromAwards(awardIds: number[]): Promise<number[]> {
 
-
     const userToken = Cookies.get("userToken");
     if (!userToken) {
         throw new Error("쿠키 접근 불가");

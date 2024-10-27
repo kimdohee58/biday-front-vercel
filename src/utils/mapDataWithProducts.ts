@@ -13,24 +13,41 @@ export const mapDataWithAuctionModel = (
     data: { content: AuctionModel[] },
     productList: ProductModel[]
 ): (AuctionModel & { product: ProductModel | null })[] => {
-    if (!data || !productList || !Array.isArray(data.content)) {
+    console.log("🔍 mapDataWithAuctionModel 함수 호출됨");
+    console.log("📄 data:", data);
+    console.log("📄 productList:", productList);
+
+    // data.content의 타입이 불확실할 때 안전하게 처리
+    const dataArray: AuctionModel[] =
+        Array.isArray(data?.content)
+            ? data.content
+            : Array.isArray((data?.content as { content?: AuctionModel[] })?.content)
+                ? (data?.content as { content: AuctionModel[] }).content
+                : [];
+
+    // dataArray와 productList의 유효성 확인
+    if (!dataArray || dataArray.length === 0 || !productList || productList.length === 0) {
+        console.log("❌ 데이터 또는 제품 목록이 잘못되었습니다.");
         return [];
     }
 
-    const dataArray = data.content; // content 배열을 사용
+
+    console.log("🟢 mapDataWithAuctionModel dataArray:", dataArray);
+    console.log("🟢 mapDataWithAuctionModel productList:", productList);
 
     return dataArray.map((item: AuctionModel) => {
         const matchedProduct = productList.find(
             (product: ProductModel) => product.id === (item as any).sizeId || (item as any).size
         );
+        console.log("🔵 현재 처리 중인 item:", item);
+        console.log("🔵 item의 sizeId:", item.size);
+        console.log("🔵 매칭된 product:", matchedProduct);
 
-        // AuctionModel과 ProductModel을 하나의 객체로 반환
         const combinedObject = {
-            ...item,           // AuctionModel 데이터를 포함
-            product: matchedProduct || null, // 매칭된 ProductModel 데이터를 추가
+            ...item,
+            product: matchedProduct || null,
         };
 
-        // 객체가 결합되었는지 확인하기 위한 콘솔 출력
         console.log("🎯 경매 최종 결합된 객체:", combinedObject);
 
         return combinedObject;
@@ -43,31 +60,36 @@ export const mapDataWithAwardModel = (
     productList: ProductModel[]
 ): (AwardModel & { product: ProductModel | null })[] => {
     if (!data || !productList || !Array.isArray(data.content)) {
+        //console.log("데이터 또는 제품 목록이 잘못되었습니다.");
         return [];
     }
 
-    const dataArray = data.content; // content 배열을 사용
+    //console.log("🟢 mapDataWithAwardModel dataArray:", data.content);
+    //console.log("🟢 mapDataWithAwardModel productList:", productList);
+
+    const dataArray = data.content;
 
     return dataArray.map((item: AwardModel) => {
-
-        // award 데이터의 auction 객체 안에 sizeId가 있음
         const sizeId = item.auction?.sizeId;
+        //console.log("🔵 현재 Award 아이템:", item);
+        //console.log("🔵 Award의 sizeId:", sizeId);
 
         if (!sizeId) {
-            return { ...item, product: null }; // sizeId가 없을 경우 처리
+            //console.log("🔴 sizeId가 없습니다. 이 아이템은 매칭되지 않습니다.");
+            return { ...item, product: null };
         }
 
         const matchedProduct = productList.find(
             (product: ProductModel) => product.id === sizeId
         );
 
-        // AwardModel과 ProductModel을 결합한 객체
+        //console.log("🔵 매칭된 제품:", matchedProduct);
+
         const combinedObject = {
             ...item,
             product: matchedProduct ? matchedProduct : null,
         };
 
-        // 결합된 객체를 확인하기 위한 콘솔 출력
         console.log("🎯 최종 결합된 Award 객체:", combinedObject);
 
         return combinedObject;
@@ -77,41 +99,43 @@ export const mapDataWithAwardModel = (
 
 
 export const mapDataWithPaymentModel = async (
-    paymentData: PaymentRequestModel[], // PaymentRequestModel 배열
-    productList: ProductDTO[] // ProductModel 리스트
+    paymentData: PaymentRequestModel[],
+    productList: ProductDTO[]
 ): Promise<PaymentRequestModel[]> => {
     if (!paymentData || !productList) {
+        //console.log("결제 데이터 또는 제품 목록이 잘못되었습니다.");
         return [];
     }
 
-    // 유틸 함수 호출하여 awardIds 추출
+    //console.log("🟢 paymentData:", paymentData);
+    //console.log("🟢 productList:", productList);
+
     const awardIds = extractAwardIdsFromPaymentData(paymentData);
+   // console.log("🔵 추출된 awardIds:", awardIds);
 
-    // fetchSizeIdsFromAwards API를 통해 sizeIds 추출
     const paymentSizeIds = await fetchSizeIdsFromAwards(awardIds);
+   // console.log("🔵 추출된 paymentSizeIds:", paymentSizeIds);
 
-    // paymentData 배열을 순회하며 sizeId와 product를 매칭
     return paymentData.map((payment, index) => {
-
-        // awardIds와 paymentSizeIds가 동일한 인덱스를 기준으로 매칭된다고 가정
         const sizeId = awardIds.includes(payment.awardId) ? paymentSizeIds[index] : undefined;
+        //console.log("🔵 매칭된 sizeId:", sizeId);
 
         if (!sizeId) {
-            return { ...payment, product: null }; // sizeId가 없을 경우 처리
+            //console.log("🔴 sizeId가 없습니다. 이 결제는 매칭되지 않습니다.");
+            return { ...payment, product: null };
         }
 
-        // productList에서 sizeId와 매칭되는 product 찾기
         const matchedProduct = productList.find(
             (product: ProductDTO) => product.id === sizeId
         );
+        //console.log("🔵 매칭된 제품:", matchedProduct);
 
-        // PaymentRequestModel과 ProductModel을 결합한 객체
+
         const combinedObject = {
             ...payment,
-            product: matchedProduct ? matchedProduct : null, // 매칭된 product 추가
+            product: matchedProduct ? matchedProduct : null,
         };
 
-        // 결합된 객체를 확인하기 위한 콘솔 출력
         console.log("🎯 최종 결합된 Payment 객체:", combinedObject);
 
         return combinedObject;
