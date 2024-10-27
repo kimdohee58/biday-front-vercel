@@ -9,7 +9,6 @@ import NcImage from "@/shared/NcImage/NcImage";
 import {ColorType, ProductModel} from "@/model/product/product.model";
 import {getColorsByTypes} from "@/utils/productUtils";
 import {ImageModel} from "@/model/ftp/image.model";
-import WishDeleteButton from "@/components/WishDeleteButton";
 
 export interface ProductCardProps {
     className?: string;
