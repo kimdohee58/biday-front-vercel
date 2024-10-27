@@ -132,7 +132,7 @@ export async function fetchProductOne(productId: string): Promise<ProductModel> 
 }
 
 // 상품 (색상 포함) 들을 이미지와 함께 불러오는 함수
-export async function fetchProductWithImages(productId: number): Promise<ProductWithImageModel[]> {
+export async function fetchProductsWithImages(productId: number): Promise<ProductWithImageModel[]> {
     try {
 
         const products = await fetchProduct(productId);
@@ -157,6 +157,14 @@ export async function fetchProductWithImages(productId: number): Promise<Product
     } catch (error) {
         console.error("fetchProductWithImages 중 오류 발생");
         throw new Error();
+    }
+}
+
+export async function fetchProductWithImage(productId: number) {
+    try {
+
+    } catch (error) {
+
     }
 }
 
@@ -199,7 +207,7 @@ export async function fetchProductDetails(id: number): Promise<{
             }
         };
 
-        const productWithImagesArray = await fetchProductWithImages(id);
+        const productWithImagesArray = await fetchProductsWithImages(id);
         const product = productWithImagesArray.find((item) => item.product.id === id);
         if (product === undefined) {
             throw new Error(`해당 product를 찾을 수 없습니다. id: ${id}`);

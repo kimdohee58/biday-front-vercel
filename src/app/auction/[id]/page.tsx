@@ -302,6 +302,7 @@ export default function AuctionDetailPage() {
                     <h2 className="text-2xl md:text-3xl font-semibold">
                         {product.isLoading ? "Loading..." : product.data!!.name}
                     </h2>
+                    {/* subName */}
                     <div className="flex items-center mt-4 sm:mt-5">
                         <a
                             href="#reviews"
