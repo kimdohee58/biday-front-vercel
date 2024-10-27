@@ -300,7 +300,7 @@ export default function AuctionDetailPage() {
             <div className="listingSection__wrap !space-y-6">
                 <div>
                     <h2 className="text-2xl md:text-3xl font-semibold">
-                        {product.isLoading? "Loading..." : product.data!!.name}
+                        {product.isLoading ? "Loading..." : product.data!!.name}
                     </h2>
                     <div className="flex items-center mt-4 sm:mt-5">
                         <a
@@ -322,7 +322,8 @@ export default function AuctionDetailPage() {
                         {renderStatus()}
                     </div>
                 </div>
-                <div className="block lg:hidden">{renderSectionSidebar()}</div>
+                <div className="block lg:hidden">
+                    {renderSectionSidebar()}</div>
 
                 <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
 
@@ -445,10 +446,11 @@ export default function AuctionDetailPage() {
 
                 {/* SIDEBAR */}
                 <div className="flex-grow">
-                    <div className="mb-4">
-                        <Timer endedTime={auction?.endedAt ? new Date(auction.endedAt).toISOString() : "2024-01-01T00:00:00.000Z"}/>
-                    </div>
                     <div className="hidden lg:block sticky top-28">
+                        <div className="mb-4">
+                            <Timer
+                                endedTime={auction?.endedAt ? new Date(auction.endedAt).toISOString() : "2024-01-01T00:00:00.000Z"}/>
+                        </div>
                         {renderSectionSidebar()}
                     </div>
                 </div>
