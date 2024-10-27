@@ -79,7 +79,7 @@ export default function PageClient({products}: ClientComponentProps) {
     const {data: wishList, isLoading: isWishLoading, isError} = useWishlist();
 
     useEffect(() => {
-        if (wishList && !isWishLoading && !isError) {
+        if (wishList && wishList.length > 0 && !isWishLoading && !isError) {
             wishList.forEach((wish) => {
                 dispatch(updateIsLiked(wish.product.id));
             })
