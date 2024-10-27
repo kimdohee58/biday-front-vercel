@@ -15,7 +15,6 @@ if (userRole === Role.ADMIN) {
     console.log("판매자")
 }*/
 
-//src/model/enum/userToken.ts
 import {UserRole} from "@/model/user/user.model";
 
 export interface UserToken {

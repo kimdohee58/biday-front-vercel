@@ -57,7 +57,6 @@ export async function insertUser(user: UserModel): Promise<any> {
     };
     try {
         const data = await apiRequest("/join", "POST", body);
-        console.log("시발 좆같다 : " , data)
         return {...data, status: true};
     } catch (error) {
         console.error('Error inserting user:', error);
@@ -110,7 +109,6 @@ export const logoutUser = async (): Promise<void> => {
 export async function checkEmailDuplication(email: string): Promise<boolean> {
     try {
         const data = await apiRequest("/validate", "POST", {email});
-        console.log("중복확인 좆같다 : " , data)
         return data;
     } catch (error) {
         throw error;
@@ -121,7 +119,6 @@ export async function checkEmailDuplication(email: string): Promise<boolean> {
 export async function checkPhoneDuplication(phoneNum: string): Promise<boolean> {
     try {
         const data = await apiRequest("/phoneNum", "POST", {phoneNum});
-        console.log("중복확인 핸드폰 좆같다 : " , data)
         return data;
     } catch (error) {
         throw error;

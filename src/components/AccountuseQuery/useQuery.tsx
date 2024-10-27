@@ -2,8 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchProductBySizeId } from "@/service/product/product.service";
 import {extractAwardIdsFromPaymentData, extractSizeIds} from "@/utils/extract";
 import {fetchSizeIdsFromAwards} from "@/service/auction/award.service";
-import {ColorType, ProductDTO, ProductModel} from "@/model/product/product.model";
-import {SizeModel} from "@/model/product/size.model"; // sizeId 추출 유틸리티 함수 가져오기
+import {ColorType, ProductDTO} from "@/model/product/product.model";
+import {SizeModel} from "@/model/product/size.model";
 
 // auctionSizeIds를 사용하여 상품 데이터 가져오기
 export const useFetchAuctionProducts = (auctionData: any) => {

@@ -28,16 +28,16 @@ const userSlice = createSlice({
     reducers: {
         saveUser: (state, action: PayloadAction<{ user: UserModel, token: string }>) => {
             console.log("유저슬라이스 유저정보 리덕스에 저장 : " , saveUser)
-            state.user = action.payload.user;  // 유저 정보 저장
-            state.token = action.payload.token;  // 토큰 저장
+            state.user = action.payload.user;
+            state.token = action.payload.token;
         },
         saveUserToken: (state, action: PayloadAction<{userInfo:UserToken}>) => {
             state.userInfo = action.payload.userInfo;
         },
         clearUser: (state) => {
-            state.user = initialUser;  // 유저 정보 초기화
-            state.token = null;  // 토큰 초기화
-            state.userInfo = initialUserToken; // 유저토큰초기화
+            state.user = initialUser;
+            state.token = null;
+            state.userInfo = initialUserToken;
         },
         addAddress: (state, action: PayloadAction<AddressModel>) => {
             // 주소 배열에 새 주소 추가

@@ -121,7 +121,7 @@ export default function PageSearch() {
                             ))
                         ) : (
                             <>
-                                <p className="text-lg text-red-500 text-center mb-4">"{keyword}"를 포함한 상품이 없습니다.</p>
+                                <p className="text-lg text-red-500 text-center mb-4">{keyword}를 포함한 상품이 없습니다.</p>
                                 <h2 className="text-lg font-bold text-center mb-4">추천 상품</h2>
                                 {products.length > 0 ? (
                                     products.slice(0, 20).map((item) => (
