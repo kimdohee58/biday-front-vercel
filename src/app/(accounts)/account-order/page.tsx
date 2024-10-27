@@ -39,7 +39,7 @@ const AccountOrder = () => {
 
     console.log("paymentProductList 페이지에서 확인 하는 코드:",paymentProductList)
     console.log("paymentData 페이지에서 확인 하는 코드:",paymentData)
-
+    console.log("awardProductList",awardProductList)
 
     useEffect(() => {
         const fetchMappedPaymentData = async () => {

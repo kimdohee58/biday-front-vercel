@@ -112,7 +112,7 @@ export const renderBidHistory = (bidProductList: any[]) => {
 
 // 낙찰 내역 렌더링
 export const renderAwardHistory = (awardProductList: any[]) => {
-
+    console.log("awardProductList :입찰내역 ", awardProductList)
     return (
         <div className="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden z-0">
             <div
