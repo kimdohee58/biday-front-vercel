@@ -6,6 +6,5 @@ export const extractSizeIds = (data: any) => {
 };
 
 export const extractAwardIdsFromPaymentData = (paymentData: any[]) => {
-    console.log("extractAwardIdsFromPaymentData :",paymentData)
     return paymentData.map((payment) => payment.awardId);
 };

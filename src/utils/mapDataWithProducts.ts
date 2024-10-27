@@ -42,7 +42,6 @@ export const mapDataWithAuctionModel = (
     });
 };
 
-
 export const mapDataWithAwardModel = (
     data: { content: AwardModel[] },
     productList: ProductModel[]
@@ -55,7 +54,6 @@ export const mapDataWithAwardModel = (
                 ? (data.content as { content: AwardModel[] }).content
                 : [];
 
-    // 데이터 배열과 제품 목록이 유효한지 확인
     if (!dataArray || dataArray.length === 0 || !productList || productList.length === 0) {
         return [];
     }
@@ -73,7 +71,7 @@ export const mapDataWithAwardModel = (
             (product: ProductModel) => product.id === sizeId
         );
 
-        console.log("🔵 매칭된 제품:", matchedProduct);
+       // console.log("🔵 매칭된 제품:", matchedProduct);
 
         const combinedObject = {
             ...item,
