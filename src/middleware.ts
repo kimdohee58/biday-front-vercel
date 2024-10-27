@@ -26,7 +26,7 @@ export async function middleware(req: NextRequest) {
     if (token) {
         const timeRemaining = getTokenRemainingTime(token);
 
-        if (timeRemaining !== null && timeRemaining <= 580) { // 남은 시간이 5분 이하일 때
+        if (timeRemaining !== null && timeRemaining <= 10) { // 남은 시간이 5분 이하일 때
             console.log("토큰 만료 임박, 재발급 요청");
 
             // 토큰 재발급 요청 수행
@@ -71,5 +71,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-    matcher: [], // 미들웨어 적용 경로
+    matcher: ['/blog'], // 미들웨어 적용 경로
 };

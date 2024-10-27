@@ -39,6 +39,8 @@ const ProductCard: FC<ProductCardProps> = ({
 
     const [showModalQuickView, setShowModalQuickView] = useState(false);
     const router = useRouter();
+    const status: "New in" | "Limited edition" | "Sold Out" | "50% Discount" | undefined =
+        data.category === 'some-category' ? "New in" : undefined; // 이걸 하니깐 컴파일 에러 해결
 
     const imageSrc = image || "/—Pngtree—loading icon vector_6629917.png"; // 기본 이미지 설정
 
