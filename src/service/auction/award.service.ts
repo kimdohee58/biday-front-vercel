@@ -63,7 +63,7 @@ export async function findByUserAward(): Promise<AwardModel[]> {
 
 // awardIds 배열을 기반으로 각 awardId로 fetchAwardOne을 호출해 sizeId를 추출하는 함수
 export async function fetchSizeIdsFromAwards(awardIds: number[]): Promise<number[]> {
-
+    console.log("📌 fetchSizeIdsFromAwards 내부 awardIds:", awardIds);
     const userToken = Cookies.get("userToken");
     if (!userToken) {
         throw new Error("쿠키 접근 불가");
@@ -71,21 +71,21 @@ export async function fetchSizeIdsFromAwards(awardIds: number[]): Promise<number
     }
 
     try {
-        // Promise.all을 사용하여 모든 awardId에 대해 fetchAwardOne 호출
         const awards = await Promise.all(
             awardIds.map(async (awardId) => {
                 const options = {
-                    params: { awardId },  // 개별 awardId를 전달
+                    params: {awardId},  // 개별 awardId를 전달
                     userToken: userToken,
                 };
+                console.log(`🟢 Award ID: ${awardId}, Fetch Result:`);
+                console.log("🟢 Award API 응답:", options);
+                return await awardAPI.findById(options);
 
-                // 각 awardId에 대해 fetchAwardOne 호출
-                return await awardAPI.findById(options);  // 반환된 award 데이터 반환
             })
         );
 
-        const sizeIds = awards.map((award) => award?.auction?.sizeId).filter((sizeId) => sizeId !== undefined);
-
+        const sizeIds = awards.map(award => award.auction.sizeId);
+        console.log("🟢 추출된 sizeIds:", sizeIds);
         return sizeIds
     } catch (error) {
         console.error("sizeId를 추출하는 도중 오류 발생: ", error);

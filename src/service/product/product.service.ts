@@ -134,7 +134,6 @@ export async function fetchProductOne(productId: string): Promise<ProductModel> 
 // 상품 (색상 포함) 들을 이미지와 함께 불러오는 함수
 export async function fetchProductWithImages(productId: number): Promise<ProductWithImageModel[]> {
     try {
-
         const products = await fetchProduct(productId);
 
         console.log("products", products);

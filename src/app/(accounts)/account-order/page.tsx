@@ -20,6 +20,8 @@ import {
     mapDataWithPaymentModel
 } from "@/utils/mapDataWithProducts";
 import {PaymentRequestModel} from "@/model/order/payment.model";
+import {AuctionModel} from "@/model/auction/auction.model";
+import {AwardModel} from "@/model/auction/award.model";
 
 const AccountOrder = () => {
     const [activeTab, setActiveTab] = useState("auction");
@@ -37,14 +39,29 @@ const AccountOrder = () => {
     const { data: awardProductList } = useFetchAwardProducts(awardData);
     const { data: paymentProductList } = useFetchPaymentProducts(paymentData);
 
-    console.log("paymentProductList 페이지에서 확인 하는 코드:",paymentProductList)
-    console.log("paymentData 페이지에서 확인 하는 코드:",paymentData)
-    console.log("awardProductList",awardProductList)
+    console.log("🩷🩷🩷🩷🩷🩷🩷ㅍpaymentProductList : 사이즈 확인하는 코드  :",paymentProductList)
+    console.log("🩷🩷🩷🩷🩷🩷🩷paymentData : 사이즈 확인하는 코드  :",paymentData)
+    const hasContent = (data: any): data is { content: AuctionModel[] } => {
+        return data && Array.isArray(data.content);
+    };
+
+    const auctionContent = hasContent(auctionData) ? auctionData.content : auctionData as AuctionModel[];
+
+    const hasAwardContent = (data: any): data is { content: AwardModel[] } => {
+        return data && Array.isArray(data.content) && data.content.length > 0 && 'userId' in data.content[0];
+    };
+
+    const awardContent = hasAwardContent(awardData) ? awardData.content : (awardData as AwardModel[]);
+
 
     useEffect(() => {
         const fetchMappedPaymentData = async () => {
             if (paymentData && paymentProductList) {
+
+                console.log("🔍 매핑 전 paymentData:", paymentData);
+                console.log("🔍 매핑 전 paymentProductList:", paymentProductList);
                 const mappedData = await mapDataWithPaymentModel(paymentData, paymentProductList);
+                console.log("🔍 매핑 후 mappedPaymentData:", mappedData);
                 setMappedPaymentData(mappedData);
             }
         };
@@ -98,7 +115,7 @@ const AccountOrder = () => {
                         {activeTab === "auction" && (
                             <>
                                 <div className="mb-8">
-                                    {renderAuctionHistory(mapDataWithAuctionModel({content: auctionData}, auctionProductList!!))}
+                                    {renderAuctionHistory(mapDataWithAuctionModel(auctionContent, auctionProductList!!))}
                                 </div>
                                 <div className="mb-8">
                                     {renderBidHistory(bidProductList!!)}
@@ -108,7 +125,7 @@ const AccountOrder = () => {
                         {activeTab === "award" && (
                             <>
                                 <div className="mb-8">
-                                    {renderAwardHistory(mapDataWithAwardModel({content: awardData}, awardProductList!!))}
+                                    {renderAwardHistory(mapDataWithAwardModel(awardContent, awardProductList!!))}
                                 </div>
                                 <div className="mb-8">
                                     {renderPaymentHistory(mappedPaymentData)}
