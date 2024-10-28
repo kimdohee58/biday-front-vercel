@@ -223,7 +223,7 @@ export default function CartDropdownDohee() {// const wishes = useQuery({queryKe
                                 className="overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 dark:ring-white/10">
                                 <div className="relative bg-white dark:bg-neutral-800">
                                     <div className="max-h-[60vh] p-5 overflow-y-auto hiddenScrollbar">
-                                        <h3 className="text-xl font-semibold">Award Cart</h3>
+                                        <h3 className="text-xl font-semibold mr-4">Award Cart</h3>
                                         <div className="divide-y divide-slate-100 dark:divide-slate-700">
                                             {loading ? (
                                                 <div className="flex justify-center items-center py-5">
@@ -232,7 +232,7 @@ export default function CartDropdownDohee() {// const wishes = useQuery({queryKe
                                             ) : filteredAwardProductList?.length > 0 ? (
                                                 filteredAwardProductList.map((item, index) => renderProduct(item, index, close))
                                             ) : (
-                                                <p className="text-center">결제 대기 중인 상품이 없습니다.</p>
+                                                <p className="text-center m-9 text-lg">결제 대기 중인 상품이 없습니다.</p>
                                             )}
                                             {/*/!*{renderAwardHistory(mapDataWithAwardModel({content: awardData}, awardProductList!!))}*!/*/}
                                             {/*{mapDataWithAwardModel({content: awardData}, filteredAwardProductList!!).map(*/}
@@ -248,7 +248,7 @@ export default function CartDropdownDohee() {// const wishes = useQuery({queryKe
                           Shipping and taxes calculated at checkout.
                         </span>
                       </span>
-                                            <span className="">₩{totalBid.toFixed(2)}</span>
+                                            <span className="">₩{totalBid.toLocaleString()}</span>
                                         </p>
                                         <div className="flex space-x-2 mt-5">
                                             <ButtonSecondary
