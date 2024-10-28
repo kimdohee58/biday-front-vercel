@@ -7,48 +7,59 @@ interface HighestBidProps {
     auctionId: string;
     onDataUpdate: (data: { highestBid: number; adjustBid: number }) => void
 }
-export default function HighestBid ({auctionId, onDataUpdate}: HighestBidProps)  {
+
+export default function HighestBid({auctionId, onDataUpdate}: HighestBidProps) {
     const eventSourceRef = useRef<EventSource | null>(null);
 
 
     useEffect(() => {
-        if (!eventSourceRef.current) {
-            const url = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/bids/stream?auctionId=${auctionId}`;
-            eventSourceRef.current = new EventSource(url);
 
-            eventSourceRef.current.addEventListener("message", (event: MessageEvent) => {
-                try {
-                    const bidStream: BidStreamModel = JSON.parse(event.data);
-                    const newHighestBid = bidStream.currentBid;
-                    const newAdjustBid = newHighestBid + 4000;
+        if (eventSourceRef.current) {
+            console.log("기존 연결 아직 열려있음");
+            eventSourceRef.current.close();
+        }
 
-                    onDataUpdate({highestBid: newHighestBid, adjustBid: newAdjustBid});
-                } catch (error) {
-                    console.error("SSE 데이터 파싱 중 오류 발생", error);
-                }
-            });
+        if (eventSourceRef.current && eventSourceRef.current.readyState !== EventSource.CLOSED) {
+            console.log("기존 연결이 아직 열려 있습니다.");
+        }
 
-            eventSourceRef.current.addEventListener("open", () => {
-                console.log("SSE 연결 완료");
-            });
 
-            eventSourceRef.current.addEventListener("error", () => {
-                console.error("SSE 오류 발생");
-                if (eventSourceRef.current && eventSourceRef.current.readyState === EventSource.CLOSED) {
-                    console.log("SSE 연결 종료");
-                    eventSourceRef.current = null;
-                }
-            } )
+        const url = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/bids/stream?auctionId=${auctionId}`;
+        eventSourceRef.current = new EventSource(url);
 
-            return () => {
-                if (eventSourceRef.current) {
-                    eventSourceRef.current.close();
-                    eventSourceRef.current = null;
-                }
+        eventSourceRef.current.addEventListener("message", (event: MessageEvent) => {
+            try {
+                const bidStream: BidStreamModel = JSON.parse(event.data);
+                const newHighestBid = bidStream.currentBid;
+                const newAdjustBid = newHighestBid + 4000;
+
+                onDataUpdate({highestBid: newHighestBid, adjustBid: newAdjustBid});
+            } catch (error) {
+                console.error("SSE 데이터 파싱 중 오류 발생", error);
+            }
+        });
+
+        eventSourceRef.current.addEventListener("open", () => {
+            console.log("SSE 연결 완료");
+        });
+
+        eventSourceRef.current.addEventListener("error", () => {
+            console.error("SSE 오류 발생");
+            if (eventSourceRef.current && eventSourceRef.current.readyState === EventSource.CLOSED) {
+                console.log("SSE 연결 종료");
+                eventSourceRef.current = null;
+            }
+        })
+
+        return () => {
+            if (eventSourceRef.current) {
+                eventSourceRef.current.close();
+                eventSourceRef.current = null;
             }
         }
 
-    }, [auctionId, onDataUpdate]);
+
+    }, [auctionId]);
 
     return null;
 }

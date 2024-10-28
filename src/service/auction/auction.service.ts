@@ -95,7 +95,7 @@ export async function deleteAuction(id: number) {
     }
 }
 
-export async function fetchAuctionsBySize(sizeId: number) {
+export async function fetchAuctionsBySize(sizeId: number): Promise<AuctionModel[]> {
     try {
         const options = {
             params: {sizeId: sizeId},
@@ -103,12 +103,13 @@ export async function fetchAuctionsBySize(sizeId: number) {
 
         const result = await auctionAPI.findAllBySize(options);
 
-        if (typeof result === "undefined") return [];
+        if (typeof result === "undefined") return [] as AuctionModel[];
 
         return result;
 
     } catch (error) {
         console.error("fetchAuctionBySize 도중 오류 발생", error);
+        throw new Error("");
     }
 }
 
