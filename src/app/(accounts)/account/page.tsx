@@ -9,14 +9,12 @@ import {initialUser} from "@/model/user/user.model";
 import {AddressModel} from "@/model/user/address.model";
 import {insertAddress} from "@/service/user/address.api";
 import Postcode from "@/components/Postcode";
-import {RadioGroup, Radio, Stack} from "@chakra-ui/react";
 import NcModal from "@/shared/NcModal/NcModal";
 import {fetchAllAddressesByUserId, fetchDeleteAddress, fetchPickAddress} from "@/service/user/address.service";
 import OrderList from "@/components/OrderList";
 import {getAddresses} from "@/lib/features/user.slice";
 import {saveUserTokenToCookie} from "@/utils/cookie/cookie.api";
 
-// 주소 유형 매핑 함수
 const mapAddressType = (type: string) => {
     switch (type) {
         case "HOME":
@@ -37,55 +35,51 @@ export default function AccountPage() {
     const [addressType, setAddressType] = useState<string>("home");
     const [zipcode, setZipcode] = useState<string>("");
     const [showDropdown, setShowDropdown] = useState(false);
-    const [addresses, setAddresses] = useState<AddressModel[]>([]); // 주소 목록 상태 관리
-    const [error, setError] = useState<string | null>(null); // 에러 상태 관리
-
+    const [addresses, setAddresses] = useState<AddressModel[]>([]);
+    const [error, setError] = useState<string | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const address = useSelector(getAddresses);
-
-    saveUserTokenToCookie(userToken); // 유저인포 === 유저토큰
+    saveUserTokenToCookie(userToken);
 
     const [formData, setFormData] = useState({
         addressId: "",
         selectedAddress: "",
         addressDetail: "",
         zipcode: "",
-        addressType: "",  // 기본 주소 유형
+        addressType: "",
     });
    
-    const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
 
-    // 주소 검색 완료 후 처리하는 함수
     const handleAddressComplete = (data: any) => {
         setFormData({
             ...formData,
             selectedAddress: data.address,
             zipcode: data.zonecode,
         });
-        setIsModalOpen(false); // 주소 검색 완료 후 모달 닫기
+        setIsModalOpen(false);
     };
 
-    // 주소 유형 변경 처리
     const handleAddressTypeChange = (value: string) => {
         setFormData({...formData, addressType: value});
     };
 
-    // 주소 추가 처리 함수
     const handleUpdate = async () => {
         const newAddress: AddressModel = {
             id: "",
-            userId: user.id || "",  // Redux에서 유저 ID 가져오기
+            userId: user.id || "",
             streetAddress: formData.selectedAddress || "",
             detailAddress: formData.addressDetail || "",
             zipcode: formData.zipcode || "",
             type: formData.addressType,
             pick: false,
-            email: user.email || "",  // Redux에서 유저 이메일 가져오기
+            email: user.email || "",
         };
 
         try {
             if (userToken) {
-                await insertAddress(userToken, newAddress); // 주소 추가 API 호출
+                await insertAddress(userToken, newAddress);
                 alert("주소가 성공적으로 추가되었습니다.");
+                setIsModalOpen(false); // 송준한 10월 27일 추가
             } else {
                 alert("유저 토큰이 없습니다.");
             }
@@ -95,36 +89,34 @@ export default function AccountPage() {
         }
     };
 
-    // 주소 선택 시 pick 값 업데이트
     const handlePickAddress = async (addressId: string) => {
         try {
-            await fetchPickAddress(addressId); // pick 업데이트
+            await fetchPickAddress(addressId);
             alert("주소가 기본 설정되었습니다.");
-            loadAddresses(); // 주소 목록을 다시 로드하여 업데이트된 상태 반영
+            loadAddresses();
         } catch (error) {
             console.error("pick 업데이트 중 오류가 발생했습니다:", error);
         }
     };
-    // 주소 삭제 처리 함수
+
     const handleDeleteAddress = async (addressId: string) => {
         try {
-            await fetchDeleteAddress(addressId); // deleteAddress API 호출
+            await fetchDeleteAddress(addressId);
             alert("주소가 삭제되었습니다.");
-            loadAddresses(); // 삭제 후 주소 목록 업데이트
+            loadAddresses();
         } catch (error) {
             console.error("주소 삭제 중 오류가 발생했습니다:", error);
             alert("주소 삭제 중 오류가 발생했습니다.");
         }
     };
-    // 주소 목록 로드
+
     const loadAddresses = async () => {
         try {
             const addressList = await fetchAllAddressesByUserId();
-            // pick = true인 주소가 최상단에 오도록 정렬
-            const sortedAddresses = addressList.sort((a, b) => (a.pick === b.pick) ? 0 : a.pick ? -1 : 1);
-            setAddresses(sortedAddresses); // 주소 목록 설정
 
-            // 기본 주소(pick=true) 설정
+            const sortedAddresses = addressList.sort((a, b) => (a.pick === b.pick) ? 0 : a.pick ? -1 : 1);
+            setAddresses(sortedAddresses);
+
             if (sortedAddresses.length > 0) {
                 const defaultAddress = sortedAddresses[0];
                 setAddressId(defaultAddress.id);
@@ -139,7 +131,6 @@ export default function AccountPage() {
         }
     };
 
-    // useEffect로 주소 목록 로드
     useEffect(() => {
          loadAddresses();
     }, []);
@@ -301,65 +292,19 @@ export default function AccountPage() {
                                         </div>
 
                                         {/* 주소 유형 선택 */}
+                                        {/* 주소 유형 선택 */}
                                         <div>
                                             <Label>주소 유형</Label>
-                                            <RadioGroup value={formData.addressType} onChange={handleAddressTypeChange}>
-                                                <Stack spacing={4}>
-                                                    <Radio
-                                                        value="HOME"
-                                                        _checked={{
-                                                            bg: "green.500", // 선택 시 배경색
-                                                            color: "white",   // 선택 시 텍스트 색상
-                                                            _before: {
-                                                                content: '"✔"',
-                                                                color: "red",
-                                                                marginRight: "10px"
-                                                            }, // 선택 시 체크 아이콘 추가
-                                                        }}
-                                                        px={4}
-                                                        py={2}
-                                                        borderRadius="md"
-                                                    >
-                                                        집
-                                                    </Radio>
-                                                    <Radio
-                                                        value="WORK"
-                                                        _checked={{
-                                                            bg: "blue.500",
-                                                            color: "white",
-                                                            _before: {
-                                                                content: '"✔"',
-                                                                color: "red",
-                                                                marginRight: "10px"
-                                                            },
-                                                        }}
-                                                        px={4}
-                                                        py={2}
-                                                        borderRadius="md"
-                                                    >
-                                                        회사
-                                                    </Radio>
-                                                    <Radio
-                                                        value="OTHER"
-                                                        _checked={{
-                                                            bg: "purple.500",
-                                                            color: "white",
-                                                            _before: {
-                                                                content: '"✔"',
-                                                                color: "red",
-                                                                marginRight: "10px"
-                                                            },
-                                                        }}
-                                                        px={4}
-                                                        py={2}
-                                                        borderRadius="md"
-                                                    >
-                                                        기본
-                                                    </Radio>
-                                                </Stack>
-                                            </RadioGroup>
+                                            <select
+                                                value={formData.addressType}
+                                                onChange={(e) => handleAddressTypeChange(e.target.value)}
+                                                className="mt-2 px-4 py-2 border rounded-md"
+                                            >
+                                                <option value="HOME">집</option>
+                                                <option value="WORK">회사</option>
+                                                <option value="OTHER">기본</option>
+                                            </select>
                                         </div>
-
 
                                         {/* 업데이트 버튼 */}
                                         <div className="pt-2">

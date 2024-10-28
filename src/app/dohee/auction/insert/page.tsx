@@ -351,16 +351,20 @@ export default function InsertAuction() {
 
     return (
         <div className="max-w-5xl mx-auto pt-14 pb-24 lg:pb-32">
-            <h2 className="text-3xl font-semibold mb-6">경매 등록</h2>
-            <form onSubmit={handleSubmit} className="flex flex-col space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="w-full">
+            <h2 className="text-3xl font-semibold mb-8 text-center">경매 등록</h2>
+            <form onSubmit={handleSubmit} className="flex flex-col space-y-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {/* 왼쪽 열: 상품 */}
+                    <div
+                        className="w-full max-w-lg mx-auto p-8 bg-white rounded-lg shadow-lg mt-4"> {/* 패딩 및 상단 여백 추가 */}
                         <Label className="block text-lg font-bold text-gray-800">상품</Label>
                         <p className="mt-2 text-sm text-gray-600">
                             경매하고자 하는 상품을 선택해주세요.
                         </p>
-                        <ProductSection openModal={openModalProduct} selectedProduct={selectedProduct}
-                                        handleSize={handleSize}/>
+                        <div className="w-full mt-4">
+                            <ProductSection openModal={openModalProduct} selectedProduct={selectedProduct}
+                                            handleSize={handleSize}/>
+                        </div>
                         {isOpen && currentModal === "product" && (
                             <ProductModal onClose={closeModal} productList={productList.data}
                                           onClick={handleSelectProduct}/>
@@ -368,55 +372,77 @@ export default function InsertAuction() {
                         <input type="hidden" name="productId" value={selectedProduct?.product.id}/>
                     </div>
 
-                    <div className="w-full">
-                        <Label className="block text-lg font-bold text-gray-800">경매 기간</Label>
-                        <p className="mt-2 text-sm text-gray-600">
-                            선택한 경매 기간에 따라 경매가 진행됩니다.
-                        </p>
-                        <div className="mt-2 p-4 border rounded-lg shadow-sm">
-                            <div className="max-w-lg mx-auto flex flex-col items-center justify-center space-y-4 text-center">
-                                {durationSelectButton()}
+                    {/* 오른쪽 열: 경매 기간 및 업로드 이미지 */}
+                    <div className="flex flex-col space-y-8">
+                        {/* 경매 기간 */}
+                        <div className="w-full max-w-lg mx-auto p-6 bg-white rounded-lg shadow-lg">
+                            <Label className="block text-lg font-bold text-gray-800">경매 기간</Label>
+                            <p className="mt-2 text-sm text-gray-600">
+                                선택한 경매 기간에 따라 경매가 진행됩니다.
+                            </p>
+                            <div className="mt-4 p-4 border rounded-lg shadow-sm">
+                                <div className="flex flex-col items-center justify-center space-y-4 text-center">
+                                    {durationSelectButton()}
+                                </div>
+                            </div>
+                            <input type="hidden" name="duration"/>
+                        </div>
+
+                        {/* 업로드 이미지 */}
+                        <div className="w-full max-w-lg mx-auto p-6 bg-white rounded-lg shadow-lg">
+                            <Label className="block text-lg font-bold text-gray-800">업로드 이미지</Label>
+                            <p className="mt-2 text-sm text-gray-600">
+                                내가 가진 상품의 사진과 상세 설명을 적어주세요.
+                            </p>
+                            <div className="flex flex-nowrap gap-4 mt-4 justify-center overflow-x-auto">
+                                {files.map((file, index) => (
+                                    <ImageCard key={index} file={file} onClick={() => openModal("image", index)}/>
+                                ))}
+                            </div>
+
+                            {isOpen && currentModal === "image" && (
+                                <ImageModal onClose={closeModal} isOpen={isOpen} onSubmit={handleImageSubmit}
+                                            files={files}/>
+                            )}
+
+                            {/* 설명 추가 */}
+                            <div className="mt-4">
+                                {renderDescription()}
                             </div>
                         </div>
-                        <input type="hidden" name="duration"/>
                     </div>
                 </div>
 
-                <div className="w-full">
-                    <Label className="block text-lg font-bold text-gray-800">업로드 이미지</Label>
-                    <p className="mt-2 text-sm text-gray-600">
-                        내가 가진 상품의 사진과 상세 설명을 적어주세요.
-                    </p>
-                    <div className="flex gap-4 mt-4">
-                        {files.map((file, index) => (
-                            <ImageCard key={index} file={file} onClick={() => openModal("image", index)}/>
-                        ))}
+                {/* 버튼 섹션 */}
+                <div className="flex flex-col items-center mt-4 w-full max-w-lg mx-auto">
+                    {/* 에러 메시지를 위한 빈 공간 확보 */}
+                    <div className={`text-red-500 text-sm font-medium mb-2 ${errorMessage ? 'block' : 'hidden'}`}>
+                        {errorMessage}
                     </div>
-                    {isOpen && currentModal === "image" && (
-                        <ImageModal onClose={closeModal} isOpen={isOpen} onSubmit={handleImageSubmit} files={files}/>
-                    )}
+
+                    <div className="flex justify-center w-full">
+                        <button
+                            type="button"
+                            className="py-3 px-4 rounded-lg text-gray-700 bg-gray-200 font-semibold shadow-md hover:bg-gray-300 transition duration-300 ease-in-out mr-2" // mr-4에서 mr-2로 변경
+                            onClick={() => window.history.back()}
+                        >
+                            뒤로가기
+                        </button>
+
+                        <button
+                            type="submit"
+                            className={`py-3 px-8 rounded-lg text-white font-semibold transition duration-300 ease-in-out shadow-md hover:shadow-lg ${
+                                isFormValid ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'
+                            }`}
+                            disabled={!isFormValid}
+                        >
+                            경매 등록
+                        </button>
+                    </div>
                 </div>
 
-                {renderDescription()}
 
-                <div className="flex justify-end items-center mt-4 w-full">
-                {errorMessage && (
-                        <div className="text-red-500 text-sm font-medium mr-4">
-                            {errorMessage}
-                        </div>
-                    )}
-                    <button
-                        type="submit"
-                        className={`py-3 px-8 rounded-lg text-white font-semibold transition duration-300 ease-in-out shadow-md hover:shadow-lg ${
-                            isFormValid ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'
-                        }`}
-                        disabled={!isFormValid}
-                    >
-                        경매 등록
-                    </button>
-                </div>
             </form>
         </div>
     );
-
 }

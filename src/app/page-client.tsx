@@ -39,7 +39,10 @@ function RandomProductsByCategory({category}: { category: string }) {
         <div className="mt-10">
             <div className="space-y-10 lg:space-y-14">
                 <div className="flex justify-between items-center w-full">
-                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold">{category}</h2>
+                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold">
+                        {/*{category}*/}
+                        {category ? category.charAt(0).toUpperCase() + category.slice(1) : ""}
+                    </h2>
                     <ButtonPrimary onClick={() => handleShowMoreClick(category)}>Show More</ButtonPrimary>
                 </div>
             </div>
@@ -77,7 +80,7 @@ export default function PageClient({products}: ClientComponentProps) {
     const {data: wishList, isLoading: isWishLoading, isError} = useWishlist();
 
     useEffect(() => {
-        if (wishList && !isWishLoading && !isError) {
+        if (wishList && wishList.length > 0 && !isWishLoading && !isError) {
             wishList.forEach((wish) => {
                 dispatch(updateIsLiked(wish.product.id));
             })

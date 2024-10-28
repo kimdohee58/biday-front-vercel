@@ -8,6 +8,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import AvatarDropdown from "@/components/Header/AvatarDropdown";
 import CartDropdown from "@/components/Header/CartDropdown";
+import CartDropdownDohee from "./CartDropdownDohee";
 
 export interface MainNav2LoggedProps {}
 
@@ -91,7 +92,8 @@ const MainNav2LoggedDohee: FC<MainNav2LoggedProps> = () => {
                     </button>
                 )}
                 <AvatarDropdown />
-                <CartDropdown />
+                {/*<CartDropdown />*/}
+                <CartDropdownDohee/>
             </div>
         </div>
     );

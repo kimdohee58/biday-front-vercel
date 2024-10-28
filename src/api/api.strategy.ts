@@ -8,7 +8,6 @@ import {HTTPRequest} from "@/utils/headers";
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | "PATCH" ;
 
 const apiRequest = async (url: string, method: HttpMethod, {params, data, headers, token, userToken, contentType, cache}: RequestOptions<any,any>) => {
-    console.log("strategy 진입");
 
     if (userToken) {
         console.log("token", HTTPRequest(userToken));
@@ -30,7 +29,6 @@ const apiRequest = async (url: string, method: HttpMethod, {params, data, header
 
     };
 
-    console.log("options", options);
 
     let response = await fetchAPI(`${url}${queryString}`, options);
 

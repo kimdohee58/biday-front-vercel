@@ -37,12 +37,9 @@ const AccountOrder = () => {
     const { data: awardProductList } = useFetchAwardProducts(awardData);
     const { data: paymentProductList } = useFetchPaymentProducts(paymentData);
 
-    console.log("auctionProductList : ", auctionProductList)
-    console.log("awardProductList : ", awardProductList)
-    console.log("paymentProductList : ", paymentProductList)
-
-
-
+    console.log("paymentProductList 페이지에서 확인 하는 코드:",paymentProductList)
+    console.log("paymentData 페이지에서 확인 하는 코드:",paymentData)
+    console.log("awardProductList",awardProductList)
 
     useEffect(() => {
         const fetchMappedPaymentData = async () => {
