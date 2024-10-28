@@ -1,5 +1,6 @@
 import {productAPI} from "@/api/product/product.api";
 import {
+    ColorType,
     ProductCardModel,
     ProductDictionary,
     ProductModel,
@@ -200,7 +201,8 @@ export async function fetchProductDetails(productId: string): Promise<{
     colorIds: number[],
     product: ProductWithImageModel,
     size: string[],
-    auctions: AuctionModel[]
+    auctions: AuctionModel[],
+    colors: ColorType[],
     productWithImagesArray: ProductWithImageModel[];
 }> {
     try {
@@ -218,6 +220,7 @@ export async function fetchProductDetails(productId: string): Promise<{
             throw new Error(`해당 product를 찾을 수 없습니다. id: ${productId}`);
         }
         const colorIds = productWithImagesArray.map((item) => item.product.id);
+        const colors = productWithImagesArray.map((item) => item.product.color);
         const sizes = product.product.sizes.map((size) => size.id);
 
         const auctionArray = await Promise.all(sizes.map((size) => {
@@ -228,7 +231,7 @@ export async function fetchProductDetails(productId: string): Promise<{
 
         console.log("auctions", auctions);
 
-        return {colorIds, product, size, auctions, productWithImagesArray};
+        return {colorIds, colors, product, size, auctions, productWithImagesArray};
 
 
     } catch (error) {
