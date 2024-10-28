@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, {useState} from "react";
 import facebookSvg from "@/images/Facebook.svg";
 import twitterSvg from "@/images/Twitter.svg";
 import googleSvg from "@/images/Google.svg";
@@ -8,11 +8,11 @@ import Input from "@/shared/Input/Input";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import Image from "next/image";
 import Link from "next/link";
-import { UserModel } from "@/model/user/user.model";
-import { useRouter } from "next/navigation";
+import {UserModel} from "@/model/user/user.model";
+import {useRouter} from "next/navigation";
 import btnG_official from "@/images/btnG_official.png";
 import useSignInUser from "@/hooks/useSignInUser";
-import { checkEmailDuplication, checkPhoneDuplication } from "@/service/user/user.api";
+import {checkEmailDuplication, checkPhoneDuplication} from "@/service/user/user.api";
 import TermsAgreement from "@/components/dohee/TermsAgreement";
 
 const loginSocials = [
@@ -39,7 +39,14 @@ const loginSocials = [
 ];
 
 export default function PageSignUp() {
-    const { handleSignUp, errorMessage, fieldErrors, fieldSuccess, setFieldError, setFieldSuccessMessage } = useSignInUser();
+    const {
+        handleSignUp,
+        errorMessage,
+        fieldErrors,
+        fieldSuccess,
+        setFieldError,
+        setFieldSuccessMessage
+    } = useSignInUser();
     const router = useRouter();
 
     const [formData, setFormData] = useState<Partial<UserModel & { confirmPassword: string }>>({
@@ -86,7 +93,7 @@ export default function PageSignUp() {
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
 
         let newValue = value;
         if (name === "phoneNum") {
@@ -101,7 +108,7 @@ export default function PageSignUp() {
             }
         }
 
-        setFormData({ ...formData, [name]: newValue });
+        setFormData({...formData, [name]: newValue});
 
         // 각 필드에 대한 유효성 검사 직접 구현
         switch (name) {
