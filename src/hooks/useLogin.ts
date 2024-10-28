@@ -21,7 +21,7 @@ export const useLogin = () => {
             const response = await handleLogin(username, password);
 
             if (response) {
-                const authorizationHeader = response.headers["Authorization"];
+                const authorizationHeader = response.headers["authorization"];
 
                 if (authorizationHeader) {
                     const accessToken = authorizationHeader.split(" ")[1];

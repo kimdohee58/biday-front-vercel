@@ -58,7 +58,7 @@ export const useFetchPaymentProducts = (paymentData: any) => {
         queryFn: async () => {
 
             const paymentSizeIds = await fetchSizeIdsFromAwards(awardIds);
-
+            console.log("paymentSizeIds :",paymentSizeIds)
 
             const productLists = await Promise.all(
                 paymentSizeIds.map(async (sizeId: number) => {

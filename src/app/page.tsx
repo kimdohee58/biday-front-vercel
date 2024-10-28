@@ -13,7 +13,9 @@ export default async function PageHome({params}: {params:{filter:string}}) {
 
     return (
         <div>
-            <PageClient authorizationToken={authorizationToken} products={productWithImagesData}/>
+            <PageClient authorizationToken={authorizationToken}
+                        products={productWithImagesData}
+            />
             <TokenManager/>
         </div>
     );

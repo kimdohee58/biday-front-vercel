@@ -122,7 +122,7 @@ const AccountOrder = () => {
                                     {renderAuctionHistory(mapDataWithAuctionModel(auctionContent, auctionProductList!!))}
                                 </div>
                                 <div className="mb-8">
-                                    {renderBidHistory(bidProductList!!)}
+                                    {renderBidHistory([])}
                                 </div>
                             </>
                         )}
