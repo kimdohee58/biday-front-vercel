@@ -24,7 +24,7 @@ const findByUser = async (options: RequestOptions<findByUserProps,null>): Promis
 
 // 낙찰 상세 조회 (userInfo, awardId: number)
 const findById = async (options: RequestOptions<{awardId: number}, null>): Promise<AwardModel> => {
-    console.log("findById 확인하는 코드 : ", findById )
+    console.log("findById 확인하는 코드 : ", options )
     return await strategy.GET(`${api.award}/findById`, options);
 };
 

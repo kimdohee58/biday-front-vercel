@@ -8,7 +8,6 @@ import {SizeModel} from "@/model/product/size.model";
 
 export const useFetchAuctionProducts = (auctionData: any) => {
     const auctionSizeIds = extractSizeIds(auctionData);
-    console.log("auctionData",auctionData)
     return useQuery({
         queryKey: ["auctionSizeIds", auctionSizeIds],
         queryFn: async () => {
@@ -52,7 +51,7 @@ export const useFetchAwardProducts = (awardData: any) => {
 export const useFetchPaymentProducts = (paymentData: any) => {
     const awardIds = extractAwardIdsFromPaymentData(paymentData);
     console.log("useFetchPaymentProducts :",paymentData)
-    console.log("extractAwardIdsFromPaymentData :",awardIds)
+    console.log("awardIds :",awardIds)
 
     return useQuery({
         queryKey: ["paymentSizeIds", awardIds],

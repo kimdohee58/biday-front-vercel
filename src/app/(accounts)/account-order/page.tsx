@@ -22,6 +22,8 @@ import {
 import {PaymentRequestModel} from "@/model/order/payment.model";
 import {AuctionModel} from "@/model/auction/auction.model";
 import {AwardModel} from "@/model/auction/award.model";
+import {SizeModel} from "@/model/product/size.model";
+import {ColorType, ProductDTO} from "@/model/product/product.model";
 
 const AccountOrder = () => {
     const [activeTab, setActiveTab] = useState("auction");
@@ -39,8 +41,9 @@ const AccountOrder = () => {
     const { data: awardProductList } = useFetchAwardProducts(awardData);
     const { data: paymentProductList } = useFetchPaymentProducts(paymentData);
 
-    console.log("🩷🩷🩷🩷🩷🩷🩷ㅍpaymentProductList : 사이즈 확인하는 코드  :",paymentProductList)
-    console.log("🩷🩷🩷🩷🩷🩷🩷paymentData : 사이즈 확인하는 코드  :",paymentData)
+    console.log("페이먼트프로덕트 리스트 값 확인하는 코드:",paymentProductList)
+    console.log("paymentData 리스트 값 확인하는 코드:",paymentData)
+
     const hasContent = (data: any): data is { content: AuctionModel[] } => {
         return data && Array.isArray(data.content);
     };
@@ -52,6 +55,7 @@ const AccountOrder = () => {
     };
 
     const awardContent = hasAwardContent(awardData) ? awardData.content : (awardData as AwardModel[]);
+
 
 
     useEffect(() => {

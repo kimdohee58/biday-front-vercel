@@ -7,5 +7,6 @@ export const extractSizeIds = (data: any) => {
 };
 
 export const extractAwardIdsFromPaymentData = (paymentData: any[]) => {
+    console.log("extractAwardIdsFromPaymentData에서 호출을 하는 paymentData :",paymentData)
     return paymentData.map((payment) => payment.awardId);
 };

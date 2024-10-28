@@ -96,9 +96,6 @@ export const renderProductItem = (product: any, index: number, type?: string) =>
 
 // 경매 내역 렌더링
 export const renderAuctionHistory = (auctionProductList: any[]) => {
-    console.log("🔍 renderAuctionHistory 호출됨");
-    console.log("🗃️ auctionProductList 데이터:", auctionProductList);
-
     return (
         <div className="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden z-0">
             <div
@@ -170,7 +167,6 @@ export const renderAwardHistory = (awardProductList: any[]) => {
 
 // 결제 내역 렌더링
 export const renderPaymentHistory = (paymentProductList: any[]) => {
-    console.log("🩷🩷🩷🩷🩷🩷🩷🩷renderPaymentHistory  🩷🩷🩷🩷🩷🩷🩷🩷:",paymentProductList)
     return (
         <div className="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden z-0">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center p-4 sm:p-8 bg-slate-50 dark:bg-slate-500/5">

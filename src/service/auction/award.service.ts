@@ -77,10 +77,7 @@ export async function fetchSizeIdsFromAwards(awardIds: number[]): Promise<number
                     params: {awardId},  // 개별 awardId를 전달
                     userToken: userToken,
                 };
-                console.log(`🟢 Award ID: ${awardId}, Fetch Result:`);
-                console.log("🟢 Award API 응답:", options);
                 return await awardAPI.findById(options);
-
             })
         );
 
