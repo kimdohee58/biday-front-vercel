@@ -134,7 +134,6 @@ export async function fetchProductOne(productId: string): Promise<ProductModel> 
 // 상품 (색상 포함) 들을 이미지와 함께 불러오는 함수
 export async function fetchProductWithImages(productId: number): Promise<ProductWithImageModel[]> {
     try {
-
         const products = await fetchProduct(productId);
 
         console.log("products", products);
@@ -191,7 +190,6 @@ export async function fetchProductDetails(id: number): Promise<{
     productWithImagesArray: ProductWithImageModel[];
 }> {
     try {
-        console.log("fetchProductDetails 진입");
 
         const options = {
             params: {
@@ -213,7 +211,6 @@ export async function fetchProductDetails(id: number): Promise<{
         const auctions = auctionArray.flat(Infinity).filter((auction) => auction !== undefined) as unknown as AuctionModel[];
         const size = product.product.sizes.map((size) => size.size);
 
-        console.log("auctions", auctions);
 
         return {colorIds, product, size, auctions, productWithImagesArray};
 
@@ -233,7 +230,6 @@ export async function fetchProductBySizeId(sizeId: number): Promise<SizeModel> {
                 sizeId: sizeId
             }
         };
-        console.log("패치프로덕트바이사이즈아이디 : ", sizeId)
         return await productAPI.findBySizeId(options);
 
     } catch (error) {
