@@ -9,21 +9,24 @@ import NcImage from "@/shared/NcImage/NcImage";
 import {ColorType, ProductModel} from "@/model/product/product.model";
 import {getColorsByTypes} from "@/utils/productUtils";
 import {ImageModel} from "@/model/ftp/image.model";
+import WishDeleteButton from "@/components/WishDeleteButton";
 
 export interface ProductCardProps {
     className?: string;
     product: ProductModel;
     image: ImageModel;
-    isLiked: boolean;
     colors: ColorType[];
+    wishId: number;
+    onDelete: () => void;
 }
 
 const ProductCard: FC<ProductCardProps> = ({
                                                className = "",
                                                product,
                                                image,
-                                               isLiked,
                                                colors,
+                                               wishId,
+                                               onDelete
                                            }) => {
 
     const colorArray = getColorsByTypes(colors);
@@ -116,33 +119,33 @@ const ProductCard: FC<ProductCardProps> = ({
         );
     };
 
-    const HeartIcon = ({className}: { className?: string }) => {
+    const deleteButton = () => {
         return (
-            <div className={className}>
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
-                    <path
-                        d="M12.62 20.81C12.28 20.93 11.72 20.93 11.38 20.81C8.48 19.82 2 15.69 2 8.68998C2 5.59998 4.49 3.09998 7.56 3.09998C9.38 3.09998 10.99 3.97998 12 5.33998C13.01 3.97998 14.63 3.09998 16.44 3.09998C19.51 3.09998 22 5.59998 22 8.68998C22 15.69 15.52 19.82 12.62 20.81Z"
-                        fill="#ef4444"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                    />
-                </svg>
+            <div className={`${className}`}>
+                <div
+                    className={`flex items-center border-2 border-red-500 rounded-lg`}
+                >
+                    <button
+                        className="text-red-500 !leading-none"
+                        onClick={onDelete}
+                    >
+                        삭제
+                    </button>
+                </div>
             </div>
-
         )
-    };
+    }
 
     return (
         <>
             <div
                 className={`nc-ProductCard relative flex flex-col bg-transparent ${className}`}
             >
-                <Link href={`/product/${product.id}`} className="absolute inset-0"></Link>
 
                 <div
                     className="relative flex-shrink-0 bg-slate-50 dark:bg-slate-300 rounded-3xl overflow-hidden z-1 group">
-                    <Link href={`/product/${product.id}`} className="block">
+                    <Link href={`/product/${product.id}`} className="block"
+                          onClick={(event) => event.stopPropagation()}>
                         <NcImage
                             containerClassName="flex aspect-w-11 aspect-h-12 w-full h-0"
                             src={imageSrc}
@@ -152,13 +155,7 @@ const ProductCard: FC<ProductCardProps> = ({
                             alt="product"
                         />
                     </Link>
-                    {/*<ProductStatus status={status}/>*/}
 
-                    <LikeButton
-                        className="absolute top-3 end-3 z-10"
-                        productId={product.id}
-                        liked={isLiked}
-                    />
                     {product.sizes ? renderSizeList() : null}
                 </div>
 
@@ -173,15 +170,12 @@ const ProductCard: FC<ProductCardProps> = ({
                         </p>
                     </div>
 
+
                     <div className="flex justify-between items-end ">
                         <Prices price={product.price}/>
-                        <div className="flex items-center mb-0.5">
-                            <HeartIcon className="w-5 h-5 pb-[1px] text-amber-400"/>
-                            <span className="text-sm ms-1 text-slate-500 dark:text-slate-400">
-                                {product.wishes || 0} wishes
-                            </span>
-                        </div>
+                        {deleteButton()}
                     </div>
+
                 </div>
             </div>
         </>
