@@ -4,7 +4,6 @@ import React, {Suspense, useEffect, useState} from "react";
 import {ClockIcon, NoSymbolIcon, SparklesIcon,} from "@heroicons/react/24/outline";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import NcImage from "@/shared/NcImage/NcImage";
-import {PRODUCTS} from "@/data/data";
 import IconDiscount from "@/components/IconDiscount";
 import BagIcon from "@/components/BagIcon";
 import toast from "react-hot-toast";
@@ -16,13 +15,14 @@ import ListingImageGallery from "@/components/listing-image-gallery/ListingImage
 import {useParams, usePathname, useRouter, useSearchParams} from "next/navigation";
 import {Route} from "next";
 import {useMutation} from "@tanstack/react-query";
-import {ImageModel, ImageType} from "@/model/ftp/image.model";
-import {BidStreamModel} from "@/model/auction/bid.model";
 import Cookies from "js-cookie";
 import {saveBid} from "@/service/auction/bid.service";
-import {Timer} from "@/app/auction/[id]/timer";
+import {Timer} from "@/app/auction/[id]/Timer";
 import {getColor} from "@/utils/productUtils";
 import {useAuctionWithImage, useSuspenseAuctionAndProduct} from "@/hooks/react-query/useAuctionlist";
+import HighestBid from "@/app/auction/[id]/HighestBid";
+import NotifyBid from "@/app/auction/[id]/NotifyBid";
+import LikeSaveBtns from "@/components/LikeSaveBtns";
 
 export default function AuctionDetailPage() {
 
@@ -39,6 +39,11 @@ export default function AuctionDetailPage() {
     const productId = searchParams.get("productId" || "0") as string;
     const router = useRouter();
     const {id} :{id : string }= useParams();
+
+    const handleBidUpdate = ({highestBid, adjustBid}: {highestBid: number, adjustBid: number}) => {
+        setHighestBid(highestBid);
+        setAdjustBid(adjustBid);
+    }
 
     const mutation = useMutation({
         mutationFn: saveBid
@@ -57,57 +62,6 @@ export default function AuctionDetailPage() {
     const { auction, images: auctionImages = [] } = auctionData.data.auction || { auction: null, images: [] };
     const { product, image: productImage, size} = auctionData.data.product;
 
-    // 이미지
-
-
-    const RenderHighestBid = () => {
-        const url = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/bids/stream?auctionId=${Number(id)}`;
-
-        useEffect(() => {
-
-            const eventSource = new EventSource(url);
-
-            eventSource.addEventListener("message", (event: MessageEvent) => {
-                console.log("입찰 데이터 수신 완료, 데이터:", event.data);
-                try {
-                    const bidStream: BidStreamModel = JSON.parse(event.data);
-                    setHighestBid(bidStream.currentBid);
-                    setAdjustBid(bidStream.currentBid + 4000);
-                } catch (error) {
-                    console.error("SSE 데이터 파싱 중 오류 발생", error);
-                }
-            });
-
-            eventSource.addEventListener("open", () => {
-                console.log("SSE 연결 완료");
-            });
-
-            eventSource.addEventListener("error", () => {
-                console.error("SSE 오류 발생");
-                if (eventSource.readyState === EventSource.CLOSED) {
-                    console.log("연결 종료");
-                }
-            });
-
-            return () => {
-                console.log("연결 종료")
-                eventSource.close();
-            };
-
-        }, [id]);
-
-        useEffect(() => {
-            if (highestBid !== undefined) {
-                console.log("최고입찰가 갱신", highestBid);
-            }
-        }, [highestBid]);
-
-        return <div>{highestBid}</div>;
-    }
-
-
-
-    //
     const handleCloseModalImageGallery = () => {
         let params = new URLSearchParams(document.location.search);
         params.delete("modal");
@@ -160,12 +114,16 @@ export default function AuctionDetailPage() {
 
         toast.custom(
             (t) => (
-                <NotifyAddTocart
+                <NotifyBid
                     productImage={productImage.uploadUrl}
                     qualitySelected={qualitySelected}
                     show={t.visible}
                     sizeSelected={size}
                     variantActive={variantActive}
+                    productName={product.name}
+                    price={currentBid}
+                    size={size}
+                    color={getColor(product.name)}
                 />
             ),
             {position: "top-right", id: "nc-product-notify", duration: 3000}
@@ -179,7 +137,7 @@ export default function AuctionDetailPage() {
                     <label htmlFor="">
             <span className="">
               Size:
-              <span className="ml-1 font-semibold"> {auctionData.isLoading || !auction ? "" : auction.size}</span>
+              <span className="ml-1 font-semibold"> {auctionData.data.product.size}</span>
             </span>
                     </label>
                     <a
@@ -245,7 +203,7 @@ export default function AuctionDetailPage() {
                         {/* ---------- 1 HEADING ----------  */}
                         <div className="flex items-center justify-between space-x-5">
                             <div className="flex text-2xl font-semibold">
-                                {RenderHighestBid()}원
+                                {highestBid}원
                             </div>
                             <a
                                 className="flex items-center text-sm font-medium"
@@ -272,7 +230,7 @@ export default function AuctionDetailPage() {
                     <div className="flex space-x-3.5">
                         <div
                             className="flex items-center justify-center bg-slate-100/70 dark:bg-slate-800/70 px-2 py-3 sm:p-3.5 rounded-full">
-                            {adjustBid ? `${adjustBid}` : "15000"}
+                            🪙 : {adjustBid ? `${adjustBid}` : "15000"}
                         </div>
                         <ButtonPrimary
                             className="flex-1 flex-shrink-0"
@@ -286,6 +244,19 @@ export default function AuctionDetailPage() {
             </div>
         );
     };
+
+    const section1Data = [
+        {
+            name: "판매자 정보",
+            content: "",
+        },
+        {
+            name: "경매 상품 설명",
+            content: auction?.description,
+
+        }
+    ];
+
 
     const renderSection1 = () => {
         return (
@@ -313,14 +284,17 @@ export default function AuctionDetailPage() {
                         </a>
                         <span className="hidden sm:block mx-2.5">·</span>
                         {renderStatus()}
+                        <div className="ml-auto">
+                            <LikeSaveBtns/>
+                        </div>
                     </div>
                 </div>
-                <div className="block lg:hidden">
-                    {renderSectionSidebar()}</div>
 
                 <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
 
-                <AccordionInfo panelClassName="p-4 pt-3.5 text-slate-600 text-base dark:text-slate-300 leading-7"/>
+                <AccordionInfo panelClassName="p-4 pt-3.5 text-slate-600 text-base dark:text-slate-300 leading-7"
+                data={section1Data}/>
+
             </div>
         );
     };
@@ -423,7 +397,7 @@ export default function AuctionDetailPage() {
                                     d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
                                 />
                             </svg>
-                            <span className="ml-2 text-neutral-800 text-sm font-medium">Show all photos</span>
+                            <span className="ml-2 text-neutral-800 text-sm font-medium">전체 이미지 확인</span>
                         </div>
                     </div>
                 </header>
@@ -448,6 +422,7 @@ export default function AuctionDetailPage() {
                     </div>
                 </div>
             </main>
+            <HighestBid auctionId={id} onDataUpdate={handleBidUpdate} />
 
             {/* OTHER SECTION */}
             <div className="container pb-24 lg:pb-28 pt-14 space-y-14">
