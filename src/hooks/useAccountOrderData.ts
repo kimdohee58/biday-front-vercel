@@ -1,4 +1,3 @@
-
 import {useEffect, useState} from "react";
 import {PaymentModel, PaymentRequestModel} from "@/model/order/payment.model";
 import {AwardModel} from "@/model/auction/award.model";
@@ -46,6 +45,7 @@ export const useFetchData = (activeTab: string) => {
         setLoading(true);
         try {
             const data = await fetchAllPaymentByUserId();
+            console.log("fetchPaymentData 확인하는 코드:",data)
             setPaymentData(data); // 결제 데이터를 설정
         } catch (error) {
             console.error("결제 데이터를 가져오는 중 오류가 발생했습니다.", error);

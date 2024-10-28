@@ -1,11 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
-import { fetchProductBySizeId } from "@/service/product/product.service";
+
+import {useQuery} from "@tanstack/react-query";
+import {fetchProductBySizeId} from "@/service/product/product.service";
 import {extractAwardIdsFromPaymentData, extractSizeIds} from "@/utils/extract";
 import {fetchSizeIdsFromAwards} from "@/service/auction/award.service";
 import {ColorType, ProductDTO} from "@/model/product/product.model";
 import {SizeModel} from "@/model/product/size.model";
 
-// auctionSizeIds를 사용하여 상품 데이터 가져오기
 export const useFetchAuctionProducts = (auctionData: any) => {
     const auctionSizeIds = extractSizeIds(auctionData);
     return useQuery({
@@ -20,7 +20,6 @@ export const useFetchAuctionProducts = (auctionData: any) => {
     });
 };
 
-// bidSizeIds를 사용하여 상품 데이터 가져오기
 export const useFetchBidProducts = () => {
     const bidSizeIds = [0]; // 고정된 값 사용
     return useQuery({
@@ -35,7 +34,6 @@ export const useFetchBidProducts = () => {
     });
 };
 
-// awardSizeIds를 사용하여 상품 데이터 가져오기
 export const useFetchAwardProducts = (awardData: any) => {
     const awardSizeIds = extractSizeIds(awardData);
     return useQuery({
@@ -51,19 +49,28 @@ export const useFetchAwardProducts = (awardData: any) => {
 };
 
 export const useFetchPaymentProducts = (paymentData: any) => {
-    // paymentData에서 awardId 추출
     const awardIds = extractAwardIdsFromPaymentData(paymentData);
-    // 리액트쿼리를 할 때 훅 디렉토리에 있어도 된다. 근데 약간 명확하지 않을 것 같다. 근데 에이싱크 어웨잇 비동기잖아 서비스로 분리를 하고,
-    // 리액트 쿼리를 쓰고 싶으면, 리액트 쿼리로 써서 해라.
+    console.log("useFetchPaymentProducts :",paymentData)
+    console.log("awardIds :",awardIds)
+
     return useQuery({
         queryKey: ["paymentSizeIds", awardIds],
         queryFn: async () => {
+
             const paymentSizeIds = await fetchSizeIdsFromAwards(awardIds);
+            console.log("paymentSizeIds :",paymentSizeIds)
+
             const productLists = await Promise.all(
-                paymentSizeIds.map((sizeId: number) => fetchProductBySizeId(sizeId))
+                paymentSizeIds.map(async (sizeId: number) => {
+                    const product = await fetchProductBySizeId(sizeId);
+                    console.log(`🎯 fetchProductBySizeId(${sizeId}) 결과:`, product);
+                    return product;
+                })
             );
 
-            // SizeModel을 ProductModel으로 변환하는 함수
+            console.log("🎯🎯🎯🎯🎯useFetchPaymentProducts 함수에서 최종 productLists🎯🎯🎯🎯🎯🎯:", productLists);
+
+
             const convertSizeToProduct = (size: SizeModel): ProductDTO => ({
                 id: size.sizeProduct.id,
                 brand: size.sizeProduct.brand,
@@ -71,16 +78,15 @@ export const useFetchPaymentProducts = (paymentData: any) => {
                 name: size.sizeProduct.name,
                 subName: size.sizeProduct.subName,
                 productCode: size.sizeProduct.productCode,
-                price: size.sizeProduct.price || 0, // 기본값 설정
-                color: size.sizeProduct.color || "unknown" as ColorType, // 기본값 설정
-                createdAt: new Date(), // 필요에 따라 size.sizeProduct.createdAt 사용 가능
-                updatedAt: new Date(), // 필요에 따라 size.sizeProduct.updatedAt 사용 가능
-                wishes: 0 // 기본값 설정
+                price: size.sizeProduct.price || 0,
+                color: size.sizeProduct.color || "unknown" as ColorType,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                wishes: 0
             });
-
-            // SizeModel 리스트를 ProductModel 리스트로 변환
+            console.log("convertSizeToProduct :",convertSizeToProduct)
             return productLists.flat().map(convertSizeToProduct);
         },
-        enabled: awardIds.length > 0, // awardIds가 있을 때만 실행
+        enabled: awardIds.length > 0,
     });
 };
