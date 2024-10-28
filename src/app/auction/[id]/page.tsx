@@ -15,44 +15,49 @@ import AccordionInfo from "@/components/AccordionInfo";
 import ListingImageGallery from "@/components/listing-image-gallery/ListingImageGallery";
 import {useParams, usePathname, useRouter, useSearchParams} from "next/navigation";
 import {Route} from "next";
-import {useMutation, useQuery} from "@tanstack/react-query";
+import {useMutation} from "@tanstack/react-query";
 import {ImageModel, ImageType} from "@/model/ftp/image.model";
-import {fetchProductOne} from "@/service/product/product.service";
 import {BidStreamModel} from "@/model/auction/bid.model";
-import {fetchImage} from "@/service/ftp/image.service";
 import Cookies from "js-cookie";
 import {saveBid} from "@/service/auction/bid.service";
-import {fetchAuctionWithImages} from "@/service/auction/auction.service";
 import {Timer} from "@/app/auction/[id]/timer";
 import {getColor} from "@/utils/productUtils";
+import {useAuctionWithImage, useSuspenseAuctionAndProduct} from "@/hooks/react-query/useAuctionlist";
 
 export default function AuctionDetailPage() {
 
+
+    const thisPathname = usePathname();
+    const [variantActive, setVariantActive] = useState(0);
+    // const [sizeSelected, setSizeSelected] = useState(sizes ? sizes[0] : "");
+    const [qualitySelected, setQualitySelected] = useState(1);
+    const [isOpenModalViewAllReviews, setIsOpenModalViewAllReviews] = useState(false);
+
+    const [highestBid, setHighestBid] = useState<number>();
+    const [adjustBid, setAdjustBid] = useState<number>();
     const searchParams = useSearchParams();
     const productId = searchParams.get("productId" || "0") as string;
     const router = useRouter();
     const {id} :{id : string }= useParams();
 
-    const auctionData = useQuery({queryKey: ["auction", id], queryFn: () => fetchAuctionWithImages(id)});
-    const product = useQuery({queryKey: ["product"], queryFn: () => fetchProductOne(productId)});
-    const productImage = useQuery({queryKey: ["productImage"], queryFn: () => fetchImage(ImageType.PRODUCT, productId)});
-    console.log('productImage >>> ', productImage);
-    if (!productImage.isLoading) {
-        console.log("프로덕트 이미지", productImage.data);
+    const mutation = useMutation({
+        mutationFn: saveBid
+    });
+
+
+    const auctionData = useSuspenseAuctionAndProduct(id);
+    // auctionData.data.size
+ /*   const product = useQuery({queryKey: ["product"], queryFn: () => fetchProductOne(productId)});
+    const productImage = useQuery({queryKey: ["p.0.00..0.0roductImage"], queryFn: () => fetchImage(ImageType.PRODUCT, productId)});*/
+
+    if (!!auctionData.data) {
+        console.log('auction>>> ', auctionData.data);
     }
 
-    if (auctionData.isLoading) {
-        console.log('로딩 중,,,,');
-    }
-
-    const { auction, images: auctionImages = [] } = auctionData.data || { auction: null, images: [] };
+    const { auction, images: auctionImages = [] } = auctionData.data.auction || { auction: null, images: [] };
+    const { product, image: productImage, size} = auctionData.data.product;
 
     // 이미지
-
-    const {sizes, variants, status, allOfSizes, image} = PRODUCTS[0];
-
-    const [highestBid, setHighestBid] = useState<number>();
-    const [adjustBid, setAdjustBid] = useState<number>();
 
 
     const RenderHighestBid = () => {
@@ -101,11 +106,6 @@ export default function AuctionDetailPage() {
     }
 
 
-    const thisPathname = usePathname();
-    const [variantActive, setVariantActive] = useState(0);
-    const [sizeSelected, setSizeSelected] = useState(sizes ? sizes[0] : "");
-    const [qualitySelected, setQualitySelected] = useState(1);
-    const [isOpenModalViewAllReviews, setIsOpenModalViewAllReviews] = useState(false);
 
     //
     const handleCloseModalImageGallery = () => {
@@ -120,9 +120,6 @@ export default function AuctionDetailPage() {
 
     //
     const renderVariants = () => {
-        if (!variants || !variants.length) {
-            return null;
-        }
 
         return (
             <div>
@@ -130,7 +127,7 @@ export default function AuctionDetailPage() {
           <span className="text-sm font-medium">
             Color:
             <span className="ml-1 font-semibold">
-               {product.isLoading || !product.data ? "" : getColor(product.data.name)}
+               {getColor(product.name)}
             </span>
           </span>
                 </label>
@@ -138,9 +135,7 @@ export default function AuctionDetailPage() {
         );
     };
 
-    const mutation = useMutation({
-        mutationFn: saveBid
-    });
+
 
     const onClickBidButton = () => {
 
@@ -166,10 +161,10 @@ export default function AuctionDetailPage() {
         toast.custom(
             (t) => (
                 <NotifyAddTocart
-                    productImage={image}
+                    productImage={productImage.uploadUrl}
                     qualitySelected={qualitySelected}
                     show={t.visible}
-                    sizeSelected={sizeSelected}
+                    sizeSelected={size}
                     variantActive={variantActive}
                 />
             ),
@@ -178,9 +173,6 @@ export default function AuctionDetailPage() {
     };
 
     const renderSizeList = () => {
-        if (!allOfSizes || !sizes || !sizes.length) {
-            return null;
-        }
         return (
             <div>
                 <div className="flex justify-between font-medium text-sm">
@@ -300,7 +292,7 @@ export default function AuctionDetailPage() {
             <div className="listingSection__wrap !space-y-6">
                 <div>
                     <h2 className="text-2xl md:text-3xl font-semibold">
-                        {product.isLoading ? "Loading..." : product.data!!.name}
+                        {product.name}
                     </h2>
                     {/* subName */}
                     <div className="flex items-center mt-4 sm:mt-5">
@@ -339,7 +331,7 @@ export default function AuctionDetailPage() {
                 <h2 className="text-2xl font-semibold">Product details</h2>
                 {/* <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div> */}
                 <div className="prose prose-sm sm:prose dark:prose-invert sm:max-w-4xl">
-                    {auctionData.isLoading || !auction ? "" : auction.description}
+                    {auction.description}
                 </div>
             </div>
         );
@@ -362,7 +354,7 @@ export default function AuctionDetailPage() {
                                     containerClassName="aspect-w-3 aspect-h-4 relative md:aspect-none md:absolute md:inset-0"
                                     className="object-cover rounded-md sm:rounded-xl"
                                     priority
-                                    src={productImage.data ? (productImage.data as ImageModel).uploadUrl : ""}
+                                    src={productImage.uploadUrl}
                                 />
                                 <div
                                     className="absolute inset-0 bg-neutral-900/20 opacity-0 hover:opacity-40 transition-opacity rounded-md sm:rounded-xl">
@@ -473,7 +465,7 @@ export default function AuctionDetailPage() {
                 <ListingImageGallery
                     onClose={handleCloseModalImageGallery}
                     images={[
-                        ...((!Array.isArray(productImage.data) && productImage.data) ? [productImage.data] : []),
+                        ...((!Array.isArray(productImage) && productImage) ? [productImage] : []),
                         ...((Array.isArray(auctionImages) ? auctionImages : [auctionImages])),
                     ].map((item, index) => {
                         return {

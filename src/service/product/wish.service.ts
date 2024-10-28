@@ -18,7 +18,7 @@ export const fetchWishesWithImages = async (): Promise<WishCardModel[]> => {
 
         return await Promise.all(wishes.map(async (wish) => {
             const image:ImageModel = await fetchImageOne(ImageType.PRODUCT, String(wish.product.id)) || defaultImage;
-            const products = await fetchProduct(wish.product.id);
+            const products = await fetchProduct(String(wish.product.id));
             const colors = getColorsArray(products);
 
                 return {

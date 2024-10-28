@@ -37,7 +37,7 @@ async function RenderImage({image}: { image: ImageModel}) {
 export default async function ProductDetailPage({params}: { params: { id: string } }) {
 console.log("product/{id}", params.id)
 
-    const {colorIds, product, size, auctions, productWithImagesArray} = await fetchProductDetails(Number(params.id));
+    const {colorIds, product, size, auctions, productWithImagesArray} = await fetchProductDetails((params.id));
 
     const insertAuctionUrl = `/auction/insert?productId=${params.id}`;
 

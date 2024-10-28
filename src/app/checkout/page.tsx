@@ -456,7 +456,7 @@ export default function CheckoutPage() {
                                 >
                                     Shipping
                                 </a>
-                                {` `} infomation
+                                {` `} information
                             </p>
                         </div>
                     </div>
