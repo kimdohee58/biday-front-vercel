@@ -42,7 +42,7 @@ export async function fetchAllProductCards(): Promise<ProductCardModel[]> {
 
     } catch (error) {
         console.error("fetchAllProductCards 중 오류 발생", error);
-        throw new Error("");
+        throw new Error("fetchAllProductsCards 중 오류 발생");
     }
 
 }
