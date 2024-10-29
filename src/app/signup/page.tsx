@@ -1,42 +1,14 @@
 "use client";
 
 import React, {useState} from "react";
-import facebookSvg from "@/images/Facebook.svg";
-import twitterSvg from "@/images/Twitter.svg";
-import googleSvg from "@/images/Google.svg";
 import Input from "@/shared/Input/Input";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
-import Image from "next/image";
 import Link from "next/link";
 import {UserModel} from "@/model/user/user.model";
 import {useRouter} from "next/navigation";
-import btnG_official from "@/images/btnG_official.png";
 import useSignInUser from "@/hooks/useSignInUser";
 import {checkEmailDuplication, checkPhoneDuplication} from "@/service/user/user.api";
 import TermsAgreement from "@/components/dohee/TermsAgreement";
-
-const loginSocials = [
-    {
-        name: "onNaverLogin",
-        href: `${process.env.NEXT_PUBLIC_API_SERVER_URL}/oauth2/authorization/naver`,
-        icon: btnG_official,
-    },
-    {
-        name: "Continue with Facebook",
-        href: "#",
-        icon: facebookSvg,
-    },
-    {
-        name: "Continue with Twitter",
-        href: "#",
-        icon: twitterSvg,
-    },
-    {
-        name: "Continue with Google",
-        href: "#",
-        icon: googleSvg,
-    },
-];
 
 export default function PageSignUp() {
     const {
@@ -63,6 +35,7 @@ export default function PageSignUp() {
     const [isCustomDomain, setIsCustomDomain] = useState<boolean>(false);
     const [isEmailChecked, setIsEmailChecked] = useState(false);
     const [isPhoneChecked, setIsPhoneChecked] = useState(false);
+    const [termsChecked, setTermsChecked] = useState([]);
 
     // 이메일 도메인 목록
     const emailDomains = [
@@ -160,6 +133,10 @@ export default function PageSignUp() {
         }
     };
 
+    const handleTermsChange = (checkedTerms) => {
+        setTermsChecked(checkedTerms);
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -210,6 +187,15 @@ export default function PageSignUp() {
 
         if (!formData.phoneNum || !/^010-\d{4}-\d{4}$/.test(formData.phoneNum)) {
             alert("전화번호 형식이 잘못되었습니다.");
+            return;
+        }
+
+        // 이용 약관 체크 여부 확인
+        const requiredTerms = ['age', 'terms', 'privacy'];
+        handleTermsChange(requiredTerms);
+        const allRequiredChecked = requiredTerms.every((term) => termsChecked.includes(term));
+        if (!allRequiredChecked) {
+            alert('모든 필수 약관에 동의해야 합니다.');
             return;
         }
 
@@ -425,7 +411,7 @@ export default function PageSignUp() {
                                 className="absolute left-0 w-full top-1/2 transform -translate-y-1/2 border-2 border-neutral-100 dark:border-neutral-800"></div>
                         </div>
 
-                        <TermsAgreement/>
+                        <TermsAgreement onTermsChange={handleTermsChange} />
 
                         {/* 제출 버튼 */}
                         <ButtonPrimary type="submit">Continue</ButtonPrimary>
