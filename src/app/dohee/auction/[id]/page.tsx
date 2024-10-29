@@ -9,20 +9,20 @@ import BagIcon from "@/components/BagIcon";
 import toast from "react-hot-toast";
 import {StarIcon} from "@heroicons/react/24/solid";
 import SectionSliderProductCard from "@/components/SectionSliderProductCard";
-import NotifyAddTocart from "@/components/NotifyAddTocart";
 import AccordionInfo from "@/components/AccordionInfo";
 import ListingImageGallery from "@/components/listing-image-gallery/ListingImageGallery";
 import {useParams, usePathname, useRouter, useSearchParams} from "next/navigation";
 import {Route} from "next";
-import {useMutation} from "@tanstack/react-query";
+import {useMutation, useSuspenseQuery} from "@tanstack/react-query";
 import Cookies from "js-cookie";
 import {saveBid} from "@/service/auction/bid.service";
-import {Timer} from "@/app/auction/[id]/Timer";
+import {Timer} from "./Timer";
 import {getColor} from "@/utils/productUtils";
 import {useAuctionWithImage, useSuspenseAuctionAndProduct} from "@/hooks/react-query/useAuctionlist";
-import HighestBid from "@/app/auction/[id]/HighestBid";
-import NotifyBid from "@/app/auction/[id]/NotifyBid";
+import HighestBid from "./HighestBid";
+import NotifyBid from "./NotifyBid";
 import LikeSaveBtns from "@/components/LikeSaveBtns";
+import {fetchAwardOne, findByAuctionId} from "@/service/auction/award.service";
 
 export default function AuctionDetailPage() {
 
@@ -38,11 +38,11 @@ export default function AuctionDetailPage() {
     const [highestBid, setHighestBid] = useState<number>();
     const [adjustBid, setAdjustBid] = useState<number>(initialBid);
     const searchParams = useSearchParams();
-    const productId = searchParams.get("productId" || "0") as string; // TODO 이거 지금 작동 안함, 기존 코드에서는 작동 했엇음
+    const productId = searchParams.get("productId" || "0") as string; // TODO? 이거 지금 작동 안함, 기존 코드에서는 작동 했엇음
     const router = useRouter();
-    const {id} :{id : string }= useParams();
+    const {id}: { id: string } = useParams();
 
-    const handleBidUpdate = ({highestBid, adjustBid}: {highestBid: number, adjustBid: number}) => {
+    const handleBidUpdate = ({highestBid, adjustBid}: { highestBid: number, adjustBid: number }) => {
         setHighestBid(highestBid);
         setAdjustBid(adjustBid);
     }
@@ -54,12 +54,23 @@ export default function AuctionDetailPage() {
 
     const auctionData = useSuspenseAuctionAndProduct(id);
     // auctionData.data.size
- /*   const product = useQuery({queryKey: ["product"], queryFn: () => fetchProductOne(productId)});
-    const productImage = useQuery({queryKey: ["p.0.00..0.0roductImage"], queryFn: () => fetchImage(ImageType.PRODUCT, productId)});*/
+    /*   const product = useQuery({queryKey: ["product"], queryFn: () => fetchProductOne(productId)});
+       const productImage = useQuery({queryKey: ["p.0.00..0.0roductImage"], queryFn: () => fetchImage(ImageType.PRODUCT, productId)});*/
 
 
-    const { auction, images: auctionImages = [] } = auctionData.data.auction || { auction: null, images: [] };
-    const { product, image: productImage, size} = auctionData.data.product;
+    const {auction, images: auctionImages = []} = auctionData.data.auction || {auction: null, images: []};
+    const {product, image: productImage, size} = auctionData.data.product;
+
+    // const isEnded = new Date(auction.endedAt) < new Date();
+    const isEnded = auction.status;
+    console.log("isEnded", isEnded)
+
+    const award = isEnded
+        ? useSuspenseQuery({
+            queryKey: ["auctionId", auction?.id],
+            queryFn: () => findByAuctionId(Number(auction?.id)),
+        })
+        : null;
 
     const handleCloseModalImageGallery = () => {
         let params = new URLSearchParams(document.location.search);
@@ -87,7 +98,6 @@ export default function AuctionDetailPage() {
             </div>
         );
     };
-
 
 
     const onClickBidButton = () => {
@@ -195,52 +205,54 @@ export default function AuctionDetailPage() {
 
     const renderSectionSidebar = () => {
         return (
-            <div className="listingSectionSidebar__wrap lg:shadow-lg">
-                <div className="space-y-7 lg:space-y-8">
-                    {/* PRICE */}
-                    <div className="">
-                        {/* ---------- 1 HEADING ----------  */}
-                        <div className="flex items-center justify-between space-x-5">
+            <>
+                <div className="mb-4">
+                    {!isEnded && (
+                        <Timer endedTime={auction?.endedAt ? new Date(auction.endedAt).toISOString() : initialTimer} />
+                    )}
+                </div>
+                <div className="listingSectionSidebar__wrap lg:shadow-lg relative">
+                    <div className="space-y-7 lg:space-y-8 relative">
+                        {/* PRICE */}
+                        <div className="">
+                            <div className="flex items-center justify-between space-x-5">
                             <div className="flex text-2xl font-semibold">
-                                {highestBid}원
+                                {isEnded ? `낙찰가: ${award?.data.currentBid}원` : `${highestBid}원`}
                             </div>
-                            <a
-                                className="flex items-center text-sm font-medium"
-                            >
-                                <div className="">
-                                    <StarIcon className="w-5 h-5 pb-[1px] text-orange-400"/>
-                                </div>
-                                <span className="ml-1.5 flex">
-                  <span>4.9 </span>
-                  <span className="mx-1.5">·</span>
-                  <span className="text-slate-700 dark:text-slate-400">
-                  </span>
-                </span>
-                            </a>
+                                <a className="flex items-center text-sm font-medium">
+                                    <div className="">
+                                        <StarIcon className="w-5 h-5 pb-[1px] text-orange-400"/>
+                                    </div>
+                                    <span className="ml-1.5 flex">
+                                        <span>4.9 </span>
+                                        <span className="mx-1.5">·</span>
+                                    </span>
+                                </a>
+                            </div>
+
+                            <div className="mt-6 space-y-7 lg:space-y-8">
+                                <div className="">{renderVariants()}</div>
+                                <div className="">{renderSizeList()}</div>
+                            </div>
                         </div>
 
-                        {/* ---------- 3 VARIANTS AND SIZE LIST ----------  */}
-                        <div className="mt-6 space-y-7 lg:space-y-8">
-                            <div className="">{renderVariants()}</div>
-                            <div className="">{renderSizeList()}</div>
+                        <div className="flex space-x-3.5">
+                            <div
+                                className="flex items-center justify-center bg-slate-100/70 dark:bg-slate-800/70 px-2 py-3 sm:p-3.5 rounded-full">
+                                🪙 : {isEnded ? '---' : adjustBid}
+                            </div>
+                            <ButtonPrimary
+                                className={`flex-1 flex-shrink-0 ${isEnded ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'hover:bg-blue-600'}`}
+                                onClick={onClickBidButton}
+                                disabled={isEnded} // 경매 종료 시 버튼 비활성화
+                            >
+                                <BagIcon className="hidden sm:inline-block w-5 h-5 mb-0.5"/>
+                                <span className="ml-3">{isEnded ? '경매 종료' : '입찰 참여'}</span>
+                            </ButtonPrimary>
                         </div>
-                    </div>
-                    {/*  ---------- 4  QTY AND ADD TO CART BUTTON */}
-                    <div className="flex space-x-3.5">
-                        <div
-                            className="flex items-center justify-center bg-slate-100/70 dark:bg-slate-800/70 px-2 py-3 sm:p-3.5 rounded-full">
-                            🪙 : {adjustBid}
-                        </div>
-                        <ButtonPrimary
-                            className="flex-1 flex-shrink-0"
-                            onClick={onClickBidButton}
-                        >
-                            <BagIcon className="hidden sm:inline-block w-5 h-5 mb-0.5"/>
-                            <span className="ml-3">입찰 참여</span>
-                        </ButtonPrimary>
                     </div>
                 </div>
-            </div>
+            </>
         );
     };
 
@@ -292,7 +304,7 @@ export default function AuctionDetailPage() {
                 <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
 
                 <AccordionInfo panelClassName="p-4 pt-3.5 text-slate-600 text-base dark:text-slate-300 leading-7"
-                data={section1Data}/>
+                               data={section1Data}/>
 
             </div>
         );
@@ -413,15 +425,11 @@ export default function AuctionDetailPage() {
                 {/* SIDEBAR */}
                 <div className="flex-grow">
                     <div className="hidden lg:block sticky top-28">
-                        <div className="mb-4">
-                            <Timer
-                                endedTime={auction?.endedAt ? new Date(auction.endedAt).toISOString() : initialTimer}/>
-                        </div>
                         {renderSectionSidebar()}
                     </div>
                 </div>
             </main>
-            <HighestBid auctionId={id} onDataUpdate={handleBidUpdate} />
+            <HighestBid auctionId={id} onDataUpdate={handleBidUpdate}/>
 
             {/* OTHER SECTION */}
             <div className="container pb-24 lg:pb-28 pt-14 space-y-14">
@@ -436,6 +444,21 @@ export default function AuctionDetailPage() {
             </div>
 
             <Suspense>
+                {isEnded && (
+                    // <div
+                    //     className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -rotate-43 text-red-600 border-8 border-red-600 font-bold text-8xl bg-white rounded-md shadow-md w-[700px] h-[200px] flex items-center justify-center text-center leading-none overflow-hidden"
+                    // >
+                    //     <span className="whitespace-nowrap">SOLD OUT</span>
+                    // </div>
+                    <div
+                        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -rotate-43 bg-red-600 border-8 border-white font-bold text-8xl text-white rounded-md shadow-md w-[700px] h-[200px] flex items-center justify-center text-center leading-none overflow-hidden"
+                    >
+                        <span className="whitespace-nowrap">SOLD OUT</span>
+                    </div>
+
+
+                )}
+
                 <ListingImageGallery
                     onClose={handleCloseModalImageGallery}
                     images={[
@@ -449,6 +472,77 @@ export default function AuctionDetailPage() {
                     })}
                 />
             </Suspense>
+
         </div>
     );
 };
+
+
+// const renderSectionSidebar = () => {
+//     return (
+//         <>
+//             <div className="mb-4">
+//                 {isEnded ? (
+//                     <div
+//                         className="relative rounded-md bg-white p-6 shadow-lg border border-gray-200 sm:rounded-xl text-center">
+//                         <h2 className="text-lg font-semibold text-gray-800">Time Remaining</h2>
+//                         <p className="mt-2 text-3xl text-gray-700">
+//                             <span className="text-red-500 font-bold">SOLD OUT</span>
+//                         </p>
+//                     </div>
+//                 ) : (
+//                     <Timer
+//                         endedTime={auction?.endedAt ? new Date(auction.endedAt).toISOString() : initialTimer}
+//                     />
+//                 )}
+//             </div>
+//             <div className="listingSectionSidebar__wrap lg:shadow-lg">
+//                 <div className="space-y-7 lg:space-y-8">
+//                     {/* PRICE */}
+//                     <div className="">
+//                         {/* ---------- 1 HEADING ----------  */}
+//                         <div className="flex items-center justify-between space-x-5">
+//                             <div className="flex text-2xl font-semibold">
+//                                 {highestBid}원
+//                             </div>
+//                             <a
+//                                 className="flex items-center text-sm font-medium"
+//                             >
+//                                 <div className="">
+//                                     <StarIcon className="w-5 h-5 pb-[1px] text-orange-400"/>
+//                                 </div>
+//                                 <span className="ml-1.5 flex">
+//                   <span>4.9 </span>
+//                   <span className="mx-1.5">·</span>
+//                   <span className="text-slate-700 dark:text-slate-400">
+//                   </span>
+//                 </span>
+//                             </a>
+//                         </div>
+//
+//                         {/* ---------- 3 VARIANTS AND SIZE LIST ----------  */}
+//                         <div className="mt-6 space-y-7 lg:space-y-8">
+//                             <div className="">{renderVariants()}</div>
+//                             <div className="">{renderSizeList()}</div>
+//                         </div>
+//                     </div>
+//                     {/*  ---------- 4  QTY AND ADD TO CART BUTTON */}
+//                     <div className="flex space-x-3.5">
+//                         <div
+//                             className="flex items-center justify-center bg-slate-100/70 dark:bg-slate-800/70 px-2 py-3 sm:p-3.5 rounded-full">
+//                             🪙 : {adjustBid}
+//                         </div>
+//                         <ButtonPrimary
+//                             className="flex-1 flex-shrink-0"
+//                             onClick={onClickBidButton}
+//                             disabled={isEnded}
+//                         >
+//                             <BagIcon className="hidden sm:inline-block w-5 h-5 mb-0.5"/>
+//                             <span className="ml-3">{isEnded ? '경매 종료' : '입찰 참여'}</span>
+//                         </ButtonPrimary>
+//                     </div>
+//                 </div>
+//             </div>
+//         </>
+//     );
+// };

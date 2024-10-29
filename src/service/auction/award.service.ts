@@ -1,6 +1,6 @@
 import {awardAPI} from "@/api/auction/award.api";
 import Cookies from "js-cookie";
-import {AwardModel} from "@/model/auction/award.model";
+import {AwardDto, AwardModel} from "@/model/auction/award.model";
 
 // awardId: number
 export async function fetchAwardOne (awardId: number): Promise<AwardModel> {
@@ -58,6 +58,22 @@ export async function findByUserAward(): Promise<AwardModel[]> {
     } catch (error) {
         console.error("findByUserAward 에러 발생", error);
         throw new Error("낙찰 내역을 가져오는 중 에러가 발생했습니다.");
+    }
+}
+
+export async function findByAuctionId(auctionId: number): Promise<AwardDto> {
+    try {
+        const options = {
+            params : {auctionId: auctionId},
+        };
+        const award: AwardDto = await awardAPI.findByAuctionId(options);
+        if(award === null) {
+            console.log("해당 경매의 낙찰 정보를 찾을 수 없습니다.")
+        }
+        return award;
+    } catch (error) {
+        console.error("findByAuctionId 에러 발생", error)
+        throw new Error("종료된 경매의 낙찰을 가져오는 중 에러가 발생했습니다.")
     }
 }
 

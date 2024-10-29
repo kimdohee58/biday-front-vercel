@@ -1,4 +1,4 @@
-import {AwardModel} from "@/model/auction/award.model"; // 필요에 맞게 경로 수정
+import {AwardDto, AwardModel} from "@/model/auction/award.model"; // 필요에 맞게 경로 수정
 import {api} from "../request";
 import {strategy} from "../api.strategy";
 import {RequestOptions} from "@/model/api/RequestOptions";
@@ -28,7 +28,14 @@ const findById = async (options: RequestOptions<{awardId: number}, null>): Promi
     return await strategy.GET(`${api.award}/findById`, options);
 };
 
+// 종료된 경매에서 호출될 낙찰 정보(auctionId: number)
+const findByAuctionId = async (options: RequestOptions<{auctionId: number}, null>): Promise<AwardDto> => {
+    console.log("findByAuctionId 확인: ", options)
+    return await strategy.GET(`${api.award}/findByAuction`, options);
+}
+
 export const awardAPI= {
     findByUser,
     findById,
+    findByAuctionId,
 };
