@@ -20,7 +20,8 @@ export default function HighestBid({auctionId, onDataUpdate}: HighestBidProps) {
         }
 
         if (eventSourceRef.current && eventSourceRef.current.readyState !== EventSource.CLOSED) {
-            console.log("기존 연결이 아직 열려 있습니다.");
+            console.log("기존 연결이 아직 열려 있으나 닫을 수 없는 상태입니다. 이 로그가 뜬다면 설유정에게 알려주세요.");
+            //TODO 닫을 수 없으면서 열려있는 상태가 존재하는지 확인하는 코드, 해당 로그가 뜬다면 알려주세요
         }
 
 
