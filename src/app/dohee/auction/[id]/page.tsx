@@ -25,6 +25,7 @@ import LikeSaveBtns from "@/components/LikeSaveBtns";
 import {fetchAwardOne, findByAuctionId} from "@/service/auction/award.service";
 import {useSelector} from "react-redux";
 import {getUserToken} from "@/lib/features/user.slice";
+import { differenceInMinutes, isAfter } from "date-fns";
 
 export default function AuctionDetailPage() {
     const thisPathname = usePathname();
@@ -38,7 +39,7 @@ export default function AuctionDetailPage() {
     const [highestBid, setHighestBid] = useState<number>();
     const [adjustBid, setAdjustBid] = useState<number>(initialBid);
     const searchParams = useSearchParams();
-    const productId = searchParams.get("productId" || "0") as string; // TODO? 이거 지금 작동 안함, 기존 코드에서는 작동 했엇음
+    const productId = searchParams.get("productId" || "0") as string;
     const router = useRouter();
     const {id}: { id: string } = useParams();
 
@@ -61,17 +62,17 @@ export default function AuctionDetailPage() {
     const {auction, images: auctionImages = []} = auctionData.data.auction || {auction: null, images: []};
     const {product, image: productImage, size} = auctionData.data.product;
 
-    const [sellerId, setSellerId] = useState("");
+    // 접속자 판매자 본인인지 여부
+    const [isSeller, setIsSeller] = useState(false);
     const userToken = useSelector(getUserToken);
 
     useEffect(() => {
-        const sellerId = auction?.user && userToken.userId ? userToken.userId : "null";
-        setSellerId(sellerId);
+        if (userToken) {
+            setIsSeller(!!(auction?.user && userToken.userId));
+        }
     }, [userToken]);
 
-    console.log("sellerId", sellerId)
-
-    // const isEnded = new Date(auction.endedAt) < new Date();
+    // 경매 status 여부
     const isEnded = auction.status;
     console.log("isEnded", isEnded)
 
@@ -81,6 +82,23 @@ export default function AuctionDetailPage() {
             queryFn: () => findByAuctionId(Number(auction?.id)),
         })
         : null;
+
+    // 본인이라면 경매기간이 40% 넘어갔다면 취소 불가
+    const [isCancel, setIsCancel] = useState(true);
+
+    useEffect(() => {
+        const now = new Date();
+        const auctionEnd = new Date(auction.endedAt);
+
+        // 남은 시간이 70% 미만일 때 취소 불가 설정
+        const auctionDuration = differenceInMinutes(auctionEnd, new Date(auction.startedAt));
+        const remainingTime = differenceInMinutes(auctionEnd, now);
+        const isBelowSeventyPercent = remainingTime / auctionDuration < 0.6;
+
+        if (isSeller && isBelowSeventyPercent) {
+            setIsCancel(false);
+        }
+    }, [auction, isSeller]);
 
     const handleCloseModalImageGallery = () => {
         let params = new URLSearchParams(document.location.search);
@@ -109,7 +127,8 @@ export default function AuctionDetailPage() {
         );
     };
 
-
+    // 취소하시겠습니까 뜨게 하기 위함
+    const [showCancelModal, setShowCancelModal] = useState(false);
     const onClickBidButton = () => {
         const token = Cookies.get("token");
         if (!token) {
@@ -118,7 +137,8 @@ export default function AuctionDetailPage() {
         }
 
         // sellerId 체크 추가
-        if (sellerId != 'null') {
+        if (isSeller) {
+            setShowCancelModal(true);
             console.log("Seller ID가 존재합니다.");
         } else {
             if (!adjustBid) {
@@ -151,6 +171,26 @@ export default function AuctionDetailPage() {
                 { position: "top-right", id: "nc-product-notify", duration: 3000 }
             );
         }
+    };
+
+    // 경매 취소
+    const [isCancelling, setIsCancelling] = useState(false);
+    const [isCancelled, setIsCancelled] = useState(false);
+    const handleConfirmCancel = async () => {
+        setIsCancelling(true);
+        // 여기에서 API 호출을 통해 경매 취소 로직 실행 (예: await cancelAuctionAPI())
+
+        // API 호출 후 상태 업데이트
+        setTimeout(() => {
+            setIsCancelling(false);
+            setIsCancelled(true);
+
+            // 일정 시간 후 모달 닫기
+            setTimeout(() => {
+                setShowCancelModal(false);
+                setIsCancelled(false);
+            }, 2000);
+        }, 2000);
     };
 
     const renderSizeList = () => {
@@ -231,7 +271,7 @@ export default function AuctionDetailPage() {
                         <div className="">
                             <div className="flex items-center justify-between space-x-5">
                             <div className="flex text-2xl font-semibold">
-                                {isEnded ? `낙찰가: ${award?.data.currentBid}원` : `${highestBid}원`}
+                                {isEnded ? `낙찰가: ${award?.data.currentBid}원` : `현재 최고 입찰가: ${highestBid}원`}
                             </div>
                                 <a className="flex items-center text-sm font-medium">
                                     <div className="">
@@ -258,11 +298,11 @@ export default function AuctionDetailPage() {
                             <ButtonPrimary
                                 className={`flex-1 flex-shrink-0 ${isEnded ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'hover:bg-blue-600'}`}
                                 onClick={onClickBidButton}
-                                disabled={isEnded} // 경매 종료 시 버튼 비활성화
+                                disabled={isEnded || (isSeller && !isCancel)}
                             >
                                 <BagIcon className="hidden sm:inline-block w-5 h-5 mb-0.5"/>
                                 <span className="ml-3">
-                                    {isEnded ? '경매 종료' : (sellerId !== null ? '경매 취소' : '입찰 참여')}
+                                    {isEnded ? '경매 종료' : (isSeller ? (isCancel ? '경매 취소' : '취소 불가') : '입찰 참여')}
                                 </span>
                             </ButtonPrimary>
                         </div>
@@ -489,76 +529,36 @@ export default function AuctionDetailPage() {
                 />
             </Suspense>
 
+            {/* 경매 취소 모달 창 */}
+            {showCancelModal && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg text-center max-w-md w-full">
+                        {isCancelling ? (
+                            <p className="mb-4">취소하는 중...</p>
+                        ) : isCancelled ? (
+                            <p className="mb-4">취소가 완료되었습니다.</p>
+                        ) : (
+                            <p className="mb-4">현재 진행 중인 경매를 취소하겠습니까?</p>
+                        )}
+                        {!isCancelling && !isCancelled && (
+                            <div className="flex justify-center gap-4">
+                                <button
+                                    className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                                    onClick={() => setShowCancelModal(false)}
+                                >
+                                    아니오
+                                </button>
+                                <button
+                                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                                    onClick={handleConfirmCancel}
+                                >
+                                    예
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
-
-
-// const renderSectionSidebar = () => {
-//     return (
-//         <>
-//             <div className="mb-4">
-//                 {isEnded ? (
-//                     <div
-//                         className="relative rounded-md bg-white p-6 shadow-lg border border-gray-200 sm:rounded-xl text-center">
-//                         <h2 className="text-lg font-semibold text-gray-800">Time Remaining</h2>
-//                         <p className="mt-2 text-3xl text-gray-700">
-//                             <span className="text-red-500 font-bold">SOLD OUT</span>
-//                         </p>
-//                     </div>
-//                 ) : (
-//                     <Timer
-//                         endedTime={auction?.endedAt ? new Date(auction.endedAt).toISOString() : initialTimer}
-//                     />
-//                 )}
-//             </div>
-//             <div className="listingSectionSidebar__wrap lg:shadow-lg">
-//                 <div className="space-y-7 lg:space-y-8">
-//                     {/* PRICE */}
-//                     <div className="">
-//                         {/* ---------- 1 HEADING ----------  */}
-//                         <div className="flex items-center justify-between space-x-5">
-//                             <div className="flex text-2xl font-semibold">
-//                                 {highestBid}원
-//                             </div>
-//                             <a
-//                                 className="flex items-center text-sm font-medium"
-//                             >
-//                                 <div className="">
-//                                     <StarIcon className="w-5 h-5 pb-[1px] text-orange-400"/>
-//                                 </div>
-//                                 <span className="ml-1.5 flex">
-//                   <span>4.9 </span>
-//                   <span className="mx-1.5">·</span>
-//                   <span className="text-slate-700 dark:text-slate-400">
-//                   </span>
-//                 </span>
-//                             </a>
-//                         </div>
-//
-//                         {/* ---------- 3 VARIANTS AND SIZE LIST ----------  */}
-//                         <div className="mt-6 space-y-7 lg:space-y-8">
-//                             <div className="">{renderVariants()}</div>
-//                             <div className="">{renderSizeList()}</div>
-//                         </div>
-//                     </div>
-//                     {/*  ---------- 4  QTY AND ADD TO CART BUTTON */}
-//                     <div className="flex space-x-3.5">
-//                         <div
-//                             className="flex items-center justify-center bg-slate-100/70 dark:bg-slate-800/70 px-2 py-3 sm:p-3.5 rounded-full">
-//                             🪙 : {adjustBid}
-//                         </div>
-//                         <ButtonPrimary
-//                             className="flex-1 flex-shrink-0"
-//                             onClick={onClickBidButton}
-//                             disabled={isEnded}
-//                         >
-//                             <BagIcon className="hidden sm:inline-block w-5 h-5 mb-0.5"/>
-//                             <span className="ml-3">{isEnded ? '경매 종료' : '입찰 참여'}</span>
-//                         </ButtonPrimary>
-//                     </div>
-//                 </div>
-//             </div>
-//         </>
-//     );
-// };
