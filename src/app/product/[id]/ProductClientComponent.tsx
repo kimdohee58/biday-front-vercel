@@ -45,13 +45,10 @@ async function RenderImage({image}: { image: ImageModel}) {
     );
 }
 
-export default function ProductClientComponent({product}: { product: ProductDetailProps}) {
+export default function ProductClientComponent({product, size}: { product: ProductDetailProps, size: string}) {
 
     const productSize = product.product.product.sizes.find((size) => size.sizeProduct.id === product.product.product.id)?.id;
 
-    if (!productSize) {
-        throw new Error("사이즈 이상");
-    }
     const auctions = useSuspenseAuctionBySizeId(productSize);
 
     const colorArray = getColorsByTypes(product.colors);
