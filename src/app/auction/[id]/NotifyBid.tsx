@@ -47,7 +47,7 @@ const NotifyAddTocart: FC<Props> = ({
                         <div className="flex justify-between ">
                             <div>
                                 <h3 className="text-base font-medium ">내 입찰가: </h3>
-                               <Prices price={price} className="mt-0.5"/>
+                                <Prices price={price} className="mt-0.5"/>
                                 <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                   <span>
                     {color}
@@ -60,7 +60,8 @@ const NotifyAddTocart: FC<Props> = ({
                     </div>
                     <h3 className="text-base font-medium ">{productName}</h3>
                     <div className="flex flex-1 items-end justify-between text-sm">
-                        <p className="text-gray-500 dark:text-slate-400">{""}</p>
+                        {/*<p className="text-gray-500 dark:text-slate-400">{""}</p>*/}
+                        {/* TODO 추후 CSS 수정 */}
 
                         <div className="flex">
                             <button

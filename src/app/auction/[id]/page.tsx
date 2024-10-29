@@ -32,9 +32,11 @@ export default function AuctionDetailPage() {
     // const [sizeSelected, setSizeSelected] = useState(sizes ? sizes[0] : "");
     const [qualitySelected, setQualitySelected] = useState(1);
     const [isOpenModalViewAllReviews, setIsOpenModalViewAllReviews] = useState(false);
+    const initialBid = 15000;
+    const initialTimer = "2024-01-01T00:00:00.000Z";
 
     const [highestBid, setHighestBid] = useState<number>();
-    const [adjustBid, setAdjustBid] = useState<number>();
+    const [adjustBid, setAdjustBid] = useState<number>(initialBid);
     const searchParams = useSearchParams();
     const productId = searchParams.get("productId" || "0") as string;
     const router = useRouter();
@@ -55,9 +57,6 @@ export default function AuctionDetailPage() {
  /*   const product = useQuery({queryKey: ["product"], queryFn: () => fetchProductOne(productId)});
     const productImage = useQuery({queryKey: ["p.0.00..0.0roductImage"], queryFn: () => fetchImage(ImageType.PRODUCT, productId)});*/
 
-    if (!!auctionData.data) {
-        console.log('auction>>> ', auctionData.data);
-    }
 
     const { auction, images: auctionImages = [] } = auctionData.data.auction || { auction: null, images: [] };
     const { product, image: productImage, size} = auctionData.data.product;
@@ -230,7 +229,7 @@ export default function AuctionDetailPage() {
                     <div className="flex space-x-3.5">
                         <div
                             className="flex items-center justify-center bg-slate-100/70 dark:bg-slate-800/70 px-2 py-3 sm:p-3.5 rounded-full">
-                            🪙 : {adjustBid ? `${adjustBid}` : "15000"}
+                            🪙 : {adjustBid}
                         </div>
                         <ButtonPrimary
                             className="flex-1 flex-shrink-0"
@@ -416,7 +415,7 @@ export default function AuctionDetailPage() {
                     <div className="hidden lg:block sticky top-28">
                         <div className="mb-4">
                             <Timer
-                                endedTime={auction?.endedAt ? new Date(auction.endedAt).toISOString() : "2024-01-01T00:00:00.000Z"}/>
+                                endedTime={auction?.endedAt ? new Date(auction.endedAt).toISOString() : initialTimer}/>
                         </div>
                         {renderSectionSidebar()}
                     </div>
