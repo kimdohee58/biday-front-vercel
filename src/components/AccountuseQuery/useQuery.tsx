@@ -1,10 +1,8 @@
 
 import {useQuery} from "@tanstack/react-query";
 import {fetchProductBySizeId} from "@/service/product/product.service";
-import {extractAwardIdsFromPaymentData, extractSizeIds} from "@/utils/extract";
-import {fetchSizeIdsFromAwards} from "@/service/auction/award.service";
-import {ColorType, ProductDTO} from "@/model/product/product.model";
-import {SizeModel} from "@/model/product/size.model";
+import {extractSizeIds} from "@/utils/extract";
+import {BidLoadModel} from "@/model/auction/bid.model";
 
 export const useFetchAuctionProducts = (auctionData: any) => {
     const auctionSizeIds = extractSizeIds(auctionData);
@@ -20,17 +18,24 @@ export const useFetchAuctionProducts = (auctionData: any) => {
     });
 };
 
-export const useFetchBidProducts = () => {
-    const bidSizeIds = [0]; // 고정된 값 사용
+export const useFetchBidProducts = (bidayData: any) => {
     return useQuery({
-        queryKey: ["bidSizeIds", bidSizeIds],
+        queryKey: ["sizeIds", bidayData],
         queryFn: async () => {
+
+            const sizeIds = bidayData
+                .map((bid: BidLoadModel) => bid.sizeId) // 각 bid에서 sizeId를 추출
+                .filter((size: string) => size !== undefined); // undefined 값을 필터링
+
+
             const productLists = await Promise.all(
-                bidSizeIds.map((sizeId: number) => fetchProductBySizeId(sizeId))
+                sizeIds.map((sizeIds: number) => fetchProductBySizeId(sizeIds))
             );
+
             return productLists.flat();
+
         },
-        enabled: bidSizeIds.length > 0,
+        enabled: bidayData.length > 0,
     });
 };
 
@@ -49,44 +54,16 @@ export const useFetchAwardProducts = (awardData: any) => {
 };
 
 export const useFetchPaymentProducts = (paymentData: any) => {
-    const awardIds = extractAwardIdsFromPaymentData(paymentData);
-    console.log("useFetchPaymentProducts :",paymentData)
-    console.log("awardIds :",awardIds)
 
+    const sizeIds = paymentData.map((payment: { sizeId: any; }) => payment.sizeId);
     return useQuery({
-        queryKey: ["paymentSizeIds", awardIds],
+        queryKey: ["paymentSizeIds", sizeIds],
         queryFn: async () => {
-
-            const paymentSizeIds = await fetchSizeIdsFromAwards(awardIds);
-            console.log("paymentSizeIds :",paymentSizeIds)
-
             const productLists = await Promise.all(
-                paymentSizeIds.map(async (sizeId: number) => {
-                    const product = await fetchProductBySizeId(sizeId);
-                    console.log(`🎯 fetchProductBySizeId(${sizeId}) 결과:`, product);
-                    return product;
-                })
+                sizeIds.map((sizeId: number) => fetchProductBySizeId(sizeId))
             );
-
-            console.log("🎯🎯🎯🎯🎯useFetchPaymentProducts 함수에서 최종 productLists🎯🎯🎯🎯🎯🎯:", productLists);
-
-
-            const convertSizeToProduct = (size: SizeModel): ProductDTO => ({
-                id: size.sizeProduct.id,
-                brand: size.sizeProduct.brand,
-                category: size.sizeProduct.category,
-                name: size.sizeProduct.name,
-                subName: size.sizeProduct.subName,
-                productCode: size.sizeProduct.productCode,
-                price: size.sizeProduct.price || 0,
-                color: size.sizeProduct.color || "unknown" as ColorType,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                wishes: 0
-            });
-            console.log("convertSizeToProduct :",convertSizeToProduct)
-            return productLists.flat().map(convertSizeToProduct);
+            return productLists.flat();
         },
-        enabled: awardIds.length > 0,
+        enabled: sizeIds.length > 0,
     });
 };

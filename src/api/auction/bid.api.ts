@@ -52,8 +52,16 @@ const doOnClose = async (bidData: Partial<BidModel>): Promise<BidModel> => {
     return await strategy.POST(`${api.bid}`, {});
     // 안에 내부 53번 임시로 사용을 한 소스 고쳐야한다.
 };
+
+// 마이페이지 경매 목록 조회 (GET 요청)
+const findByUser = async (options: Omit<RequestOptions<any, null>, "params">): Promise<BidModel[]> => {
+    return await strategy.GET(`${api.bid}`, options);
+};
+
 export const bidAPI = {
     streamBid,
     save,
     doOnClose,
+    findByUser
 };
+

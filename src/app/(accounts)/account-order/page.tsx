@@ -1,5 +1,8 @@
+// src/app/(accounts)/account-order/page.tsx
 "use client";
 import React, {useEffect, useState} from "react";
+import { useRouter } from "next/navigation";
+
 import {useFetchData} from "@/hooks/useAccountOrderData";
 import {
     useFetchAuctionProducts,
@@ -16,16 +19,15 @@ import {
 } from "@/components/RenderAccountOrder";
 import {
     mapDataWithAuctionModel,
-    mapDataWithAwardModel,
+    mapDataWithAwardModel, mapDataWithBidModel,
     mapDataWithPaymentModel
 } from "@/utils/mapDataWithProducts";
 import {PaymentRequestModel} from "@/model/order/payment.model";
 import {AuctionModel} from "@/model/auction/auction.model";
 import {AwardModel} from "@/model/auction/award.model";
-import {SizeModel} from "@/model/product/size.model";
-import {ColorType, ProductDTO} from "@/model/product/product.model";
 
 const AccountOrder = () => {
+    const router = useRouter(); // Initialize the router
     const [activeTab, setActiveTab] = useState("auction");
     const [mappedPaymentData, setMappedPaymentData] = useState<PaymentRequestModel[]>([]);
 
@@ -33,16 +35,14 @@ const AccountOrder = () => {
         auctionData,
         awardData,
         paymentData,
+        bidData,
         loading
     } = useFetchData(activeTab);
 
     const { data: auctionProductList } = useFetchAuctionProducts(auctionData);
-    const { data: bidProductList } = useFetchBidProducts();
+    const { data: bidProductList } = useFetchBidProducts(bidData);
     const { data: awardProductList } = useFetchAwardProducts(awardData);
     const { data: paymentProductList } = useFetchPaymentProducts(paymentData);
-
-    console.log("페이먼트프로덕트 리스트 값 확인하는 코드:",paymentProductList)
-    console.log("paymentData 리스트 값 확인하는 코드:",paymentData)
 
     const hasContent = (data: any): data is { content: AuctionModel[] } => {
         return data && Array.isArray(data.content);
@@ -56,16 +56,14 @@ const AccountOrder = () => {
 
     const awardContent = hasAwardContent(awardData) ? awardData.content : (awardData as AwardModel[]);
 
-
+    const handleCheckoutClick = (awardId: string, productId: string) => {
+        router.push(`/checkout?awardId=${awardId}&productId=${productId}`);
+    };
 
     useEffect(() => {
         const fetchMappedPaymentData = async () => {
             if (paymentData && paymentProductList) {
-
-                console.log("🔍 매핑 전 paymentData:", paymentData);
-                console.log("🔍 매핑 전 paymentProductList:", paymentProductList);
                 const mappedData = await mapDataWithPaymentModel(paymentData, paymentProductList);
-                console.log("🔍 매핑 후 mappedPaymentData:", mappedData);
                 setMappedPaymentData(mappedData);
             }
         };
@@ -122,14 +120,14 @@ const AccountOrder = () => {
                                     {renderAuctionHistory(mapDataWithAuctionModel(auctionContent, auctionProductList!!))}
                                 </div>
                                 <div className="mb-8">
-                                    {renderBidHistory([])}
+                                    {renderBidHistory(mapDataWithBidModel(bidData, bidProductList!!))}
                                 </div>
                             </>
                         )}
                         {activeTab === "award" && (
                             <>
                                 <div className="mb-8">
-                                    {renderAwardHistory(mapDataWithAwardModel(awardContent, awardProductList!!))}
+                                    {renderAwardHistory(mapDataWithAwardModel(awardContent, awardProductList!!), handleCheckoutClick)}
                                 </div>
                                 <div className="mb-8">
                                     {renderPaymentHistory(mappedPaymentData)}
