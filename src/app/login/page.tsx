@@ -98,9 +98,14 @@ const PageLogin = () => {
         e.preventDefault();
         try {
             await login(email, password);
+            // 로그인 성공 시 알림창 띄우기
+            window.alert('로그인 성공!');
+            router.push('/'); // 성공 후 리디렉션
         } catch (err) {
             setError("Login failed. Please check your email or password.");
             console.log("실패다.", err);
+            // 로그인 실패 시 알림창 띄우기
+            window.alert('로그인 실패! 이메일이나 비밀번호를 확인해 주세요.');
         }
     };
 

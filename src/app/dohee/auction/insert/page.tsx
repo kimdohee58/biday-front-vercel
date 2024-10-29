@@ -6,11 +6,11 @@ import {defaultProduct, ProductWithImageModel} from "@/model/product/product.mod
 import {useQuery} from "@tanstack/react-query";
 import {fetchAllProductsWithImages} from "@/service/product/product.service";
 import {defaultImage, ImageType} from "@/model/ftp/image.model";
-import ProductModal from "@/app/auction/insert/ProductModal";
+import ProductModal from "./ProductModal";
 import {useSearchParams} from "next/navigation";
-import ProductSection from "@/app/auction/insert/productSection";
-import ImageCard from "@/app/auction/insert/imageCard";
-import ImageModal from "@/app/auction/insert/imageModal";
+import ProductSection from "./productSection";
+import ImageCard from "./imageCard";
+import ImageModal from "./imageModal";
 import {useMutation} from "@tanstack/react-query";
 import {deleteAuction, saveAuction} from "@/service/auction/auction.service";
 import {SaveAuctionModel} from "@/model/auction/auction.model";
@@ -229,7 +229,7 @@ export default function InsertAuction() {
                 const message = await imageMutate.mutateAsync(image);
 
                 // 성공적인 경우 리다이렉트
-                if (message === "success" && message.status === 200) {
+                if (message === "success") {
                     router.push("/dohee/auction/insert/success");
                 } else {
                     if (data.id != null) {
