@@ -15,11 +15,26 @@ import path from "path";
 const PRICE_RANGE = [10000, 1000000];
 
 const DATA_colors = [
-    {name: "White"},
-    {name: "Beige"},
-    {name: "Blue"},
-    {name: "Black"},
-    {name: "Brown"}
+    { name: "Red" },
+    { name: "Orange" },
+    { name: "Yellow" },
+    { name: "Green" },
+    { name: "Blue" },
+    { name: "Purple" },
+    { name: "Charcoal" },
+    { name: "Gray" },
+    { name: "Black" },
+    { name: "Brown" },
+    { name: "White" },
+    { name: "Cream" },
+    { name: "Ivory" },
+    { name: "Khaki" },
+    { name: "Melange" },
+    { name: "Navy" },
+    { name: "Pink" },
+    { name: "Beige" },
+    { name: "Olive" },
+    { name: "Burgundy" }
 ];
 
 const DATA_brands = [
@@ -113,7 +128,11 @@ const TabFiltersProduct = ({
                 {({open, close}) => (
                     <>
                         <PopoverButton
-                            className={`flex items-center justify-center px-4 py-2 text-sm rounded-full border border-primary-500 bg-primary-50 text-primary-900 focus:outline-none`}
+                            className={`flex items-center justify-center px-4 py-2 text-sm rounded-full border ${
+                                tempRangePrices[0] === PRICE_RANGE[0] && tempRangePrices[1] === PRICE_RANGE[1]
+                                    ? "border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:border-neutral-400 dark:hover:border-neutral-500"
+                                    : "!border-primary-500 bg-primary-50 text-primary-900"
+                            } focus:outline-none`}
                         >
                             <svg
                                 className="w-4 h-4"
@@ -268,7 +287,7 @@ const TabFiltersProduct = ({
     const renderTabsBrand = () => {
         return (
             <Popover className="relative">
-                {({ open, close }) => (
+                {({open, close}) => (
                     <>
                         <PopoverButton
                             className={`
@@ -330,7 +349,7 @@ const TabFiltersProduct = ({
                             <span className="ml-2">Brands</span>
 
                             {!tempSelectedBrands.length ? (
-                                <ChevronDownIcon className="w-4 h-4 ml-3" />
+                                <ChevronDownIcon className="w-4 h-4 ml-3"/>
                             ) : (
                                 <span
                                     onClick={() => {
@@ -359,8 +378,10 @@ const TabFiltersProduct = ({
                             leaveFrom="opacity-100 translate-y-0"
                             leaveTo="opacity-0 translate-y-1"
                         >
-                            <PopoverPanel className="absolute z-40 w-screen max-w-sm px-4 mt-3 left-0 sm:px-0 lg:max-w-sm">
-                                <div className="overflow-hidden rounded-2xl shadow-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700">
+                            <PopoverPanel
+                                className="absolute z-40 w-screen max-w-sm px-4 mt-3 left-0 sm:px-0 lg:max-w-sm">
+                                <div
+                                    className="overflow-hidden rounded-2xl shadow-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700">
                                     <div className="relative flex flex-col px-5 py-6 space-y-5">
                                         {DATA_brands.map((item) => (
                                             <div key={item.name}>
@@ -376,7 +397,8 @@ const TabFiltersProduct = ({
                                         ))}
                                     </div>
 
-                                    <div className="p-5 bg-slate-50 dark:bg-slate-900 dark:border-t dark:border-slate-800 flex items-center justify-between">
+                                    <div
+                                        className="p-5 bg-slate-50 dark:bg-slate-900 dark:border-t dark:border-slate-800 flex items-center justify-between">
                                         <ButtonThird
                                             onClick={() => {
                                                 setTempSelectedBrands([]);
@@ -481,7 +503,7 @@ const TabFiltersProduct = ({
                                 {renderXClear()}
                             </span>
                             ) : (
-                                <ChevronDownIcon className="w-4 h-4 ml-3" />
+                                <ChevronDownIcon className="w-4 h-4 ml-3"/>
                             )}
                         </PopoverButton>
 
@@ -498,19 +520,21 @@ const TabFiltersProduct = ({
                                 className="absolute z-40 w-screen max-w-sm px-4 mt-3 left-0 sm:px-0 lg:max-w-sm">
                                 <div
                                     className="overflow-hidden rounded-2xl shadow-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700">
-                                    <div className="relative flex flex-col px-5 py-6 space-y-5">
-                                        {DATA_colors.map((item) => (
-                                            <div key={item.name} className="">
-                                                <Checkbox
-                                                    name={item.name}
-                                                    label={item.name}
-                                                    defaultChecked={tempSelectedColors.includes(item.name)}
-                                                    onChange={(checked) =>
-                                                        handleChangeColors(checked, item.name)
-                                                    }
-                                                />
-                                            </div>
-                                        ))}
+                                    <div className="relative px-5 py-6">
+                                        <div className="grid grid-cols-2 gap-x-4 gap-y-5">
+                                            {DATA_colors.map((item) => (
+                                                <div key={item.name} className="">
+                                                    <Checkbox
+                                                        name={item.name}
+                                                        label={item.name}
+                                                        defaultChecked={tempSelectedColors.includes(item.name)}
+                                                        onChange={(checked) =>
+                                                            handleChangeColors(checked, item.name)
+                                                        }
+                                                    />
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
 
                                     <div
@@ -547,7 +571,7 @@ const TabFiltersProduct = ({
     const renderTabsSortOrder = () => {
         return (
             <Popover className="relative">
-                {({ open, close }) => (
+                {({open, close}) => (
                     <>
                         <PopoverButton
                             className={`
@@ -605,7 +629,7 @@ const TabFiltersProduct = ({
                                 : "Sort order"}
                         </span>
                             {!tempSelectedSortOrder ? (
-                                <ChevronDownIcon className="w-4 h-4 ml-3" />
+                                <ChevronDownIcon className="w-4 h-4 ml-3"/>
                             ) : (
                                 <span
                                     onClick={() => {
@@ -629,8 +653,11 @@ const TabFiltersProduct = ({
                             leaveFrom="opacity-100 translate-y-0"
                             leaveTo="opacity-0 translate-y-1"
                         >
-                            <PopoverPanel className="absolute z-40 w-screen max-w-sm px-4 mt-3 left-0 sm:px-0 lg:max-w-sm">
-                                <div className="rounded-2xl shadow-xl bg-white dark:bg-neutral-900 border border-neutral-200">
+                            <PopoverPanel
+                                className="absolute z-40 w-screen max-w-sm px-4 mt-3 right-0 sm:px-0 lg:max-w-sm"
+                            >
+                                <div
+                                    className="rounded-2xl shadow-xl bg-white dark:bg-neutral-900 border border-neutral-200">
                                     <div className="px-5 py-6 space-y-5">
                                         {DATA_sortOrderRadios.map((radio) => (
                                             <Radio
@@ -644,7 +671,8 @@ const TabFiltersProduct = ({
                                         ))}
                                     </div>
 
-                                    <div className="p-5 bg-neutral-50 dark:bg-neutral-900 dark:border-t dark:border-neutral-800 flex items-center justify-between">
+                                    <div
+                                        className="p-5 bg-neutral-50 dark:bg-neutral-900 dark:border-t dark:border-neutral-800 flex items-center justify-between">
                                         <ButtonThird
                                             onClick={() => {
                                                 close();
@@ -674,257 +702,270 @@ const TabFiltersProduct = ({
         );
     };
 
-    // TODO 도희 : 반응형 웹 처리 하기 위해서 처리 해야함, 선택된 애들 filter 페이지로 넘어가게만 하면 완료
-    // const renderMoreFilterItem = (
-    //     data: {
-    //         name: string;
-    //         description?: string;
-    //         defaultChecked?: boolean;
-    //     }[],
-    //     onFilterChange: (checkedItems: string[]) => void
-    // ) => {
-    //     const [checkedItems, setCheckedItems] = useState<string[]>(
-    //         data.filter(item => item.defaultChecked).map(item => item.name)
-    //     );
-    //
-    //     const handleCheckboxChange = (name: string) => {
-    //         setCheckedItems((prevChecked) => {
-    //             const updatedCheckedItems = prevChecked.includes(name)
-    //                 ? prevChecked.filter(item => item !== name)
-    //                 : [...prevChecked, name];
-    //
-    //             // 상태가 업데이트될 때마다 부모에게 전달
-    //             onFilterChange(updatedCheckedItems);
-    //             return updatedCheckedItems;
-    //         });
-    //     };
-    //
-    //     const list1 = data.filter((_, i) => i < data.length / 2);
-    //     const list2 = data.filter((_, i) => i >= data.length / 2);
-    //
-    //     return (
-    //         <div className="grid grid-cols-2 gap-x-4 sm:gap-x-8 gap-8">
-    //             <div className="flex flex-col space-y-5">
-    //                 {list1.map((item) => (
-    //                     <Checkbox
-    //                         key={item.name}
-    //                         name={item.name}
-    //                         subLabel={item.description}
-    //                         label={item.name}
-    //                         checked={checkedItems.includes(item.name)}
-    //                         onChange={() => handleCheckboxChange(item.name)}
-    //                     />
-    //                 ))}
-    //             </div>
-    //             <div className="flex flex-col space-y-5">
-    //                 {list2.map((item) => (
-    //                     <Checkbox
-    //                         key={item.name}
-    //                         name={item.name}
-    //                         subLabel={item.description}
-    //                         label={item.name}
-    //                         checked={checkedItems.includes(item.name)}
-    //                         onChange={() => handleCheckboxChange(item.name)}
-    //                     />
-    //                 ))}
-    //             </div>
-    //         </div>
-    //     );
-    // };
-    //
-    // const renderTabMobileFilter = () => {
-    //     return (
-    //         <div className="flex-shrink-0">
-    //             <div
-    //                 className="flex flex-shrink-0 items-center justify-center px-4 py-2 text-sm rounded-full border border-primary-500 bg-primary-50 text-primary-900 focus:outline-none cursor-pointer select-none"
-    //                 onClick={openModalMoreFilter}
-    //             >
-    //                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    //                     <path d="M22 6.5H16" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-    //                     <path d="M6 6.5H2" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-    //                     <path d="M10 10C11.933 10 13.5 8.433 13.5 6.5C13.5 4.567 11.933 3 10 3C8.067 3 6.5 4.567 6.5 6.5C6.5 8.433 8.067 10 10 10Z" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-    //                     <path d="M22 17.5H18" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-    //                     <path d="M8 17.5H2" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-    //                     <path d="M14 21C15.933 21 17.5 19.433 17.5 17.5C17.5 15.567 15.933 14 14 14C12.067 14 10.5 15.567 10.5 17.5C10.5 19.433 12.067 21 14 21Z" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-    //                 </svg>
-    //                 <span className="ml-2">Products filters (3)</span>
-    //                 {renderXClear()}
-    //             </div>
-    //
-    //             <Transition appear show={isOpenMoreFilter}>
-    //                 <Dialog as="div" className="fixed inset-0 z-50" onClose={closeModalMoreFilter}>
-    //                     <div className="min-h-screen text-center">
-    //                         <TransitionChild enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
-    //                             <div className="fixed inset-0 bg-black bg-opacity-40 dark:bg-opacity-60" />
-    //                         </TransitionChild>
-    //
-    //                         <span className="inline-block h-svh align-middle" aria-hidden="true">
-    //                         &#8203;
-    //                     </span>
-    //
-    //                         <TransitionChild
-    //                             as={"div"}
-    //                             className="inline-block h-svh w-full max-w-4xl"
-    //                             enter="ease-out duration-300"
-    //                             enterFrom="opacity-0 scale-95"
-    //                             enterTo="opacity-100 scale-100"
-    //                             leave="ease-in duration-200"
-    //                             leaveFrom="opacity-100 scale-100"
-    //                             leaveTo="opacity-0 scale-95"
-    //                         >
-    //                             <div className="inline-flex flex-col w-full text-left align-middle transition-all transform bg-white dark:bg-neutral-900 dark:border dark:border-neutral-700 dark:text-neutral-100 h-full">
-    //                                 <div className="relative flex-shrink-0 px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 text-center">
-    //                                     <DialogTitle as="h3" className="text-lg font-medium leading-6 text-gray-900">
-    //                                         Products filters
-    //                                     </DialogTitle>
-    //                                     <span className="absolute left-3 top-3">
-    //                                     <ButtonClose onClick={closeModalMoreFilter} />
-    //                                 </span>
-    //                                 </div>
-    //
-    //                                 <div className="flex-grow overflow-y-auto">
-    //                                     <div className="px-6 sm:px-8 md:px-10 divide-y divide-neutral-200 dark:divide-neutral-800">
-    //                                         {/* Categories */}
-    //                                         <div className="py-7">
-    //                                             <h3 className="text-xl font-medium">Brands</h3>
-    //                                             <div className="mt-6 relative ">{renderMoreFilterItem(DATA_brands)}</div>
-    //                                         </div>
-    //
-    //                                         {/* Colors */}
-    //                                         <div className="py-7">
-    //                                             <h3 className="text-xl font-medium">Colors</h3>
-    //                                             <div className="mt-6 relative ">{renderMoreFilterItem(DATA_colors)}</div>
-    //                                         </div>
-    //
-    //                                         {/* Range Prices */}
-    //                                         <div className="py-7">
-    //                                             <h3 className="text-xl font-medium">Range Prices</h3>
-    //                                             <div className="mt-6 relative ">
-    //                                                 <div className="relative flex flex-col space-y-8">
-    //                                                     <div className="space-y-5">
-    //                                                         <Slider
-    //                                                             range
-    //                                                             className="text-red-400"
-    //                                                             min={PRICE_RANGE[0]}
-    //                                                             max={PRICE_RANGE[1]}
-    //                                                             defaultValue={tempRangePrices}
-    //                                                             allowCross={false}
-    //                                                             onChange={(_input: number | number[]) =>
-    //                                                                 setTempRangePrices(_input as number[])
-    //                                                             }
-    //                                                         />
-    //                                                     </div>
-    //
-    //                                                     <div className="flex justify-between space-x-5">
-    //                                                         <div>
-    //                                                             <label
-    //                                                                 htmlFor="minPrice"
-    //                                                                 className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
-    //                                                             >
-    //                                                                 Min price
-    //                                                             </label>
-    //                                                             <div className="mt-1 relative rounded-md">
-    //                                                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-    //                                                                     <span className="text-neutral-500 sm:text-sm">₩</span>
-    //                                                                 </div>
-    //                                                                 <input
-    //                                                                     type="text"
-    //                                                                     name="minPrice"
-    //                                                                     disabled
-    //                                                                     id="minPrice"
-    //                                                                     className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-3 sm:text-sm border-neutral-200 rounded-full text-neutral-900"
-    //                                                                     value={tempRangePrices[0]}
-    //                                                                 />
-    //                                                             </div>
-    //                                                         </div>
-    //                                                         <div>
-    //                                                             <label
-    //                                                                 htmlFor="maxPrice"
-    //                                                                 className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
-    //                                                             >
-    //                                                                 Max price
-    //                                                             </label>
-    //                                                             <div className="mt-1 relative rounded-md">
-    //                                                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-    //                                                                     <span className="text-neutral-500 sm:text-sm">₩</span>
-    //                                                                 </div>
-    //                                                                 <input
-    //                                                                     type="text"
-    //                                                                     disabled
-    //                                                                     name="maxPrice"
-    //                                                                     id="maxPrice"
-    //                                                                     className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-3 sm:text-sm border-neutral-200 rounded-full text-neutral-900"
-    //                                                                     value={tempRangePrices[1]}
-    //                                                                 />
-    //                                                             </div>
-    //                                                         </div>
-    //                                                     </div>
-    //                                                 </div>
-    //                                             </div>
-    //                                         </div>
-    //
-    //                                         {/* Sort Order */}
-    //                                         <div className="py-7">
-    //                                             <h3 className="text-xl font-medium">Sort Order</h3>
-    //                                             <div className="mt-6 relative ">
-    //                                                 <div className="relative flex flex-col space-y-5">
-    //                                                     {DATA_sortOrderRadios.map((item) => (
-    //                                                         <Radio
-    //                                                             id={item.id}
-    //                                                             key={item.id}
-    //                                                             name="radioNameSort"
-    //                                                             label={item.name}
-    //                                                             defaultChecked={tempSelectedSortOrder === item.id}
-    //                                                             onChange={setTempSelectedSortOrder}
-    //                                                         />
-    //                                                     ))}
-    //                                                 </div>
-    //                                             </div>
-    //                                         </div>
-    //                                     </div>
-    //                                 </div>
-    //
-    //                                 <div className="px-6 py-5 flex-shrink-0 bg-neutral-50 dark:bg-neutral-900 dark:border-t dark:border-neutral-800 flex items-center justify-between">
-    //                                     <ButtonThird
-    //                                         onClick={() => {
-    //                                             setTempRangePrices(PRICE_RANGE);
-    //                                             setTempSelectedBrands([]);
-    //                                             setTempSelectedColors([]);
-    //                                             setTempSelectedSortOrder("");
-    //                                             closeModalMoreFilter();
-    //                                         }}
-    //                                         sizeClass="py-2.5 px-5"
-    //                                     >
-    //                                         Clear
-    //                                     </ButtonThird>
-    //                                     <ButtonPrimary
-    //                                         onClick={() => {
-    //                                             closeModalMoreFilter();
-    //                                             // Apply the filters
-    //                                             onFilterChange(
-    //                                                 tempRangePrices,
-    //                                                 tempSelectedBrands,
-    //                                                 tempSelectedColors,
-    //                                                 tempSelectedSortOrder
-    //                                             );
-    //                                         }}
-    //                                         sizeClass="py-2.5 px-5"
-    //                                     >
-    //                                         Apply
-    //                                     </ButtonPrimary>
-    //                                 </div>
-    //                             </div>
-    //                         </TransitionChild>
-    //                     </div>
-    //                 </Dialog>
-    //             </Transition>
-    //         </div>
-    //     );
-    // };
+    const renderTabMobileFilter = () => {
+        let filterCount = tempSelectedBrands.length + tempSelectedColors.length + (tempSelectedSortOrder !== "" ? 1 : 0)
+            + ((tempRangePrices[0] !== PRICE_RANGE[0] || tempRangePrices[1] !== PRICE_RANGE[1]) ? 1 : 0);
+
+        return (
+            <div className="flex-shrink-0">
+                <div
+                    className={`flex items-center justify-center px-4 py-2 text-sm rounded-full border ${
+                        filterCount > 0
+                            ? "!border-primary-500 bg-primary-50 text-primary-900"
+                            : "border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:border-neutral-400 dark:hover:border-neutral-500"
+                    } focus:outline-none`}
+                    onClick={openModalMoreFilter}
+                >
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22 6.5H16" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10"
+                              strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M6 6.5H2" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10"
+                              strokeLinecap="round" strokeLinejoin="round"/>
+                        <path
+                            d="M10 10C11.933 10 13.5 8.433 13.5 6.5C13.5 4.567 11.933 3 10 3C8.067 3 6.5 4.567 6.5 6.5C6.5 8.433 8.067 10 10 10Z"
+                            stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round"
+                            strokeLinejoin="round"/>
+                        <path d="M22 17.5H18" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10"
+                              strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M8 17.5H2" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10"
+                              strokeLinecap="round" strokeLinejoin="round"/>
+                        <path
+                            d="M14 21C15.933 21 17.5 19.433 17.5 17.5C17.5 15.567 15.933 14 14 14C12.067 14 10.5 15.567 10.5 17.5C10.5 19.433 12.067 21 14 21Z"
+                            stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round"
+                            strokeLinejoin="round"/>
+                    </svg>
+                    <span className="ml-2">
+                        Products filters ({filterCount})
+                    </span>
+                    {filterCount > 0 ? (
+                        <span
+                            onClick={() => {
+                                setTempSelectedBrands([]);
+                                setTempSelectedColors([]);
+                                setTempRangePrices(PRICE_RANGE);
+                                setTempSelectedSortOrder("");
+                                setTimeout(() => {
+                                    onFilterChange(
+                                        tempRangePrices,
+                                        tempSelectedBrands,
+                                        tempSelectedColors,
+                                        tempSelectedSortOrder
+                                    );
+                                }, 0);
+                            }}
+                        >
+                            {renderXClear()}
+                        </span>
+                    ) : (
+                        <ChevronDownIcon className="w-4 h-4 ml-3"/>
+                    )}
+                </div>
+
+                <Transition appear show={isOpenMoreFilter}>
+                    <Dialog as="div" className="fixed inset-0 z-50" onClose={closeModalMoreFilter}>
+                        <div className="min-h-screen text-center">
+                            <TransitionChild enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100"
+                                             leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
+                                <div className="fixed inset-0 bg-black bg-opacity-40 dark:bg-opacity-60"/>
+                            </TransitionChild>
+
+                            <span className="inline-block h-svh align-middle" aria-hidden="true">
+                            &#8203;
+                        </span>
+
+                            <TransitionChild
+                                as={"div"}
+                                className="inline-block h-svh w-full max-w-4xl"
+                                enter="ease-out duration-300"
+                                enterFrom="opacity-0 scale-95"
+                                enterTo="opacity-100 scale-100"
+                                leave="ease-in duration-200"
+                                leaveFrom="opacity-100 scale-100"
+                                leaveTo="opacity-0 scale-95"
+                            >
+                                <div
+                                    className="inline-flex flex-col w-full text-left align-middle transition-all transform bg-white dark:bg-neutral-900 dark:border dark:border-neutral-700 dark:text-neutral-100 h-full">
+                                    <div
+                                        className="relative flex-shrink-0 px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 text-center">
+                                        <DialogTitle as="h3" className="text-lg font-medium leading-6 text-gray-900">
+                                            Products filters
+                                        </DialogTitle>
+                                        <span className="absolute left-3 top-3">
+                                        <ButtonClose onClick={closeModalMoreFilter}/>
+                                    </span>
+                                    </div>
+
+                                    <div className="flex-grow overflow-y-auto">
+                                        <div
+                                            className="px-6 sm:px-8 md:px-10 divide-y divide-neutral-200 dark:divide-neutral-800">
+                                            {/* Categories */}
+                                            <div className="py-7">
+                                                <h3 className="text-xl font-medium">Brands</h3>
+                                                {DATA_brands.map((item) => (
+                                                    <div key={item.name} className="mt-6 relative">
+                                                        <Checkbox
+                                                            name={item.name}
+                                                            label={item.name}
+                                                            defaultChecked={tempSelectedBrands.includes(item.name)}
+                                                            onChange={(checked) =>
+                                                                handleChangeBrands(checked, item.name)
+                                                            }
+                                                        />
+                                                    </div>
+                                                ))}
+                                            </div>
+
+                                            {/* Colors */}
+                                            <div className="py-7">
+                                                <h3 className="text-xl font-medium">Colors</h3>
+                                                <div className="grid grid-cols-2 gap-x-4 mt-6">
+                                                    {DATA_colors.map((item) => (
+                                                        <div key={item.name} className="mt-6 relative">
+                                                            <Checkbox
+                                                                name={item.name}
+                                                                label={item.name}
+                                                                defaultChecked={tempSelectedColors.includes(item.name)}
+                                                                onChange={(checked) =>
+                                                                    handleChangeColors(checked, item.name)
+                                                                }
+                                                            />
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            {/* Range Prices */}
+                                            <div className="py-7">
+                                                <h3 className="text-xl font-medium">Range Prices</h3>
+                                                <div className="mt-6 relative ">
+                                                    <div className="relative flex flex-col space-y-8">
+                                                        <div className="space-y-5">
+                                                            <Slider
+                                                                range
+                                                                className="text-red-400"
+                                                                min={PRICE_RANGE[0]}
+                                                                max={PRICE_RANGE[1]}
+                                                                defaultValue={tempRangePrices}
+                                                                allowCross={false}
+                                                                onChange={(_input: number | number[]) =>
+                                                                    setTempRangePrices(_input as number[])
+                                                                }
+                                                            />
+                                                        </div>
+
+                                                        <div className="flex justify-between space-x-5">
+                                                            <div>
+                                                                <label
+                                                                    htmlFor="minPrice"
+                                                                    className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
+                                                                >
+                                                                    Min price
+                                                                </label>
+                                                                <div className="mt-1 relative rounded-md">
+                                                                    <div
+                                                                        className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                                        <span
+                                                                            className="text-neutral-500 sm:text-sm">₩</span>
+                                                                    </div>
+                                                                    <input
+                                                                        type="text"
+                                                                        name="minPrice"
+                                                                        disabled
+                                                                        id="minPrice"
+                                                                        className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-3 sm:text-sm border-neutral-200 rounded-full text-neutral-900"
+                                                                        value={tempRangePrices[0]}
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <label
+                                                                    htmlFor="maxPrice"
+                                                                    className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
+                                                                >
+                                                                    Max price
+                                                                </label>
+                                                                <div className="mt-1 relative rounded-md">
+                                                                    <div
+                                                                        className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                                        <span
+                                                                            className="text-neutral-500 sm:text-sm">₩</span>
+                                                                    </div>
+                                                                    <input
+                                                                        type="text"
+                                                                        disabled
+                                                                        name="maxPrice"
+                                                                        id="maxPrice"
+                                                                        className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-3 sm:text-sm border-neutral-200 rounded-full text-neutral-900"
+                                                                        value={tempRangePrices[1]}
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Sort Order */}
+                                            <div className="py-7">
+                                                <h3 className="text-xl font-medium">Sort Order</h3>
+                                                <div className="mt-6 relative ">
+                                                    <div className="relative flex flex-col space-y-5">
+                                                        {DATA_sortOrderRadios.map((item) => (
+                                                            <Radio
+                                                                id={item.id}
+                                                                key={item.id}
+                                                                name="radioNameSort"
+                                                                label={item.name}
+                                                                defaultChecked={tempSelectedSortOrder === item.id}
+                                                                onChange={setTempSelectedSortOrder}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        className="px-6 py-5 flex-shrink-0 bg-neutral-50 dark:bg-neutral-900 dark:border-t dark:border-neutral-800 flex items-center justify-between">
+                                        <ButtonThird
+                                            onClick={() => {
+                                                setTempRangePrices(PRICE_RANGE);
+                                                setTempSelectedBrands([]);
+                                                setTempSelectedColors([]);
+                                                setTempSelectedSortOrder("");
+                                                closeModalMoreFilter();
+                                            }}
+                                            sizeClass="py-2.5 px-5"
+                                        >
+                                            Clear
+                                        </ButtonThird>
+                                        <ButtonPrimary
+                                            onClick={() => {
+                                                closeModalMoreFilter();
+                                                onFilterChange(
+                                                    tempRangePrices,
+                                                    tempSelectedBrands,
+                                                    tempSelectedColors,
+                                                    tempSelectedSortOrder
+                                                );
+                                            }}
+                                            sizeClass="py-2.5 px-5"
+                                        >
+                                            Apply
+                                        </ButtonPrimary>
+                                    </div>
+                                </div>
+                            </TransitionChild>
+                        </div>
+                    </Dialog>
+                </Transition>
+            </div>
+        );
+    };
 
     return (
         <div className="flex lg:space-x-4">
-            {/* FOR DESKTOP */}
             <div className="hidden lg:flex flex-1 space-x-4">
                 {renderTabsPriceRage()}
                 {renderTabsBrand()}
@@ -932,9 +973,9 @@ const TabFiltersProduct = ({
                 <div className="!ml-auto">{renderTabsSortOrder()}</div>
             </div>
 
-            {/*<div className="flex overflow-x-auto lg:hidden space-x-4">*/}
-            {/*    {renderTabMobileFilter()}*/}
-            {/*</div>*/}
+            <div className="flex overflow-x-auto lg:hidden space-x-4">
+                {renderTabMobileFilter()}
+            </div>
         </div>
     );
 };

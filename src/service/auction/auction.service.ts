@@ -2,9 +2,11 @@
 
 import {auctionAPI} from "@/api/auction/auction.api";
 import Cookies from "js-cookie";
-import {AuctionModel, SaveAuctionModel} from "@/model/auction/auction.model";
+import {AuctionModel, AuctionWithImageModel, SaveAuctionModel} from "@/model/auction/auction.model";
 import {fetchImage} from "@/service/ftp/image.service";
-import {ImageType} from "@/model/ftp/image.model";
+import {defaultImage, ImageModel, ImageType} from "@/model/ftp/image.model";
+import {fetchProductWithImageBySizeId} from "@/service/product/product.service";
+import {ProductDTO, ProductWithImageModel} from "@/model/product/product.model";
 
 
 export async function fetchAuction(auctionId: string) {
@@ -21,7 +23,7 @@ export async function fetchAuction(auctionId: string) {
     }
 }
 
-export async function fetchAuctionWithImages(auctionId: string) {
+export async function fetchAuctionWithImages(auctionId: string): Promise<AuctionWithImageModel> {
 
     try {
         const auction = await fetchAuction(auctionId);
@@ -31,11 +33,15 @@ export async function fetchAuctionWithImages(auctionId: string) {
             throw new Error("");
         }
 
-        const images = await fetchImage(ImageType.AUCTION, auctionId);
+        console.log("auction", auction);
+
+        const images = await fetchImage(ImageType.AUCTION, auctionId) || [defaultImage, defaultImage, defaultImage];
+
+        console.log("images", images);
 
         return {
-            auction: auction,
-            images: images,
+            auction,
+            images: images as ImageModel[],
         };
     } catch (error) {
         console.error("fetchAuctionWithImages 중 오류 발생");
@@ -89,7 +95,7 @@ export async function deleteAuction(id: number) {
     }
 }
 
-export async function fetchAuctionsBySize(sizeId: number) {
+export async function fetchAuctionsBySize(sizeId: number): Promise<AuctionModel[]> {
     try {
         const options = {
             params: {sizeId: sizeId},
@@ -97,12 +103,13 @@ export async function fetchAuctionsBySize(sizeId: number) {
 
         const result = await auctionAPI.findAllBySize(options);
 
-        if (typeof result === "undefined") return [];
+        if (typeof result === "undefined") return [] as AuctionModel[];
 
         return result;
 
     } catch (error) {
         console.error("fetchAuctionBySize 도중 오류 발생", error);
+        throw new Error("");
     }
 }
 
@@ -135,4 +142,27 @@ export async function findByUserAuction(): Promise<AuctionModel[]> {
         console.error("findByUserAuction 에러 발생", error);
         throw new Error("경매 내역을 가져오는 중 에러가 발생했습니다.");
     }
+}
+
+type ProductDTOWithImage = {
+    product: ProductDTO,
+    image: ImageModel,
+    size: string;
+}
+
+export async function fetchAuctionDetails(auctionId: string): Promise<{auction: AuctionWithImageModel, product: ProductDTOWithImage}> {
+    try {
+        const auction = await fetchAuctionWithImages(auctionId);
+        const product = await fetchProductWithImageBySizeId(auction.auction.size);
+
+        return {
+            auction,
+            product,
+        }
+
+    } catch (error) {
+        console.error("auctionDetails 에러 발생", error);
+        throw new Error();
+    }
+
 }

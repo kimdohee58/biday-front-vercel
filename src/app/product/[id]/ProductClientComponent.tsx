@@ -1,23 +1,34 @@
+"use client";
+
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import LikeButton from "@/components/LikeButton";
-import {StarIcon} from "@heroicons/react/24/solid";
 import BagIcon from "@/components/BagIcon";
 
 import {SparklesIcon} from "@heroicons/react/24/outline";
 import Prices from "@/components/Prices";
 import SectionSliderProductCard from "@/components/SectionSliderProductCard";
-// import Policy from "./Policy";
+import Policy from "./Policy";
 import SectionPromo2 from "@/components/SectionPromo2";
 import Image from "next/image";
 import {Route} from "@/routers/types";
 import {fetchProductDetails} from "@/service/product/product.service";
 import {ImageModel} from "@/model/ftp/image.model"
-import React, {Suspense} from "react";
+import {Suspense, useState} from "react";
 import {PhotoPlaceholderSkeleton} from "@/components/skeleton/PhotoPlaceholderSkeleton";
 import {AuctionModel} from "@/model/auction/auction.model"
-import {getColor} from "@/utils/productUtils";
+import {getColor, getColorsByTypes} from "@/utils/productUtils";
 import AuctionTable from "@/app/product/[id]/AuctionTable";
-import Policy from "@/app/product/[id]/Policy";
+import {HeartIcon} from "@heroicons/react/24/solid";
+import {ColorType, ProductWithImageModel} from "@/model/product/product.model";
+import {useSuspenseAuctionBySizeId} from "@/hooks/react-query/useAuctionlist";
+
+type ProductDetailProps = {
+    colorIds: number[],
+    product: ProductWithImageModel,
+    size: string[],
+    colors: ColorType[],
+    productWithImagesArray: ProductWithImageModel[];
+}
 
 async function RenderImage({image}: { image: ImageModel}) {
 
@@ -34,12 +45,20 @@ async function RenderImage({image}: { image: ImageModel}) {
     );
 }
 
-export default async function ProductDetailPage({params}: { params: { id: string } }) {
-console.log("product/{id}", params.id)
+export default function ProductClientComponent({product}: { product: ProductDetailProps}) {
 
-    const {colorIds, product, size, auctions, productWithImagesArray} = await fetchProductDetails((params.id));
+    const productSize = product.product.product.sizes.find((size) => size.sizeProduct.id === product.product.product.id)?.id;
 
-    const insertAuctionUrl = `/auction/insert?productId=${params.id}`;
+    if (!productSize) {
+        throw new Error("사이즈 이상");
+    }
+    const auctions = useSuspenseAuctionBySizeId(productSize);
+
+    const colorArray = getColorsByTypes(product.colors);
+    const [colorActive, setColorActive] = useState(product.colors.findIndex(c => c === product.product.product.color));
+
+
+    const insertAuctionUrl = `/auction/insert?productId=${product.product.product.id}`;
 
     /* const renderStatus = () => {
          if (!status) {
@@ -82,23 +101,64 @@ console.log("product/{id}", params.id)
          return null;
      };*/
 
+    const renderColors = () => {
+        if (!colorArray || !colorArray.length) {
+            return null;
+        }
+
+        return (
+            <div>
+                <label htmlFor="">
+          <span className="text-sm font-medium">
+            Color:
+            <span className="ml-1 font-semibold">
+              {colorArray[colorActive].name}
+            </span>
+          </span>
+                </label>
+                <div className="flex mt-3">
+                    {colorArray.map((color, index) => (
+                        <div
+                            key={index}
+                            onClick={() => setColorActive(index)}
+                            className={`relative flex-1 max-w-[75px] h-10 sm:h-11 rounded-full border-2 cursor-pointer ${
+                                colorActive === index
+                                    ? "border-primary-6000 dark:border-primary-500"
+                                    : "border-transparent"
+                            }`}
+                        >
+                            <div
+                                className="absolute inset-0.5 rounded-full overflow-hidden z-0 object-cover bg-cover"
+                                style={{
+                                    backgroundImage: `url(${
+                                        color.thumbnail.src
+                                    })`,
+                                }}
+                            ></div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    };
+
     const renderSectionContent = () => {
         return (
             <div className="space-y-7 2xl:space-y-8">
                 {/* ---------- 1 HEADING ----------  */}
                 <div>
                     <h2 className="text-2xl sm:text-3xl font-semibold">
-                        {product.product.name}
+                        {product.product.product.name}
                     </h2>
                     <h6 className="text-gray-300 text-left">
-                        {product.product.subName}
+                        {product.product.product.subName}
                     </h6>
 
                     <div className="flex items-center mt-5 space-x-4 sm:space-x-5">
                         {/* <div className="flex text-xl font-semibold">$112.00</div> */}
                         <Prices
                             contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold"
-                            price={product.product.price}
+                            price={product.product.product.price}
                         />
 
                         <div className="h-7 border-l border-slate-300 dark:border-slate-700"></div>
@@ -107,10 +167,10 @@ console.log("product/{id}", params.id)
                             <a
                                 className="flex items-center text-sm font-medium"
                             >
-                                <StarIcon className="w-5 h-5 pb-[1px] text-yellow-400"/>
+                                <HeartIcon className="w-5 h-5 pb-[1px] text-red-500"/>
                                 <div className="ml-1.5 flex">
                   <span className="text-slate-600 dark:text-slate-400">
-                    {product.product.wishes} wishes
+                    {product.product.product.wishes} wishes
                   </span>
                                 </div>
                             </a>
@@ -130,12 +190,14 @@ console.log("product/{id}", params.id)
                     >
                         <BagIcon className="hidden sm:inline-block w-5 h-5 mb-0.5"/>
                         <span className="ml-3">판매하기</span>
-
                     </ButtonPrimary>
                 </div>
                 <hr className=" 2xl:!my-10 border-slate-200 dark:border-slate-700"></hr>
                 <div className="flex-1 items-center justify-center mt-5 space-x-3.5">
-                    <AuctionTable auctions={auctions} product={product.product}/>
+                    <Suspense>
+                        <AuctionTable auctions={auctions.data} product={product.product.product}/>
+                    </Suspense>
+
                 </div>
 
                 {/* ---------- 5 ----------  */}
@@ -153,7 +215,7 @@ console.log("product/{id}", params.id)
             <div className="">
                 <h2 className="text-2xl font-semibold">Product Details</h2>
                 <div className="prose prose-sm sm:prose dark:prose-invert sm:max-w-4xl mt-7">
-                    <p dangerouslySetInnerHTML={{__html: product.product.description.replace(/\\n/g, '<br/>')}}/>
+                    <p dangerouslySetInnerHTML={{__html: product.product.product.description.replace(/\\n/g, '<br/>')}}/>
                 </div>
             </div>
         );
@@ -169,12 +231,12 @@ console.log("product/{id}", params.id)
                         {/* HEADING */}
                         <div className="relative">
                             <Suspense fallback={<PhotoPlaceholderSkeleton/>}>
-                                <RenderImage image={product.image}/>
+                                <RenderImage image={product.product.image}/>
                             </Suspense>
                             {/*{renderStatus()}*/}
                             {/* META FAVORITES */}
                             <LikeButton className="absolute right-3 top-3 "
-                                        productId={Number(params.id)}/>
+                                        productId={Number(product.product.product.id)}/>
                         </div>
                     </div>
 
@@ -194,7 +256,7 @@ console.log("product/{id}", params.id)
                     <hr className="border-slate-200 dark:border-slate-700"/>
 
                     {/* OTHER SECTION */}
-                   {/* <SectionSliderProductCard
+                    {/* <SectionSliderProductCard
                         heading="Customers also purchased"
                         subHeading=""
                         headingFontClassName="text-2xl font-semibold"

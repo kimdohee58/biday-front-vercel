@@ -1,5 +1,6 @@
 import {productAPI} from "@/api/product/product.api";
 import {
+    ColorType,
     ProductCardModel,
     ProductDictionary,
     ProductModel,
@@ -12,7 +13,7 @@ import {setLoading} from "@/lib/features/products.slice";
 import {fetchAllProductImage, fetchImageOne} from "@/service/ftp/image.service";
 import {defaultImage, ImageType} from "@/model/ftp/image.model";
 import {SizeModel} from "@/model/product/size.model";
-import {getColorsArray, getColorsByTypes} from "@/utils/productUtils";
+import {getColorsArray} from "@/utils/productUtils";
 
 export async function fetchAllProductCards(): Promise<ProductCardModel[]> {
     try {
@@ -26,7 +27,7 @@ export async function fetchAllProductCards(): Promise<ProductCardModel[]> {
         }
 
         return await Promise.all(products.map(async (product) => {
-            const productGroup = await fetchProduct(product.id);
+            const productGroup = await fetchProduct(String(product.id));
             const colors = getColorsArray(productGroup);
             const productImages = images.find(image => (
                 image.referencedId === product.id.toString() && image.type === ImageType.PRODUCT
@@ -132,7 +133,7 @@ export async function fetchProductOne(productId: string): Promise<ProductModel> 
 }
 
 // 상품 (색상 포함) 들을 이미지와 함께 불러오는 함수
-export async function fetchProductWithImages(productId: number): Promise<ProductWithImageModel[]> {
+export async function fetchProductsWithImages(productId: string): Promise<ProductWithImageModel[]> {
     try {
         const products = await fetchProduct(productId);
 
@@ -159,8 +160,21 @@ export async function fetchProductWithImages(productId: number): Promise<Product
     }
 }
 
+export async function fetchProductWithImage(productId: string): Promise<Omit<ProductCardModel, "isLiked">> {
+    try {
+        const products = await fetchProduct(productId);
+        const colors = getColorsArray(products);
+        const product = await fetchProductOne(productId);
+        const image = await fetchImageOne(ImageType.PRODUCT, productId);
+
+        return {product, image, colors};
+    } catch (error) {
+        throw new Error("");
+    }
+}
+
 // productId의 색상만 다른 product 들도 함께 불러오는 함수
-export async function fetchProduct(productId: number): Promise<ProductModel[]> {
+export async function fetchProduct(productId: string): Promise<ProductModel[]> {
     try {
         const options = {
             params: {
@@ -182,27 +196,29 @@ export async function fetchProduct(productId: number): Promise<ProductModel[]> {
     }
 }
 
-export async function fetchProductDetails(id: number): Promise<{
+export async function fetchProductDetails(productId: string): Promise<{
     colorIds: number[],
     product: ProductWithImageModel,
     size: string[],
-    auctions: AuctionModel[]
+    auctions: AuctionModel[],
+    colors: ColorType[],
     productWithImagesArray: ProductWithImageModel[];
 }> {
     try {
 
         const options = {
             params: {
-                productId: id,
+                productId: Number(productId),
             }
         };
 
-        const productWithImagesArray = await fetchProductWithImages(id);
-        const product = productWithImagesArray.find((item) => item.product.id === id);
+        const productWithImagesArray = await fetchProductsWithImages(productId);
+        const product = productWithImagesArray.find((item) => String(item.product.id) === productId);
         if (product === undefined) {
-            throw new Error(`해당 product를 찾을 수 없습니다. id: ${id}`);
+            throw new Error(`해당 product를 찾을 수 없습니다. id: ${productId}`);
         }
         const colorIds = productWithImagesArray.map((item) => item.product.id);
+        const colors = productWithImagesArray.map((item) => item.product.color);
         const sizes = product.product.sizes.map((size) => size.id);
 
         const auctionArray = await Promise.all(sizes.map((size) => {
@@ -212,7 +228,7 @@ export async function fetchProductDetails(id: number): Promise<{
         const size = product.product.sizes.map((size) => size.size);
 
 
-        return {colorIds, product, size, auctions, productWithImagesArray};
+        return {colorIds, colors, product, size, auctions, productWithImagesArray};
 
 
     } catch (error) {
@@ -236,6 +252,22 @@ export async function fetchProductBySizeId(sizeId: number): Promise<SizeModel> {
         console.error("fetchProduct 에러 발생", error);
         throw new Error("");
         // TODO error enum
+    }
+}
+
+export async function fetchProductWithImageBySizeId(sizeId: number) {
+    try {
+        const sizeProduct = await fetchProductBySizeId(sizeId);
+        const image = await fetchImageOne(ImageType.PRODUCT, String(sizeProduct.sizeProduct.id));
+
+        return {
+            product: sizeProduct.sizeProduct,
+            image: image,
+            size: sizeProduct.size,
+        }
+
+    } catch (error) {
+        throw new Error("");
     }
 }
 

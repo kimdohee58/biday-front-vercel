@@ -38,7 +38,6 @@ axiosInstance.interceptors.response.use(
                 try {
                     const redirectResponse = await axios.get(location, {withCredentials: true});
                     const authorizationHeader = redirectResponse.headers['authorization'];
-
                     if (authorizationHeader) {
                         const accessToken = authorizationHeader.split(' ')[1];
                         saveToken(accessToken);
