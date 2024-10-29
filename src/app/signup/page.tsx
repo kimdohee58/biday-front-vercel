@@ -137,9 +137,7 @@ export default function PageSignUp() {
         setTermsChecked(checkedTerms);
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
+    const handleSubmit = async () => {
         const fullEmail = isCustomDomain
             ? `${emailLocalPart}@${customEmailDomain}`
             : `${emailLocalPart}@${emailDomain}`;
@@ -268,8 +266,17 @@ export default function PageSignUp() {
                     Signup
                 </h2>
                 <div className="max-w-md mx-auto space-y-2">
+                    <TermsAgreement onTermsChange={handleTermsChange}/>
+                    <div className="relative text-center">
+                            <span
+                                className="relative z-10 inline-block px-6 font-medium text-base bg-white dark:text-neutral-400 dark:bg-neutral-900"> {/* text-sm에서 text-base로 변경 및 px를 4에서 6으로 증가 */}
+                                AND
+                            </span>
+                        <div
+                            className="absolute left-0 w-full top-1/2 transform -translate-y-1/2 border-2 border-neutral-100 dark:border-neutral-800"></div>
+                    </div>
                     {/* 회원가입 폼 */}
-                    <form className="grid grid-cols-1 gap-6" onSubmit={handleSubmit}>
+                    <form className="grid grid-cols-1 gap-6" onClick={handleSubmit}>
                         {/* 이름 입력 필드 */}
                         <label className="block">
                             <span className="text-neutral-800 dark:text-neutral-200">이름</span>
@@ -402,20 +409,13 @@ export default function PageSignUp() {
                             <span className="text-sm text-green-400">{fieldSuccess.phoneNum}</span>
                         )}
 
-                        <div className="relative text-center">
-                            <span
-                                className="relative z-10 inline-block px-6 font-medium text-base bg-white dark:text-neutral-400 dark:bg-neutral-900"> {/* text-sm에서 text-base로 변경 및 px를 4에서 6으로 증가 */}
-                                AND
-                            </span>
-                            <div
-                                className="absolute left-0 w-full top-1/2 transform -translate-y-1/2 border-2 border-neutral-100 dark:border-neutral-800"></div>
-                        </div>
-
-                        <TermsAgreement onTermsChange={handleTermsChange} />
-
-                        {/* 제출 버튼 */}
-                        <ButtonPrimary type="submit">Continue</ButtonPrimary>
+                        <ButtonPrimary type="submit" className="w-full">Continue</ButtonPrimary>
                     </form>
+
+                    <div className="max-w-md mx-auto space-y-2">
+                        <div className="flex justify-center mt-4">
+                        </div>
+                    </div>
 
                     {/* 이미 계정이 있는 경우 로그인 링크 */}
                     <span className="block text-center text-neutral-700 dark:text-neutral-300">
