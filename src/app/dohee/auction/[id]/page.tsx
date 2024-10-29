@@ -23,10 +23,10 @@ import HighestBid from "./HighestBid";
 import NotifyBid from "./NotifyBid";
 import LikeSaveBtns from "@/components/LikeSaveBtns";
 import {fetchAwardOne, findByAuctionId} from "@/service/auction/award.service";
+import {useSelector} from "react-redux";
+import {getUserToken} from "@/lib/features/user.slice";
 
 export default function AuctionDetailPage() {
-
-
     const thisPathname = usePathname();
     const [variantActive, setVariantActive] = useState(0);
     // const [sizeSelected, setSizeSelected] = useState(sizes ? sizes[0] : "");
@@ -60,6 +60,16 @@ export default function AuctionDetailPage() {
 
     const {auction, images: auctionImages = []} = auctionData.data.auction || {auction: null, images: []};
     const {product, image: productImage, size} = auctionData.data.product;
+
+    const [sellerId, setSellerId] = useState("");
+    const userToken = useSelector(getUserToken);
+
+    useEffect(() => {
+        const sellerId = auction?.user && userToken.userId ? userToken.userId : "null";
+        setSellerId(sellerId);
+    }, [userToken]);
+
+    console.log("sellerId", sellerId)
 
     // const isEnded = new Date(auction.endedAt) < new Date();
     const isEnded = auction.status;
@@ -101,42 +111,46 @@ export default function AuctionDetailPage() {
 
 
     const onClickBidButton = () => {
-
         const token = Cookies.get("token");
         if (!token) {
             router.push("/login");
             return;
         }
 
-        if (!adjustBid) {
-            return;
+        // sellerId 체크 추가
+        if (sellerId != 'null') {
+            console.log("Seller ID가 존재합니다.");
+        } else {
+            if (!adjustBid) {
+                return;
+            }
+
+            const currentBid = adjustBid;
+
+            const bidData = {
+                auctionId: Number(id),
+                currentBid: currentBid,
+            }
+
+            mutation.mutate(bidData);
+
+            toast.custom(
+                (t) => (
+                    <NotifyBid
+                        productImage={productImage.uploadUrl}
+                        qualitySelected={qualitySelected}
+                        show={t.visible}
+                        sizeSelected={size}
+                        variantActive={variantActive}
+                        productName={product.name}
+                        price={currentBid}
+                        size={size}
+                        color={getColor(product.name)}
+                    />
+                ),
+                { position: "top-right", id: "nc-product-notify", duration: 3000 }
+            );
         }
-
-        const currentBid = adjustBid;
-
-        const bidData = {
-            auctionId: Number(id),
-            currentBid: currentBid,
-        }
-
-        mutation.mutate(bidData);
-
-        toast.custom(
-            (t) => (
-                <NotifyBid
-                    productImage={productImage.uploadUrl}
-                    qualitySelected={qualitySelected}
-                    show={t.visible}
-                    sizeSelected={size}
-                    variantActive={variantActive}
-                    productName={product.name}
-                    price={currentBid}
-                    size={size}
-                    color={getColor(product.name)}
-                />
-            ),
-            {position: "top-right", id: "nc-product-notify", duration: 3000}
-        );
     };
 
     const renderSizeList = () => {
@@ -247,7 +261,9 @@ export default function AuctionDetailPage() {
                                 disabled={isEnded} // 경매 종료 시 버튼 비활성화
                             >
                                 <BagIcon className="hidden sm:inline-block w-5 h-5 mb-0.5"/>
-                                <span className="ml-3">{isEnded ? '경매 종료' : '입찰 참여'}</span>
+                                <span className="ml-3">
+                                    {isEnded ? '경매 종료' : (sellerId !== null ? '경매 취소' : '입찰 참여')}
+                                </span>
                             </ButtonPrimary>
                         </div>
                     </div>
