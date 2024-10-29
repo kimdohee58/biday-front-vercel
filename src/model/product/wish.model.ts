@@ -1,5 +1,6 @@
-import {ProductModel} from "@/model/product/product.model";
+import {ColorType, ProductModel} from "@/model/product/product.model";
 import {UserModel} from "@/model/user/user.model";
+import {ImageModel} from "@/model/ftp/image.model";
 
 export interface WishModel {
     id?: number;
@@ -10,6 +11,11 @@ export interface WishModel {
     updatedAt: Date;
 }
 
+export interface WishCardModel {
+    wish: WishModel;
+    image: ImageModel;
+    colors: ColorType[];
+}
 
 export const initialWishModel: WishModel = {
     id: 0,

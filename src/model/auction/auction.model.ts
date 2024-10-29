@@ -1,5 +1,6 @@
 //src/model/auction/auction.model.ts
 import {AwardModel} from "@/model/auction/award.model";
+import {ImageModel} from "@/model/ftp/image.model";
 
 export interface AuctionModel {
     id?: number;
@@ -14,6 +15,11 @@ export interface AuctionModel {
     updatedAt: Date;
     size:number,
     award:AwardModel,
+}
+
+export interface AuctionWithImageModel {
+    auction: AuctionModel,
+    images: ImageModel[];
 }
 
 export interface SaveAuctionModel {

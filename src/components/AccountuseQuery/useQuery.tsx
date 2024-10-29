@@ -1,3 +1,4 @@
+
 import {useQuery} from "@tanstack/react-query";
 import {fetchProductBySizeId} from "@/service/product/product.service";
 import {extractAwardIdsFromPaymentData, extractSizeIds} from "@/utils/extract";
@@ -41,7 +42,6 @@ export const useFetchAwardProducts = (awardData: any) => {
             const productLists = await Promise.all(
                 awardSizeIds.map((sizeId: number) => fetchProductBySizeId(sizeId))
             );
-            // return productLists;
             return productLists.flat();
         },
         enabled: awardSizeIds.length > 0,
@@ -51,14 +51,25 @@ export const useFetchAwardProducts = (awardData: any) => {
 export const useFetchPaymentProducts = (paymentData: any) => {
     const awardIds = extractAwardIdsFromPaymentData(paymentData);
     console.log("useFetchPaymentProducts :",paymentData)
-    console.log("extractAwardIdsFromPaymentData :",awardIds)
+    console.log("awardIds :",awardIds)
+
     return useQuery({
         queryKey: ["paymentSizeIds", awardIds],
         queryFn: async () => {
+
             const paymentSizeIds = await fetchSizeIdsFromAwards(awardIds);
+            console.log("paymentSizeIds :",paymentSizeIds)
+
             const productLists = await Promise.all(
-                paymentSizeIds.map((sizeId: number) => fetchProductBySizeId(sizeId))
+                paymentSizeIds.map(async (sizeId: number) => {
+                    const product = await fetchProductBySizeId(sizeId);
+                    console.log(`🎯 fetchProductBySizeId(${sizeId}) 결과:`, product);
+                    return product;
+                })
             );
+
+            console.log("🎯🎯🎯🎯🎯useFetchPaymentProducts 함수에서 최종 productLists🎯🎯🎯🎯🎯🎯:", productLists);
+
 
             const convertSizeToProduct = (size: SizeModel): ProductDTO => ({
                 id: size.sizeProduct.id,
@@ -73,7 +84,7 @@ export const useFetchPaymentProducts = (paymentData: any) => {
                 updatedAt: new Date(),
                 wishes: 0
             });
-
+            console.log("convertSizeToProduct :",convertSizeToProduct)
             return productLists.flat().map(convertSizeToProduct);
         },
         enabled: awardIds.length > 0,
