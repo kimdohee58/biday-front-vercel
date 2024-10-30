@@ -30,3 +30,11 @@ export const getRandomItems = <T>(arr: T[], count: number): T[] => {
     const shuffled = [...arr].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, count);
 }
+
+export const formatProductName = (name: string): string => {
+    const index = name.indexOf("(");
+    if (index !== -1) {
+        return `${name.slice(0, index)}\n${name.slice(index)}`;
+    }
+    return name;
+}
