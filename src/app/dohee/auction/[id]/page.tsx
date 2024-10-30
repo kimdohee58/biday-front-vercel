@@ -69,10 +69,18 @@ export default function AuctionDetailPage() {
 
     useEffect(() => {
         console.log("userToken in Auction Detail", userToken);
-        if (userToken && auction?.user) {
+
+        if (!userToken) return; // userToken이 없을 때 바로 종료
+
+        if (auction?.user) {
             setIsSeller(auction.user === userToken.userId);
+        } else {
+            setIsSeller(false);
         }
+
+        console.log("isSeller", isSeller);
     }, [userToken, auction]);
+
 
     // 경매 status 여부
     const isEnded = auction.status;
@@ -517,7 +525,7 @@ export default function AuctionDetailPage() {
             </div>
 
             <Suspense>
-                <div className="relative">
+                <div>
                     {isEnded && (
                         // <div
                         //     className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -rotate-43 text-red-600 border-8 border-red-600 font-bold text-8xl bg-white rounded-md shadow-md w-[700px] h-[200px] flex items-center justify-center text-center leading-none overflow-hidden"
@@ -525,7 +533,7 @@ export default function AuctionDetailPage() {
                         //     <span className="whitespace-nowrap">SOLD OUT</span>
                         // </div>
                         <div
-                            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -rotate-43 bg-red-600 border-8 border-white font-bold text-8xl text-white rounded-md shadow-md w-[700px] h-[200px] flex items-center justify-center text-center leading-none overflow-hidden z-10"
+                            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -rotate-40 bg-red-600 border-8 border-white font-bold text-8xl text-white rounded-md shadow-md w-[700px] h-[200px] flex items-center justify-center text-center leading-none overflow-hidden z-10"
                         >
                             <span className="whitespace-nowrap">SOLD OUT</span>
                         </div>
@@ -546,6 +554,7 @@ export default function AuctionDetailPage() {
                 </div>
             </Suspense>
 
+
             {/* 경매 취소 모달 창 */}
             {showCancelModal && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -553,7 +562,15 @@ export default function AuctionDetailPage() {
                         {isCancelling ? (
                             <p className="mb-4">취소하는 중...</p>
                         ) : isCancelled ? (
-                            <p className="mb-4">취소가 완료되었습니다.</p>
+                            <>
+                                <p className="mb-4">취소가 완료되었습니다.</p>
+                                <button
+                                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mt-4"
+                                    onClick={() => window.location.reload()} // 페이지 새로고침
+                                >
+                                    확인
+                                </button>
+                            </>
                         ) : (
                             <p className="mb-4">현재 진행 중인 경매를 취소하겠습니까?</p>
                         )}
@@ -579,3 +596,8 @@ export default function AuctionDetailPage() {
         </div>
     );
 };
+// <div
+//     className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -rotate-43 text-red-600 border-8 border-red-600 font-bold text-8xl bg-white rounded-md shadow-md w-[700px] h-[200px] flex items-center justify-center text-center leading-none overflow-hidden"
+// >
+//     <span className="whitespace-nowrap">SOLD OUT</span>
+// </div>
