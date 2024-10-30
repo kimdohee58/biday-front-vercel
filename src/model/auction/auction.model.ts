@@ -1,4 +1,3 @@
-//src/model/auction/auction.model.ts
 import {AwardModel} from "@/model/auction/award.model";
 import {ImageModel} from "@/model/ftp/image.model";
 
@@ -31,6 +30,7 @@ export interface SaveAuctionModel {
     endedAt: Date;
 }
 
+// AwardAuctionModel --> AuctionDTO로 변경
 export interface AwardAuctionModel {
     id: number;
     userId: string;
@@ -44,6 +44,3 @@ export interface AwardAuctionModel {
     updatedAt: Date;
     sizeId: number;
 }
-
-
-

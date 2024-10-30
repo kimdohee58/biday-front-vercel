@@ -12,7 +12,7 @@ import Postcode from "@/components/Postcode";
 import NcModal from "@/shared/NcModal/NcModal";
 import {fetchAllAddressesByUserId, fetchDeleteAddress, fetchPickAddress} from "@/service/user/address.service";
 import OrderList from "@/components/OrderList";
-import {getAddresses} from "@/lib/features/user.slice";
+import {getAddresses, getUserToken, saveUser} from "@/lib/features/user.slice";
 import {saveUserTokenToCookie} from "@/utils/cookie/cookie.api";
 
 const mapAddressType = (type: string) => {
@@ -48,7 +48,8 @@ export default function AccountPage() {
         zipcode: "",
         addressType: "",
     });
-   
+
+    const user1 = useSelector(saveUser)
 
     const handleAddressComplete = (data: any) => {
         setFormData({

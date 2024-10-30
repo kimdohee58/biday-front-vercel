@@ -23,7 +23,7 @@ import {fetchImage} from "@/service/ftp/image.service";
 import Cookies from "js-cookie";
 import {saveBid} from "@/service/auction/bid.service";
 import {fetchAuctionWithImages} from "@/service/auction/auction.service";
-import {Timer} from "@/app/auction/[id]/timer";
+import {Timer} from "@/app/auction/[id]/Timer";
 import {getColor} from "@/utils/productUtils";
 
 export default function AuctionDetailPage() {
