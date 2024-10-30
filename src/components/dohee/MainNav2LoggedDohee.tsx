@@ -1,3 +1,4 @@
+// 복붙 완료
 "use client";
 
 import React, { createRef, FC, useState } from "react";
@@ -40,7 +41,7 @@ const MainNav2LoggedDohee: FC<MainNav2LoggedProps> = () => {
     const handleSearchSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (keyword.trim()) {
-            router.push(`/dohee/search?keyword=${encodeURIComponent(keyword)}`);
+            router.push(`/search?keyword=${encodeURIComponent(keyword)}`);
         } else {
             console.log("No keyword entered");
         }
@@ -58,6 +59,7 @@ const MainNav2LoggedDohee: FC<MainNav2LoggedProps> = () => {
                 <input
                     type="text"
                     placeholder="MainNav2Dohee"
+                    // placeholder="Type and press Enter"
                     className="border-none bg-transparent focus:outline-none focus:ring-0 w-full text-base"
                     value={keyword}
                     onChange={(e) => setKeyword(e.target.value)}

@@ -9,7 +9,7 @@ import {ProductModel, ProductWithImageModel} from "@/model/product/product.model
 import {fetchAllProductsWithImages} from "@/service/product/product.service";
 import {defaultImage} from "@/model/ftp/image.model";
 import {useSearchParams} from 'next/navigation';
-import HeaderFilterSearchPageDohee from "@/components/dohee/HeaderFilterSearchPageDohee";
+import HeaderFilterSearchPage from "@/components/HeaderFilterSearchPage";
 
 export default function PageSearch() {
     const itemsPerPage = 20;
@@ -109,7 +109,7 @@ export default function PageSearch() {
 
             <div className="container py-16 lg:pb-28 lg:pt-20 space-y-16 lg:space-y-28">
                 <main>
-                    <HeaderFilterSearchPageDohee
+                    <HeaderFilterSearchPage
                         products={filteredProducts}
                         onFilteredProductsChange={handleFilteredProductsChange}
                     />

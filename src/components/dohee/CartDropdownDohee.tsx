@@ -29,7 +29,7 @@ export default function CartDropdownDohee() {
         setLoading(true);
         try {
             const data = await findByUserAward();
-            setAwardData(data);
+            setAwardData(Array.isArray(data) ? data : []);
         } catch (error) {
             console.error("낙찰 데이터를 가져오는 중 오류가 발생했습니다.", error);
         } finally {
@@ -55,15 +55,13 @@ export default function CartDropdownDohee() {
     console.log("awardData", awardData)
 
     const currentDate = new Date();
-    // const filteredAwardList = !loading
-    //     ? awardData.filter((item) => {
-    //         const { createdAt } = item;
-    //         const payDate = new Date(createdAt);
-    //         payDate.setDate(payDate.getDate() + 3);
-    //         return payDate >= currentDate;
-    //     })
-    //     : [];
-    // console.log("filteredAwardList", filteredAwardList)
+    const filteredAwardList = awardData.filter((item) => {
+            const { createdAt } = item;
+            const payDate = new Date(createdAt);
+            payDate.setDate(payDate.getDate() + 3);
+            return payDate >= currentDate;
+        }) || [];
+    console.log("filteredAwardList", filteredAwardList)
 
     const {data: awardProductList} = useFetchAwardProducts(awardData);
     console.log("awardProductList", awardProductList)

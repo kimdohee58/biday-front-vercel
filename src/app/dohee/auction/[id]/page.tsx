@@ -281,8 +281,8 @@ export default function AuctionDetailPage() {
                                 <div className="flex text-2xl font-semibold">
                                     {isEnded ? (
                                         // award가 null 이면 취소되 ㄴ경매 떠야 하는데 이상함
-                                        award != null ? (
-                                            <span>낙찰가: {award.data?.currentBid}원</span>
+                                        award && award.data ? (
+                                            <span>낙찰가: {award.data.currentBid}원</span>
                                         ) : (
                                             <span className="text-red-500 font-semibold">취소된 경매입니다.</span>
                                         )
@@ -525,7 +525,7 @@ export default function AuctionDetailPage() {
                         //     <span className="whitespace-nowrap">SOLD OUT</span>
                         // </div>
                         <div
-                            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -rotate-43 bg-red-600 border-8 border-white font-bold text-8xl text-white rounded-md shadow-md w-[700px] h-[200px] flex items-center justify-center text-center leading-none overflow-hidden"
+                            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -rotate-43 bg-red-600 border-8 border-white font-bold text-8xl text-white rounded-md shadow-md w-[700px] h-[200px] flex items-center justify-center text-center leading-none overflow-hidden z-10"
                         >
                             <span className="whitespace-nowrap">SOLD OUT</span>
                         </div>
