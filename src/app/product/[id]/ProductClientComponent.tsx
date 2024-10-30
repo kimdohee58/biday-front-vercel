@@ -156,7 +156,7 @@ export default function ProductClientComponent({product}: { product: ProductDeta
 
     console.log("auctions", auctions);
 
-    const insertAuctionUrl = `/auction/insert?productId=${currentProduct.id}`;
+    const insertAuctionUrl = `/dohee/auction/insert?productId=${currentProduct.id}`;
 
     /* const renderStatus = () => {
          if (!status) {
