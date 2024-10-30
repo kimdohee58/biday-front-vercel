@@ -157,11 +157,24 @@ export default function AccountPage() {
                         <div className="flex gap-4"> {/* Flexbox 사용하여 수평 배치 */}
                             <div className="flex-1"> {/* 이름 입력 필드 */}
                                 <Label>이름</Label>
-                                <Input className="mt-1.5" defaultValue={user.name}/>
+                                <div className="mt-1.5 flex">
+            <span
+                className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
+                <i className="text-2xl las la-user"></i> {/* 이름 아이콘 */}
+            </span>
+                                    <Input className="!rounded-l-none" defaultValue={user.name}/>
+                                </div>
                             </div>
                             <div className="flex-1"> {/* 등급 입력 필드 */}
                                 <Label>등급</Label>
-                                <Input className="mt-1.5" defaultValue={user.role.toString()} disabled={true}/>
+                                <div className="mt-1.5 flex">
+            <span
+                className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
+                <i className="text-2xl las la-star"></i> {/* 등급 아이콘 */}
+            </span>
+                                    <Input className="!rounded-l-none" defaultValue={user.role.toString()}
+                                           disabled={true}/>
+                                </div>
                             </div>
                         </div>
 
@@ -193,12 +206,13 @@ export default function AccountPage() {
                         <div>
                             {/* 주소와 우편번호를 수평으로 나란히 배치 */}
                             <div className="flex gap-4">
-                                <div className="flex-1" style={{ flex: "1 1 0%" }}>
+                                <div className="flex-1" style={{flex: "1 1 0%"}}>
                                     <Label>우편번호</Label>
                                     <div className="mt-1.5 flex">
-                <span className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
-                    <i className="text-2xl las la-map-marker-alt"></i> {/* 아이콘 변경 가능 */}
-                </span>
+                                        <span
+                                            className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
+                                            <i className="text-2xl las la-map-marker-alt"></i> {/* 아이콘 변경 가능 */}
+                                        </span>
                                         <Input
                                             className="!rounded-l-none"
                                             value={zipcode}
@@ -208,10 +222,13 @@ export default function AccountPage() {
                                     </div>
                                 </div>
 
-                                <div className="flex-1" style={{ flex: "3 1 0%" }}>
+                                <div className="flex-1" style={{flex: "3 1 0%"}}>
                                     <Label>주소</Label>
-                                    <div className="relative mt-1.5">
-                                        {/* 선택된 주소 표시 */}
+                                    <div className="mt-1.5 flex">
+                                        <span
+                                            className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
+                                            <i className="text-2xl las la-map"></i> {/* 주소 아이콘 추가 */}
+                                        </span>
                                         <Input
                                             className="!rounded-l-none"
                                             value={`${selectedAddress} ${addressDetail}`}
@@ -219,54 +236,61 @@ export default function AccountPage() {
                                             readOnly
                                             onClick={() => setShowDropdown(prev => !prev)} // 드롭다운 토글
                                         />
-
-                                        {showDropdown && (
-                                            <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1">
-                                                {addresses.map((address, index) => (
-                                                    <li
-                                                        key={index}
-                                                        className="px-4 py-2 flex justify-between items-center cursor-pointer hover:bg-gray-100"
-                                                        onClick={() => {
-                                                            handlePickAddress(address.id);
-                                                            setSelectedAddress(address.streetAddress);
-                                                            setAddressDetail(address.detailAddress);
-                                                            setZipcode(address.zipcode);
-                                                            setAddressType(address.type);
-                                                            setShowDropdown(false);
-                                                        }}
-                                                    >
-                                                        <div>
-                                                            {/* streetAddress와 detailAddress를 합쳐서 표시하고, type을 매핑하여 표시 */}
-                                                            {`${address.streetAddress} ${address.detailAddress} (${mapAddressType(address.type)})`}
-                                                            <span
-                                                                className="ml-2 text-gray-500">({address.zipcode})</span> {/* 우편번호 표시 */}
-                                                        </div>
-                                                        {/* 삭제 버튼 */}
-                                                        <button
-                                                            onClick={(e) => {
-                                                                e.stopPropagation(); // 삭제 클릭 시 주소 선택되지 않도록 이벤트 전파 중지
-                                                                handleDeleteAddress(address.id);
-                                                            }}
-                                                            className="text-red-600 hover:underline"
-                                                        >
-                                                            삭제
-                                                        </button>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        )}
                                     </div>
                                 </div>
                             </div>
+
+                            {/* 드롭다운 및 주소 선택 부분 */}
+                            {showDropdown && (
+                                <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1">
+                                    {addresses.map((address, index) => (
+                                        <li
+                                            key={index}
+                                            className="px-4 py-2 flex justify-between items-center cursor-pointer hover:bg-gray-100"
+                                            onClick={() => {
+                                                handlePickAddress(address.id);
+                                                setSelectedAddress(address.streetAddress);
+                                                setAddressDetail(address.detailAddress);
+                                                setZipcode(address.zipcode);
+                                                setAddressType(address.type);
+                                                setShowDropdown(false);
+                                            }}
+                                        >
+                                            <div>
+                                                {/* streetAddress와 detailAddress를 합쳐서 표시하고, type을 매핑하여 표시 */}
+                                                {`${address.streetAddress} ${address.detailAddress} (${mapAddressType(address.type)})`}
+                                                <span
+                                                    className="ml-2 text-gray-500">({address.zipcode})</span> {/* 우편번호 표시 */}
+                                            </div>
+                                            {/* 삭제 버튼 */}
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation(); // 삭제 클릭 시 주소 선택되지 않도록 이벤트 전파 중지
+                                                    handleDeleteAddress(address.id);
+                                                }}
+                                                className="text-red-600 hover:underline"
+                                            >
+                                                삭제
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
                         </div>
 
 
                         {/* 주소 입력란 */}
-                        <div>
+                        <div className="flex justify-end w-full">
                             {/* 모달 트리거 버튼 */}
                             <NcModal
                                 modalTitle="주소 검색"
-                                triggerText="주소 추가하기"
+                                triggerText={
+                                    <ButtonPrimary
+                                        className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow hover:bg-blue-700 transition duration-200 ease-in-out"
+                                    >
+                                        주소 추가하기
+                                    </ButtonPrimary>
+                                }
                                 renderContent={() => (
                                     <div> {/* 모든 요소를 하나의 부모 div로 감쌈 */}
                                         <Postcode
