@@ -19,7 +19,6 @@ export default function AccountPass() {
     setError(null);
     setSuccessMessage(null);
 
-    // 비밀번호 유효성 검사
     if (newPassword !== confirmPassword) {
       setError("새 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
       return;
@@ -43,19 +42,27 @@ export default function AccountPass() {
     }
 
     try {
-      // 비밀번호 변경 API 호출
-      await changePasswordService(currentPassword, newPassword);
+      const response = await changePasswordService(currentPassword, newPassword);
 
-      // 비밀번호 변경 성공 시
-      setSuccessMessage("비밀번호가 성공적으로 변경되었습니다.");
-      await handleLogout(); // 로그아웃
-      router.push('/login'); // 로그인 페이지로 이동
+      if (response === "비밀번호 변경이 완료했습니다.") {
+        setSuccessMessage("비밀번호가 성공적으로 변경되었습니다.");
+        alert("비밀번호 변경이 됐습니다. 다시 로그인 해주세요.")
+        await handleLogout();
+        router.push('/login');
+        return;
+      } else if (response === "예전 비밀번호가 틀렸습니다.") {
+        setError("현재 비밀번호가 틀립니다.");
+      }
+      else {
+
+        setError("비밀번호 변경 중 오류가 발생했습니다.");
+      }
     } catch (err) {
-      // 비밀번호 변경 실패 시
-      setError("현재 비밀번호가 틀립니다.");
+      setError("비밀번호 변경에 실패했습니다.");
       console.error("비밀번호 변경 실패: ", err);
     }
-  };
+  }
+
 
   return (
       <div className="space-y-10 sm:space-y-12">
