@@ -18,8 +18,6 @@ export default function AvatarDropdown() {
     const { handleLogout } = useLogout(); // useLogout 훅 사용
     const user = useSelector((state: RootState) => state.user.user);
 
-
-
     return (
         <div className="AvatarDropdown">
             <Popover className="relative">

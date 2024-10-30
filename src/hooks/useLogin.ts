@@ -42,6 +42,7 @@ export const useLogin = () => {
                             status: user.status ? String(user.status) : '',
                         };
 
+
                         dispatch(saveUser({user: userData, token: accessToken}));
 
                         // 백엔드 헤더에 보낼 유저객체 userToken

@@ -3,52 +3,106 @@ import Prices from "@/components/Prices";
 import ImageFetcher from "@/components/ImageFetcher";
 import { format } from "date-fns";
 
-function findNestedProperty<T = any>(obj: any, key: string): T | undefined {
-    if (!obj || typeof obj !== "object") return undefined;
+function findNestedProperty<T = any>(obj: any, keys: string[]): T | undefined {
+    if (!obj || typeof obj !== "object") return undefined; // Check for valid object at the start
 
-    if (key in obj) return obj[key] as T;
+    let current: any = obj;
 
-    for (const value of Object.values(obj)) {
-        const found = findNestedProperty(value, key);
-        if (found !== undefined) return found;
+    for (const key of keys) {
+        // Check if current is still a valid object before accessing properties
+        if (current && typeof current === "object" && key in current) {
+            current = current[key];
+        } else {
+            return undefined; // Return undefined if any key is not found
+        }
     }
-
-    return undefined;
+    return current as T; // Return the found value
 }
+
+
 
 function formatDate(dateString: string): string {
     const date = new Date(dateString);
 
-    // 날짜가 유효하지 않은 경우 처리
     if (isNaN(date.getTime())) {
-        // console.warn("Invalid date string provided:", dateString); 잠시 주석처리
         return "Invalid Date"; // 기본값 또는 에러 메시지 설정
     }
-
-    return format(date, "yyyy-MM-dd HH:mm:ss");
+    return format(date, "yyyy-MM-dd");
 }
 
+const renderProductItem = (product: any, index: number, type: string,
+                           onImg?: (auctionId: string)=> void,
+                           onCheckout?: (awardId: string, productId: string) => void
 
-export const renderProductItem = (product: any, index: number, type?: string) => {
+) => {
 
-    const productId = findNestedProperty<string>(product, "id") || `product-${index}`;
-    const productName = findNestedProperty<string>(product, "name") || "No name available";
-    const productSubName = findNestedProperty<string>(product, "subName") || "No sub-name available";
-    const brand = findNestedProperty<string>(product, "brand") || "No brand available";
-    const originalPrice = findNestedProperty<number>(product, "price") || 0;
-    const size = findNestedProperty<string>(product, "size") || "No size available";
+
+    const defaultProductId = `product-${index}`;
+    const defaultProductName = "No name available";
+    const defaultProductSubName = "No sub-name available";
+    const defaultBrand = "No brand available";
+    const defaultOriginalPrice = 0;
+    const defaultSize = "No size available";
+
+    let productId, productName, productSubName, brand, originalPrice, size, awardId: any;
+
+    productId = findNestedProperty<string>(product, ["product", "sizeProduct", "id"]) ||
+        findNestedProperty<string>(product, ["id"]) || defaultProductId;
+
+    productName = findNestedProperty<string>(product, ["product", "sizeProduct", "name"]) || defaultProductName;
+    productSubName = findNestedProperty<string>(product, ["product", "sizeProduct", "subName"]) || defaultProductSubName;
+    brand = findNestedProperty<string>(product, ["product", "sizeProduct", "brand"]) || defaultBrand;
+    originalPrice = findNestedProperty<number>(product, ["product", "sizeProduct", "price"]) || defaultOriginalPrice;
+    size = findNestedProperty<string>(product, ["product", "size"]) || defaultSize;
+
+    const auctionId: string | undefined = type === 'auction'
+        ? findNestedProperty<string>(product, ["id"])?.toString() // auction 객체의 id를 문자열로 변환
+        : type === 'bid'
+            ? findNestedProperty<string>(product, ["auctionId"])?.toString() // bid 객체의 auctionId를 문자열로 변환
+            : type === 'award'
+                ? findNestedProperty<string>(product, ["auction", "id"])?.toString() // award 객체의 auction.id를 문자열로 변환
+                : undefined;
+
+
+    if (type === 'award') {
+        awardId = product.id;
+    }
+
+
     const price = product.amount || product.currentBid || 0;
 
-    const createdAt = formatDate(product.createdAt); // createdAt 날짜 포맷팅
+    const createdAt = formatDate(findNestedProperty<string>(product, ["createdAt"]) || "Invalid Date");
+    const startedAt = formatDate(findNestedProperty<string>(product, ["startedAt"]) || "Invalid Date");
+    const endedAt = formatDate(findNestedProperty<string>(product, ["endedAt"]) || "Invalid Date");
+    const approvedAt = formatDate(findNestedProperty<string>(product, ["approvedAt"]) || "Invalid Date");
 
-    // 날짜 포맷팅
-    const startedAt = formatDate(product.startedAt);
-    const endedAt = formatDate(product.endedAt);
+    let registrationLabel = "등록 날짜:";
+    let dateContent = createdAt; // Default to createdAt for most types
+
+    if (type === 'payment') {
+        registrationLabel = "결제 날짜:";
+        dateContent = approvedAt;
+    } else if (type === 'award') {
+        registrationLabel = "낙찰 날짜:";
+    } else if (type === 'bid') {
+        registrationLabel = "입찰 날짜:";
+    } else if (type === 'auction') {
+        registrationLabel = "경매 날짜:";
+        dateContent = `${startedAt} ~ ${endedAt}`; // Show the range for auction
+    }
 
     return (
         <div key={index} className="flex py-4 sm:py-7 last:pb-0 first:pt-0 mb-2">
-            {/* ImageFetcher 컴포넌트를 사용하여 이미지 가져오기 */}
-            <ImageFetcher id={productId} altText={productName} />
+
+            <div
+                onClick={['auction', 'bid', 'award'].includes(type) && onImg && auctionId ? () => {
+                    onImg(auctionId, );
+                } : undefined}
+
+                style={{cursor: ['auction', 'bid', 'award'].includes(type) && auctionId ? 'pointer' : 'default'}}
+            >
+                <ImageFetcher id={productId} altText={productName}/>
+            </div>
 
             <div className="ml-4 flex flex-1 flex-col">
                 <div>
@@ -62,17 +116,12 @@ export const renderProductItem = (product: any, index: number, type?: string) =>
                             </p>
                         </div>
 
-                        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                            낙찰 생성 날짜: {createdAt}
-                        </p>
-
-                        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                            시작 시간: {startedAt}
-                        </p>
-                        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                            종료 시간: {endedAt}
-                        </p>
-                        <Prices className="mt-0.5 ml-2" price={price} contentClass="py-2 px-3"/>
+                        <div
+                            onClick={type === 'award' && onCheckout ? () => onCheckout(awardId, productId) : undefined}
+                            style={{cursor: type === 'award' ? 'pointer' : 'default'}} // Change cursor based on type
+                        >
+                            <Prices className="mt-0.5 ml-2" price={price} contentClass="py-2 px-3"/>
+                        </div>
                     </div>
                 </div>
                 <div className="flex flex-1 items-end justify-between text-sm">
@@ -84,7 +133,7 @@ export const renderProductItem = (product: any, index: number, type?: string) =>
 
                     <div className="flex">
                         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                            생성 날짜: {createdAt}
+                            {registrationLabel} {dateContent}
                         </p>
                     </div>
                 </div>
@@ -95,7 +144,9 @@ export const renderProductItem = (product: any, index: number, type?: string) =>
 
 
 // 경매 내역 렌더링
-export const renderAuctionHistory = (auctionProductList: any[]) => {
+export const renderAuctionHistory = (auctionProductList: any[],
+                                     onImg: (auctionId: string) => void
+) => {
     return (
         <div className="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden z-0">
             <div
@@ -107,7 +158,7 @@ export const renderAuctionHistory = (auctionProductList: any[]) => {
                 {auctionProductList && auctionProductList.length > 0 ? (
                     <div>
                         <p className="text-lg font-semibold mt-4">경매상품 정보</p>
-                        {auctionProductList.map((product, index) => renderProductItem(product, index))}
+                        {auctionProductList.map((product, index) => renderProductItem(product, index, "auction", onImg))}
                     </div>
                 ) : (
                     <p>내역이 없습니다.</p>
@@ -117,21 +168,23 @@ export const renderAuctionHistory = (auctionProductList: any[]) => {
     );
 };
 
-// 입찰 내역 렌더링
-export const renderBidHistory = (bidProductList: any[]) => {
 
+// 입찰 내역 렌더링
+export const renderBidHistory = (bidProductList: any[],
+                                 onImg: (auctionId: string)=> void
+) => {
     return (
         <div className="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden z-0">
             <div
                 className="flex flex-col sm:flex-row sm:justify-between sm:items-center p-4 sm:p-8 bg-slate-50 dark:bg-slate-500/5">
-                <p className="text-lg font-semibold">입찰 내역</p>
+                <p className="text-lg font-semibold"> 진행중 입찰 내역</p>
             </div>
             <div
                 className="border-t border-slate-200 dark:border-slate-700 p-2 sm:p-8 divide-y divide-y-slate-200 dark:divide-slate-700">
                 {bidProductList && bidProductList.length > 0 ? (
                     <div>
                         <p className="text-lg font-semibold mt-4">입찰상품 정보</p>
-                        {bidProductList.map((product, index) => renderProductItem(product, index))}
+                        {bidProductList.map((product, index) => renderProductItem(product, index, "bid", onImg))}
                     </div>
                 ) : (
                     <p>내역이 없습니다.</p>
@@ -142,20 +195,21 @@ export const renderBidHistory = (bidProductList: any[]) => {
 };
 
 // 낙찰 내역 렌더링
-export const renderAwardHistory = (awardProductList: any[]) => {
+export const renderAwardHistory = (
+    awardProductList: any[],
+    onImg: (auctionId: string)=> void,
+    onCheckout: (awardId: string, productId: string)=> void
+) => {
     return (
         <div className="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden z-0">
-            <div
-                className="flex flex-col sm:flex-row sm:justify-between sm:items-center p-4 sm:p-8 bg-slate-50 dark:bg-slate-500/5">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center p-4 sm:p-8 bg-slate-50 dark:bg-slate-500/5">
                 <p className="text-lg font-semibold">낙찰 내역</p>
             </div>
-            <div
-                className="border-t border-slate-200 dark:border-slate-700 p-2 sm:p-8 divide-y divide-y-slate-200 dark:divide-slate-700">
+            <div className="border-t border-slate-200 dark:border-slate-700 p-2 sm:p-8 divide-y divide-y-slate-200 dark:divide-slate-700">
                 {awardProductList && awardProductList.length > 0 ? (
                     <div>
                         <p className="text-lg font-semibold mt-4">낙찰상품 정보</p>
-                        {awardProductList.map((product, index) => renderProductItem(product, index))}
-
+                        {awardProductList.map((product, index) => renderProductItem(product, index, "award",onImg, onCheckout))}
                     </div>
                 ) : (
                     <p>내역이 없습니다.</p>
@@ -164,6 +218,7 @@ export const renderAwardHistory = (awardProductList: any[]) => {
         </div>
     );
 };
+
 
 // 결제 내역 렌더링
 export const renderPaymentHistory = (paymentProductList: any[]) => {

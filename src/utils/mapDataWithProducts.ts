@@ -4,7 +4,8 @@ import { AwardModel } from "@/model/auction/award.model";
 import { PaymentRequestModel} from "@/model/order/payment.model";
 import {ProductDTO, ProductModel} from "@/model/product/product.model";
 import {extractAwardIdsFromPaymentData} from "@/utils/extract";
-import {fetchSizeIdsFromAwards} from "@/service/auction/award.service"; // ProductModel 경로는 가정입니다.
+import {fetchSizeIdsFromAwards} from "@/service/auction/award.service";
+import {BidLoadModel, BidModel} from "@/model/auction/bid.model"; // ProductModel 경로는 가정입니다.
 
 interface DataModel {
     content?: AuctionModel[] | AwardModel[] ;
@@ -30,11 +31,36 @@ export const mapDataWithAuctionModel = (
             product: matchedProduct || null,
         };
 
-      //  console.log("🎯 경매 최종 결합된 객체:", combinedObject);
+        console.log("🎯 경매 최종 결합된 객체:", combinedObject);
 
         return combinedObject;
     });
 };
+
+export const mapDataWithBidModel = (
+    bidData: BidLoadModel[], // `BidModel` 배열로 받기
+    productList: ProductDTO[]
+): (BidLoadModel & { product: ProductDTO | null })[] => {
+    if (!bidData || bidData.length === 0 || !productList || productList.length === 0) {
+        return [];
+    }
+
+    return bidData.map((item: BidLoadModel) => {
+        const matchedProduct = productList.find(
+            (product: ProductDTO) => product.id === parseInt(item.sizeId) // auctionId에 해당하는 product 찾기
+        );
+
+        const combinedObject = {
+            ...item,
+            product: matchedProduct || null, // 일치하는 제품이 없으면 null
+        };
+
+         console.log("🎯 최종 결합된 Bid 객체:", combinedObject);
+
+        return combinedObject;
+    });
+};
+
 
 export const mapDataWithAwardModel = (
     dataArray: AwardModel[], // `content` 없이 `AwardModel[]` 배열로 받기
@@ -56,10 +82,11 @@ export const mapDataWithAwardModel = (
             ...item,
             product: matchedProduct || null,
         };
-       // console.log("🎯 최종 결합된 Award 객체:", combinedObject);
+        console.log("🎯 최종 결합된 Award 객체:", combinedObject);
         return combinedObject;
     });
 };
+
 
 
 export const mapDataWithPaymentModel = async (
@@ -69,13 +96,10 @@ export const mapDataWithPaymentModel = async (
     if (!paymentData || !productList) {
         return [];
     }
-    console.log("현재 productList:", productList);
 
     const awardIds = extractAwardIdsFromPaymentData(paymentData);
-    console.log("📌 추출된 awardIds:", awardIds);
 
     const paymentSizeIds = await fetchSizeIdsFromAwards(awardIds);
-    console.log("📌 추출된 paymentSizeIds:", paymentSizeIds);
 
     return paymentData.map((payment, index) => {
         const sizeId = awardIds.includes(payment.awardId) ? paymentSizeIds[index] : undefined;
