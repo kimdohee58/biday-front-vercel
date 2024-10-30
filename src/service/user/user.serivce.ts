@@ -24,16 +24,7 @@ export async function changePasswordService(password: string, newPassword: strin
     try {
         const response = await userAPI.changePassword(options);
 
-        if (response === "비밀번호 변경이 완료했습니다.") {
-            alert("비밀번호가 성공적으로 변경되었습니다.");
-        } else if (response === "예전 비밀번호가 틀렸습니다.") {
-            alert("예전 비밀번호가 틀렸습니다.");
-        } else if (response === "유저 대상이 없습니다.") {
-            alert("유저 대상이 없습니다.");
-        } else {
-            throw new Error("비밀번호 변경 실패");
-            // TODO error enum
-        }
+        return  response
     } catch (error) {
         console.error("비밀번호 변경 실패:", error);
         alert("비밀번호 변경에 실패했습니다.");

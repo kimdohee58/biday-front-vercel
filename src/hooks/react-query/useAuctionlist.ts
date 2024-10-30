@@ -1,5 +1,11 @@
 import {useQuery, useSuspenseQuery} from "@tanstack/react-query";
-import {fetchAuctionDetails, fetchAuctionsBySize, fetchAuctionWithImages} from "@/service/auction/auction.service";
+import {
+    fetchAuctionBySizesWithUser,
+    fetchAuctionDetails,
+    fetchAuctionsBySize,
+    fetchAuctionsBySizes,
+    fetchAuctionWithImages
+} from "@/service/auction/auction.service";
 
 export const useSuspenseAuctionImage = (auctionId: string) => {
     return useSuspenseQuery({
@@ -22,9 +28,9 @@ export const useSuspenseAuctionAndProduct = (auctionId: string) => {
     })
 }
 
-export const useSuspenseAuctionBySizeId = (sizeId: number) => {
-    return useSuspenseQuery({
-        queryKey: ["auction", "size", sizeId],
-        queryFn: () => fetchAuctionsBySize(sizeId),
+export const useFetchAuctionBySizeIdsWithUser = (sizeIds: number[]) => {
+    return useQuery({
+        queryKey: ["auction", "size", sizeIds],
+        queryFn: () => fetchAuctionBySizesWithUser(sizeIds),
     })
 }

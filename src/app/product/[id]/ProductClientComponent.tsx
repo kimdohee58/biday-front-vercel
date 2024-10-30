@@ -1,7 +1,6 @@
 "use client";
 
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
-import LikeButton from "@/components/LikeButton";
 import BagIcon from "@/components/BagIcon";
 
 import {SparklesIcon} from "@heroicons/react/24/outline";
@@ -11,26 +10,27 @@ import Policy from "./Policy";
 import SectionPromo2 from "@/components/SectionPromo2";
 import Image from "next/image";
 import {Route} from "@/routers/types";
-import {fetchProductDetails} from "@/service/product/product.service";
 import {ImageModel} from "@/model/ftp/image.model"
-import {Suspense, useState} from "react";
-import {PhotoPlaceholderSkeleton} from "@/components/skeleton/PhotoPlaceholderSkeleton";
+import React, {Suspense, useState} from "react";
 import {AuctionModel} from "@/model/auction/auction.model"
-import {getColor, getColorsByTypes} from "@/utils/productUtils";
+import {formatProductName, getColor} from "@/utils/productUtils";
 import AuctionTable from "@/app/product/[id]/AuctionTable";
 import {HeartIcon} from "@heroicons/react/24/solid";
 import {ColorType, ProductWithImageModel} from "@/model/product/product.model";
-import {useSuspenseAuctionBySizeId} from "@/hooks/react-query/useAuctionlist";
+import {useFetchAuctionBySizeIdsWithUser} from "@/hooks/react-query/useAuctionlist";
+import {Colors} from "@/data/color";
+import LikeButton from "@/components/LikeButton";
+import Chart from "@/app/product/[id]/Chart";
+import {useSearchParams} from "next/navigation";
 
 type ProductDetailProps = {
-    colorIds: number[],
     product: ProductWithImageModel,
     size: string[],
     colors: ColorType[],
     productWithImagesArray: ProductWithImageModel[];
 }
 
-async function RenderImage({image}: { image: ImageModel}) {
+function RenderImage({image}: { image: ImageModel }) {
 
     return (
         <div className="aspect-w-16 aspect-h-16 relative">
@@ -45,20 +45,118 @@ async function RenderImage({image}: { image: ImageModel}) {
     );
 }
 
+type RenderSizeListProps = {
+    sizeArray: string[];
+    onClickSizeButton: (size: string) => void;
+    currentSize: string | null;
+    sizes: number[];
+}
+
+function RenderSizeList({sizeArray, onClickSizeButton, currentSize, sizes}: RenderSizeListProps) {
+    if (!sizeArray || !sizes || !sizes.length) {
+        return null;
+    }
+
+    return (
+        <div>
+            <div className="flex justify-between font-medium text-sm">
+                <label htmlFor="">
+            <span className="">
+              Size:
+              <span className="ml-1 font-semibold">{currentSize || "선택 사이즈 없음"}</span>
+            </span>
+                </label>
+                <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href="##"
+                    className="text-primary-6000 hover:text-primary-500"
+                >
+                    See sizing chart
+                </a>
+            </div>
+            <div className="grid grid-cols-5 sm:grid-cols-7 gap-2 mt-3">
+                {sizeArray.map((size, index) => {
+                    const isActive = size === currentSize;
+                    return (
+                        <div
+                            key={index}
+                            className={`relative h-10 sm:h-11 rounded-2xl border flex items-center justify-center text-sm sm:text-base uppercase font-semibold select-none overflow-hidden z-0 cursor-pointer
+                                ${
+                                isActive
+                                    ? "bg-primary-600 border-primary-6000 text-white hover:bg-primary-6000"
+                                    : "border-slate-300 dark:border-slate-600 text-slate-900 dark:text-slate-200 hover:bg-neutral-50 dark:hover:bg-neutral-700"
+                            }`}
+                            onClick={() => onClickSizeButton(size)}
+                        >
+                            {size}
+                        </div>
+                    );
+                })}
+            </div>
+        </div>
+    );
+}
+
 export default function ProductClientComponent({product}: { product: ProductDetailProps}) {
 
-    const productSize = product.product.product.sizes.find((size) => size.sizeProduct.id === product.product.product.id)?.id;
+    const searchParams = useSearchParams();
+    const size = searchParams.get("size");
+    console.log("size", size);
 
-    if (!productSize) {
-        throw new Error("사이즈 이상");
-    }
-    const auctions = useSuspenseAuctionBySizeId(productSize);
+    const {product: productWithImage, size: sizeArray, colors, productWithImagesArray} = product;
+    const {product: initialProduct} = productWithImage;
+    const productArray = productWithImagesArray.map((product) => {
+        return {
+            product: product.product,
+            image: product.image,
+            color: Colors[product.product.color],
+        }
 
-    const colorArray = getColorsByTypes(product.colors);
-    const [colorActive, setColorActive] = useState(product.colors.findIndex(c => c === product.product.product.color));
+    });
+
+    const getSizeId = (sizeName: string | null) => {
+        if (!sizeName) {
+            return null;
+        }
+
+        const sizeModel = initialProduct.sizes.find(size => size.size === sizeName);
+        return sizeModel ? sizeModel.id : null;
+    };
+
+    const getIndex = productArray.findIndex(p => p.product.id === initialProduct.id);
+    const [colorActive, setColorActive] = useState(colors.findIndex(c => c === initialProduct.color));
+    const [currentProduct, setCurrentProduct] = useState(productArray[getIndex].product);
+    const [image, setImage] = useState(productArray[getIndex].image);
+    const [currentSize, setCurrentSize] = useState<string | null>(size || null);
+    const [currentSizeId, setCurrentSizeId] = useState<number | null>(size ? getSizeId(size) : null);
+    console.log("currentSizeId", currentSizeId);
 
 
-    const insertAuctionUrl = `/auction/insert?productId=${product.product.product.id}`;
+    const onClickColorButton = (index: number) => {
+        setColorActive(index);
+        setCurrentProduct(productArray[index].product);
+        setImage(productArray[index].image);
+    };
+
+    const onClickSizeButton = (size: string) => {
+        if (currentSize === size) {
+            setCurrentSize(null);
+            setCurrentSizeId(null);
+        } else {
+            setCurrentSize(size);
+            setCurrentSizeId(getSizeId(size));
+        }
+    };
+
+    const sizes = initialProduct.sizes.map((size) => size.id);
+    console.log("sizes", sizes);
+
+    const auctions = useFetchAuctionBySizeIdsWithUser(sizes);
+
+    console.log("auctions", auctions);
+
+    const insertAuctionUrl = `/auction/insert?productId=${currentProduct.id}`;
 
     /* const renderStatus = () => {
          if (!status) {
@@ -102,7 +200,7 @@ export default function ProductClientComponent({product}: { product: ProductDeta
      };*/
 
     const renderColors = () => {
-        if (!colorArray || !colorArray.length) {
+        if (!productArray || !productArray.length) {
             return null;
         }
 
@@ -112,18 +210,18 @@ export default function ProductClientComponent({product}: { product: ProductDeta
           <span className="text-sm font-medium">
             Color:
             <span className="ml-1 font-semibold">
-              {colorArray[colorActive].name}
+              {getColor(currentProduct.name)}
             </span>
           </span>
                 </label>
                 <div className="flex mt-3">
-                    {colorArray.map((color, index) => (
+                    {productArray.map((item, index) => (
                         <div
                             key={index}
-                            onClick={() => setColorActive(index)}
+                            onClick={() => onClickColorButton(index)}
                             className={`relative flex-1 max-w-[75px] h-10 sm:h-11 rounded-full border-2 cursor-pointer ${
                                 colorActive === index
-                                    ? "border-primary-6000 dark:border-primary-500"
+                                    ? item.color.color
                                     : "border-transparent"
                             }`}
                         >
@@ -131,8 +229,8 @@ export default function ProductClientComponent({product}: { product: ProductDeta
                                 className="absolute inset-0.5 rounded-full overflow-hidden z-0 object-cover bg-cover"
                                 style={{
                                     backgroundImage: `url(${
-                                        color.thumbnail.src
-                                    })`,
+                                item.color.thumbnail.src
+                            })`,
                                 }}
                             ></div>
                         </div>
@@ -142,23 +240,24 @@ export default function ProductClientComponent({product}: { product: ProductDeta
         );
     };
 
+
     const renderSectionContent = () => {
         return (
             <div className="space-y-7 2xl:space-y-8">
                 {/* ---------- 1 HEADING ----------  */}
                 <div>
                     <h2 className="text-2xl sm:text-3xl font-semibold">
-                        {product.product.product.name}
+                        {formatProductName(currentProduct.name)}
                     </h2>
                     <h6 className="text-gray-300 text-left">
-                        {product.product.product.subName}
+                        {currentProduct.subName}
                     </h6>
 
                     <div className="flex items-center mt-5 space-x-4 sm:space-x-5">
                         {/* <div className="flex text-xl font-semibold">$112.00</div> */}
                         <Prices
                             contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold"
-                            price={product.product.product.price}
+                            price={currentProduct.price}
                         />
 
                         <div className="h-7 border-l border-slate-300 dark:border-slate-700"></div>
@@ -170,7 +269,7 @@ export default function ProductClientComponent({product}: { product: ProductDeta
                                 <HeartIcon className="w-5 h-5 pb-[1px] text-red-500"/>
                                 <div className="ml-1.5 flex">
                   <span className="text-slate-600 dark:text-slate-400">
-                    {product.product.product.wishes} wishes
+                    {currentProduct.wishes} wishes
                   </span>
                                 </div>
                             </a>
@@ -183,6 +282,10 @@ export default function ProductClientComponent({product}: { product: ProductDeta
                     </div>
                 </div>
 
+                <div>{renderColors()}</div>
+                <RenderSizeList sizes={sizes} currentSize={currentSize} sizeArray={sizeArray}
+                                onClickSizeButton={onClickSizeButton}/>
+
                 <div className="flex space-x-3.5">
                     <ButtonPrimary
                         className="flex-1 flex-shrink-0"
@@ -194,9 +297,13 @@ export default function ProductClientComponent({product}: { product: ProductDeta
                 </div>
                 <hr className=" 2xl:!my-10 border-slate-200 dark:border-slate-700"></hr>
                 <div className="flex-1 items-center justify-center mt-5 space-x-3.5">
-                    <Suspense>
-                        <AuctionTable auctions={auctions.data} product={product.product.product}/>
-                    </Suspense>
+                    {
+                        !auctions.isLoading ? (
+                                <AuctionTable auctions={auctions.data!} product={currentProduct}
+                                              size={currentSizeId}/>)
+                            :
+                            (<div>Loading...</div>)
+                    }
 
                 </div>
 
@@ -215,14 +322,14 @@ export default function ProductClientComponent({product}: { product: ProductDeta
             <div className="">
                 <h2 className="text-2xl font-semibold">Product Details</h2>
                 <div className="prose prose-sm sm:prose dark:prose-invert sm:max-w-4xl mt-7">
-                    <p dangerouslySetInnerHTML={{__html: product.product.product.description.replace(/\\n/g, '<br/>')}}/>
+                    <p dangerouslySetInnerHTML={{__html: currentProduct.description.replace(/\\n/g, '<br/>')}}/>
                 </div>
             </div>
         );
     };
 
     return (
-        <div className={`nc-ProductDetailPage `}>
+        <div className={"nc-ProductDetailPage"}>
             {/* MAIn */}
             <main className="container mt-5 lg:mt-11">
                 <div className="lg:flex">
@@ -230,9 +337,7 @@ export default function ProductClientComponent({product}: { product: ProductDeta
                     <div className="w-full lg:w-[55%] ">
                         {/* HEADING */}
                         <div className="relative">
-                            <Suspense fallback={<PhotoPlaceholderSkeleton/>}>
-                                <RenderImage image={product.product.image}/>
-                            </Suspense>
+                            <RenderImage image={image}/>
                             {/*{renderStatus()}*/}
                             {/* META FAVORITES */}
                             <LikeButton className="absolute right-3 top-3 "
@@ -245,9 +350,13 @@ export default function ProductClientComponent({product}: { product: ProductDeta
                         {renderSectionContent()}
                     </div>
                 </div>
-                `
+
                 {/* DETAIL AND REVIEW */}
+                <Chart/>
+
                 <div className="mt-12 sm:mt-16 space-y-10 sm:space-y-16">
+
+
 
                     {renderDetailSection()}
 
@@ -272,4 +381,3 @@ export default function ProductClientComponent({product}: { product: ProductDeta
         </div>
     );
 };
-

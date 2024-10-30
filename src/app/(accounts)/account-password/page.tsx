@@ -2,9 +2,9 @@
 import React, { useState } from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import Input from "@/shared/Input/Input";
+import { useLogout } from "@/hooks/useLogout";
+import { useRouter } from "next/navigation";
 import {changePasswordService} from "@/service/user/user.serivce";
-import {useLogout} from "@/hooks/useLogout";
-import { useRouter } from 'next/navigation';
 
 export default function AccountPass() {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -12,14 +12,13 @@ export default function AccountPass() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const {handleLogout} = useLogout();
+  const { handleLogout } = useLogout();
   const router = useRouter();
 
   const handlePasswordChange = async () => {
     setError(null);
     setSuccessMessage(null);
 
-    // 비밀번호 유효성 검사
     if (newPassword !== confirmPassword) {
       setError("새 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
       return;
@@ -42,23 +41,33 @@ export default function AccountPass() {
       return;
     }
 
-    // 비밀번호 변경 API 호출
     try {
-      await changePasswordService(currentPassword, newPassword);
-      setSuccessMessage("비밀번호가 성공적으로 변경되었습니다.");
-      await handleLogout();
-      router.push('/login');
+      const response = await changePasswordService(currentPassword, newPassword);
+
+      if (response === "비밀번호 변경이 완료했습니다.") {
+        setSuccessMessage("비밀번호가 성공적으로 변경되었습니다.");
+        alert("비밀번호 변경이 됐습니다. 다시 로그인 해주세요.")
+        await handleLogout();
+        router.push('/login');
+        return;
+      } else if (response === "예전 비밀번호가 틀렸습니다.") {
+        setError("현재 비밀번호가 틀립니다.");
+      }
+      else {
+
+        setError("비밀번호 변경 중 오류가 발생했습니다.");
+      }
     } catch (err) {
-      setError("비밀번호 변경 중 오류가 발생했습니다.");
+      setError("비밀번호 변경에 실패했습니다.");
       console.error("비밀번호 변경 실패: ", err);
     }
-  };
+  }
+
 
   return (
       <div className="space-y-10 sm:space-y-12">
         <h2 className="text-2xl sm:text-3xl font-semibold">비밀번호 변경</h2>
         <div className="max-w-xl space-y-6">
-          {/* 현재 비밀번호 입력 */}
           <div>
             <label>현재 비밀번호</label>
             <Input
@@ -69,7 +78,6 @@ export default function AccountPass() {
             />
           </div>
 
-          {/* 새 비밀번호 입력 */}
           <div>
             <label>새 비밀번호</label>
             <Input
@@ -83,7 +91,6 @@ export default function AccountPass() {
           </span>
           </div>
 
-          {/* 새 비밀번호 확인 입력 */}
           <div>
             <label>새 비밀번호 확인</label>
             <Input
