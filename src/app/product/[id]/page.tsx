@@ -6,7 +6,7 @@ export default async function ProductPage({params}: { params: { id: string} }) {
 
     return (
         <div>
-            <ProductClientComponent product={product}/>
+            <ProductClientComponent product={product} />
         </div>
     );
 };

@@ -197,38 +197,26 @@ export async function fetchProduct(productId: string): Promise<ProductModel[]> {
 }
 
 export async function fetchProductDetails(productId: string): Promise<{
-    colorIds: number[],
     product: ProductWithImageModel,
     size: string[],
-    auctions: AuctionModel[],
     colors: ColorType[],
     productWithImagesArray: ProductWithImageModel[];
 }> {
     try {
-
-        const options = {
-            params: {
-                productId: Number(productId),
-            }
-        };
-
         const productWithImagesArray = await fetchProductsWithImages(productId);
+        console.log("productWithImagesArray", productWithImagesArray);
         const product = productWithImagesArray.find((item) => String(item.product.id) === productId);
         if (product === undefined) {
             throw new Error(`해당 product를 찾을 수 없습니다. id: ${productId}`);
         }
-        const colorIds = productWithImagesArray.map((item) => item.product.id);
+
         const colors = productWithImagesArray.map((item) => item.product.color);
         const sizes = product.product.sizes.map((size) => size.id);
 
-        const auctionArray = await Promise.all(sizes.map((size) => {
-            return fetchAuctionsBySize(size);
-        }));
-        const auctions = auctionArray.flat(Infinity).filter((auction) => auction !== undefined) as unknown as AuctionModel[];
         const size = product.product.sizes.map((size) => size.size);
 
 
-        return {colorIds, colors, product, size, auctions, productWithImagesArray};
+        return {colors, product, size, productWithImagesArray};
 
 
     } catch (error) {
