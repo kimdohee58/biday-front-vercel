@@ -106,7 +106,7 @@ const ProductCard: FC<ProductCardProps> = ({
                         <div
                             key={index}
                             className="nc-shadow-lg w-10 h-10 rounded-xl bg-white hover:bg-slate-900 hover:text-white transition-colors cursor-pointer flex items-center justify-center uppercase font-semibold tracking-tight text-sm text-slate-900"
-                            onClick={() => router.push(`/product/${product.id}?size=${size.id}`)}
+                            onClick={() => router.push(`/product/${product.id}?size=${size.size}`)}
                         >
                             {size.size}
                         </div>
@@ -165,11 +165,13 @@ const ProductCard: FC<ProductCardProps> = ({
                 <div className="space-y-4 px-2.5 pt-5 pb-2.5">
                     {renderVariants()}
                     <div>
-                        <h2 className="nc-ProductCard__title text-base font-semibold transition-colors">
-                            {product.name}
+                        <h2 className="nc-ProductCard__title text-base font-semibold transition-colors whitespace-nowrap"
+                            title={product.name}>
+                            {product.name.length > 20 ? `${product.name.slice(0, 20)}...` : product.name}
                         </h2>
-                        <p className={`text-sm text-slate-500 dark:text-slate-400 mt-1 `}>
-                            {product.subName}
+                        <p className={`text-sm text-slate-500 dark:text-slate-400 mt-1 `}
+                           title={product.subName}>
+                            {product.subName.length > 18 ? `${product.subName.slice(0, 18)}...` : product.subName}
                         </p>
                     </div>
 

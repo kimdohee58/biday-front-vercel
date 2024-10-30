@@ -9,7 +9,7 @@ import ProductCard from "@/components/ProductCard";
 import {useRouter} from "next/navigation";
 import {useDispatch, useSelector} from "react-redux";
 import {
-    getProductCards, getRandomCategoryProducts, isProductsInRedux,
+    getRandomCategoryProducts, isProductsInRedux,
     setProductCards,
     setRandomCategoryProducts,
     updateIsLiked
@@ -42,7 +42,6 @@ function RandomProductsByCategory({category}: { category: string }) {
             <div className="space-y-10 lg:space-y-14">
                 <div className="flex justify-between items-center w-full">
                     <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold">
-                        {/*{category}*/}
                         {category ? category.charAt(0).toUpperCase() + category.slice(1) : ""}
                     </h2>
                     <ButtonPrimary onClick={() => handleShowMoreClick(category)}>Show More</ButtonPrimary>

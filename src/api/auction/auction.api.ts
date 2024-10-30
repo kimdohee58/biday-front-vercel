@@ -1,4 +1,4 @@
-import {AuctionModel, SaveAuctionModel} from "@/model/auction/auction.model";
+import {AuctionDTO, AuctionModel, SaveAuctionModel} from "@/model/auction/auction.model";
 import {api} from "../request";
 import {strategy} from "../api.strategy";
 import {RequestOptions} from "@/model/api/RequestOptions";
@@ -15,12 +15,12 @@ type findBySizeParams = {
     order?: string,
     cursor?: number
 }
-const findBySize = async (options: RequestOptions<findBySizeParams, null>): Promise<AuctionModel[]> => {
+const findBySize = async (options: RequestOptions<findBySizeParams, null>): Promise<AuctionDTO[]> => {
     return await strategy.GET(`${api.auction}/findBySize`, options);
 };
 
 // 상품 상세 경매 목록 조회 (GET 요청)
-const findAllBySize = async (options: RequestOptions<Omit<findBySizeParams, "cursor">, null>): Promise<AuctionModel[]> => {
+const findAllBySize = async (options: RequestOptions<findBySizeParams, null>): Promise<AuctionDTO[]> => {
     return await strategy.GET(`${api.auction}/findAllBySize`, options);
 };
 
@@ -31,17 +31,17 @@ type findByUserProps = {
     page?: number
 }
 // 마이페이지 경매 목록 조회 (GET 요청)
-const findByUser = async (options: RequestOptions<findByUserProps,null>): Promise<AuctionModel[]> => {
+const findByUser = async (options: RequestOptions<findByUserProps,null>): Promise<AuctionDTO[]> => {
     return await strategy.GET(`${api.auction}`, options);
 };
 
 // 경매 등록 (POST 요청)
-const save = async (options: Omit<RequestOptions<any, SaveAuctionModel>, "params">): Promise<AuctionModel> => {
+const save = async (options: Omit<RequestOptions<any, SaveAuctionModel>, "params">): Promise<AuctionDTO> => {
     return await strategy.POST(`${api.auction}`, options);
 };
 
 // 경매 수정 (PATCH 요청)
-const update = async (auctionData: Partial<AuctionModel>): Promise<AuctionModel> => {
+const update = async (auctionData: Partial<AuctionModel>): Promise<AuctionDTO> => {
     return await strategy.PATCH(`${api.auction}`, {});
 };
 

@@ -2,14 +2,22 @@
 
 import {auctionAPI} from "@/api/auction/auction.api";
 import Cookies from "js-cookie";
-import {AuctionModel, AuctionWithImageModel, SaveAuctionModel} from "@/model/auction/auction.model";
+import {
+    AuctionDTO,
+    AuctionDTOWithImageModel,
+    AuctionModel,
+    AuctionWithImageModel,
+    SaveAuctionModel
+} from "@/model/auction/auction.model";
 import {fetchImage} from "@/service/ftp/image.service";
 import {defaultImage, ImageModel, ImageType} from "@/model/ftp/image.model";
 import {fetchProductWithImageBySizeId} from "@/service/product/product.service";
 import {ProductDTO} from "@/model/product/product.model";
+import {isApiError} from "@/utils/error/error";
+import {findUserById} from "@/service/user/user.api";
 
 
-export async function fetchAuction(auctionId: string) {
+export async function fetchAuction(auctionId: string):Promise<AuctionModel> {
     try {
         const options = {
             params: {
@@ -20,6 +28,7 @@ export async function fetchAuction(auctionId: string) {
         return await auctionAPI.findById(options);
     } catch (error) {
         console.log(error);
+        throw new Error();
     }
 }
 
@@ -50,7 +59,7 @@ export async function fetchAuctionWithImages(auctionId: string): Promise<Auction
 
 }
 
-export async function saveAuction(auction: SaveAuctionModel) {
+export async function saveAuction(auction: SaveAuctionModel):Promise<AuctionDTO> {
     const userToken = Cookies.get("userToken");
 
     if (!userToken) {
@@ -72,7 +81,7 @@ export async function saveAuction(auction: SaveAuctionModel) {
     }
 }
 
-export async function deleteAuction(id: number) {
+export async function deleteAuction(id: number): Promise<void> {
     const userToken = Cookies.get("userToken");
 
     if (!userToken) {
@@ -84,7 +93,7 @@ export async function deleteAuction(id: number) {
 
     const options = {
         userToken: userToken,
-        params: { auctionId: id.toString() },
+        params: {auctionId: id.toString()},
     };
 
     try {
@@ -95,26 +104,55 @@ export async function deleteAuction(id: number) {
     }
 }
 
-export async function fetchAuctionsBySize(sizeId: number): Promise<AuctionModel[]> {
+export async function fetchAuctionsBySize(sizeId: number): Promise<AuctionDTO[]> {
     try {
+        console.log("fetchAuctionBySize");
         const options = {
             params: {sizeId: sizeId},
         };
 
+        console.log("options", options);
+
         const result = await auctionAPI.findAllBySize(options);
-
-        if (typeof result === "undefined") return [] as AuctionModel[];
-
+        console.log("result", result);
         return result;
 
     } catch (error) {
-        console.error("fetchAuctionBySize 도중 오류 발생", error);
-        throw new Error("");
+        if (isApiError(error) && error.status === 404) {
+            console.log("404에러");
+            return [] as AuctionDTO[];
+        }
+        throw error;
     }
 }
 
+export async function fetchAuctionsBySizes(sizeIds: number[]): Promise<AuctionDTO[]> {
+    try {
+        return (await Promise.all(sizeIds.map(size => fetchAuctionsBySize(size)))).flat();
+
+    } catch (error) {
+        throw new Error("오류")
+    }
+}
+
+// product 상세페이지에서 사용하는 함수, sizeId[] 을 가지고 auction[]과 유저 이름을 함께 반환
+export async function fetchAuctionBySizesWithUser(sizeIds: number[]): Promise<AuctionDTO[]> {
+    const auctions = await fetchAuctionsBySizes(sizeIds);
+    console.log("auctions in service", auctions)
+    const users = await Promise.all(auctions.map(auction => findUserById(auction.userId)));
+
+
+    return auctions.map((auction) => {
+        const user = users.find(user => user!.id === auction.userId) || {};
+        return {
+            ...auction,
+            userId: user.name || "",
+        }
+    });
+
+}
 // findByUserAuction 함수 수정
-export async function findByUserAuction(): Promise<AuctionModel[]> {
+export async function findByUserAuction(): Promise<AuctionDTO[]> {
     try {
         // 쿠키에서 userToken 가져오기
         const userToken = Cookies.get('userToken')
@@ -129,9 +167,7 @@ export async function findByUserAuction(): Promise<AuctionModel[]> {
         };
 
         // findByUser API 호출
-        const auctionArray: AuctionModel[] = await auctionAPI.findByUser(options);
-
-
+        const auctionArray: AuctionDTO[] = await auctionAPI.findByUser(options);
 
         if (auctionArray.length === 0) {
             console.log("경매 내역을 찾을 수 없습니다.");
@@ -164,7 +200,6 @@ export async function fetchAuctionDetails(auctionId: string): Promise<{auction: 
         console.error("auctionDetails 에러 발생", error);
         throw new Error();
     }
-
 }
 
 // 판매 도중 멈추기

@@ -9,7 +9,6 @@ import BagIcon from "@/components/BagIcon";
 import toast from "react-hot-toast";
 import {StarIcon} from "@heroicons/react/24/solid";
 import SectionSliderProductCard from "@/components/SectionSliderProductCard";
-import NotifyAddTocart from "@/components/NotifyAddTocart";
 import AccordionInfo from "@/components/AccordionInfo";
 import ListingImageGallery from "@/components/listing-image-gallery/ListingImageGallery";
 import {useParams, usePathname, useRouter, useSearchParams} from "next/navigation";
@@ -31,7 +30,6 @@ export default function AuctionDetailPage() {
     const [variantActive, setVariantActive] = useState(0);
     // const [sizeSelected, setSizeSelected] = useState(sizes ? sizes[0] : "");
     const [qualitySelected, setQualitySelected] = useState(1);
-    const [isOpenModalViewAllReviews, setIsOpenModalViewAllReviews] = useState(false);
     const initialBid = 15000;
     const initialTimer = "2024-01-01T00:00:00.000Z";
 
