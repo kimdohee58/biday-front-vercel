@@ -6,7 +6,9 @@ import {AuctionModel, AuctionWithImageModel, SaveAuctionModel} from "@/model/auc
 import {fetchImage} from "@/service/ftp/image.service";
 import {defaultImage, ImageModel, ImageType} from "@/model/ftp/image.model";
 import {fetchProductWithImageBySizeId} from "@/service/product/product.service";
-import {ProductDTO, ProductWithImageModel} from "@/model/product/product.model";
+import {ProductDTO} from "@/model/product/product.model";
+import {isApiError} from "@/utils/error/error";
+import {findUserById} from "@/service/user/user.api";
 
 
 export async function fetchAuction(auctionId: string) {
@@ -97,22 +99,51 @@ export async function deleteAuction(id: number) {
 
 export async function fetchAuctionsBySize(sizeId: number): Promise<AuctionModel[]> {
     try {
+        console.log("fetchAuctionBySize");
         const options = {
             params: {sizeId: sizeId},
         };
 
+        console.log("options", options);
+
         const result = await auctionAPI.findAllBySize(options);
-
-        if (typeof result === "undefined") return [] as AuctionModel[];
-
+        console.log("result", result);
         return result;
 
     } catch (error) {
-        console.error("fetchAuctionBySize 도중 오류 발생", error);
-        throw new Error("");
+        if (isApiError(error) && error.status === 404) {
+            console.log("404에러");
+            return [] as AuctionModel[];
+        }
+        throw error;
     }
 }
 
+export async function fetchAuctionsBySizes(sizeIds: number[]): Promise<AuctionModel[]> {
+    try {
+        return (await Promise.all(sizeIds.map(size => fetchAuctionsBySize(size)))).flat();
+
+    } catch (error) {
+        throw new Error("오류")
+    }
+}
+
+// product 상세페이지에서 사용하는 함수, sizeId[] 을 가지고 auction[]과 유저 이름을 함께 반환
+export async function fetchAuctionBySizesWithUser(sizeIds: number[]): Promise<AuctionModel[]> {
+    const auctions = await fetchAuctionsBySizes(sizeIds);
+    console.log("auctions in service", auctions)
+    const users = await Promise.all(auctions.map(auction => findUserById(auction.userId)));
+
+
+    return auctions.map((auction) => {
+        const user = users.find(user => user!.id === auction.userId) || {};
+        return {
+            ...auction,
+            userId: user.name || "",
+        }
+    });
+
+}
 // findByUserAuction 함수 수정
 export async function findByUserAuction(): Promise<AuctionModel[]> {
     try {
@@ -153,7 +184,7 @@ type ProductDTOWithImage = {
 export async function fetchAuctionDetails(auctionId: string): Promise<{auction: AuctionWithImageModel, product: ProductDTOWithImage}> {
     try {
         const auction = await fetchAuctionWithImages(auctionId);
-        const product = await fetchProductWithImageBySizeId(auction.auction.size);
+        const product = await fetchProductWithImageBySizeId(auction.auction.sizeId);
 
         return {
             auction,

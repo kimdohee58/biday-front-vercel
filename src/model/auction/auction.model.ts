@@ -3,8 +3,8 @@ import {AwardModel} from "@/model/auction/award.model";
 import {ImageModel} from "@/model/ftp/image.model";
 
 export interface AuctionModel {
-    id?: number;
-    user?: string;
+    id: number;
+    userId: string;
     description: string;
     startingBid: number;
     currentBid: number;
@@ -13,7 +13,7 @@ export interface AuctionModel {
     status: boolean;
     createdAt: Date;
     updatedAt: Date;
-    size:number,
+    sizeId:number,
     award:AwardModel,
 }
 

@@ -19,7 +19,7 @@ const findBySize = async (options: RequestOptions<findBySizeParams, null>): Prom
 };
 
 // 상품 상세 경매 목록 조회 (GET 요청)
-const findAllBySize = async (options: RequestOptions<Omit<findBySizeParams, "cursor">, null>): Promise<AuctionModel[]> => {
+const findAllBySize = async (options: RequestOptions<findBySizeParams, null>): Promise<AuctionModel[]> => {
     return await strategy.GET(`${api.auction}/findAllBySize`, options);
 };
 
