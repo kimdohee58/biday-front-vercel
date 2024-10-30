@@ -28,7 +28,7 @@ import {AwardModel} from "@/model/auction/award.model";
 
 const AccountOrder = () => {
     const router = useRouter(); // Initialize the router
-    const [activeTab, setActiveTab] = useState("award");
+    const [activeTab, setActiveTab] = useState("auction");
     const [mappedPaymentData, setMappedPaymentData] = useState<PaymentRequestModel[]>([]);
 
     const {
@@ -59,6 +59,11 @@ const AccountOrder = () => {
     const handleCheckoutClick = (awardId: string, productId: string) => {
         router.push(`/checkout?awardId=${awardId}&productId=${productId}`);
     };
+
+    const handleImgClick = (auctionId: string) => {
+        router.push(`/auction/${auctionId}`);
+    };
+
 
     useEffect(() => {
         const fetchMappedPaymentData = async () => {
@@ -112,22 +117,23 @@ const AccountOrder = () => {
                         </svg>
                         <h2 className="text-2xl font-semibold text-indigo-600">Loading...</h2>
                     </div>
+
                 </div> : (
                     <>
                         {activeTab === "auction" && (
                             <>
                                 <div className="mb-8">
-                                    {renderAuctionHistory(mapDataWithAuctionModel(auctionContent, auctionProductList!!))}
+                                    {renderAuctionHistory(mapDataWithAuctionModel(auctionContent, auctionProductList!!),handleImgClick)}
                                 </div>
                                 <div className="mb-8">
-                                    {renderBidHistory(mapDataWithBidModel(bidData, bidProductList!!))}
+                                    {renderBidHistory(mapDataWithBidModel(bidData, bidProductList!!),handleImgClick)}
                                 </div>
                             </>
                         )}
                         {activeTab === "award" && (
                             <>
                                 <div className="mb-8">
-                                    {renderAwardHistory(mapDataWithAwardModel(awardContent, awardProductList!!), handleCheckoutClick)}
+                                    {renderAwardHistory(mapDataWithAwardModel(awardContent, awardProductList!!), handleImgClick,handleCheckoutClick)}
                                 </div>
                                 <div className="mb-8">
                                     {renderPaymentHistory(mappedPaymentData)}

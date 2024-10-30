@@ -116,44 +116,49 @@ export default function PageSearch() {
 
                     <>
                         {selectedProducts.length > 0 ? (
-                            <div
-                                className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-x-8 gap-y-10 mt-8 lg:mt-10">
-                                {selectedProducts.map((item) => (
-                                    <ProductCard data={item} image={getProductImage(item)} key={item.id} />
-                                ))}
-                            </div>
+                            <>
+                                <div
+                                    className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-x-8 gap-y-10 mt-8 lg:mt-10">
+                                    {selectedProducts.map((item) => (
+                                        <ProductCard data={item} image={getProductImage(item)} key={item.id}/>
+                                    ))}
+                                </div>
+
+                                <div
+                                    className="flex flex-col mt-12 lg:mt-16 space-y-5 sm:space-y-0 sm:space-x-5 sm:flex-row sm:justify-between sm:items-center">
+                                    <Pagination
+                                        currentPage={currentPage}
+                                        totalPages={totalPages}
+                                        onPageChange={handlePageChange}
+                                    />
+                                    <ButtonPrimary loading>Show me more</ButtonPrimary>
+                                </div>
+                            </>
                         ) : (
                             <>
-                                <p className="text-3xl text-red-600 font-semibold text-center mb-8">
+                                <p className="text-3xl text-red-600 font-semibold text-center mb-10">
                                     '{keyword}'에 해당하는 상품이 없습니다.
                                 </p>
-                                <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
-                                    추천 상품을 확인해 보세요
-                                </h2>
-                                {products.length > 0 ? (
-                                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-x-8 gap-y-10 mt-6 lg:mt-8">
-                                        {products.slice(0, 20).map((item) => (
-                                            <ProductCard data={item} image={getProductImage(item)} key={item.id} />
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <p className="text-lg text-gray-500 text-center mt-4">
-                                        현재 추천 상품이 없습니다.
-                                    </p>
-                                )}
+                                <div className="bg-gray-100 rounded-lg p-6 shadow-md mt-8">
+                                    <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
+                                        추천 상품을 확인해 보세요
+                                    </h2>
+                                    {products.length > 0 ? (
+                                        <div
+                                            className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-x-8 gap-y-10">
+                                            {products.slice(0, 20).map((item) => (
+                                                <ProductCard data={item} image={getProductImage(item)} key={item.id}/>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <p className="text-lg text-gray-500 text-center mt-4">
+                                            현재 추천 상품이 없습니다.
+                                        </p>
+                                    )}
+                                </div>
                             </>
                         )}
                     </>
-
-                    <div
-                        className="flex flex-col mt-12 lg:mt-16 space-y-5 sm:space-y-0 sm:space-x-5 sm:flex-row sm:justify-between sm:items-center">
-                        <Pagination
-                            currentPage={currentPage}
-                            totalPages={totalPages}
-                            onPageChange={handlePageChange}
-                        />
-                        <ButtonPrimary loading>Show me more</ButtonPrimary>
-                    </div>
                 </main>
 
                 <hr className="border-slate-200 dark:border-slate-700"/>
@@ -162,5 +167,6 @@ export default function PageSearch() {
                 <SectionPromo1/>
             </div>
         </div>
-    );
+    )
+        ;
 }

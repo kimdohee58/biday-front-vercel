@@ -2,6 +2,7 @@ import {AuctionModel, SaveAuctionModel} from "@/model/auction/auction.model";
 import {api} from "../request";
 import {strategy} from "../api.strategy";
 import {RequestOptions} from "@/model/api/RequestOptions";
+import {AwardDto} from "@/model/auction/award.model";
 
 // 경매 상세보기 (GET 요청)
 const findById = async (options: RequestOptions<{ auctionId: string }, null>): Promise<AuctionModel> => {
@@ -49,6 +50,11 @@ const delete_ = async (options:RequestOptions<{auctionId:string},null>): Promise
     return await strategy.DELETE(`${api.auction}`, options);
 };
 
+// 경매 취소 (PATCH 요청)
+const cancel = async (options: RequestOptions<{auctionId: number}, null>): Promise<string> => {
+    return await strategy.PATCH(`${api.auction}/cancel`, options);
+};
+
 export const auctionAPI = {
     findById,
     findBySize,
@@ -56,5 +62,6 @@ export const auctionAPI = {
     findByUser,
     update,
     save,
-    delete_ // 키워드 딜리트라는 단억나 키워드여서 _ 언더바를 준거다. 다른 이름으로 아 자바 컨트롤러랑 맞추고 싶은데 에러가 나서 한거.
+    delete_, // 키워드 딜리트라는 단억나 키워드여서 _ 언더바를 준거다. 다른 이름으로 아 자바 컨트롤러랑 맞추고 싶은데 에러가 나서 한거.
+    cancel
 };

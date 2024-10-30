@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import {AwardDto, AwardModel} from "@/model/auction/award.model";
 
 // awardId: number
-export async function fetchAwardOne (awardId: number): Promise<AwardModel> {
+export async function fetchAwardOne(awardId: number): Promise<AwardModel> {
     const userToken = Cookies.get("userToken");
     if (!userToken) {
         throw new Error("쿠키 접근 불가");
@@ -11,7 +11,7 @@ export async function fetchAwardOne (awardId: number): Promise<AwardModel> {
     }
 
     const options = {
-        params : {awardId: awardId},
+        params: {awardId: awardId},
         userToken: userToken,
     };
     console.log("userToken", JSON.parse(userToken));
@@ -41,13 +41,12 @@ export async function findByUserAward(): Promise<AwardModel[]> {
         }
 
         const options = {
-            userToken : userToken, // 쿠키에서 가져온 userToken을 사용
+            userToken: userToken, // 쿠키에서 가져온 userToken을 사용
             params: {}
         };
 
         // findByUser API 호출
         const awardArray: AwardModel[] = await awardAPI.findByUser(options);
-
 
 
         if (awardArray.length === 0) {
@@ -61,19 +60,15 @@ export async function findByUserAward(): Promise<AwardModel[]> {
     }
 }
 
-export async function findByAuctionId(auctionId: number): Promise<AwardDto> {
+export async function findByAuctionId(auctionId: number): Promise<AwardDto | null> {
     try {
         const options = {
-            params : {auctionId: auctionId},
+            params: {auctionId: auctionId},
         };
-        const award: AwardDto = await awardAPI.findByAuctionId(options);
-        if(award === null) {
-            console.log("해당 경매의 낙찰 정보를 찾을 수 없습니다.")
-        }
-        return award;
+        return await awardAPI.findByAuctionId(options);
     } catch (error) {
         console.error("findByAuctionId 에러 발생", error)
-        throw new Error("종료된 경매의 낙찰을 가져오는 중 에러가 발생했습니다.")
+        return null;
     }
 }
 

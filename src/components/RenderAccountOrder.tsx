@@ -30,7 +30,12 @@ function formatDate(dateString: string): string {
     return format(date, "yyyy-MM-dd");
 }
 
-const renderProductItem = (product: any, index: number, type: string, onCheckout?: (awardId: string, productId: string) => void) => {
+const renderProductItem = (product: any, index: number, type: string,
+                           onImg?: (auctionId: string)=> void,
+                           onCheckout?: (awardId: string, productId: string) => void
+
+) => {
+
 
     const defaultProductId = `product-${index}`;
     const defaultProductName = "No name available";
@@ -50,7 +55,18 @@ const renderProductItem = (product: any, index: number, type: string, onCheckout
     originalPrice = findNestedProperty<number>(product, ["product", "sizeProduct", "price"]) || defaultOriginalPrice;
     size = findNestedProperty<string>(product, ["product", "size"]) || defaultSize;
 
-    awardId = product.id;
+    const auctionId: string | undefined = type === 'auction'
+        ? findNestedProperty<string>(product, ["id"])?.toString() // auction 객체의 id를 문자열로 변환
+        : type === 'bid'
+            ? findNestedProperty<string>(product, ["auctionId"])?.toString() // bid 객체의 auctionId를 문자열로 변환
+            : type === 'award'
+                ? findNestedProperty<string>(product, ["auction", "id"])?.toString() // award 객체의 auction.id를 문자열로 변환
+                : undefined;
+
+
+    if (type === 'award') {
+        awardId = product.id;
+    }
 
 
     const price = product.amount || product.currentBid || 0;
@@ -78,7 +94,15 @@ const renderProductItem = (product: any, index: number, type: string, onCheckout
     return (
         <div key={index} className="flex py-4 sm:py-7 last:pb-0 first:pt-0 mb-2">
 
-            <ImageFetcher id={productId} altText={productName} />
+            <div
+                onClick={['auction', 'bid', 'award'].includes(type) && onImg && auctionId ? () => {
+                    onImg(auctionId, );
+                } : undefined}
+
+                style={{cursor: ['auction', 'bid', 'award'].includes(type) && auctionId ? 'pointer' : 'default'}}
+            >
+                <ImageFetcher id={productId} altText={productName}/>
+            </div>
 
             <div className="ml-4 flex flex-1 flex-col">
                 <div>
@@ -120,7 +144,9 @@ const renderProductItem = (product: any, index: number, type: string, onCheckout
 
 
 // 경매 내역 렌더링
-export const renderAuctionHistory = (auctionProductList: any[]) => {
+export const renderAuctionHistory = (auctionProductList: any[],
+                                     onImg: (auctionId: string) => void
+) => {
     return (
         <div className="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden z-0">
             <div
@@ -132,7 +158,7 @@ export const renderAuctionHistory = (auctionProductList: any[]) => {
                 {auctionProductList && auctionProductList.length > 0 ? (
                     <div>
                         <p className="text-lg font-semibold mt-4">경매상품 정보</p>
-                        {auctionProductList.map((product, index) => renderProductItem(product, index, "auction"))}
+                        {auctionProductList.map((product, index) => renderProductItem(product, index, "auction", onImg))}
                     </div>
                 ) : (
                     <p>내역이 없습니다.</p>
@@ -142,9 +168,11 @@ export const renderAuctionHistory = (auctionProductList: any[]) => {
     );
 };
 
-// 입찰 내역 렌더링
-export const renderBidHistory = (bidProductList: any[]) => {
 
+// 입찰 내역 렌더링
+export const renderBidHistory = (bidProductList: any[],
+                                 onImg: (auctionId: string)=> void
+) => {
     return (
         <div className="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden z-0">
             <div
@@ -156,7 +184,7 @@ export const renderBidHistory = (bidProductList: any[]) => {
                 {bidProductList && bidProductList.length > 0 ? (
                     <div>
                         <p className="text-lg font-semibold mt-4">입찰상품 정보</p>
-                        {bidProductList.map((product, index) => renderProductItem(product, index, "bid"))}
+                        {bidProductList.map((product, index) => renderProductItem(product, index, "bid", onImg))}
                     </div>
                 ) : (
                     <p>내역이 없습니다.</p>
@@ -169,7 +197,8 @@ export const renderBidHistory = (bidProductList: any[]) => {
 // 낙찰 내역 렌더링
 export const renderAwardHistory = (
     awardProductList: any[],
-    onCheckout: (awardId: string, productId: string) => void // Accept onCheckout as an argument
+    onImg: (auctionId: string)=> void,
+    onCheckout: (awardId: string, productId: string)=> void
 ) => {
     return (
         <div className="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden z-0">
@@ -180,9 +209,7 @@ export const renderAwardHistory = (
                 {awardProductList && awardProductList.length > 0 ? (
                     <div>
                         <p className="text-lg font-semibold mt-4">낙찰상품 정보</p>
-                        {awardProductList.map((product, index) =>
-                            renderProductItem(product, index, "award", onCheckout)
-                        )}
+                        {awardProductList.map((product, index) => renderProductItem(product, index, "award",onImg, onCheckout))}
                     </div>
                 ) : (
                     <p>내역이 없습니다.</p>

@@ -25,7 +25,8 @@ import LikeSaveBtns from "@/components/LikeSaveBtns";
 import {fetchAwardOne, findByAuctionId} from "@/service/auction/award.service";
 import {useSelector} from "react-redux";
 import {getUserToken} from "@/lib/features/user.slice";
-import { differenceInMinutes, isAfter } from "date-fns";
+import {differenceInMinutes, isAfter} from "date-fns";
+import {CancelAuction} from "@/service/auction/auction.service";
 
 export default function AuctionDetailPage() {
     const thisPathname = usePathname();
@@ -67,6 +68,7 @@ export default function AuctionDetailPage() {
     const userToken = useSelector(getUserToken);
 
     useEffect(() => {
+        console.log("userToken in Auction Detail", userToken)
         if (userToken) {
             setIsSeller(!!(auction?.user && userToken.userId));
         }
@@ -83,10 +85,15 @@ export default function AuctionDetailPage() {
         })
         : null;
 
-    // 본인이라면 경매기간이 40% 넘어갔다면 취소 불가
     const [isCancel, setIsCancel] = useState(true);
 
     useEffect(() => {
+        // 경매가 종료된 경우, 실행하지 않도록 함
+        if (isEnded) {
+            setIsCancel(false); // 혹은 원하는 기본값으로 설정
+            return; // 이 시점에서 더 이상 실행하지 않음
+        }
+
         const now = new Date();
         const auctionEnd = new Date(auction.endedAt);
 
@@ -98,7 +105,7 @@ export default function AuctionDetailPage() {
         if (isSeller && isBelowSeventyPercent) {
             setIsCancel(false);
         }
-    }, [auction, isSeller]);
+    }, [auction, isSeller, isEnded]);
 
     const handleCloseModalImageGallery = () => {
         let params = new URLSearchParams(document.location.search);
@@ -168,7 +175,7 @@ export default function AuctionDetailPage() {
                         color={getColor(product.name)}
                     />
                 ),
-                { position: "top-right", id: "nc-product-notify", duration: 3000 }
+                {position: "top-right", id: "nc-product-notify", duration: 3000}
             );
         }
     };
@@ -178,19 +185,20 @@ export default function AuctionDetailPage() {
     const [isCancelled, setIsCancelled] = useState(false);
     const handleConfirmCancel = async () => {
         setIsCancelling(true);
-        // 여기에서 API 호출을 통해 경매 취소 로직 실행 (예: await cancelAuctionAPI())
+        try {
+            const cancelMessage = await CancelAuction(Number(auction?.id));
 
-        // API 호출 후 상태 업데이트
-        setTimeout(() => {
+            if (cancelMessage === "경매 취소 성공") {
+                setIsCancelled(true);
+            } else {
+                console.error("경매 취소 실패:", cancelMessage);
+            }
+        } catch (error) {
+            console.error("API 호출 중 오류 발생:", error);
+        } finally {
+            // 로딩 상태 해제
             setIsCancelling(false);
-            setIsCancelled(true);
-
-            // 일정 시간 후 모달 닫기
-            setTimeout(() => {
-                setShowCancelModal(false);
-                setIsCancelled(false);
-            }, 2000);
-        }, 2000);
+        }
     };
 
     const renderSizeList = () => {
@@ -262,7 +270,7 @@ export default function AuctionDetailPage() {
             <>
                 <div className="mb-4">
                     {!isEnded && (
-                        <Timer endedTime={auction?.endedAt ? new Date(auction.endedAt).toISOString() : initialTimer} />
+                        <Timer endedTime={auction?.endedAt ? new Date(auction.endedAt).toISOString() : initialTimer}/>
                     )}
                 </div>
                 <div className="listingSectionSidebar__wrap lg:shadow-lg relative">
@@ -270,9 +278,18 @@ export default function AuctionDetailPage() {
                         {/* PRICE */}
                         <div className="">
                             <div className="flex items-center justify-between space-x-5">
-                            <div className="flex text-2xl font-semibold">
-                                {isEnded ? `낙찰가: ${award?.data.currentBid}원` : `현재 최고 입찰가: ${highestBid}원`}
-                            </div>
+                                <div className="flex text-2xl font-semibold">
+                                    {isEnded ? (
+                                        // award가 null 이면 취소되 ㄴ경매 떠야 하는데 이상함
+                                        award != null ? (
+                                            <span>낙찰가: {award.data?.currentBid}원</span>
+                                        ) : (
+                                            <span className="text-red-500 font-semibold">취소된 경매입니다.</span>
+                                        )
+                                    ) : (
+                                        <span>현재 최고 입찰가: {highestBid}원</span>
+                                    )}
+                                </div>
                                 <a className="flex items-center text-sm font-medium">
                                     <div className="">
                                         <StarIcon className="w-5 h-5 pb-[1px] text-orange-400"/>
@@ -500,33 +517,33 @@ export default function AuctionDetailPage() {
             </div>
 
             <Suspense>
-                {isEnded && (
-                    // <div
-                    //     className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -rotate-43 text-red-600 border-8 border-red-600 font-bold text-8xl bg-white rounded-md shadow-md w-[700px] h-[200px] flex items-center justify-center text-center leading-none overflow-hidden"
-                    // >
-                    //     <span className="whitespace-nowrap">SOLD OUT</span>
-                    // </div>
-                    <div
-                        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -rotate-43 bg-red-600 border-8 border-white font-bold text-8xl text-white rounded-md shadow-md w-[700px] h-[200px] flex items-center justify-center text-center leading-none overflow-hidden"
-                    >
-                        <span className="whitespace-nowrap">SOLD OUT</span>
-                    </div>
+                <div className="relative">
+                    {isEnded && (
+                        // <div
+                        //     className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -rotate-43 text-red-600 border-8 border-red-600 font-bold text-8xl bg-white rounded-md shadow-md w-[700px] h-[200px] flex items-center justify-center text-center leading-none overflow-hidden"
+                        // >
+                        //     <span className="whitespace-nowrap">SOLD OUT</span>
+                        // </div>
+                        <div
+                            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -rotate-43 bg-red-600 border-8 border-white font-bold text-8xl text-white rounded-md shadow-md w-[700px] h-[200px] flex items-center justify-center text-center leading-none overflow-hidden"
+                        >
+                            <span className="whitespace-nowrap">SOLD OUT</span>
+                        </div>
+                    )}
 
-
-                )}
-
-                <ListingImageGallery
-                    onClose={handleCloseModalImageGallery}
-                    images={[
-                        ...((!Array.isArray(productImage) && productImage) ? [productImage] : []),
-                        ...((Array.isArray(auctionImages) ? auctionImages : [auctionImages])),
-                    ].map((item, index) => {
-                        return {
-                            id: index,
-                            url: item.uploadUrl,
-                        };
-                    })}
-                />
+                    <ListingImageGallery
+                        onClose={handleCloseModalImageGallery}
+                        images={[
+                            ...((!Array.isArray(productImage) && productImage) ? [productImage] : []),
+                            ...((Array.isArray(auctionImages) ? auctionImages : [auctionImages])),
+                        ].map((item, index) => {
+                            return {
+                                id: index,
+                                url: item.uploadUrl,
+                            };
+                        })}
+                    />
+                </div>
             </Suspense>
 
             {/* 경매 취소 모달 창 */}
