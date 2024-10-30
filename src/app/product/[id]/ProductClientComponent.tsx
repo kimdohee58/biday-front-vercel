@@ -21,6 +21,7 @@ import {useFetchAuctionBySizeIdsWithUser} from "@/hooks/react-query/useAuctionli
 import {Colors} from "@/data/color";
 import LikeButton from "@/components/LikeButton";
 import Chart from "@/app/product/[id]/Chart";
+import {useSearchParams} from "next/navigation";
 
 type ProductDetailProps = {
     product: ProductWithImageModel,
@@ -97,7 +98,11 @@ function RenderSizeList({sizeArray, onClickSizeButton, currentSize, sizes}: Rend
     );
 }
 
-export default function ProductClientComponent({product, size}: { product: ProductDetailProps, size?: string }) {
+export default function ProductClientComponent({product}: { product: ProductDetailProps}) {
+
+    const searchParams = useSearchParams();
+    const size = searchParams.get("size");
+    console.log("size", size);
 
     const {product: productWithImage, size: sizeArray, colors, productWithImagesArray} = product;
     const {product: initialProduct} = productWithImage;
