@@ -1,44 +1,24 @@
 "use client";
 
-import React, { useState } from "react";
-import facebookSvg from "@/images/Facebook.svg";
-import twitterSvg from "@/images/Twitter.svg";
-import googleSvg from "@/images/Google.svg";
+import React, {useState} from "react";
 import Input from "@/shared/Input/Input";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
-import Image from "next/image";
 import Link from "next/link";
-import { UserModel } from "@/model/user/user.model";
-import { useRouter } from "next/navigation";
-import btnG_official from "@/images/btnG_official.png";
+import {UserModel} from "@/model/user/user.model";
+import {useRouter} from "next/navigation";
 import useSignInUser from "@/hooks/useSignInUser";
-import { checkEmailDuplication, checkPhoneDuplication } from "@/service/user/user.api";
-
-const loginSocials = [
-    {
-        name: "onNaverLogin",
-        href: `${process.env.NEXT_PUBLIC_API_SERVER_URL}/oauth2/authorization/naver`,
-        icon: btnG_official,
-    },
-    {
-        name: "Continue with Facebook",
-        href: "#",
-        icon: facebookSvg,
-    },
-    {
-        name: "Continue with Twitter",
-        href: "#",
-        icon: twitterSvg,
-    },
-    {
-        name: "Continue with Google",
-        href: "#",
-        icon: googleSvg,
-    },
-];
+import {checkEmailDuplication, checkPhoneDuplication} from "@/service/user/user.api";
+import TermsAgreement from "@/components/dohee/TermsAgreement";
 
 export default function PageSignUp() {
-    const { handleSignUp, errorMessage, fieldErrors, fieldSuccess, setFieldError, setFieldSuccessMessage } = useSignInUser();
+    const {
+        handleSignUp,
+        errorMessage,
+        fieldErrors,
+        fieldSuccess,
+        setFieldError,
+        setFieldSuccessMessage
+    } = useSignInUser();
     const router = useRouter();
 
     const [formData, setFormData] = useState<Partial<UserModel & { confirmPassword: string }>>({
@@ -55,6 +35,7 @@ export default function PageSignUp() {
     const [isCustomDomain, setIsCustomDomain] = useState<boolean>(false);
     const [isEmailChecked, setIsEmailChecked] = useState(false);
     const [isPhoneChecked, setIsPhoneChecked] = useState(false);
+    const [termsChecked, setTermsChecked] = useState([]);
 
     // 이메일 도메인 목록
     const emailDomains = [
@@ -85,7 +66,7 @@ export default function PageSignUp() {
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
 
         let newValue = value;
         if (name === "phoneNum") {
@@ -100,7 +81,7 @@ export default function PageSignUp() {
             }
         }
 
-        setFormData({ ...formData, [name]: newValue });
+        setFormData({...formData, [name]: newValue});
 
         // 각 필드에 대한 유효성 검사 직접 구현
         switch (name) {
@@ -152,9 +133,11 @@ export default function PageSignUp() {
         }
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const handleTermsChange = (checkedTerms) => {
+        setTermsChecked(checkedTerms);
+    };
 
+    const handleSubmit = async () => {
         const fullEmail = isCustomDomain
             ? `${emailLocalPart}@${customEmailDomain}`
             : `${emailLocalPart}@${emailDomain}`;
@@ -202,6 +185,15 @@ export default function PageSignUp() {
 
         if (!formData.phoneNum || !/^010-\d{4}-\d{4}$/.test(formData.phoneNum)) {
             alert("전화번호 형식이 잘못되었습니다.");
+            return;
+        }
+
+        // 이용 약관 체크 여부 확인
+        const requiredTerms = ['age', 'terms', 'privacy'];
+        handleTermsChange(requiredTerms);
+        const allRequiredChecked = requiredTerms.every((term) => termsChecked.includes(term));
+        if (!allRequiredChecked) {
+            alert('모든 필수 약관에 동의해야 합니다.');
             return;
         }
 
@@ -270,43 +262,21 @@ export default function PageSignUp() {
     return (
         <div className={`nc-PageSignUp`} data-nc-id="PageSignUp">
             <div className="container mb-24 lg:mb-32">
-                <h2 className="my-20 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
+                <h2 className="my-12 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
                     Signup
                 </h2>
-                <div className="max-w-md mx-auto space-y-6">
-                    {/* 소셜 로그인 버튼 */}
-                    <div className="grid gap-3">
-                        {loginSocials.map((item, index) => (
-                            <a
-                                key={index}
-                                href={item.href}
-                                className="flex w-full rounded-lg bg-primary-50 dark:bg-neutral-800 px-4 py-3 transform transition-transform sm:px-6 hover:translate-y-[-2px]"
-                            >
-                                <Image
-                                    className="flex-shrink-0"
-                                    src={item.icon}
-                                    alt={item.name}
-                                    width={24}
-                                    height={24}
-                                    sizes="40px"
-                                />
-                                <h3 className="flex-grow text-center text-sm font-medium text-neutral-700 dark:text-neutral-300 sm:text-sm">
-                                    {item.name}
-                                </h3>
-                            </a>
-                        ))}
-                    </div>
-
-                    {/* OR */}
+                <div className="max-w-md mx-auto space-y-2">
+                    <TermsAgreement onTermsChange={handleTermsChange}/>
                     <div className="relative text-center">
-                        <span className="relative z-10 inline-block px-4 font-medium text-sm bg-white dark:text-neutral-400 dark:bg-neutral-900">
-                            OR
-                        </span>
-                        <div className="absolute left-0 w-full top-1/2 transform -translate-y-1/2 border border-neutral-100 dark:border-neutral-800"></div>
+                            <span
+                                className="relative z-10 inline-block px-6 font-medium text-base bg-white dark:text-neutral-400 dark:bg-neutral-900"> {/* text-sm에서 text-base로 변경 및 px를 4에서 6으로 증가 */}
+                                AND
+                            </span>
+                        <div
+                            className="absolute left-0 w-full top-1/2 transform -translate-y-1/2 border-2 border-neutral-100 dark:border-neutral-800"></div>
                     </div>
-
                     {/* 회원가입 폼 */}
-                    <form className="grid grid-cols-1 gap-6" onSubmit={handleSubmit}>
+                    <form className="grid grid-cols-1 gap-6" onClick={handleSubmit}>
                         {/* 이름 입력 필드 */}
                         <label className="block">
                             <span className="text-neutral-800 dark:text-neutral-200">이름</span>
@@ -324,37 +294,46 @@ export default function PageSignUp() {
 
                         {/* 이메일 입력 필드 */}
                         <label className="block">
-                            <span className="text-neutral-800 dark:text-neutral-200">Email address</span>
-                            <div className="flex">
-                                <Input
-                                    type="text"
-                                    placeholder="이메일 입력"
-                                    value={emailLocalPart}
-                                    onChange={handleChangeLocalPart}
-                                    className="mt-1 flex-grow"
-                                />
-                                <span className="mx-2">@</span>
-                                {!isCustomDomain ? (
-                                    <select
-                                        value={emailDomain}
-                                        onChange={handleChangeDomain}
-                                        className="mt-1"
-                                    >
-                                        {emailDomains.map((domain, index) => (
-                                            <option key={index} value={domain}>
-                                                {domain}
-                                            </option>
-                                        ))}
-                                    </select>
-                                ) : (
+                            <span className="text-neutral-800 dark:text-neutral-200 mb-2">Email address</span>
+                            <div className="flex items-center gap-2">
+                                {/* 이메일 입력 필드 */}
+                                <div className="flex-grow">
                                     <Input
                                         type="text"
-                                        value={customEmailDomain}
-                                        onChange={handleCustomDomainChange}
-                                        placeholder="도메인 입력"
-                                        className="mt-1 flex-grow"
+                                        placeholder="이메일 입력"
+                                        value={emailLocalPart}
+                                        onChange={handleChangeLocalPart}
+                                        className="w-full p-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-neutral-800 dark:border-neutral-700 dark:focus:ring-blue-400"
                                     />
-                                )}
+                                </div>
+
+                                {/* @ 기호 */}
+                                <span className="text-lg font-semibold"> @ </span>
+
+                                {/* 도메인 선택 필드 */}
+                                <div className="flex-grow">
+                                    {!isCustomDomain ? (
+                                        <select
+                                            value={emailDomain}
+                                            onChange={handleChangeDomain}
+                                            className="w-full p-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-neutral-800 dark:border-neutral-700 dark:focus:ring-blue-400"
+                                        >
+                                            {emailDomains.map((domain, index) => (
+                                                <option key={index} value={domain}>
+                                                    {domain}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    ) : (
+                                        <Input
+                                            type="text"
+                                            value={customEmailDomain}
+                                            onChange={handleCustomDomainChange}
+                                            placeholder="도메인 입력"
+                                            className="w-full p-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-neutral-800 dark:border-neutral-700 dark:focus:ring-blue-400"
+                                        />
+                                    )}
+                                </div>
                             </div>
                         </label>
 
@@ -430,9 +409,13 @@ export default function PageSignUp() {
                             <span className="text-sm text-green-400">{fieldSuccess.phoneNum}</span>
                         )}
 
-                        {/* 제출 버튼 */}
-                        <ButtonPrimary type="submit">Continue</ButtonPrimary>
+                        <ButtonPrimary type="submit" className="w-full">Continue</ButtonPrimary>
                     </form>
+
+                    <div className="max-w-md mx-auto space-y-2">
+                        <div className="flex justify-center mt-4">
+                        </div>
+                    </div>
 
                     {/* 이미 계정이 있는 경우 로그인 링크 */}
                     <span className="block text-center text-neutral-700 dark:text-neutral-300">

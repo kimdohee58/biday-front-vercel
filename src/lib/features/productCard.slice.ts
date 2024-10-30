@@ -35,7 +35,7 @@ const productCardSlice = createSlice({
 })
 
 
-export const { setProductCards, updateIsLiked, setRandomCategoryProducts } = productCardSlice.actions;
+export const { setProductCards, updateIsLiked,  setRandomCategoryProducts } = productCardSlice.actions;
 export const getProductCards = (state: RootState) => state.productCards.productCards;
 export const getRandomCategoryProducts = (category: string) => (state: RootState) => state.productCards.randomCategoryProducts[category];
 export const getCategoryProducts = (category: string) => (state: RootState) => state.productCards.productCards.filter((productCard) => productCard.product.category.toLowerCase() === category.toLowerCase());

@@ -4,7 +4,7 @@ import { AuctionModel } from "@/model/auction/auction.model";
 import {fetchAuction, findByUserAuction} from "@/service/auction/auction.service";
 import {fetchSizeIdsFromAwards, findByUserAward} from "@/service/auction/award.service";
 import {fetchAllPaymentByUserId} from "@/service/order/payment.service";
-import {extractAwardIdsFromBidData, extractAwardIdsFromPaymentData, extractSizeIds} from "@/utils/extract";
+import {extractAwardIdsFromBidData, extractAwardIdsFromPaymentData} from "@/utils/extract";
 import {BidLoadModel, BidModel} from "@/model/auction/bid.model";
 import {findByUserBid} from "@/service/auction/bid.service";
 import {PaymentRequestModel} from "@/model/order/payment.model";
@@ -107,11 +107,6 @@ export const useFetchData = (activeTab: string) => {
 
             const paymentDataWithSizes = mapPaymentDataWithSizes(data, paymentSizeIds);
 
-
-            console.log("data : ",data)
-            console.log("awardIds : ",awardIds)
-            console.log("paymentSizeIds : ",paymentSizeIds)
-            console.log("paymentDataWithSizes : ",paymentDataWithSizes)
             setPaymentData(paymentDataWithSizes); // 결제 데이터를 설정
         } catch (error) {
             console.error("결제 데이터를 가져오는 중 오류가 발생했습니다.", error);

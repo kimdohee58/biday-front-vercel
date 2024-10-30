@@ -22,6 +22,7 @@ export interface NavMobileProps {
 }
 
 const NavMobile: React.FC<NavMobileProps> = ({data = NAVIGATION_DEMO_2, onClickClose,}) => {
+    // TODO 경매 등록 role = seller 아니라면 판매자 등록 페이지로 넘어가기
     const userToken = useSelector(getUserToken);
     const [userRole, setUserRole] = useState("");
     const [showSearchForm, setShowSearchForm] = useState(false);
@@ -116,7 +117,7 @@ const NavMobile: React.FC<NavMobileProps> = ({data = NAVIGATION_DEMO_2, onClickC
         const handleSearchSubmit = (e: React.FormEvent) => {
             e.preventDefault();
             if (keyword.trim()) {
-                router.push(`/dohee/search?keyword=${encodeURIComponent(keyword)}`);
+                router.push(`/search?keyword=${encodeURIComponent(keyword)}`);
                 setShowSearchForm(false);
                 onClickClose?.();
             }
@@ -128,7 +129,7 @@ const NavMobile: React.FC<NavMobileProps> = ({data = NAVIGATION_DEMO_2, onClickC
                     {renderMagnifyingGlassIcon()}
                     <input
                         type="search"
-                        placeholder="Type and press enter"
+                        placeholder="Type and press Enter"
                         className="border-none bg-transparent focus:outline-none focus:ring-0 w-full text-sm"
                         value={keyword}
                         onChange={(e) => setKeyword(e.target.value)}

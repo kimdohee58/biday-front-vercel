@@ -200,5 +200,25 @@ export async function fetchAuctionDetails(auctionId: string): Promise<{auction: 
         console.error("auctionDetails 에러 발생", error);
         throw new Error();
     }
+}
 
+// 판매 도중 멈추기
+export async function CancelAuction(auctionId: number): Promise<string> {
+    try {
+        const userToken = Cookies.get('userToken')
+        console.log("userToken for cancel Auction", userToken)
+
+        if (!userToken) {
+            throw new Error("userToken 갖고 올 수 없습니다.")
+        }
+
+        const options = {
+            userToken : userToken,
+            params: {auctionId: auctionId},
+        };
+        return await auctionAPI.cancel(options);
+    } catch (error) {
+        console.error("CancelAuction 에러 발생", error)
+        throw new Error("경매를 취소하는 중 에러가 발생했습니다.")
+    }
 }

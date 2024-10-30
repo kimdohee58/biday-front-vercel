@@ -49,8 +49,6 @@ export default function AccountPage() {
         addressType: "",
     });
 
-    const user1 = useSelector(saveUser)
-
     const handleAddressComplete = (data: any) => {
         setFormData({
             ...formData,
@@ -80,13 +78,15 @@ export default function AccountPage() {
             if (userToken) {
                 await insertAddress(userToken, newAddress);
                 alert("주소가 성공적으로 추가되었습니다.");
-                setIsModalOpen(false); // 송준한 10월 27일 추가
+                setIsModalOpen(false);
             } else {
                 alert("유저 토큰이 없습니다.");
+                setIsModalOpen(false);
             }
         } catch (error) {
             console.error("주소 추가 실패: ", error);
             alert("주소 추가 중 오류가 발생했습니다.");
+            setIsModalOpen(false);
         }
     };
 
@@ -133,7 +133,7 @@ export default function AccountPage() {
     };
 
     useEffect(() => {
-         loadAddresses();
+        loadAddresses();
     }, []);
 
     const [activeTab, setActiveTab] = useState<"order" | "bid" | "auction" | "win">("order");
@@ -141,7 +141,7 @@ export default function AccountPage() {
     const renderContent = () => {
         switch (activeTab) {
             case "order":
-                return <OrderList />;
+                return <OrderList/>;
 
         }
     };
@@ -153,10 +153,30 @@ export default function AccountPage() {
                 <h2 className="text-2xl sm:text-3xl font-semibold">회원정보</h2>
                 <div className="flex flex-col md:flex-row">
                     <div className="flex-grow mt-10 md:mt-0 md:pl-16 max-w-3xl space-y-6">
-                        {/* 이름 */}
-                        <div>
-                            <Label>이름</Label>
-                            <Input className="mt-1.5" defaultValue={user.name} readOnly />
+                        <div className="flex gap-4"> {/* Flexbox 사용하여 수평 배치 */}
+                            <div className="flex-1"> {/* 이름 입력 필드 */}
+                                <Label>이름</Label>
+                                <div className="mt-1.5 flex">
+            <span
+                className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
+                <i className="text-2xl las la-user"></i> {/* 이름 아이콘 */}
+            </span>
+                                    <Input className="!rounded-l-none" defaultValue={user.name}
+                                           disabled={true}/>
+                                </div>
+                            </div>
+                            <div className="flex-1"> {/* 등급 입력 필드 */}
+                                <Label>등급</Label>
+                                <div className="mt-1.5 flex">
+            <span
+                className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
+                <i className="text-2xl las la-star"></i> {/* 등급 아이콘 */}
+            </span>
+                                    // TODO user role 고치기
+                                    <Input className="!rounded-l-none" defaultValue={user.role.toString()}
+                                           disabled={true}/>
+                                </div>
+                            </div>
                         </div>
 
                         {/* 이메일 */}
@@ -167,7 +187,8 @@ export default function AccountPage() {
                                     className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
                                     <i className="text-2xl las la-envelope"></i>
                                 </span>
-                                <Input className="!rounded-l-none" defaultValue={user.email} readOnly />
+                                <Input className="!rounded-l-none" defaultValue={user.email}
+                                       disabled={true}/>
                             </div>
                         </div>
 
@@ -179,78 +200,99 @@ export default function AccountPage() {
                                     className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
                                     <i className="text-2xl las la-phone-volume"></i>
                                 </span>
-                                <Input className="!rounded-l-none" defaultValue={user.phoneNum} readOnly/>
+                                <Input className="!rounded-l-none" defaultValue={user.phoneNum} disabled={true}/>
                             </div>
                         </div>
 
                         {/* 주소 목록 */}
                         <div>
-                            <Label>주소</Label>
-                            <div className="relative mt-1.5">
-                                {/* 선택된 주소 표시 */}
-                                <Input
-                                    className="!rounded-l-none"
-                                    value={`${selectedAddress} ${addressDetail}`}
-                                    placeholder="주소를 선택하세요"
-                                    readOnly
-                                    onClick={() => setShowDropdown(prev => !prev)} // 드롭다운 토글
-                                />
+                            {/* 주소와 우편번호를 수평으로 나란히 배치 */}
+                            <div className="flex gap-4">
+                                <div className="flex-1" style={{flex: "1 1 0%"}}>
+                                    <Label>우편번호</Label>
+                                    <div className="mt-1.5 flex">
+                                        <span
+                                            className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
+                                            <i className="text-2xl las la-map-marker-alt"></i> {/* 아이콘 변경 가능 */}
+                                        </span>
+                                        <Input
+                                            className="!rounded-l-none"
+                                            value={zipcode}
+                                            placeholder="우편번호"
+                                            readOnly
+                                        />
+                                    </div>
+                                </div>
 
-                                {showDropdown && (
-                                    <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1">
-                                        {addresses.map((address, index) => (
-                                            <li
-                                                key={index}
-                                                className="px-4 py-2 flex justify-between items-center cursor-pointer hover:bg-gray-100"
-                                                onClick={() => {
-                                                    handlePickAddress(address.id);
-                                                    setSelectedAddress(address.streetAddress);
-                                                    setAddressDetail(address.detailAddress);
-                                                    setZipcode(address.zipcode);
-                                                    setAddressType(address.type);
-                                                    setShowDropdown(false);
-                                                }}
-                                            >
-                                                <div>
-                                                    {/* streetAddress와 detailAddress를 합쳐서 표시하고, type을 매핑하여 표시 */}
-                                                    {`${address.streetAddress} ${address.detailAddress} (${mapAddressType(address.type)})`}
-                                                    <span className="ml-2 text-gray-500">({address.zipcode})</span> {/* 우편번호 표시 */}
-                                                </div>
-                                                {/* 삭제 버튼 */}
-                                                <button
-                                                    onClick={(e) => {
-                                                        e.stopPropagation(); // 삭제 클릭 시 주소 선택되지 않도록 이벤트 전파 중지
-                                                        handleDeleteAddress(address.id);
-                                                    }}
-                                                    className="text-red-600 hover:underline"
-                                                >
-                                                    삭제
-                                                </button>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                )}
+                                <div className="flex-1" style={{flex: "3 1 0%"}}>
+                                    <Label>주소</Label>
+                                    <div className="mt-1.5 flex">
+                                        <span
+                                            className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
+                                            <i className="text-2xl las la-map"></i> {/* 주소 아이콘 추가 */}
+                                        </span>
+                                        <Input
+                                            className="!rounded-l-none"
+                                            value={`${selectedAddress} ${addressDetail}`}
+                                            placeholder="주소를 선택하세요"
+                                            readOnly
+                                            onClick={() => setShowDropdown(prev => !prev)} // 드롭다운 토글
+                                        />
+                                    </div>
+                                </div>
                             </div>
 
-                            {/* 우편번호 */}
-                            <Label>우편번호</Label>
-                            <Input
-                                className="!rounded-l-none mt-2"
-                                value={zipcode}
-                                placeholder="우편번호"
-                                readOnly
-                            />
+                            {/* 드롭다운 및 주소 선택 부분 */}
+                            {showDropdown && (
+                                <ul className="absolute z-10 bg-white border border-gray-300 rounded mt-1">
+                                    {addresses.map((address, index) => (
+                                        <li
+                                            key={index}
+                                            className="px-4 py-2 flex justify-between items-center cursor-pointer hover:bg-gray-100"
+                                            onClick={() => {
+                                                handlePickAddress(address.id);
+                                                setSelectedAddress(address.streetAddress);
+                                                setAddressDetail(address.detailAddress);
+                                                setZipcode(address.zipcode);
+                                                setAddressType(address.type);
+                                                setShowDropdown(false);
+                                            }}
+                                        >
+                                            <div>
+                                                {/* streetAddress와 detailAddress를 합쳐서 표시하고, type을 매핑하여 표시 */}
+                                                {`${address.streetAddress} ${address.detailAddress} (${mapAddressType(address.type)})`}
+                                                <span
+                                                    className="ml-2 text-gray-500">({address.zipcode})</span> {/* 우편번호 표시 */}
+                                            </div>
+                                            {/* 삭제 버튼 */}
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation(); // 삭제 클릭 시 주소 선택되지 않도록 이벤트 전파 중지
+                                                    handleDeleteAddress(address.id);
+                                                }}
+                                                className="text-red-600 hover:underline"
+                                            >
+                                                삭제
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
                         </div>
 
 
                         {/* 주소 입력란 */}
-
-
-                        <div>
+                        <div className="flex justify-end w-full">
                             {/* 모달 트리거 버튼 */}
                             <NcModal
                                 modalTitle="주소 검색"
-                                triggerText="주소 추가하기"
+                                triggerText={
+                                    <ButtonPrimary
+                                        className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow hover:bg-blue-700 transition duration-200 ease-in-out"
+                                    >
+                                        주소 추가하기
+                                    </ButtonPrimary>
+                                }
                                 renderContent={() => (
                                     <div> {/* 모든 요소를 하나의 부모 div로 감쌈 */}
                                         <Postcode

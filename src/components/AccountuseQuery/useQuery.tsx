@@ -1,10 +1,7 @@
 
 import {useQuery} from "@tanstack/react-query";
 import {fetchProductBySizeId} from "@/service/product/product.service";
-import {extractAwardIdsFromBidData, extractAwardIdsFromPaymentData, extractSizeIds} from "@/utils/extract";
-import {fetchSizeIdsFromAwards} from "@/service/auction/award.service";
-import {ColorType, ProductDTO} from "@/model/product/product.model";
-import {SizeModel} from "@/model/product/size.model";
+import {extractSizeIds} from "@/utils/extract";
 import {BidLoadModel} from "@/model/auction/bid.model";
 
 export const useFetchAuctionProducts = (auctionData: any) => {
@@ -58,17 +55,13 @@ export const useFetchAwardProducts = (awardData: any) => {
 
 export const useFetchPaymentProducts = (paymentData: any) => {
 
-    console.log("useFetchPaymentProducts paymentData : ",paymentData)
     const sizeIds = paymentData.map((payment: { sizeId: any; }) => payment.sizeId);
-
-    console.log("useFetchPaymentProducts sizeIds : ",sizeIds)
     return useQuery({
         queryKey: ["paymentSizeIds", sizeIds],
         queryFn: async () => {
             const productLists = await Promise.all(
                 sizeIds.map((sizeId: number) => fetchProductBySizeId(sizeId))
             );
-
             return productLists.flat();
         },
         enabled: sizeIds.length > 0,

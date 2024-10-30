@@ -1,11 +1,10 @@
-
 import { AuctionModel } from "@/model/auction/auction.model";
 import { AwardModel } from "@/model/auction/award.model";
 import { PaymentRequestModel} from "@/model/order/payment.model";
 import {ProductDTO, ProductModel} from "@/model/product/product.model";
 import {extractAwardIdsFromPaymentData} from "@/utils/extract";
 import {fetchSizeIdsFromAwards} from "@/service/auction/award.service";
-import {BidLoadModel, BidModel} from "@/model/auction/bid.model"; // ProductModel 경로는 가정입니다.
+import {BidLoadModel} from "@/model/auction/bid.model"; // ProductModel 경로는 가정입니다.
 
 interface DataModel {
     content?: AuctionModel[] | AwardModel[] ;
@@ -55,7 +54,7 @@ export const mapDataWithBidModel = (
             product: matchedProduct || null, // 일치하는 제품이 없으면 null
         };
 
-         console.log("🎯 최종 결합된 Bid 객체:", combinedObject);
+        console.log("🎯 최종 결합된 Bid 객체:", combinedObject);
 
         return combinedObject;
     });
