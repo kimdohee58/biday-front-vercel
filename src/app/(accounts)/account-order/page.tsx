@@ -28,7 +28,7 @@ import {AwardModel} from "@/model/auction/award.model";
 
 const AccountOrder = () => {
     const router = useRouter(); // Initialize the router
-    const [activeTab, setActiveTab] = useState("auction");
+    const [activeTab, setActiveTab] = useState("award");
     const [mappedPaymentData, setMappedPaymentData] = useState<PaymentRequestModel[]>([]);
 
     const {

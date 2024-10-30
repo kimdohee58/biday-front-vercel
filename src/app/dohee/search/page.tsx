@@ -1,14 +1,14 @@
 'use client';
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import Pagination from "@/shared/Pagination/Pagination";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import SectionSliderCollections from "@/components/SectionSliderLargeProduct";
 import SectionPromo1 from "@/components/SectionPromo1";
 import ProductCard from "@/components/ProductCard3";
-import { ProductModel, ProductWithImageModel } from "@/model/product/product.model";
-import { fetchAllProductsWithImages } from "@/service/product/product.service";
-import { defaultImage } from "@/model/ftp/image.model";
-import { useSearchParams } from 'next/navigation';
+import {ProductModel, ProductWithImageModel} from "@/model/product/product.model";
+import {fetchAllProductsWithImages} from "@/service/product/product.service";
+import {defaultImage} from "@/model/ftp/image.model";
+import {useSearchParams} from 'next/navigation';
 import HeaderFilterSearchPageDohee from "@/components/dohee/HeaderFilterSearchPageDohee";
 
 export default function PageSearch() {
@@ -93,10 +93,10 @@ export default function PageSearch() {
 
     return (
         <div className={`nc-PageSearch`} data-nc-id="PageSearch">
-            <div className={`nc-HeadBackgroundCommon h-24 2xl:h-28 top-0 left-0 right-0 w-full`} />
+            <div className={`nc-HeadBackgroundCommon h-24 2xl:h-28 top-0 left-0 right-0 w-full`}/>
             <div className="container">
-                <header className="max-w-2xl mx-auto -mt-10 flex flex-col lg:-mt-7 text-center">
-                    <h1 className="text-5xl font-bold mb-4">Search Results</h1>
+                <header className="max-w-2xl mx-auto flex flex-col lg:-mt-2 text-center">
+                    <h1 className="text-5xl font-bold mb-2">Search Results</h1>
                     <p className={`text-3xl ${keyword ? 'text-gray-700' : 'text-red-500'}`}>
                         {keyword ? (
                             <span>Searching for: <strong>{keyword}</strong></span>
@@ -114,27 +114,39 @@ export default function PageSearch() {
                         onFilteredProductsChange={handleFilteredProductsChange}
                     />
 
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-x-8 gap-y-10 mt-8 lg:mt-10">
+                    <>
                         {selectedProducts.length > 0 ? (
-                            selectedProducts.map((item) => (
-                                <ProductCard data={item} image={getProductImage(item)} key={item.id} />
-                            ))
+                            <div
+                                className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-x-8 gap-y-10 mt-8 lg:mt-10">
+                                {selectedProducts.map((item) => (
+                                    <ProductCard data={item} image={getProductImage(item)} key={item.id} />
+                                ))}
+                            </div>
                         ) : (
                             <>
-                                <p className="text-lg text-red-500 text-center mb-4">{keyword}를 포함한 상품이 없습니다.</p>
-                                <h2 className="text-lg font-bold text-center mb-4">추천 상품</h2>
+                                <p className="text-3xl text-red-600 font-semibold text-center mb-8">
+                                    '{keyword}'에 해당하는 상품이 없습니다.
+                                </p>
+                                <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
+                                    추천 상품을 확인해 보세요
+                                </h2>
                                 {products.length > 0 ? (
-                                    products.slice(0, 20).map((item) => (
-                                        <ProductCard data={item} image={getProductImage(item)} key={item.id} />
-                                    ))
+                                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-x-8 gap-y-10 mt-6 lg:mt-8">
+                                        {products.slice(0, 20).map((item) => (
+                                            <ProductCard data={item} image={getProductImage(item)} key={item.id} />
+                                        ))}
+                                    </div>
                                 ) : (
-                                    <p className="text-lg text-center">추천 상품이 없습니다.</p>
+                                    <p className="text-lg text-gray-500 text-center mt-4">
+                                        현재 추천 상품이 없습니다.
+                                    </p>
                                 )}
                             </>
                         )}
-                    </div>
+                    </>
 
-                    <div className="flex flex-col mt-12 lg:mt-16 space-y-5 sm:space-y-0 sm:space-x-5 sm:flex-row sm:justify-between sm:items-center">
+                    <div
+                        className="flex flex-col mt-12 lg:mt-16 space-y-5 sm:space-y-0 sm:space-x-5 sm:flex-row sm:justify-between sm:items-center">
                         <Pagination
                             currentPage={currentPage}
                             totalPages={totalPages}
@@ -144,10 +156,10 @@ export default function PageSearch() {
                     </div>
                 </main>
 
-                <hr className="border-slate-200 dark:border-slate-700" />
-                <SectionSliderCollections />
-                <hr className="border-slate-200 dark:border-slate-700" />
-                <SectionPromo1 />
+                <hr className="border-slate-200 dark:border-slate-700"/>
+                <SectionSliderCollections/>
+                <hr className="border-slate-200 dark:border-slate-700"/>
+                <SectionPromo1/>
             </div>
         </div>
     );
