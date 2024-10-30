@@ -20,6 +20,7 @@ import {ColorType, ProductWithImageModel} from "@/model/product/product.model";
 import {useFetchAuctionBySizeIdsWithUser} from "@/hooks/react-query/useAuctionlist";
 import {Colors} from "@/data/color";
 import LikeButton from "@/components/LikeButton";
+import Chart from "@/app/product/[id]/Chart";
 
 type ProductDetailProps = {
     product: ProductWithImageModel,
@@ -123,7 +124,7 @@ export default function ProductClientComponent({product, size}: { product: Produ
     const [currentProduct, setCurrentProduct] = useState(productArray[getIndex].product);
     const [image, setImage] = useState(productArray[getIndex].image);
     const [currentSize, setCurrentSize] = useState<string | null>(size || null);
-    const [currentSizeId, setCurrentSizeId] = useState<number | null>(null);
+    const [currentSizeId, setCurrentSizeId] = useState<number | null>(size ? getSizeId(size) : null);
     console.log("currentSizeId", currentSizeId);
 
 
@@ -346,7 +347,11 @@ export default function ProductClientComponent({product, size}: { product: Produ
                 </div>
 
                 {/* DETAIL AND REVIEW */}
+                <Chart/>
+
                 <div className="mt-12 sm:mt-16 space-y-10 sm:space-y-16">
+
+
 
                     {renderDetailSection()}
 
