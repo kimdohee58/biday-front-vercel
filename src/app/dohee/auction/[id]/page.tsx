@@ -340,7 +340,7 @@ export default function AuctionDetailPage() {
     const section1Data = [
         {
             name: "판매자 정보",
-            content: "",
+            content: auction?.user,
         },
         {
             name: "경매 상품 설명",

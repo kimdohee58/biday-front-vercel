@@ -10,7 +10,7 @@ import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import Image from "next/image";
 import Link from "next/link";
 import { useLogin } from "@/hooks/useLogin";
-import btnG_official from "@/images/btnG_official.png";
+import naver from "@/images/naver.svg";
 import axiosInstance from "@/app/api/axiosInstance/axiosInstance";
 import { useRouter } from 'next/navigation';
 import Cookies from "js-cookie";
@@ -117,7 +117,7 @@ const PageLogin = () => {
         {
             name: "NaverLogin",
             href: `${axiosInstance.defaults.baseURL}/oauth2/authorization/naver`,
-            icon: btnG_official,
+            icon: naver,
         },
         {
             name: "Continue with Facebook",
