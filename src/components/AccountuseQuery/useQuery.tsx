@@ -5,7 +5,6 @@ import {extractAwardIdsFromBidData, extractAwardIdsFromPaymentData, extractSizeI
 import {fetchSizeIdsFromAwards} from "@/service/auction/award.service";
 import {ColorType, ProductDTO} from "@/model/product/product.model";
 import {SizeModel} from "@/model/product/size.model";
-import {fetchAuction} from "@/service/auction/auction.service";
 import {BidLoadModel} from "@/model/auction/bid.model";
 
 export const useFetchAuctionProducts = (auctionData: any) => {
