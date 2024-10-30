@@ -68,11 +68,11 @@ export default function AuctionDetailPage() {
     const userToken = useSelector(getUserToken);
 
     useEffect(() => {
-        console.log("userToken in Auction Detail", userToken)
-        if (userToken) {
-            setIsSeller(!!(auction?.user && userToken.userId));
+        console.log("userToken in Auction Detail", userToken);
+        if (userToken && auction?.user) {
+            setIsSeller(auction.user === userToken.userId);
         }
-    }, [userToken]);
+    }, [userToken, auction]);
 
     // 경매 status 여부
     const isEnded = auction.status;
