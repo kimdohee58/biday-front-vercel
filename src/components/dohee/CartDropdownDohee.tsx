@@ -7,34 +7,21 @@ import {
     Transition,
 } from "@/app/headlessui";
 import Prices from "@/components/Prices";
-import {Product, PRODUCTS} from "@/data/data";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
-import Image from "next/image";
 import Link from "next/link";
-import {useQuery} from "@tanstack/react-query";
-import {fetchWishes} from "@/service/product/wish.service";
 import React, {useEffect, useState} from "react";
 import {Spinner} from "@chakra-ui/react";
 import {AwardModel} from "@/model/auction/award.model";
 import {findByUserAward} from "@/service/auction/award.service";
 import {extractSizeIds} from "@/utils/extract";
 import {useFetchAwardProducts} from "@/components/AccountuseQuery/useQuery";
-import {renderAwardHistory} from "@/components/RenderAccountOrder";
-import {mapDataWithAwardModel} from "@/utils/mapDataWithProducts";
+import { useRouter } from "next/navigation";
 import {ProductModel} from "@/model/product/product.model";
+import {mapDataWithAwardModel} from "@/utils/mapDataWithProducts";
 
-export default function CartDropdownDohee() {// const wishes = useQuery({queryKey: ['fetchWishes'], queryFn: () => fetchWishes()});
-    // console.log(">>>>>>>>>>>>>>>>wishes", wishes);
-    //
-    // if (wishes.isLoading) {
-    //   return <Spinner/>
-    // }
-    //
-    // if (!wishes.data || wishes.data.length === 0) {
-    //   return <div>찜 목록이 없습니다.</div>;
-    // }
-
+export default function CartDropdownDohee() {
+    const router = useRouter();
     const [awardData, setAwardData] = useState<AwardModel[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -49,6 +36,7 @@ export default function CartDropdownDohee() {// const wishes = useQuery({queryKe
             setLoading(false);
         }
     };
+    console.log("awardData", awardData)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -65,40 +53,32 @@ export default function CartDropdownDohee() {// const wishes = useQuery({queryKe
         fetchData();
     }, []);
 
-    const awardSizeIds = extractSizeIds(awardData);
-    const {data: awardProductList} = useFetchAwardProducts(awardData);
-
-// 오늘 날짜를 구하기
-    const currentDate = new Date();
-
-    console.log("awardProductList", awardProductList);
-
-// awardProductList에서 결제 가능 기간이 유효한 상품만 필터링
-    const filteredAwardProductList = (awardProductList || []).filter((item) => {
+    const filteredAwardList = (awardData || []).filter((item) => {
+        const currentDate = new Date();
         const { bidedAt } = item;
 
-        // bidedAt을 Date 객체로 변환하고 3일 더하기
         const bidedDate = new Date(bidedAt);
         bidedDate.setDate(bidedDate.getDate() + 3);
 
-        // 결제 가능 기간이 현재 날짜 이후인지 확인
         return bidedDate >= currentDate;
     });
+    console.log("filtered AwardList", filteredAwardList)
 
-// 필터링된 리스트 로그 출력
-    console.log("Filtered awardProductList", filteredAwardProductList);
-    const totalBid = filteredAwardProductList.reduce((acc, item) => acc + item.currentBid, 0);
+    const {data: awardProductList} = useFetchAwardProducts(filteredAwardList) ?? [];
+
+    console.log("awardProductList", awardProductList);
+
+    const totalBid = awardProductList.reduce((acc, item) => acc + item.currentBid, 0);
+
+    // const handleImgClick = (auctionId: string) => {
+    //     router.push(`/auction/${auctionId}`);
+    // };
 
     const renderProduct = (
         item: AwardModel & { product: ProductModel | null; matchedSize: string | null } | null, // item이 null일 수 있도록 수정
         index: number,
         close: () => void
     ) => {
-        // item이 null일 경우 메시지 반환
-        if (!item) {
-            return <p className="text-center">결제 대기 중인 상품이 없습니다.</p>;
-        }
-
         const {product, matchedSize, currentBid, bidedAt} = item; // currentBid 추가
 
         if (!product) {
@@ -117,6 +97,10 @@ export default function CartDropdownDohee() {// const wishes = useQuery({queryKe
         // 결제 가능 기간을 원하는 형식으로 포맷하기
         const options: Intl.DateTimeFormatOptions = {year: 'numeric', month: '2-digit', day: '2-digit'};
         const formattedDate = bidedDate.toLocaleDateString('ko-KR', options); // 한국어 형식으로 변환
+
+        const handleCheckoutClick = () => {
+            router.push(`/checkout?awardId=${item?.auction.id}&productId=${product.id}`);
+        };
 
         return (
             <div key={index} className="flex py-5 last:pb-0">
@@ -147,6 +131,13 @@ export default function CartDropdownDohee() {// const wishes = useQuery({queryKe
                             <button type="button" className="font-medium text-primary-6000 dark:text-primary-500 ">
                                 Remove
                             </button>
+                            <button
+                                type="button"
+                                className="font-medium text-primary-6000 dark:text-primary-500"
+                                onClick={handleCheckoutClick} // handleCheckoutClick 함수 연결
+                            >
+                                결제하러 가기
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -165,7 +156,7 @@ export default function CartDropdownDohee() {// const wishes = useQuery({queryKe
                     >
                         <div
                             className="w-3.5 h-3.5 flex items-center justify-center bg-primary-500 absolute top-1.5 right-1.5 rounded-full text-[10px] leading-none text-white font-medium">
-                            <span className="mt-[1px]">{filteredAwardProductList.length}</span>
+                            <span className="mt-[1px]">{awardProductList.length}</span>
                         </div>
                         <svg
                             className="w-6 h-6"
@@ -229,10 +220,10 @@ export default function CartDropdownDohee() {// const wishes = useQuery({queryKe
                                                 <div className="flex justify-center items-center py-5">
                                                     <Spinner />
                                                 </div>
-                                            ) : filteredAwardProductList?.length > 0 ? (
-                                                filteredAwardProductList.map((item, index) => renderProduct(item, index, close))
+                                            ) : awardProductList?.length > 0 ? (
+                                                awardProductList.map((item, index) => renderProduct(item, index, close))
                                             ) : (
-                                                <p className="text-center m-9 text-lg">결제 대기 중인 상품이 없습니다.</p>
+                                                <p className="text-center mt-8 mb-2 text-lg">결제 대기 중인 상품이 없습니다.</p>
                                             )}
                                             {/*/!*{renderAwardHistory(mapDataWithAwardModel({content: awardData}, awardProductList!!))}*!/*/}
                                             {/*{mapDataWithAwardModel({content: awardData}, filteredAwardProductList!!).map(*/}
