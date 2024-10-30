@@ -8,4 +8,15 @@ export interface AwardModel {
     bidedAt: Date;
     currentBid: number;
     count: number;
+    createdAt: Date;
+}
+
+export interface AwardDto {
+    id: number;
+    auction: number;
+    userId: string;
+    bidedAt: Date;
+    currentBid: number;
+    count: number;
+    createdAt: Date;
 }

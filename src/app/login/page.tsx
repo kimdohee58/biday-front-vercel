@@ -10,7 +10,7 @@ import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import Image from "next/image";
 import Link from "next/link";
 import { useLogin } from "@/hooks/useLogin";
-import btnG_official from "@/images/btnG_official.png";
+import naver from "@/images/naver.svg";
 import axiosInstance from "@/app/api/axiosInstance/axiosInstance";
 import { useRouter } from 'next/navigation';
 import Cookies from "js-cookie";
@@ -98,9 +98,14 @@ const PageLogin = () => {
         e.preventDefault();
         try {
             await login(email, password);
+            // 로그인 성공 시 알림창 띄우기
+            window.alert('로그인 성공!');
+            router.push('/'); // 성공 후 리디렉션
         } catch (err) {
             setError("Login failed. Please check your email or password.");
             console.log("실패다.", err);
+            // 로그인 실패 시 알림창 띄우기
+            window.alert('로그인 실패! 이메일이나 비밀번호를 확인해 주세요.');
         }
     };
 
@@ -112,7 +117,7 @@ const PageLogin = () => {
         {
             name: "NaverLogin",
             href: `${axiosInstance.defaults.baseURL}/oauth2/authorization/naver`,
-            icon: btnG_official,
+            icon: naver,
         },
         {
             name: "Continue with Facebook",
