@@ -211,9 +211,7 @@ export async function fetchProductDetails(productId: string): Promise<{
         }
 
         const colors = productWithImagesArray.map((item) => item.product.color);
-        console.log("colors", colors);
         const sizes = product.product.sizes.map((size) => size.id);
-        console.log("sizes", sizes);
 
         const size = product.product.sizes.map((size) => size.size);
 

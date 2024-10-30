@@ -4,7 +4,7 @@ import {ImageModel} from "@/model/ftp/image.model";
 
 export interface AuctionModel {
     id: number;
-    userId: string;
+    user: string;
     description: string;
     startingBid: number;
     currentBid: number;
@@ -13,8 +13,13 @@ export interface AuctionModel {
     status: boolean;
     createdAt: Date;
     updatedAt: Date;
-    sizeId:number,
+    size:number,
     award:AwardModel,
+}
+
+export interface AuctionDTOWithImageModel {
+    auction: AuctionDTO;
+    images: ImageModel[];
 }
 
 export interface AuctionWithImageModel {
@@ -31,7 +36,7 @@ export interface SaveAuctionModel {
     endedAt: Date;
 }
 
-export interface AwardAuctionModel {
+export interface AuctionDTO {
     id: number;
     userId: string;
     description: string;

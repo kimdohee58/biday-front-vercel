@@ -1,9 +1,9 @@
 //src/model/award.model.ts
-import {AuctionModel, AwardAuctionModel} from "@/model/auction/auction.model";
+import {AuctionDTO} from "@/model/auction/auction.model";
 
 export interface AwardModel {
     id: number;
-    auction: AwardAuctionModel;
+    auction: AuctionDTO;
     userId: string;
     bidedAt: Date;
     currentBid: number;
