@@ -13,7 +13,7 @@ import {Route} from "@/routers/types";
 import {ImageModel} from "@/model/ftp/image.model"
 import React, {Suspense, useState} from "react";
 import {AuctionModel} from "@/model/auction/auction.model"
-import {getColor} from "@/utils/productUtils";
+import {formatProductName, getColor} from "@/utils/productUtils";
 import AuctionTable from "@/app/product/[id]/AuctionTable";
 import {HeartIcon} from "@heroicons/react/24/solid";
 import {ColorType, ProductWithImageModel} from "@/model/product/product.model";
@@ -247,7 +247,7 @@ export default function ProductClientComponent({product}: { product: ProductDeta
                 {/* ---------- 1 HEADING ----------  */}
                 <div>
                     <h2 className="text-2xl sm:text-3xl font-semibold">
-                        {currentProduct.name}
+                        {formatProductName(currentProduct.name)}
                     </h2>
                     <h6 className="text-gray-300 text-left">
                         {currentProduct.subName}
