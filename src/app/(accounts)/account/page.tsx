@@ -12,7 +12,7 @@ import Postcode from "@/components/Postcode";
 import NcModal from "@/shared/NcModal/NcModal";
 import {fetchAllAddressesByUserId, fetchDeleteAddress, fetchPickAddress} from "@/service/user/address.service";
 import OrderList from "@/components/OrderList";
-import {getAddresses} from "@/lib/features/user.slice";
+import {getAddresses, getUserToken, saveUser} from "@/lib/features/user.slice";
 import {saveUserTokenToCookie} from "@/utils/cookie/cookie.api";
 
 const mapAddressType = (type: string) => {
@@ -49,7 +49,6 @@ export default function AccountPage() {
         addressType: "",
     });
 
-
     const handleAddressComplete = (data: any) => {
         setFormData({
             ...formData,
@@ -79,15 +78,15 @@ export default function AccountPage() {
             if (userToken) {
                 await insertAddress(userToken, newAddress);
                 alert("주소가 성공적으로 추가되었습니다.");
-                setIsModalOpen(false); // 모달을 닫는 위치를 여기로 유지
+                setIsModalOpen(false);
             } else {
                 alert("유저 토큰이 없습니다.");
-                setIsModalOpen(false); // 유저 토큰이 없을 때도 모달을 닫기
+                setIsModalOpen(false);
             }
         } catch (error) {
             console.error("주소 추가 실패: ", error);
             alert("주소 추가 중 오류가 발생했습니다.");
-            setIsModalOpen(false); // 오류 발생 시에도 모달을 닫기
+            setIsModalOpen(false);
         }
     };
 
@@ -162,7 +161,8 @@ export default function AccountPage() {
                 className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
                 <i className="text-2xl las la-user"></i> {/* 이름 아이콘 */}
             </span>
-                                    <Input className="!rounded-l-none" defaultValue={user.name}/>
+                                    <Input className="!rounded-l-none" defaultValue={user.name}
+                                           disabled={true}/>
                                 </div>
                             </div>
                             <div className="flex-1"> {/* 등급 입력 필드 */}
@@ -186,7 +186,8 @@ export default function AccountPage() {
                                     className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
                                     <i className="text-2xl las la-envelope"></i>
                                 </span>
-                                <Input className="!rounded-l-none" defaultValue={user.email}/>
+                                <Input className="!rounded-l-none" defaultValue={user.email}
+                                       disabled={true}/>
                             </div>
                         </div>
 
@@ -198,7 +199,7 @@ export default function AccountPage() {
                                     className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
                                     <i className="text-2xl las la-phone-volume"></i>
                                 </span>
-                                <Input className="!rounded-l-none" defaultValue={user.phoneNum}/>
+                                <Input className="!rounded-l-none" defaultValue={user.phoneNum} disabled={true}/>
                             </div>
                         </div>
 

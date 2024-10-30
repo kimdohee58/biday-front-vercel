@@ -15,6 +15,7 @@ import DropdownCategories from "@/components/Header/DropdownCategories";
 import TemplatesDropdown from "@/components/Header/TemplatesDropdown";
 import LangDropdown from "@/components/Header/LangDropdown";
 import CartDropdownDohee from "@/components/dohee/CartDropdownDohee";
+import CartDropdown from "@/components/Header/CartDropdown";
 
 export interface MainNav2Props {
     className?: string;
@@ -127,6 +128,7 @@ const MainNav2Dohee: FC<MainNav2Props> = ({ className = "" }) => {
                                 {renderMagnifyingGlassIcon()}
                             </button>
                         )}
+                        {/*<CartDropdown/>*/}
                         <CartDropdownDohee />
                     </div>
                 </div>

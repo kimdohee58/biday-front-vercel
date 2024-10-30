@@ -16,9 +16,9 @@ import {AwardModel} from "@/model/auction/award.model";
 import {findByUserAward} from "@/service/auction/award.service";
 import {extractSizeIds} from "@/utils/extract";
 import {useFetchAwardProducts} from "@/components/AccountuseQuery/useQuery";
-import { useRouter } from "next/navigation";
 import {ProductModel} from "@/model/product/product.model";
 import {mapDataWithAwardModel} from "@/utils/mapDataWithProducts";
+import {useRouter} from "next/navigation";
 
 export default function CartDropdownDohee() {
     const router = useRouter();
@@ -36,7 +36,6 @@ export default function CartDropdownDohee() {
             setLoading(false);
         }
     };
-    console.log("awardData", awardData)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -53,26 +52,38 @@ export default function CartDropdownDohee() {
         fetchData();
     }, []);
 
-    const filteredAwardList = (awardData || []).filter((item) => {
-        const currentDate = new Date();
+    console.log("awardData", awardData)
+
+    const currentDate = new Date();
+    // const filteredAwardList = !loading
+    //     ? awardData.filter((item) => {
+    //         const { createdAt } = item;
+    //         const payDate = new Date(createdAt);
+    //         payDate.setDate(payDate.getDate() + 3);
+    //         return payDate >= currentDate;
+    //     })
+    //     : [];
+    // console.log("filteredAwardList", filteredAwardList)
+
+    const {data: awardProductList} = useFetchAwardProducts(awardData);
+    console.log("awardProductList", awardProductList)
+
+// awardProductList에서 결제 가능 기간이 유효한 상품만 필터링
+//     const currentDate = new Date();
+    const filteredAwardProductList = (awardProductList || []).filter((item) => {
         const { bidedAt } = item;
 
+        // bidedAt을 Date 객체로 변환하고 3일 더하기
         const bidedDate = new Date(bidedAt);
         bidedDate.setDate(bidedDate.getDate() + 3);
 
+        // 결제 가능 기간이 현재 날짜 이후인지 확인
         return bidedDate >= currentDate;
     });
-    console.log("filtered AwardList", filteredAwardList)
 
-    const {data: awardProductList} = useFetchAwardProducts(filteredAwardList) ?? [];
-
-    console.log("awardProductList", awardProductList);
-
-    const totalBid = awardProductList.reduce((acc, item) => acc + item.currentBid, 0);
-
-    // const handleImgClick = (auctionId: string) => {
-    //     router.push(`/auction/${auctionId}`);
-    // };
+// 필터링된 리스트 로그 출력
+    console.log("Filtered awardProductList", filteredAwardProductList);
+    const totalBid = filteredAwardProductList.reduce((acc, item) => acc + item.currentBid, 0);
 
     const renderProduct = (
         item: AwardModel & { product: ProductModel | null; matchedSize: string | null } | null, // item이 null일 수 있도록 수정
@@ -156,7 +167,7 @@ export default function CartDropdownDohee() {
                     >
                         <div
                             className="w-3.5 h-3.5 flex items-center justify-center bg-primary-500 absolute top-1.5 right-1.5 rounded-full text-[10px] leading-none text-white font-medium">
-                            <span className="mt-[1px]">{awardProductList.length}</span>
+                            <span className="mt-[1px]">{filteredAwardProductList.length}</span>
                         </div>
                         <svg
                             className="w-6 h-6"
@@ -220,8 +231,8 @@ export default function CartDropdownDohee() {
                                                 <div className="flex justify-center items-center py-5">
                                                     <Spinner />
                                                 </div>
-                                            ) : awardProductList?.length > 0 ? (
-                                                awardProductList.map((item, index) => renderProduct(item, index, close))
+                                            ) : filteredAwardProductList?.length > 0 ? (
+                                                filteredAwardProductList.map((item, index) => renderProduct(item, index, close))
                                             ) : (
                                                 <p className="text-center mt-8 mb-2 text-lg">결제 대기 중인 상품이 없습니다.</p>
                                             )}

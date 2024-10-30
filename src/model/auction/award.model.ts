@@ -8,6 +8,7 @@ export interface AwardModel {
     bidedAt: Date;
     currentBid: number;
     count: number;
+    createdAt: Date;
 }
 
 export interface AwardDto {
