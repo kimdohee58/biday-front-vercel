@@ -168,7 +168,7 @@ export default function ProductClientComponent({product}: { product: ProductDeta
                     router.push("/account-seller");
                     break;
                 case UserRole.SELLER :
-                    router.push(`/auction/insert?productId=${currentProduct.id}`);
+                    router.push(`/dohee/auction/insert?productId=${currentProduct.id}`);
                     break;
             }
         }
