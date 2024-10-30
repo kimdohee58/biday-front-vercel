@@ -55,4 +55,7 @@ export interface PaymentRequestModel {
     paymentKey: string;
     amount: number;
     orderId: string;
+    sizeId : number | null;
+    approvedAt: string;
 }
+

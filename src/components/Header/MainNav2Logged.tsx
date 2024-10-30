@@ -5,9 +5,9 @@ import Logo from "@/shared/Logo/Logo";
 import MenuBar from "@/shared/MenuBar/MenuBar";
 import AvatarDropdown from "./AvatarDropdown";
 import Navigation from "@/shared/Navigation/Navigation";
-import CartDropdown from "./CartDropdown";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
+import CartDropdown from "./CartDropdown";
 
 export interface MainNav2LoggedProps {}
 
@@ -49,8 +49,7 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
         className="flex-1 py-2 text-slate-900 dark:text-slate-100"
         onSubmit={(e) => {
           e.preventDefault();
-            router.push("/dohee/search");
-            // router.push("/search");
+            router.push("/search");
           inputRef.current?.blur();
         }}
       >
@@ -59,7 +58,7 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
           <input
             ref={inputRef}
             type="text"
-            placeholder="Type and press enter"
+            placeholder="Type and press Enter"
             className="border-none bg-transparent focus:outline-none focus:ring-0 w-full text-base"
             autoFocus
           />

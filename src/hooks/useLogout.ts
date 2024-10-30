@@ -24,10 +24,15 @@ export const useLogout = () => {
 
             await logoutUser(); // user.api
 
+            // 로그아웃 성공 후 알림 창 띄우기
+            window.alert('로그아웃 성공!');
+
             // 로그아웃 후 홈 페이지로 이동
             router.push('/');
         } catch (error) {
             console.error("Logout error:", error);
+            // 에러 발생 시 사용자에게 알림
+            window.alert('로그아웃 중 오류가 발생했습니다.');
         }
     };
     return { handleLogout };

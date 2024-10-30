@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import DropdownCategories from "@/components/Header/DropdownCategories";
 import TemplatesDropdown from "@/components/Header/TemplatesDropdown";
 import LangDropdown from "@/components/Header/LangDropdown";
+import CartDropdownDohee from "@/components/dohee/CartDropdownDohee";
 import CartDropdown from "@/components/Header/CartDropdown";
 
 export interface MainNav2Props {
@@ -57,7 +58,7 @@ const MainNav2Dohee: FC<MainNav2Props> = ({ className = "" }) => {
         console.log("Search keyword:", keyword); // 디버깅용
 
         if (keyword.trim()) {  // keyword가 비어있지 않을 경우에만 이동
-            router.push(`/dohee/search?keyword=${encodeURIComponent(keyword)}`); // URL 변경
+            router.push(`/search?keyword=${encodeURIComponent(keyword)}`); // URL 변경
             setShowSearchForm(false); // 검색 폼 닫기
         } else {
             console.log("No keyword entered");
@@ -74,8 +75,7 @@ const MainNav2Dohee: FC<MainNav2Props> = ({ className = "" }) => {
                     {renderMagnifyingGlassIcon()}
                     <input
                         type="text"
-                        placeholder="MainNav2Dohee"  // 입력 설명 수정
-                        // placeholder="Type and press enter"  // 입력 설명 수정
+                        placeholder="Type and press enter"  // 입력 설명 수정
                         className="border-none bg-transparent focus:outline-none focus:ring-0 w-full text-base"
                         value={keyword}
                         onChange={(e) => setKeyword(e.target.value)}  // keyword 상태 업데이트
@@ -127,7 +127,8 @@ const MainNav2Dohee: FC<MainNav2Props> = ({ className = "" }) => {
                                 {renderMagnifyingGlassIcon()}
                             </button>
                         )}
-                        <CartDropdown />
+                        {/*<CartDropdown/>*/}
+                        <CartDropdownDohee />
                     </div>
                 </div>
             </div>
