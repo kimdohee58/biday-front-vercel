@@ -156,7 +156,7 @@ export default function AccountPage() {
                         {/* 이름 */}
                         <div>
                             <Label>이름</Label>
-                            <Input className="mt-1.5" defaultValue={user.name}/>
+                            <Input className="mt-1.5" defaultValue={user.name} readOnly />
                         </div>
 
                         {/* 이메일 */}
@@ -167,7 +167,7 @@ export default function AccountPage() {
                                     className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
                                     <i className="text-2xl las la-envelope"></i>
                                 </span>
-                                <Input className="!rounded-l-none" defaultValue={user.email}/>
+                                <Input className="!rounded-l-none" defaultValue={user.email} readOnly />
                             </div>
                         </div>
 
@@ -179,7 +179,7 @@ export default function AccountPage() {
                                     className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
                                     <i className="text-2xl las la-phone-volume"></i>
                                 </span>
-                                <Input className="!rounded-l-none" defaultValue={user.phoneNum}/>
+                                <Input className="!rounded-l-none" defaultValue={user.phoneNum} readOnly/>
                             </div>
                         </div>
 
