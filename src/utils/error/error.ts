@@ -1,3 +1,5 @@
+import {Alert} from "@/shared/Alert/Alert";
+
 export const ApiErrors = {
     UNAUTHORIZED: { message: "UNAUTHORIZED", status: 401 },
     FORBIDDEN: { message: "FORBIDDEN", status: 403 },
@@ -22,6 +24,7 @@ export const handleApiError = (error: any, showAlert = true) => {
 
     if (showAlert && typeof window !== "undefined") {
         alert(errorInfo.message || "알 수 없는 오류 발생");
+        <Alert type="warning"> {errorInfo.message || "알 수 없는 오류 발생"} </Alert>;
     }
 };
 
