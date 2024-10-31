@@ -296,7 +296,7 @@ export default function AuctionDetailPage() {
                                             <span className="text-red-500 font-semibold">취소된 경매입니다.</span>
                                         )
                                     ) : (
-                                        <span>현재 최고 입찰가: {highestBid}원</span>
+                                        <span>{highestBid}원</span>
                                     )}
                                 </div>
                                 <a className="flex items-center text-sm font-medium">
