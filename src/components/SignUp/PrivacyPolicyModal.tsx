@@ -1,19 +1,16 @@
-// 덮기 완료
-import React from "react";
+import React from 'react';
 
-export const PrivacyModelContent = () => {
-    return (
-        <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md">
-            <p className="text-gray-800 mb-4">
-                BiDay는 서비스 제공을 위하여 아래와 같이 개인정보를 수집 ・ 이용 및 제공합니다.
-            </p>
+// ModalContent만 반환하는 컴포넌트
+const PrivacyPolicyContent = () => (
+        <>
+            <p>BiDay는 서비스 제공을 위하여 아래와 같이 개인정보를 수집 ・ 이용 및 제공합니다.</p>
             <table className="w-full mt-4 border-collapse">
                 <thead>
-                <tr className="bg-gray-200">
-                    <th className="border-b p-2 text-left">항목</th>
-                    <th className="border-b p-2 text-left">수집 및 이용 목적</th>
-                    <th className="border-b p-2 text-left">필수여부</th>
-                    <th className="border-b p-2 text-left">보유 및 이용기간</th>
+                <tr>
+                    <th className="border-b p-2">항목</th>
+                    <th className="border-b p-2">수집 및 이용 목적</th>
+                    <th className="border-b p-2">필수여부</th>
+                    <th className="border-b p-2">보유 및 이용기간</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -29,14 +26,12 @@ export const PrivacyModelContent = () => {
                     <td className="border-t p-2">회원 탈퇴 또는 서비스 종료 시까지</td>
                 </tr>
                 <tr>
-                    <td className="border-t p-2">이메일 회원: ID(이메일 주소), 비밀번호, 이름, 휴대폰번호, 성별, 생년월일, CI/DI
-                    </td>
+                    <td className="border-t p-2">이메일 회원: ID(이메일 주소), 비밀번호, 이름, 휴대폰번호, 성별, 생년월일, CI/DI</td>
                     <td className="border-t p-2">필수</td>
                     <td className="border-t p-2">회원 탈퇴 또는 서비스 종료 시까지</td>
                 </tr>
                 <tr>
-                    <td className="border-t p-2">(공통) 별명, 프로필 사진, 신발 사이즈, 배송 주소, 카드 정보, 거래 은행 및 계좌 번호
-                    </td>
+                    <td className="border-t p-2">(공통) 별명, 프로필 사진, 신발 사이즈, 배송 주소, 카드 정보, 거래 은행 및 계좌 번호</td>
                     <td className="border-t p-2">선택</td>
                     <td className="border-t p-2">-</td>
                     <td className="border-t p-2">-</td>
@@ -59,6 +54,7 @@ export const PrivacyModelContent = () => {
                 개인정보의 수집 및 이용에 대한 동의를 거부하시더라도 서비스의 이용은 가능합니다.
                 다만, 수집 항목 중 필수 항목에 대한 동의를 거부하실 경우 회원가입이 불가능합니다.
             </p>
-        </div>
-    );
-};
+        </>
+);
+
+export default PrivacyPolicyContent;

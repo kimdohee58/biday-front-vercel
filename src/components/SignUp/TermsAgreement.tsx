@@ -1,8 +1,7 @@
-// 덮기 완료
 import React, {ReactNode, useEffect, useState} from 'react';
 import {TermsModalContent} from './TermsModalContent';
 import {PrivacyOptionModelContent} from "@/components/dohee/PrivacyOptionModelContent";
-import {PrivacyModelContent} from "@/components/dohee/PrivacyModelContent";
+import {PrivacyModelContent} from "@/components/SignUp/PrivacyModelContent";
 
 //TODO 체크 하나라도 누락될 시 모두 동의 되지 않도록 변경
 

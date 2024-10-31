@@ -1,4 +1,3 @@
-// 덮기 완료
 import React from "react";
 
 export const PrivacyModelContent = () => {

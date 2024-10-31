@@ -55,54 +55,54 @@ export const TermsModalContent = () => {
             <h3 className="text-xl font-semibold mt-6 mb-2">제 3 조 (약관의 명시, 효력 및 변경)</h3>
             <ol className="list-decimal list-inside space-y-4 text-gray-700">
                 <li>
-                    <span className="font-semibold">&quot;회사&quot;</span>는 이 약관의 내용을 <span
-                    className="font-semibold">&quot;회원&quot;</span>이 쉽게 알 수 있도록 <span
-                    className="font-semibold">&quot;서비스&quot;</span> 초기 화면에 게시합니다.
+                    <span className="font-semibold">"회사"</span>는 이 약관의 내용을 <span
+                    className="font-semibold">"회원"</span>이 쉽게 알 수 있도록 <span
+                    className="font-semibold">"서비스"</span> 초기 화면에 게시합니다.
                 </li>
                 <li>
-                    <span className="font-semibold">&quot;회사&quot;</span>가 약관을 개정할 경우에는 적용일자 및 개정사유를 명시하여 현행약관과 함께
+                    <span className="font-semibold">"회사"</span>가 약관을 개정할 경우에는 적용일자 및 개정사유를 명시하여 현행약관과 함께
                     제1항의 방식에 따라 그 개정약관의 적용일자 7일 전부터 공지합니다. 다만, <span
-                    className="font-semibold">&quot;회원&quot;</span>에게 불리한 내용으로 약관을 개정하는 경우에는 그 적용일자 30일 전부터 공지
-                    외에 <span className="font-semibold">&quot;회원정보&quot;</span>에 등록된 이메일 등 전자적 수단을 통해 별도로 명확히 통지하도록
+                    className="font-semibold">"회원"</span>에게 불리한 내용으로 약관을 개정하는 경우에는 그 적용일자 30일 전부터 공지
+                    외에 <span className="font-semibold">"회원정보"</span>에 등록된 이메일 등 전자적 수단을 통해 별도로 명확히 통지하도록
                     합니다.
                 </li>
                 <li>
-                    <span className="font-semibold">&quot;회사&quot;</span>가 전항에 따라 <span
-                    className="font-semibold">&quot;회원&quot;</span>에게 통지하면서 공지 기간 이내에 거부의사를 표시하지 않으면 승인한 것으로 본다는
-                    뜻을 명확하게 고지하였음에도 <span className="font-semibold">&quot;회원&quot;</span>이 명시적으로 거부의사를 밝히지
-                    않거나, <span className="font-semibold">&quot;서비스&quot;</span>를 이용할 경우에는 <span
-                    className="font-semibold">&quot;회원&quot;</span>이 개정약관에 동의한 것으로 봅니다.
+                    <span className="font-semibold">"회사"</span>가 전항에 따라 <span
+                    className="font-semibold">"회원"</span>에게 통지하면서 공지 기간 이내에 거부의사를 표시하지 않으면 승인한 것으로 본다는
+                    뜻을 명확하게 고지하였음에도 <span className="font-semibold">"회원"</span>이 명시적으로 거부의사를 밝히지
+                    않거나, <span className="font-semibold">"서비스"</span>를 이용할 경우에는 <span
+                    className="font-semibold">"회원"</span>이 개정약관에 동의한 것으로 봅니다.
                 </li>
                 <li>
-                    <span className="font-semibold">&quot;회원&quot;</span>이 개정약관에 동의하지 않는 경우 <span
-                    className="font-semibold">&quot;회사&quot;</span>는 개정약관의 내용을 적용할 수 없으며, 이 경우 회원은 제8조 제1항의 규정에 따라
+                    <span className="font-semibold">"회원"</span>이 개정약관에 동의하지 않는 경우 <span
+                    className="font-semibold">"회사"</span>는 개정약관의 내용을 적용할 수 없으며, 이 경우 회원은 제8조 제1항의 규정에 따라
                     이용계약을 해지할 수 있습니다.
                 </li>
             </ol>
 
             <h3 className="text-xl font-semibold mt-6 mb-2">제 4 조 (약관의 해석)</h3>
             <p className="mb-4 text-gray-700">
-                <span className="font-semibold">&quot;회사&quot;</span>는 개별 서비스에 대해서 별도의 이용약관 및 정책(이하 <span
-                className="font-semibold">&quot;개별 약관 등&quot;</span>)을 둘 수 있으며, 해당 내용이 이 약관과 상충할 경우에는 <span
-                className="font-semibold">&quot;개별 약관 등&quot;</span>이 우선하여 적용됩니다.
+                <span className="font-semibold">"회사"</span>는 개별 서비스에 대해서 별도의 이용약관 및 정책(이하 <span
+                className="font-semibold">"개별 약관 등"</span>)을 둘 수 있으며, 해당 내용이 이 약관과 상충할 경우에는 <span
+                className="font-semibold">"개별 약관 등"</span>이 우선하여 적용됩니다.
             </p>
             <p className="mb-4 text-gray-700">
-                이 약관에 명시되지 않은 사항은 '약관의 규제에 관한 법률'(이하 <span className="font-semibold">&quot;약관법&quot;</span>),
-                ‘전자상거래 등에서의 소비자보호에 관한 법률’(이하 <span className="font-semibold">&quot;전자상거래법&quot;</span>),
-                ‘정보통신망이용촉진및정보보호등에관한법률’(이하 <span className="font-semibold">&quot;정보통신망법&quot;</span>), 공정거래위원회가 정하는
-                전자상거래 등에서의 소비자보호지침(이하 <span className="font-semibold">&quot;소비자보호지침&quot;</span>) 및 관계 법령 또는 상관례에
+                이 약관에 명시되지 않은 사항은 '약관의 규제에 관한 법률'(이하 <span className="font-semibold">"약관법"</span>),
+                ‘전자상거래 등에서의 소비자보호에 관한 법률’(이하 <span className="font-semibold">"전자상거래법"</span>),
+                ‘정보통신망이용촉진및정보보호등에관한법률’(이하 <span className="font-semibold">"정보통신망법"</span>), 공정거래위원회가 정하는
+                전자상거래 등에서의 소비자보호지침(이하 <span className="font-semibold">"소비자보호지침"</span>) 및 관계 법령 또는 상관례에
                 따릅니다.
             </p>
 
             <h3 className="text-xl font-semibold mt-6 mb-2">제 5 조 (이용계약의 체결)</h3>
             <ol className="list-decimal list-inside space-y-4 text-gray-700">
                 <li>
-                    이용계약은 <span className="font-semibold">&quot;회원&quot;</span>이 되고자 하는 자(이하 <span
-                    className="font-semibold">&quot;가입신청자&quot;</span>)가 약관의 내용에 대하여 동의를 한 후 회원가입신청을 하고 <span
-                    className="font-semibold">&quot;회사&quot;</span>가 이러한 신청에 대하여 승낙함으로써 체결됩니다. <span
-                    className="font-semibold">&quot;회사&quot;</span>는 <span
-                    className="font-semibold">&quot;가입신청자&quot;</span>의 신청에 대하여 서비스 이용을 승낙함을 원칙으로 합니다. 다만, <span
-                    className="font-semibold">&quot;회사&quot;</span>는 다음 각 호에 해당하는 신청에 대하여는 승낙을 하지 않거나, 사후에 이용계약을
+                    이용계약은 <span className="font-semibold">"회원"</span>이 되고자 하는 자(이하 <span
+                    className="font-semibold">"가입신청자"</span>)가 약관의 내용에 대하여 동의를 한 후 회원가입신청을 하고 <span
+                    className="font-semibold">"회사"</span>가 이러한 신청에 대하여 승낙함으로써 체결됩니다. <span
+                    className="font-semibold">"회사"</span>는 <span
+                    className="font-semibold">"가입신청자"</span>의 신청에 대하여 서비스 이용을 승낙함을 원칙으로 합니다. 다만, <span
+                    className="font-semibold">"회사"</span>는 다음 각 호에 해당하는 신청에 대하여는 승낙을 하지 않거나, 사후에 이용계약을
                     해지할 수 있습니다.
                     <ol className="list-disc list-inside mt-2">
                         <li>가입신청자가 이 약관에 의하여 이전에 회원자격을 상실한 적이 있는 경우</li>
@@ -110,104 +110,104 @@ export const TermsModalContent = () => {
                         <li>허위의 정보를 기재하거나, 회사가 제시하는 내용을 기재하지 않은 경우</li>
                         <li>14세 미만 아동이 회원가입 시 법정대리인(부모 등)의 동의를 얻지 아니한 경우</li>
                         <li>사업자(이하 ‘사업자’에는 개인사업자 포함)가 이용신청을 하는 경우 (단, <span
-                            className="font-semibold">&quot;회사&quot;</span>와 별도 계약을 체결한 <span
-                            className="font-semibold">&quot;제휴 사업자&quot;</span>, <span
-                            className="font-semibold">&quot;입점 사업자&quot;</span> 또는 <span
-                            className="font-semibold">&quot;매입 사업자&quot;</span>는 제외)
+                            className="font-semibold">"회사"</span>와 별도 계약을 체결한 <span
+                            className="font-semibold">"제휴 사업자"</span>, <span
+                            className="font-semibold">"입점 사업자"</span> 또는 <span
+                            className="font-semibold">"매입 사업자"</span>는 제외)
                         </li>
                         <li>이용자의 귀책사유로 인하여 승인이 불가능하거나 기타 규정한 제반 사항을 위반하며 신청하는 경우</li>
                     </ol>
                 </li>
                 <li>
-                    <span className="font-semibold">&quot;회사&quot;</span>는 <span
-                    className="font-semibold">&quot;서비스&quot;</span> 관련 설비의 여유가 없거나, 기술상 또는 업무상 문제가 있는 경우에는 승낙을
+                    <span className="font-semibold">"회사"</span>는 <span
+                    className="font-semibold">"서비스"</span> 관련 설비의 여유가 없거나, 기술상 또는 업무상 문제가 있는 경우에는 승낙을
                     유보할 수 있습니다.
                 </li>
                 <li>
-                    회원가입신청의 승낙을 하지 아니하거나 유보한 경우, <span className="font-semibold">&quot;회사&quot;</span>는 원칙적으로
-                    이를 <span className="font-semibold">&quot;가입신청자&quot;</span>에게 알리도록 합니다.
+                    회원가입신청의 승낙을 하지 아니하거나 유보한 경우, <span className="font-semibold">"회사"</span>는 원칙적으로
+                    이를 <span className="font-semibold">"가입신청자"</span>에게 알리도록 합니다.
                 </li>
                 <li>
-                    이용계약의 성립 시기는 <span className="font-semibold">&quot;회사&quot;</span>가 가입완료를 신청절차 상에서 표시한 시점으로
+                    이용계약의 성립 시기는 <span className="font-semibold">"회사"</span>가 가입완료를 신청절차 상에서 표시한 시점으로
                     합니다.
                 </li>
                 <li>
-                    <span className="font-semibold">&quot;회사&quot;</span>는 <span
-                    className="font-semibold">&quot;회원&quot;</span>에 대해 회사정책에 따라 등급별로 구분하여 이용시간, 이용횟수, 서비스 메뉴 등을
+                    <span className="font-semibold">"회사"</span>는 <span
+                    className="font-semibold">"회원"</span>에 대해 회사정책에 따라 등급별로 구분하여 이용시간, 이용횟수, 서비스 메뉴 등을
                     세분하여 이용에 차등을 둘 수 있습니다.
                 </li>
             </ol>
 
-            <h3 className="text-xl font-semibold mt-6 mb-2">제 6 조 (&quot;회원&quot;의 &quot;아이디&quot; 및 &quot;비밀번호&quot;의 관리에 대한 의무)</h3>
+            <h3 className="text-xl font-semibold mt-6 mb-2">제 6 조 ("회원"의 "아이디" 및 "비밀번호"의 관리에 대한 의무)</h3>
             <ol className="list-decimal list-inside space-y-4 text-gray-700">
                 <li>
-                    <span className="font-semibold">&quot;회원&quot;</span>의 <span
-                    className="font-semibold">&quot;아이디&quot;</span>와 <span
-                    className="font-semibold">&quot;비밀번호&quot;</span>에 관한 관리책임은 <span
-                    className="font-semibold">&quot;회원&quot;</span>에게 있으며, 이를 제3자가 이용하도록 하여서는 안 됩니다.
+                    <span className="font-semibold">"회원"</span>의 <span
+                    className="font-semibold">"아이디"</span>와 <span
+                    className="font-semibold">"비밀번호"</span>에 관한 관리책임은 <span
+                    className="font-semibold">"회원"</span>에게 있으며, 이를 제3자가 이용하도록 하여서는 안 됩니다.
                 </li>
                 <li>
-                    <span className="font-semibold">&quot;회사&quot;</span>는 <span
-                    className="font-semibold">&quot;회원&quot;</span>의 <span className="font-semibold">&quot;아이디&quot;</span>가
+                    <span className="font-semibold">"회사"</span>는 <span
+                    className="font-semibold">"회원"</span>의 <span className="font-semibold">"아이디"</span>가
                     개인정보 유출 우려가 있거나, 회사 및 회사의 운영자로 오인한 우려가 있는 경우 등 <span
-                    className="font-semibold">&quot;회원&quot;</span> 및 <span
-                    className="font-semibold">&quot;서비스&quot;</span> 보호에 필요한 경우 해당 <span
-                    className="font-semibold">&quot;아이디&quot;</span>의 이용을 제한할 수 있습니다.
+                    className="font-semibold">"회원"</span> 및 <span
+                    className="font-semibold">"서비스"</span> 보호에 필요한 경우 해당 <span
+                    className="font-semibold">"아이디"</span>의 이용을 제한할 수 있습니다.
                 </li>
                 <li>
-                    <span className="font-semibold">&quot;회원&quot;</span>은 <span
-                    className="font-semibold">&quot;아이디&quot;</span>및 <span
-                    className="font-semibold">&quot;비밀번호&quot;</span>가 도용되거나 제3자가 사용하고 있음을 인지한 경우에는 이를 즉시 <span
-                    className="font-semibold">&quot;회사&quot;</span>에 통지하고 <span
-                    className="font-semibold">&quot;회사&quot;</span>의 안내에 따라야 합니다.
+                    <span className="font-semibold">"회원"</span>은 <span
+                    className="font-semibold">"아이디"</span>및 <span
+                    className="font-semibold">"비밀번호"</span>가 도용되거나 제3자가 사용하고 있음을 인지한 경우에는 이를 즉시 <span
+                    className="font-semibold">"회사"</span>에 통지하고 <span
+                    className="font-semibold">"회사"</span>의 안내에 따라야 합니다.
                 </li>
                 <li>
-                    제3항의 경우에 해당 <span className="font-semibold">&quot;회원&quot;</span>이 <span
-                    className="font-semibold">&quot;회사&quot;</span>에 그 사실을 통지하지 않거나, 통지한 경우에도 <span
-                    className="font-semibold">&quot;회사&quot;</span>의 안내에 따르지 않아 발생한 불이익에 대해 <span
-                    className="font-semibold">&quot;회사&quot;</span>는 책임지지 않습니다.
+                    제3항의 경우에 해당 <span className="font-semibold">"회원"</span>이 <span
+                    className="font-semibold">"회사"</span>에 그 사실을 통지하지 않거나, 통지한 경우에도 <span
+                    className="font-semibold">"회사"</span>의 안내에 따르지 않아 발생한 불이익에 대해 <span
+                    className="font-semibold">"회사"</span>는 책임지지 않습니다.
                 </li>
             </ol>
 
             <h3 className="text-xl font-semibold mt-6 mb-2">제 7 조 (이용제한 등)</h3>
             <ol className="list-decimal list-inside space-y-4 text-gray-700">
                 <li>
-                    &quot;회사&quot;는 &quot;회원&quot;이 이 약관 또는 관련 법령을 위반하거나 &quot;서비스&quot;의 정상적인 운영을 방해한 경우, 경고, 일시정지, 영구이용정지, 이용계약
-                    해지(재가입 제한 조치 포함) 등(이하 &quot;이용제한 등&quot;)으로 &quot;서비스&quot; 이용을 단계적으로 제한할 수 있습니다.
+                    "회사"는 "회원"이 이 약관 또는 관련 법령을 위반하거나 "서비스"의 정상적인 운영을 방해한 경우, 경고, 일시정지, 영구이용정지, 이용계약
+                    해지(재가입 제한 조치 포함) 등(이하 "이용제한 등")으로 "서비스" 이용을 단계적으로 제한할 수 있습니다.
                 </li>
                 <li>
-                    &quot;회사&quot;는 전항에도 불구하고, &quot;회원&quot;의 의무 위반 행위나 &quot;서비스&quot; 운영 방해 행위에 대하여 사안의 중대성이나 긴급성 등을 토대로 &quot;서비스&quot;에 미치는
+                    "회사"는 전항에도 불구하고, "회원"의 의무 위반 행위나 "서비스" 운영 방해 행위에 대하여 사안의 중대성이나 긴급성 등을 토대로 "서비스"에 미치는
                     영향을 고려하여 경고 등의 단계적인 조치를 거치지 않고 곧바로 일시 정지나 영구이용정지, 이용계약 해지(재가입 제한 조치 포함)를 할 수 있습니다.
-                    특히, ‘주민등록법'을 위반한 명의도용 및 결제도용, '저작권법'을 위반한 불법프로그램의 제공 및 운영방해, &quot;정보통신망법&quot;을 위반한 불법통신 및
+                    특히, ‘주민등록법'을 위반한 명의도용 및 결제도용, '저작권법'을 위반한 불법프로그램의 제공 및 운영방해, "정보통신망법"을 위반한 불법통신 및
                     해킹, 악성프로그램의 배포, 접속권한 초과행위 등과 같이 관련법을 위반하여 서비스에 중대한 영향을 끼친 경우에는 즉시 영구이용정지를 할 수 있으며,
-                    영구이용정지를 할 수 있는 위반행위는 이에 제한되지 않습니다. 본 항에 따른 영구이용정지 시 &quot;서비스&quot; 이용을 통해 획득한 &quot;포인트&quot;, &quot;할인쿠폰&quot; 및
-                    기타 혜택 등도 모두 소멸되며, &quot;회사&quot;는 이에 대해 별도로 보상하지 않습니다.
+                    영구이용정지를 할 수 있는 위반행위는 이에 제한되지 않습니다. 본 항에 따른 영구이용정지 시 "서비스" 이용을 통해 획득한 "포인트", "할인쿠폰" 및
+                    기타 혜택 등도 모두 소멸되며, "회사"는 이에 대해 별도로 보상하지 않습니다.
                 </li>
                 <li>
-                    본 조에 따른 &quot;이용제한 등&quot;의 사유는 아래의 사항을 포함하나 이에 한하지 아니하며, 구체적인 제한의 조건 및 세부내용은 본 약관 또는 운영 정책 및
+                    본 조에 따른 "이용제한 등"의 사유는 아래의 사항을 포함하나 이에 한하지 아니하며, 구체적인 제한의 조건 및 세부내용은 본 약관 또는 운영 정책 및
                     개별 서비스 상의 이용약관이나 운영정책에서 정하는 바에 의합니다.
                     <ul className="list-disc pl-6">
                         <li>일정 횟수 이상의 가품 판정 또는 사용감 있는 상품 거래</li>
                         <li>부정거래(시세조작 행위, 자전거래 등) 시도</li>
-                        <li>이용정지 중인 계정을 소유한 &quot;회원&quot;과 동일인임이 확인되는 활성계정</li>
-                        <li>&quot;제휴 사업자&quot;, &quot;입점 사업자&quot; 또는 &quot;매입 사업자&quot;가 아닌 사업자의 &quot;서비스&quot; 이용</li>
-                        <li>&quot;제휴 사업자&quot;, &quot;입점 사업자&quot; 또는 &quot;매입 사업자&quot;가 해당 사업자에게 허용되지 않은 경로로 &quot;서비스&quot;를 이용한 경우</li>
-                        <li>&quot;제휴 사업자&quot;, &quot;입점 사업자&quot; 또는 &quot;매입 사업자&quot;가 사업자 아닌 개인임을 가장하여 &quot;서비스&quot;를 이용한 경우</li>
+                        <li>이용정지 중인 계정을 소유한 "회원"과 동일인임이 확인되는 활성계정</li>
+                        <li>&quot;제휴 사업자&quot;, &quot;입점 사업자&quot; 또는 "매입 사업자"가 아닌 사업자의 &quot;서비스&quot; 이용</li>
+                        <li>&quot;제휴 사업자&quot;, &quot;입점 사업자&quot; 또는 "매입 사업자"가 해당 사업자에게 허용되지 않은 경로로 &quot;서비스&quot;를 이용한 경우</li>
+                        <li>&quot;제휴 사업자&quot;, &quot;입점 사업자&quot; 또는 "매입 사업자"가 사업자 아닌 개인임을 가장하여 &quot;서비스&quot;를 이용한 경우</li>
                         <li>타인 명의 계좌 등록 또는 이를 통한 정산 시도</li>
                         <li>본 약관 또는 관련 법령 위반</li>
                     </ul>
                 </li>
                 <li>
-                    &quot;회원&quot;은 본 조에 따른 이용제한 등에 대해 &quot;회사&quot;가 정한 절차에 따라 이의신청을 할 수 있습니다. 이 때 이의가 정당하다고 &quot;회사&quot;가 인정하는 경우
-                    &quot;회사&quot;는 즉시 &quot;서비스&quot;의 이용을 재개합니다.
+                    "회원"은 본 조에 따른 이용제한 등에 대해 "회사"가 정한 절차에 따라 이의신청을 할 수 있습니다. 이 때 이의가 정당하다고 "회사"가 인정하는 경우
+                    "회사"는 즉시 "서비스"의 이용을 재개합니다.
                 </li>
                 <li>
-                    &quot;포인트&quot;, &quot;할인쿠폰&quot; 및 기타 혜택은 &quot;회원&quot;이 &quot;서비스&quot;를 정상적으로 이용할 수 있는 경우에만 사용할 수 있습니다. 사유를 불문하고 이용정지 등의
-                    제재 처분을 받은 경우 &quot;포인트&quot;, &quot;할인쿠폰&quot; 및 기타 혜택은 이용정지 등 제재가 해소되는 때까지 이용이 제한되고, &quot;포인트&quot;, &quot;할인쿠폰&quot; 및 기타
-                    혜택의 유효기간은 연장되지 않으며, 기존 유효기간 등 부여 조건에 따라 소멸됩니다. 또한, &quot;회사&quot;는 이에 대하여 별도의 보상을 하지 않습니다.
+                    "포인트", "할인쿠폰" 및 기타 혜택은 "회원"이 "서비스"를 정상적으로 이용할 수 있는 경우에만 사용할 수 있습니다. 사유를 불문하고 이용정지 등의
+                    제재 처분을 받은 경우 "포인트", "할인쿠폰" 및 기타 혜택은 이용정지 등 제재가 해소되는 때까지 이용이 제한되고, "포인트", "할인쿠폰" 및 기타
+                    혜택의 유효기간은 연장되지 않으며, 기존 유효기간 등 부여 조건에 따라 소멸됩니다. 또한, "회사"는 이에 대하여 별도의 보상을 하지 않습니다.
                 </li>
                 <li>
-                    &quot;입점 사업자&quot;는 &quot;포인트&quot;, &quot;할인쿠폰&quot; 및 기타 혜택을 사용할 수 없고, 사유를 불문하고 이에 대한 적용 또는 &quot;포인트&quot;, &quot;할인쿠폰&quot; 및 기타
+                    "입점 사업자"는 "포인트", "할인쿠폰" 및 기타 혜택을 사용할 수 없고, 사유를 불문하고 이에 대한 적용 또는 "포인트", "할인쿠폰" 및 기타
                     혜택의 환금 또는 할인 등을 요구할 수 없습니다.
                 </li>
             </ol>
@@ -215,12 +215,12 @@ export const TermsModalContent = () => {
             <h3 className="text-xl font-semibold mt-6 mb-2">제 8 조 (계약해제, 해지 등)</h3>
             <ol className="list-decimal list-inside space-y-4 text-gray-700">
                 <li>
-                    &quot;회원&quot;은 언제든지 고객센터 또는 내 정보 관리 메뉴 등을 통하여 이용계약 해지(탈퇴) 신청을 할 수 있으며, &quot;회사&quot;는 관련 법령 등이 정하는 바에
+                    "회원"은 언제든지 고객센터 또는 내 정보 관리 메뉴 등을 통하여 이용계약 해지(탈퇴) 신청을 할 수 있으며, "회사"는 관련 법령 등이 정하는 바에
                     따라 이를 즉시 처리합니다. 다만, 아래와 같은 경우 해지(탈퇴) 처리가 제한될 수 있습니다.
                     <ul className="list-disc pl-6">
                         <li>
-                            &quot;회원&quot;에게 부과된 서비스 수수료나 부과된 페널티 금액의 미납이 있는 경우, 본 약관 제16조 제3항의 &quot;마이너스(-) 포인트&quot;가 남아
-                            있는 경우, &quot;회사&quot;와 &quot;회원&quot; 사이에 분쟁 계속 중인 경우 등과 같이 이용계약을 해지하는 것이 적절하지 않은 경우에는 해당하는 사유가
+                            "회원"에게 부과된 서비스 수수료나 부과된 페널티 금액의 미납이 있는 경우, 본 약관 제16조 제3항의 "마이너스(-) 포인트"가 남아
+                            있는 경우, "회사"와 "회원" 사이에 분쟁 계속 중인 경우 등과 같이 이용계약을 해지하는 것이 적절하지 않은 경우에는 해당하는 사유가
                             완전히 해소될 때까지 해지(탈퇴) 처리가 제한될 수 있습니다.
                         </li>
                         <li>
@@ -230,29 +230,29 @@ export const TermsModalContent = () => {
                     </ul>
                 </li>
                 <li>
-                    &quot;회원&quot;이 계약을 해지할 경우, 관련법 및 개인정보취급방침에 따라 &quot;회사&quot;가 회원정보를 보유하는 경우를 제외하고는 해지 즉시 &quot;회원&quot;의 모든 데이터는
+                    "회원"이 계약을 해지할 경우, 관련법 및 개인정보취급방침에 따라 "회사"가 회원정보를 보유하는 경우를 제외하고는 해지 즉시 "회원"의 모든 데이터는
                     소멸됩니다.
                 </li>
                 <li>
-                    &quot;회원&quot;이 계약을 해지하는 경우, &quot;회원&quot;이 보유한 &quot;포인트&quot;, &quot;할인쿠폰&quot; 및 기타 혜택은 즉시 모두 소멸되며, 작성한 &quot;게시물&quot; 중 피드, 블로그
-                    등과 같이 본인 계정에 등록된 게시물 일체는 삭제됩니다. 다만, 타인에 의해 담기, 스크랩 등이 되어 재게시되거나, 공용게시판에 등록된 &quot;게시물&quot; 등은
+                    "회원"이 계약을 해지하는 경우, "회원"이 보유한 "포인트", "할인쿠폰" 및 기타 혜택은 즉시 모두 소멸되며, 작성한 "게시물" 중 피드, 블로그
+                    등과 같이 본인 계정에 등록된 게시물 일체는 삭제됩니다. 다만, 타인에 의해 담기, 스크랩 등이 되어 재게시되거나, 공용게시판에 등록된 "게시물" 등은
                     삭제되지 않으니 사전에 삭제 후 탈퇴하시기 바랍니다.
                 </li>
                 <li>
-                    이용계약의 해지(탈퇴)는 &quot;회원&quot;이 해지 이전에 거래한 &quot;상품&quot;과 관련하여 발생한 책임 및 &quot;회사&quot; 및 거래 상대방 등과의 관계에서 기발생한 권리관계
+                    이용계약의 해지(탈퇴)는 "회원"이 해지 이전에 거래한 "상품"과 관련하여 발생한 책임 및 "회사" 및 거래 상대방 등과의 관계에서 기발생한 권리관계
                     및 손해배상 청구권 등 기존 권리관계에 영향을 미치지 아니합니다.
                 </li>
             </ol>
 
-            <h3 className="text-xl font-semibold mt-6 mb-2">제 9 조 (&quot;서비스&quot;의 이용)</h3>
+            <h3 className="text-xl font-semibold mt-6 mb-2">제 9 조 ("서비스"의 이용)</h3>
             <ol className="list-decimal list-inside space-y-4 text-gray-700">
                 <li>
-                    &quot;회사&quot;는 컴퓨터 등 정보통신설비의 보수점검, 교체 및 고장, 통신두절 또는 운영상 상당한 이유가 있는 경우 &quot;서비스&quot;의 제공을 일시적으로 중단할 수
-                    있습니다. 이 경우 &quot;회사&quot;는 제20조에 정한 방법으로 &quot;회원&quot;에게 통지합니다. 다만, &quot;회사&quot;가 사전에 통지할 수 없는 부득이한 사유가 있는 경우
+                    "회사"는 컴퓨터 등 정보통신설비의 보수점검, 교체 및 고장, 통신두절 또는 운영상 상당한 이유가 있는 경우 "서비스"의 제공을 일시적으로 중단할 수
+                    있습니다. 이 경우 "회사"는 제20조에 정한 방법으로 "회원"에게 통지합니다. 다만, "회사"가 사전에 통지할 수 없는 부득이한 사유가 있는 경우
                     사후에 통지할 수 있습니다.
                 </li>
                 <li>
-                    &quot;회사&quot;는 서비스의 제공에 필요한 경우 정기점검을 실시할 수 있으며, 정기점검시간은 서비스제공화면 등에 공지한 바에 따릅니다.
+                    "회사"는 서비스의 제공에 필요한 경우 정기점검을 실시할 수 있으며, 정기점검시간은 서비스제공화면 등에 공지한 바에 따릅니다.
                 </li>
             </ol>
 
@@ -260,15 +260,15 @@ export const TermsModalContent = () => {
             <ol className="list-decimal list-inside space-y-4 text-gray-700">
                 <li>
                     <strong>&quot;상품&quot; 및 &quot;입점 사업자 판매 상품&quot;의 중개 서비스</strong>
-                    <p>&quot;회원&quot; 개인 상호간 및/또는 &quot;입점 사업자&quot;와의 사이에 미사용 secondhand &quot;상품&quot; 및/또는 &quot;입점 사업자 판매 상품&quot;에 대한 거래가
-                        이루어질 수 있도록 회사가 온라인으로 제공하는 &quot;상품&quot; 및/또는 &quot;입점 사업자 판매 상품&quot;에 대한 중개 서비스 및 관련 부가서비스 일체를
-                        말합니다. &quot;회원&quot;의 &quot;상품&quot;에 대한 거래는 입찰에 의한 거래 체결 또는 &quot;판매자&quot; 및 &quot;구매자&quot;가 설정한 가격에 즉시 거래 체결되는 방식을
+                    <p>&quot;회원&quot; 개인 상호간 및/또는 &quot;입점 사업자&quot;와의 사이에 미사용 secondhand "상품" 및/또는 &quot;입점 사업자 판매 상품&quot;에 대한 거래가
+                        이루어질 수 있도록 회사가 온라인으로 제공하는 "상품" 및/또는 &quot;입점 사업자 판매 상품&quot;에 대한 중개 서비스 및 관련 부가서비스 일체를
+                        말합니다. "회원"의 "상품"에 대한 거래는 입찰에 의한 거래 체결 또는 "판매자" 및 "구매자"가 설정한 가격에 즉시 거래 체결되는 방식을
                         모두 제공할 수 있습니다. &quot;회사&quot;는 &quot;입점 사업자&quot;에게 &quot;입점 사업자 판매 상품&quot;을 판매할 별도 경로 제공할 수 있고, &quot;입점 사업자&quot;는
                         &quot;회사&quot;가 &quot;입점 사업자&quot;에게 허용한 경로에 한하여서만 거래할 수 있습니다.</p>
                 </li>
                 <li>
                     <strong>정보 서비스</strong>
-                    <p>&quot;회사&quot;가 각 &quot;회원&quot;에 대한 판매정보, 구매정보, 거래실적, 신용도, 회원정보 등 &quot;회원&quot;의 거래 기록을 모아 &quot;회원&quot; 상호 간의 상품의 거래
+                    <p>&quot;회사&quot;가 각 "회원"에 대한 판매정보, 구매정보, 거래실적, 신용도, 회원정보 등 "회원"의 거래 기록을 모아 "회원" 상호 간의 상품의 거래
                         및 중개서비스를 신속하고 편리하게 이용하도록 하기 위하여 제공하는 서비스를 말합니다.</p>
                 </li>
                 <li>
@@ -280,59 +280,59 @@ export const TermsModalContent = () => {
                 <li>
                     <strong>&quot;매입 사업자 전용 서비스 페이지&quot;</strong>
                     <p>&quot;회사&quot;가 &quot;매입 사업자&quot;와 체결한 별도의 계약에 따라 제공하는 통신판매중개 서비스 및 부가서비스 일체를 말합니다. &quot;매입 사업자&quot;는 별도로
-                        마련된 &quot;매입 사업자 전용 서비스 페이지&quot;를 통하여 &quot;회원&quot;으로부터 동 페이지에 지정된 &quot;매입 요청 상품&quot;만을 구매하고, 이에 부수한 업무만을
+                        마련된 &quot;매입 사업자 전용 서비스 페이지&quot;를 통하여 "회원"으로부터 동 페이지에 지정된 "매입 요청 상품"만을 구매하고, 이에 부수한 업무만을
                         수행할 뿐, 개인 상호간 &quot;상품&quot; 거래 중개 서비스 등 다른 서비스를 이용하지 않습니다.</p>
                 </li>
                 <li>
                     <strong>기타 정보 서비스</strong>
-                    <p>&quot;상품&quot; 서비스 이외에 &quot;회사&quot;가 제공하는 서비스를 통하여 &quot;회원&quot;에게 온라인으로 제공하는 정보서비스, 커뮤니티 등의 인터넷 서비스를
+                    <p>"상품" 서비스 이외에 "회사"가 제공하는 서비스를 통하여 "회원"에게 온라인으로 제공하는 정보서비스, 커뮤니티 등의 인터넷 서비스를
                         말합니다.</p>
                 </li>
             </ol>
 
-            <h2 className="text-xl font-bold mt-6 mb-2">제 11 조 (&quot;서비스&quot;의 변경 및 중지)</h2>
+            <h2 className="text-xl font-bold mt-6 mb-2">제 11 조 ("서비스"의 변경 및 중지)</h2>
             <ol className="list-decimal list-inside space-y-4 text-gray-700">
                 <li>
-                    &quot;회사&quot;는 상당한 이유가 있는 경우에 운영상, 기술상의 필요에 따라 제공하고 있는 전부 또는 일부 &quot;서비스&quot;를 제한, 변경하거나 중지할 수 있습니다.
+                    "회사"는 상당한 이유가 있는 경우에 운영상, 기술상의 필요에 따라 제공하고 있는 전부 또는 일부 "서비스"를 제한, 변경하거나 중지할 수 있습니다.
                 </li>
                 <li>
-                    &quot;회사&quot;는 제1항에 의한 서비스 중단의 경우에 인터넷 등에 사전 공지하거나 제20조(&quot;회원&quot;에 대한 통지)에 정한 방법으로 &quot;회원&quot;에게 통지합니다.
+                    "회사"는 제1항에 의한 서비스 중단의 경우에 인터넷 등에 사전 공지하거나 제20조("회원"에 대한 통지)에 정한 방법으로 "회원"에게 통지합니다.
                 </li>
                 <li>
-                    &quot;서비스&quot;의 내용, 이용방법, 이용시간에 대하여 변경이 있는 경우에는 변경사유, 변경될 &quot;서비스&quot;의 내용 및 제공일자 등은 그 변경 전에 해당
-                    &quot;서비스&quot; 초기화면에 게시합니다.
+                    "서비스"의 내용, 이용방법, 이용시간에 대하여 변경이 있는 경우에는 변경사유, 변경될 "서비스"의 내용 및 제공일자 등은 그 변경 전에 해당
+                    "서비스" 초기화면에 게시합니다.
                 </li>
                 <li>
-                    &quot;회사&quot;는 무료 수수료, 배송비 면제, 추가 정산 등 각종 프로모션 이벤트의 일부 또는 전부를 해당 프로모션 예산 조기 소진 시 또는 &quot;회사&quot;의 정책
-                    및 운영의 필요상 수정, 중단, 변경할 수 있으며, 이에 대하여 &quot;회원&quot;에게 별도의 보상을 하지 않습니다.
+                    "회사"는 무료 수수료, 배송비 면제, 추가 정산 등 각종 프로모션 이벤트의 일부 또는 전부를 해당 프로모션 예산 조기 소진 시 또는 "회사"의 정책
+                    및 운영의 필요상 수정, 중단, 변경할 수 있으며, 이에 대하여 "회원"에게 별도의 보상을 하지 않습니다.
                 </li>
             </ol>
 
-            <h2 className="text-xl font-bold mt-6 mb-2">제 12 조 (&quot;게시물&quot;의 저작권)</h2>
+            <h2 className="text-xl font-bold mt-6 mb-2">제 12 조 ("게시물"의 저작권)</h2>
             <ol className="list-decimal list-inside space-y-4 text-gray-700">
                 <li>
-                    &quot;회원&quot;은 저작권, 상표권 등 지식재산권, 개인정보 등 제3자의 권리를 침해하여서는 아니 되며, 저작권, 개인정보 보호 관련 규정 등 관련 법령을
-                    준수하기 위해 충분한 주의를 기울여야만 합니다. 만약 &quot;회원&quot;이 등록한 게시물이 제 3자의 저작권 등 권리를 침해한 경우, 그와 같은 침해에 대하여
-                    회사의 고의 또는 중과실이 인정되지 아니하는 한, 민형사상 모든 책임은 &quot;회원&quot; 당사자에게 있습니다.
+                    "회원"은 저작권, 상표권 등 지식재산권, 개인정보 등 제3자의 권리를 침해하여서는 아니 되며, 저작권, 개인정보 보호 관련 규정 등 관련 법령을
+                    준수하기 위해 충분한 주의를 기울여야만 합니다. 만약 "회원"이 등록한 게시물이 제 3자의 저작권 등 권리를 침해한 경우, 그와 같은 침해에 대하여
+                    회사의 고의 또는 중과실이 인정되지 아니하는 한, 민형사상 모든 책임은 "회원" 당사자에게 있습니다.
                 </li>
                 <li>
-                    &quot;회원&quot;은 &quot;서비스&quot;를 이용함으로써 얻은 정보 중 &quot;회사&quot;, &quot;제휴 사업자&quot;, &quot;입점 사업자&quot; 또는 &quot;매입 사업자&quot;에게 지적재산권이 귀속된 정보를
-                    &quot;회사&quot;의 사전 승낙 없이 복제, 송신, 출판, 배포, 방송 기타 방법에 의하여 영리목적으로 이용하거나 제 3자에게 이용하게 하여서는 안됩니다.
+                    "회원"은 "서비스"를 이용함으로써 얻은 정보 중 "회사", &quot;제휴 사업자&quot;, &quot;입점 사업자&quot; 또는 "매입 사업자"에게 지적재산권이 귀속된 정보를
+                    "회사"의 사전 승낙 없이 복제, 송신, 출판, 배포, 방송 기타 방법에 의하여 영리목적으로 이용하거나 제 3자에게 이용하게 하여서는 안됩니다.
                 </li>
                 <li>
-                    &quot;회사&quot;는 &quot;회원&quot;이 작성한 각종 게시물을 판촉, 홍보 등의 목적으로 &quot;서비스&quot;에서 사용하는 것 외에도 &quot;서비스&quot; 제공에 필요한 범위에서 타 사이트에
+                    "회사"는 "회원"이 작성한 각종 게시물을 판촉, 홍보 등의 목적으로 "서비스"에서 사용하는 것 외에도 "서비스" 제공에 필요한 범위에서 타 사이트에
                     복제, 배포, 전송, 전시할 수 있으며, 본질적인 내용에 변경을 가하지 않는 범위 내에서 수정, 편집될 수 있습니다.
                 </li>
                 <li>
-                    &quot;회원&quot;이 공개한 &quot;게시물&quot;은 &quot;서비스&quot;를 통해 전체 &quot;회원&quot;, 관련 제반 서비스에 공유될 수 있으며, &quot;회사&quot;는 해당 &quot;게시물&quot;을 &quot;서비스&quot;의 홍보,
+                    "회원"이 공개한 "게시물"은 "서비스"를 통해 전체 "회원", 관련 제반 서비스에 공유될 수 있으며, "회사"는 해당 "게시물"을 "서비스"의 홍보,
                     안내 등의 목적으로 사용할 수 있습니다.
                 </li>
                 <li>
-                    &quot;회사&quot;가 작성한 저작물에 대한 저작권 및 기타 지적 재산권은 &quot;회사&quot;에 귀속합니다.
+                    "회사"가 작성한 저작물에 대한 저작권 및 기타 지적 재산권은 "회사"에 귀속합니다.
                 </li>
             </ol>
 
-            <h3 className="text-xl font-semibold mt-6 mb-2">제 13 조 (&quot;게시물&quot;의 관리)</h3>
+            <h3 className="text-xl font-semibold mt-6 mb-2">제 13 조 ("게시물"의 관리)</h3>
             <ol className="list-decimal list-inside space-y-4 text-gray-700">
                 <li>
                     <strong>게시물의 부적절성</strong>
@@ -343,21 +343,21 @@ export const TermsModalContent = () => {
                 </li>
                 <li>
                     <strong>게시물의 권리 침해 방지</strong>
-                    <p>&quot;회원&quot;은 자신의 &quot;게시물&quot;이 타인의 저작권이나 명예 등 제3자의 권리를 침해하지 않도록 주의하여야 합니다. &quot;회사&quot;는 이에 대한 문제를 해결하기
-                        위해 &quot;정보통신망법&quot; 또는 &quot;저작권법&quot; 등을 근거로 권리 침해 주장자의 요청에 따른 게시물 게시중단, 원 게시자의 이의신청에 따른 해당 게시물
-                        게시 재개 등을 내용으로 하는 게시중단요청 서비스를 운영하고 있습니다. 타인의 &quot;게시물&quot;로 인해 자신의 저작권이나 명예가 침해되었다고 생각하는
-                        &quot;회원&quot;은 게시중단요청 서비스를 통해 해당 &quot;게시글&quot;의 게시중단 요청을 할 수 있습니다.</p>
+                    <p>"회원"은 자신의 "게시물"이 타인의 저작권이나 명예 등 제3자의 권리를 침해하지 않도록 주의하여야 합니다. "회사"는 이에 대한 문제를 해결하기
+                        위해 "정보통신망법" 또는 "저작권법" 등을 근거로 권리 침해 주장자의 요청에 따른 게시물 게시중단, 원 게시자의 이의신청에 따른 해당 게시물
+                        게시 재개 등을 내용으로 하는 게시중단요청 서비스를 운영하고 있습니다. 타인의 "게시물"로 인해 자신의 저작권이나 명예가 침해되었다고 생각하는
+                        "회원"은 게시중단요청 서비스를 통해 해당 "게시글"의 게시중단 요청을 할 수 있습니다.</p>
                 </li>
                 <li>
                     <strong>임시조치</strong>
-                    <p>&quot;회사&quot;는 전항에 따른 권리자의 요청이 없는 경우라도 &quot;전자상거래법&quot;, &quot;정보통신망법&quot;, &quot;저작권법&quot;, &quot;정보통신에 관한 심의 규정&quot; 등
-                        권리침해가 인정될 만한 사유가 있거나 기타 &quot;회사&quot; 정책 및 관련법에 위반되는 경우에는 관련법에 따라 해당 &quot;게시물&quot;에 대해 임시조치 등을 취할
+                    <p>"회사"는 전항에 따른 권리자의 요청이 없는 경우라도 "전자상거래법", "정보통신망법", "저작권법", "정보통신에 관한 심의 규정" 등
+                        권리침해가 인정될 만한 사유가 있거나 기타 "회사" 정책 및 관련법에 위반되는 경우에는 관련법에 따라 해당 "게시물"에 대해 임시조치 등을 취할
                         수 있습니다.</p>
                 </li>
                 <li>
                     <strong>게시중단요청서비스 절차</strong>
-                    <p>본 조에 따른 세부절차는 &quot;정보통신망법&quot; 및 &quot;저작권법&quot;이 규정한 범위 내에서 &quot;회사&quot;가 정한 &quot;게시중단요청서비스&quot;에 따르며, 부적절한 게시글을
-                        게시한 &quot;회원&quot;에 대해서는 제7조 및 운영정책 등에서 정한 바에 따라 이용제한 조치를 취할 수 있습니다.</p>
+                    <p>본 조에 따른 세부절차는 "정보통신망법" 및 "저작권법"이 규정한 범위 내에서 "회사"가 정한 "게시중단요청서비스"에 따르며, 부적절한 게시글을
+                        게시한 "회원"에 대해서는 제7조 및 운영정책 등에서 정한 바에 따라 이용제한 조치를 취할 수 있습니다.</p>
                 </li>
             </ol>
 
@@ -365,79 +365,79 @@ export const TermsModalContent = () => {
             <ol className="list-decimal list-inside space-y-4 text-gray-700">
                 <li>
                     <strong>저작권 및 지적재산권</strong>
-                    <p>&quot;서비스&quot;에 대한 저작권 및 지적재산권은 &quot;회사&quot;에 귀속됩니다. 단, &quot;회원&quot;의 &quot;게시물&quot; 및 제휴계약에 따라 제공된 저작물 등은
+                    <p>"서비스"에 대한 저작권 및 지적재산권은 "회사"에 귀속됩니다. 단, "회원"의 "게시물" 및 제휴계약에 따라 제공된 저작물 등은
                         제외합니다.</p>
                 </li>
                 <li>
                     <strong>이용권한</strong>
-                    <p>&quot;회사&quot;는 서비스와 관련하여 &quot;회원&quot;에게 &quot;회사&quot;가 정한 이용조건에 따라 계정, &quot;아이디&quot;, &quot;포인트&quot; 등을 이용할 수 있는 이용권한만을
-                        부여하며, &quot;회원&quot;은 이에 대한 양도, 판매, 담보제공 등의 처분행위를 할 수 없습니다.</p>
+                    <p>"회사"는 서비스와 관련하여 "회원"에게 "회사"가 정한 이용조건에 따라 계정, "아이디", "포인트" 등을 이용할 수 있는 이용권한만을
+                        부여하며, "회원"은 이에 대한 양도, 판매, 담보제공 등의 처분행위를 할 수 없습니다.</p>
                 </li>
                 <li>
                     <strong>보안 기술 사용 금지</strong>
-                    <p>&quot;회사&quot;가 &quot;서비스&quot;를 제공함에 사용되는 보안 기술이나 소프트웨어에 대해 &quot;회원&quot;은 회피 또는 변경하려 시도를 하여서는 안되며, &quot;서비스&quot; 및
-                        이에 필요한 기술 또는 소프트웨어를 부정 사용 및 타인이 그렇게 하는 것을 조장하는 행위 등은 금지되어 있습니다. 만약 &quot;회원&quot;이 그와 같은
-                        행위를 하는 경우 이에 대한 모든 책임은 &quot;회원&quot; 본인에게 있습니다.</p>
+                    <p>"회사"가 "서비스"를 제공함에 사용되는 보안 기술이나 소프트웨어에 대해 "회원"은 회피 또는 변경하려 시도를 하여서는 안되며, "서비스" 및
+                        이에 필요한 기술 또는 소프트웨어를 부정 사용 및 타인이 그렇게 하는 것을 조장하는 행위 등은 금지되어 있습니다. 만약 "회원"이 그와 같은
+                        행위를 하는 경우 이에 대한 모든 책임은 "회원" 본인에게 있습니다.</p>
                 </li>
             </ol>
 
-            <h3 className="text-xl font-semibold mt-6 mb-2">제 15 조 (&quot;회사&quot;의 의무)</h3>
+            <h3 className="text-xl font-semibold mt-6 mb-2">제 15 조 ("회사"의 의무)</h3>
             <ol className="list-decimal list-inside space-y-4 text-gray-700">
                 <li>
                     <strong>서비스 제공 의무</strong>
-                    <p>&quot;회사&quot;는 관련법령 및 이 약관 등에서 금지한 행위를 하지 않으며, 계속적이고 안정적으로 &quot;서비스&quot;를 제공하기 위하여 최선을 다하여
+                    <p>"회사"는 관련법령 및 이 약관 등에서 금지한 행위를 하지 않으며, 계속적이고 안정적으로 "서비스"를 제공하기 위하여 최선을 다하여
                         노력합니다.</p>
                 </li>
                 <li>
                     <strong>개인정보 보호</strong>
-                    <p>&quot;회사&quot;는 &quot;회원&quot;이 안전하게 &quot;서비스&quot;를 이용할 수 있도록 개인정보(신용정보 포함) 보호를 위해 보안시스템을 갖추어야 하며 개인정보보호정책을
+                    <p>"회사"는 "회원"이 안전하게 "서비스"를 이용할 수 있도록 개인정보(신용정보 포함) 보호를 위해 보안시스템을 갖추어야 하며 개인정보보호정책을
                         공시하고 준수합니다.</p>
                 </li>
                 <li>
                     <strong>의견 및 불만 처리</strong>
-                    <p>&quot;회사&quot;는 서비스 이용과 관련하여 &quot;회원&quot;으로부터 제기된 의견이나 불만이 정당하다고 인정할 경우에는 이를 처리하여야 합니다. &quot;회원&quot;이 제기한
-                        의견이나 불만사항에 대해서는 게시판을 활용하거나 전자우편 등을 통하여 &quot;회원&quot;에게 처리과정 및 결과를 전달합니다.</p>
+                    <p>"회사"는 서비스 이용과 관련하여 "회원"으로부터 제기된 의견이나 불만이 정당하다고 인정할 경우에는 이를 처리하여야 합니다. "회원"이 제기한
+                        의견이나 불만사항에 대해서는 게시판을 활용하거나 전자우편 등을 통하여 "회원"에게 처리과정 및 결과를 전달합니다.</p>
                 </li>
             </ol>
 
-            <h3 className="text-xl font-semibold mt-6 mb-2">제 16 조 (&quot;포인트&quot;)</h3>
+            <h3 className="text-xl font-semibold mt-6 mb-2">제 16 조 ("포인트")</h3>
             <ol className="list-decimal list-inside space-y-4 text-gray-700">
                 <li>
-                    &quot;회사&quot;는 서비스의 효율적 이용 및 운영을 위해 사전 공지 후 &quot;포인트&quot;에 대한 정책을 변경하거나 &quot;포인트&quot;의 일부 또는 전부를 조정할 수 있으며,
-                    &quot;포인트&quot;는 회사가 정한 기간에 따라 주기적으로 소멸할 수 있습니다.
+                    "회사"는 서비스의 효율적 이용 및 운영을 위해 사전 공지 후 "포인트"에 대한 정책을 변경하거나 "포인트"의 일부 또는 전부를 조정할 수 있으며,
+                    "포인트"는 회사가 정한 기간에 따라 주기적으로 소멸할 수 있습니다.
                     (관련정책 : 링크)
                 </li>
                 <li>
-                    &quot;회사&quot;가 &quot;회원&quot;에게 &quot;포인트&quot;를 적립하였더라도 추후 &quot;회원&quot;의 거래취소, 반품, 이벤트 부정 응모 등 &quot;포인트&quot; 적립이 무효 또는 취소되거나
-                    &quot;포인트&quot;가 부정한 방법으로 적립되었을 경우 그에 상응하는 &quot;포인트&quot;는 자동 차감될 수 있습니다.
+                    "회사"가 "회원"에게 "포인트"를 적립하였더라도 추후 "회원"의 거래취소, 반품, 이벤트 부정 응모 등 "포인트" 적립이 무효 또는 취소되거나
+                    "포인트"가 부정한 방법으로 적립되었을 경우 그에 상응하는 "포인트"는 자동 차감될 수 있습니다.
                 </li>
                 <li>
-                    전항에 따른 &quot;포인트&quot; 자동 차감 시 &quot;회원&quot;의 &quot;포인트&quot; 잔액이 &quot;포인트&quot; 차감 분 보다 적을 경우 &quot;마이너스(-) 포인트&quot;로 관리되며, 추후
-                    &quot;회원&quot;이 적립하는 &quot;포인트&quot;와 상계됩니다.
+                    전항에 따른 "포인트" 자동 차감 시 "회원"의 "포인트" 잔액이 "포인트" 차감 분 보다 적을 경우 "마이너스(-) 포인트"로 관리되며, 추후
+                    "회원"이 적립하는 "포인트"와 상계됩니다.
                 </li>
                 <li>
-                    1) &quot;회원&quot;이 &quot;회사&quot;와의 계약을 해지(탈회)하거나 기타 사유로 인하여 서비스 이용 자격을 박탈 당하는 등의 사유가 발생할 경우 또는 2) &quot;회사&quot;의
-                    정책상 &quot;마이너스(-) 포인트&quot;에 대한 청구를 진행하거나 관리 방법을 변경하기로 결정한 경우에는 &quot;회사&quot;가 해당 &quot;회원&quot;에게 마이너스(-) 1포인트 당
+                    1) "회원"이 "회사"와의 계약을 해지(탈회)하거나 기타 사유로 인하여 서비스 이용 자격을 박탈 당하는 등의 사유가 발생할 경우 또는 2) "회사"의
+                    정책상 "마이너스(-) 포인트"에 대한 청구를 진행하거나 관리 방법을 변경하기로 결정한 경우에는 "회사"가 해당 "회원"에게 마이너스(-) 1포인트 당
                     한화(KRW) 1원으로 산정한 금액을 청구할 수 있습니다.
                 </li>
             </ol>
 
-            <h3 className="text-xl font-semibold mt-6 mb-2">제 16 조의 2 (&quot;할인쿠폰&quot;)</h3>
+            <h3 className="text-xl font-semibold mt-6 mb-2">제 16 조의 2 ("할인쿠폰")</h3>
             <ol className="list-decimal list-inside space-y-4 text-gray-700">
                 <li>
-                    &quot;할인쿠폰&quot;은 발행대상, 발행경로, 사용대상, 할인금액(할인율), 사용방법, 사용기한 및 제한 등에 따라 구분될 수 있으며, 이에 대한 구체적인 사항은
-                    &quot;회사&quot;의 운영 정책, 해당 &quot;할인쿠폰&quot; 또는 &quot;서비스&quot; 화면에 표시됩니다. &quot;할인쿠폰&quot;의 종류 및 내용과 발급 여부는 &quot;회사&quot;의 운영 정책에 따라
+                    "할인쿠폰"은 발행대상, 발행경로, 사용대상, 할인금액(할인율), 사용방법, 사용기한 및 제한 등에 따라 구분될 수 있으며, 이에 대한 구체적인 사항은
+                    "회사"의 운영 정책, 해당 "할인쿠폰" 또는 "서비스" 화면에 표시됩니다. "할인쿠폰"의 종류 및 내용과 발급 여부는 "회사"의 운영 정책에 따라
                     변경될 수 있습니다.
                 </li>
                 <li>
-                    &quot;할인쿠폰&quot;은 현금으로 출금될 수 없으며, &quot;할인쿠폰&quot;에 표시된 유효기간이 만료되거나 회원자격이 상실되면 자동으로 소멸합니다.
+                    "할인쿠폰"은 현금으로 출금될 수 없으며, "할인쿠폰"에 표시된 유효기간이 만료되거나 회원자격이 상실되면 자동으로 소멸합니다.
                 </li>
                 <li>
-                    &quot;할인쿠폰&quot;은 타인에게 양도할 수 없으며, 부정한 목적이나 용도로 사용할 수 없습니다. 이를 위반한 경우 &quot;회사&quot;는 &quot;할인쿠폰&quot;을 소멸시키거나
+                    "할인쿠폰"은 타인에게 양도할 수 없으며, 부정한 목적이나 용도로 사용할 수 없습니다. 이를 위반한 경우 "회사"는 "할인쿠폰"을 소멸시키거나
                     회원자격을 제한 또는 상실시킬 수 있습니다.
                 </li>
                 <li>
-                    &quot;회원&quot;이 부정한 방법으로 &quot;할인쿠폰&quot;을 획득하거나 사용한 사실이 확인될 경우, 회사는 이를 회수하거나 부정 사용에 해당하는 금액을 별도 청구할 수
+                    "회원"이 부정한 방법으로 "할인쿠폰"을 획득하거나 사용한 사실이 확인될 경우, 회사는 이를 회수하거나 부정 사용에 해당하는 금액을 별도 청구할 수
                     있고, 회원자격 제한 또는 상실 및 민・형사 상의 법적 조치 등을 취할 수 있습니다.
                 </li>
             </ol>

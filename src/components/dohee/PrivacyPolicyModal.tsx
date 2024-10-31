@@ -1,3 +1,4 @@
+// 덮기 완료
 import { ModalContent, ModalHeader, ModalBody, Button } from '@chakra-ui/react';
 import React from 'react';
 
