@@ -1,3 +1,4 @@
+/*
 "use client";
 
 import React, {Suspense, useEffect, useState} from "react";
@@ -56,8 +57,8 @@ export default function AuctionDetailPage() {
 
     const auctionData = useSuspenseAuctionAndProduct(id);
     // auctionData.data.size
-    /*   const product = useQuery({queryKey: ["product"], queryFn: () => fetchProductOne(productId)});
-       const productImage = useQuery({queryKey: ["p.0.00..0.0roductImage"], queryFn: () => fetchImage(ImageType.PRODUCT, productId)});*/
+    /!*   const product = useQuery({queryKey: ["product"], queryFn: () => fetchProductOne(productId)});
+       const productImage = useQuery({queryKey: ["p.0.00..0.0roductImage"], queryFn: () => fetchImage(ImageType.PRODUCT, productId)});*!/
 
 
     const {auction, images: auctionImages = []} = auctionData.data.auction || {auction: null, images: []};
@@ -283,7 +284,7 @@ export default function AuctionDetailPage() {
                 </div>
                 <div className="listingSectionSidebar__wrap lg:shadow-lg relative">
                     <div className="space-y-7 lg:space-y-8 relative">
-                        {/* PRICE */}
+                        {/!* PRICE *!/}
                         <div className="">
                             <div className="flex items-center justify-between space-x-5">
                                 <div className="flex text-2xl font-semibold">
@@ -357,7 +358,7 @@ export default function AuctionDetailPage() {
                     <h2 className="text-2xl md:text-3xl font-semibold">
                         {product.name}
                     </h2>
-                    {/* subName */}
+                    {/!* subName *!/}
                     <div className="flex items-center mt-4 sm:mt-5">
                         <a
                             href="#reviews"
@@ -395,7 +396,7 @@ export default function AuctionDetailPage() {
         return (
             <div className="listingSection__wrap !border-b-0 !pb-0">
                 <h2 className="text-2xl font-semibold">Product details</h2>
-                {/* <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div> */}
+                {/!* <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div> *!/}
                 <div className="prose prose-sm sm:prose dark:prose-invert sm:max-w-4xl">
                     {auction.description}
                 </div>
@@ -463,7 +464,7 @@ export default function AuctionDetailPage() {
                                             src={item?.uploadUrl || ""}
                                         />
 
-                                        {/* OVERLAY */}
+                                        {/!* OVERLAY *!/}
                                         <div
                                             className="absolute inset-0 bg-slate-900/20 opacity-0 hover:opacity-60 transition-opacity cursor-pointer"
                                             onClick={handleOpenModalImageGallery}
@@ -495,15 +496,15 @@ export default function AuctionDetailPage() {
                 </header>
             </>
 
-            {/* MAIn */}
+            {/!* MAIn *!/}
             <main className="container relative z-10 mt-9 sm:mt-11 flex ">
-                {/* CONTENT */}
+                {/!* CONTENT *!/}
                 <div className="w-full lg:w-3/5 xl:w-2/3 space-y-10 lg:pr-14 lg:space-y-14">
                     {renderSection1()}
                     {renderSection2()}
                 </div>
 
-                {/* SIDEBAR */}
+                {/!* SIDEBAR *!/}
                 <div className="flex-grow">
                     <div className="hidden lg:block sticky top-28">
                         {renderSectionSidebar()}
@@ -512,7 +513,7 @@ export default function AuctionDetailPage() {
             </main>
             <HighestBid auctionId={id} onDataUpdate={handleBidUpdate}/>
 
-            {/* OTHER SECTION */}
+            {/!* OTHER SECTION *!/}
             <div className="container pb-24 lg:pb-28 pt-14 space-y-14">
                 <hr className="border-slate-200 dark:border-slate-700"/>
 
@@ -555,7 +556,7 @@ export default function AuctionDetailPage() {
             </Suspense>
 
 
-            {/* 경매 취소 모달 창 */}
+            {/!* 경매 취소 모달 창 *!/}
             {showCancelModal && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                     <div className="bg-white p-6 rounded-lg shadow-lg text-center max-w-md w-full">
@@ -600,4 +601,10 @@ export default function AuctionDetailPage() {
 //     className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -rotate-43 text-red-600 border-8 border-red-600 font-bold text-8xl bg-white rounded-md shadow-md w-[700px] h-[200px] flex items-center justify-center text-center leading-none overflow-hidden"
 // >
 //     <span className="whitespace-nowrap">SOLD OUT</span>
-// </div>
+// </div>*/
+
+export default function DoheeAuction() {
+    return (
+        <div>dohheAuction</div>
+    )
+};

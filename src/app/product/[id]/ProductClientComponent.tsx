@@ -154,7 +154,6 @@ export default function ProductClientComponent({product}: { product: ProductDeta
 
     const sizes = initialProduct.sizes.map((size) => size.id);
     const auctions = useFetchAuctionBySizeIdsWithUser(sizes);
-    const insertAuctionUrl = `/auction/insert?productId=${currentProduct.id}`;
 
     const onClickSaleButton = () => {
         const userToken = Cookies.get("userToken");
@@ -168,7 +167,7 @@ export default function ProductClientComponent({product}: { product: ProductDeta
                     router.push("/account-seller");
                     break;
                 case UserRole.SELLER :
-                    router.push(`/dohee/auction/insert?productId=${currentProduct.id}`);
+                    router.push(`/auction/insert?productId=${currentProduct.id}`);
                     break;
             }
         }

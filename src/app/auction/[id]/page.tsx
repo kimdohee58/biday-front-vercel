@@ -22,14 +22,12 @@ import {useAuctionWithImage, useSuspenseAuctionAndProduct} from "@/hooks/react-q
 import HighestBid from "@/app/auction/[id]/HighestBid";
 import NotifyBid from "@/app/auction/[id]/NotifyBid";
 import LikeSaveBtns from "@/components/LikeSaveBtns";
+import Seller from "@/app/auction/[id]/Seller";
 
 export default function AuctionDetailPage() {
 
-
     const thisPathname = usePathname();
     const [variantActive, setVariantActive] = useState(0);
-    // const [sizeSelected, setSizeSelected] = useState(sizes ? sizes[0] : "");
-    const [qualitySelected, setQualitySelected] = useState(1);
     const initialBid = 15000;
     const initialTimer = "2024-01-01T00:00:00.000Z";
 
@@ -38,7 +36,7 @@ export default function AuctionDetailPage() {
     const searchParams = useSearchParams();
     const productId = searchParams.get("productId" || "0") as string;
     const router = useRouter();
-    const {id} :{id : string }= useParams();
+    const {id} :{ id : string } = useParams();
 
     const handleBidUpdate = ({highestBid, adjustBid}: {highestBid: number, adjustBid: number}) => {
         setHighestBid(highestBid);
@@ -49,12 +47,9 @@ export default function AuctionDetailPage() {
         mutationFn: saveBid
     });
 
-
     const auctionData = useSuspenseAuctionAndProduct(id);
-    // auctionData.data.size
- /*   const product = useQuery({queryKey: ["product"], queryFn: () => fetchProductOne(productId)});
-    const productImage = useQuery({queryKey: ["p.0.00..0.0roductImage"], queryFn: () => fetchImage(ImageType.PRODUCT, productId)});*/
 
+    console.log("user", auctionData.data.user);
 
     const { auction, images: auctionImages = [] } = auctionData.data.auction || { auction: null, images: [] };
     const { product, image: productImage, size} = auctionData.data.product;
@@ -69,7 +64,6 @@ export default function AuctionDetailPage() {
         router.push(`${thisPathname}/?productId=${productId}&modal=PHOTO_TOUR_SCROLLABLE` as Route);
     };
 
-    //
     const renderVariants = () => {
 
         return (
@@ -85,7 +79,6 @@ export default function AuctionDetailPage() {
             </div>
         );
     };
-
 
 
     const onClickBidButton = () => {
@@ -113,7 +106,6 @@ export default function AuctionDetailPage() {
             (t) => (
                 <NotifyBid
                     productImage={productImage.uploadUrl}
-                    qualitySelected={qualitySelected}
                     show={t.visible}
                     sizeSelected={size}
                     variantActive={variantActive}
@@ -244,10 +236,6 @@ export default function AuctionDetailPage() {
 
     const section1Data = [
         {
-            name: "판매자 정보",
-            content: "",
-        },
-        {
             name: "경매 상품 설명",
             content: auction?.description,
 
@@ -288,6 +276,8 @@ export default function AuctionDetailPage() {
                 </div>
 
                 <div className="w-14 border-b border-neutral-200 dark:border-neutral-700"></div>
+
+                <Seller user={auctionData.data.user}/>
 
                 <AccordionInfo panelClassName="p-4 pt-3.5 text-slate-600 text-base dark:text-slate-300 leading-7"
                 data={section1Data}/>

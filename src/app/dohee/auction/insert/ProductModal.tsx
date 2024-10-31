@@ -55,7 +55,7 @@ export default function ProductModal({onClose, productList, onClick}: ModalProps
     }
 
     return (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50" onClick={handleOutSideClick}>
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50" onClick={() => handleOutSideClick}>
             <div className="bg-white p-6 rounded-lg max-w-md w-full shadow-lg">
                 <button className="mb-4 text-blue-600 font-semibold hover:text-blue-500 transition-colors duration-200" onClick={onClose}>
                     Close

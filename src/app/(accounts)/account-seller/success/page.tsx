@@ -1,17 +1,25 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { saveAccount } from "@/service/user/account.service";
-import { AccountModel } from "@/model/user/account.model";
-import { Spinner } from "@/shared/Spinner/Spinner";
+import {useRouter, useSearchParams} from "next/navigation";
+import React, {useEffect} from "react";
+import {useMutation} from "@tanstack/react-query";
+import {saveAccount} from "@/service/user/account.service";
+import {AccountModel} from "@/model/user/account.model";
+import {Spinner} from "@/shared/Spinner/Spinner";
+import {useDispatch} from "react-redux";
+import {updateRole} from "@/lib/features/user.slice";
+import {UserRole} from "@/model/user/user.model";
 
 export default function AccountSuccessPage() {
+    const dispatch = useDispatch();
+    const router = useRouter();
+    const searchParams = useSearchParams();
+
     const mutation = useMutation({
         mutationFn: saveAccount,
         onSuccess: () => {
             sessionStorage.clear();
+            dispatch(updateRole(UserRole.SELLER));
             router.push('/account-seller');
         },
         onError: () => {
@@ -19,8 +27,7 @@ export default function AccountSuccessPage() {
         }
     });
 
-    const router = useRouter();
-    const searchParams = useSearchParams();
+    const code = searchParams.get("code");
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -37,7 +44,7 @@ export default function AccountSuccessPage() {
     }, []);
 
     useEffect(() => {
-        if (searchParams.get('code')) {
+        if (code) {
             const sessionData = sessionStorage.getItem("account");
 
             if (!sessionData) {
@@ -49,7 +56,7 @@ export default function AccountSuccessPage() {
         } else {
             router.push('/account-seller/fail');
         }
-    }, []);
+    }, [code, router, mutation]);
 
     return <Spinner />;
 };

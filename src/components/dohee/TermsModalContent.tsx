@@ -2,14 +2,14 @@ import React from "react";
 
 export const TermsModalContent = () => {
     return (
-        <div className="max-w-3xl mx-auto p-6">
+       /* <div className="max-w-3xl mx-auto p-6">
             <h1 className="text-2xl font-bold mb-6 text-center">BiDay 서비스 이용 약관</h1>
 
             <h3 className="text-xl font-semibold mt-4 mb-2">제 1 조 (목적)</h3>
             <p className="mb-4 text-gray-700">
-                이 약관은 "회원" 개인 상호 간 또는 “제휴 사업자”, "입점 사업자"와 “회원” 개인 간에 상품 등을 매매하는 것을 중개하고,
-                "상품" 등에 관한 정보를 상호 교환할 수 있도록 크림 주식회사(이하 "회사"라 합니다)가 운영, 제공하는 KREAM 서비스(이하 "서비스")에 대한 것으로
-                본 약관에서는 "서비스"의 이용과 관련하여 "회사"와 "회원"과의 권리, 의무 및 책임사항, 기타 필요한 사항을 규정합니다.
+                이 약관은 &quot;회원&quot; 개인 상호 간 또는 &quot;제휴 사업자&quot;, &quot;입점 사업자&quot;와 &quot;회원&quot; 개인 간에 상품 등을 매매하는 것을 중개하고,
+                &quot;상품&quot; 등에 관한 정보를 상호 교환할 수 있도록 크림 주식회사(이하 &quot;회사&quot;라 합니다)가 운영, 제공하는 KREAM 서비스(이하 &quot;서비스&quot;)에 대한 것으로
+                본 약관에서는 &quot;서비스&quot;의 이용과 관련하여 &quot;회사&quot;와 &quot;회원&quot;과의 권리, 의무 및 책임사항, 기타 필요한 사항을 규정합니다.
             </p>
 
             <h3 className="text-xl font-semibold mt-6 mb-2">제 2 조 (용어의 정의)</h3>
@@ -1519,6 +1519,7 @@ export const TermsModalContent = () => {
             <p className="text-gray-700">
                 시행일자: 2024년 10월 19일
             </p>
-        </div>
+        </div>*/
+        <div>d</div>
     );
 };
