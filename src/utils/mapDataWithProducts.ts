@@ -14,7 +14,7 @@ interface DataModel {
 export const mapDataWithAuctionModel = (
     auctionData: AuctionDTO[] | undefined, // undefined도 허용
     productList: ProductModel[]
-): (AuctionModel & { product: ProductModel | null })[] => {
+) => {
     const dataArray = Array.isArray(auctionData) ? auctionData : [];
 
     if (dataArray.length === 0 || !productList || productList.length === 0) {
