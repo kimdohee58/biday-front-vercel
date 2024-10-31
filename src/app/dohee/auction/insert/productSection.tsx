@@ -213,7 +213,7 @@ export default function ProductSection({openModal, selectedProduct, handleSize}:
                     />
                     <Typography variant="small" color="blue-gray" className="mt-1 text-gray-500">
                         <p>경매의 시작가는 원가의 50%입니다.</p>
-                        <span className="font-semibold"> 경매 예상 시작가: {selectedProduct?.product?.price / 2 || ""}</span>
+                        <span className="font-semibold"> 경매 예상 시작가: {selectedProduct ? selectedProduct?.product.price / 2 : ""}</span>
                     </Typography>
                 </div>
                 <div className="w-full">

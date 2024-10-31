@@ -1,10 +1,18 @@
-import React, {useEffect, useState} from 'react';
+import React, {ReactNode, useEffect, useState} from 'react';
 import {TermsModalContent} from './TermsModalContent';
 import {PrivacyOptionModelContent} from "@/components/dohee/PrivacyOptionModelContent";
 import {PrivacyModelContent} from "@/components/dohee/PrivacyModelContent";
 
-const Modal = ({title, content, onClose}) => {
-    const handleClickOutside = (event) => {
+//TODO 체크 하나라도 누락될 시 모두 동의 되지 않도록 변경
+
+interface ModalProps {
+    title: string;
+    content: ReactNode;
+    onClose: () => void
+}
+
+const Modal = ({title, content, onClose} : ModalProps) => {
+    const handleClickOutside = (event: React.MouseEvent<HTMLDivElement>) => {
         event.stopPropagation(); // 모달 외부 클릭 시 이벤트 전파를 막음
         onClose(); // 모달 닫기
     };
@@ -30,7 +38,14 @@ const Modal = ({title, content, onClose}) => {
 
 };
 
-const CheckboxWithModal = ({checked, onChange, label, ModalContent}) => {
+interface CheckBoxWithModalProps {
+    checked: boolean,
+    onChange: () => void,
+    label: string,
+    ModalContent: React.ComponentType;
+}
+
+const CheckboxWithModal = ({checked, onChange, label, ModalContent}: CheckBoxWithModalProps) => {
     const [showModal, setShowModal] = useState(false);
 
     return (
@@ -56,9 +71,13 @@ const CheckboxWithModal = ({checked, onChange, label, ModalContent}) => {
     );
 };
 
-function TermsAgreement({onTermsChange}) {
+interface TermsAgreementProps {
+    onTermsChange: (checkedTerms: string[]) => void;
+}
+
+function TermsAgreement({onTermsChange}: TermsAgreementProps) {
     const [allChecked, setAllChecked] = useState(false);
-    const [checkedStates, setCheckedStates] = useState({
+    const [checkedStates, setCheckedStates] = useState<Record<string, boolean>>({
         age: false,
         terms: false,
         privacy: false,
@@ -222,6 +241,6 @@ function TermsAgreement({onTermsChange}) {
         </div>
     );
 
-};
+}
 
 export default TermsAgreement;

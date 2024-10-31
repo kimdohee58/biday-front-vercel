@@ -9,19 +9,15 @@ interface Props {
     productImage: string | StaticImageData;
     variantActive: number;
     sizeSelected: string;
-    qualitySelected: number;
     productName: string;
     price: number;
     size: string;
     color: string;
 }
 
-const NotifyAddTocart: FC<Props> = ({
+const NotifyBid: FC<Props> = ({
                                         show,
                                         productImage,
-                                        variantActive,
-                                        qualitySelected,
-                                        sizeSelected,
                                         productName,
                                         price,
                                         size,
@@ -99,4 +95,4 @@ const NotifyAddTocart: FC<Props> = ({
     );
 };
 
-export default NotifyAddTocart;
+export default NotifyBid;

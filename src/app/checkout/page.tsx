@@ -25,11 +25,6 @@ import {fetchImageOne} from "@/service/ftp/image.service";
 import {getColor, getSizeById} from "@/utils/productUtils";
 import {getAddresses, getUser} from "@/lib/features/user.slice";
 
-/**
- *
- * 프로덕트와 award 통합하기
- * (가지고오는 product와 award가 일치하는지 확인하거나 award를 통해서 product 불러오기)
- */
 type ShippingProps = {
     shipper: string;
     recipient: string;
@@ -65,7 +60,7 @@ export default function CheckoutPage() {
     };
 
     const handleAddressChange = (address: AddressModel) => {
-        // setAddress();
+
     };
 
     const handlePhoneNumChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -92,9 +87,12 @@ export default function CheckoutPage() {
         setAddress(address);
     };
 
+    console.log("auction", award.data.auction);
+    console.log("sizeId", award.data.auction.sizeId);
+
     const [name, setName] = useState<string>(user.name || "");
 
-    const size = getSizeById(award.data.auction.sizeId, product.data.sizes);
+    const size = getSizeById(award.data.auction.sizeId, product.data.sizes) || "";
 
     const color = getColor(product.data.name);
 

@@ -1,3 +1,4 @@
+// Header/AvatarDropdown.tsx
 "use client";
 
 import {

@@ -1,3 +1,4 @@
+//dohee/CartDropdownDohee
 "use client";
 
 import {
@@ -19,19 +20,24 @@ import {ProductModel} from "@/model/product/product.model";
 import {mapDataWithAwardModel} from "@/utils/mapDataWithProducts";
 import {useRouter} from "next/navigation";
 import ImageFetcher from "../ImageFetcher";
+import {SizeModel} from "@/model/product/size.model";
+
+interface ContentAward {
+    content: AwardModel[];
+}
 
 export default function CartDropdownDohee() {
     const router = useRouter();
-    const [awardData, setAwardData] = useState<AwardModel[]>([]);
+    const [awardData, setAwardData] = useState<ContentAward>();
     const [awardContent, setAwardContent] = useState<AwardModel[]>([]);
     const [loading, setLoading] = useState(true);
 
     const fetchAwardData = async () => {
         setLoading(true);
         try {
-            const data: AwardModel[] = await findByUserAward();
+            const data: ContentAward = await findByUserAward() as any as ContentAward;
             setAwardData(data)
-            const award: AwardModel[] = data?.content || []
+            const award: AwardModel[] = data.content || []
             setAwardContent(award)
         } catch (error) {
             console.error("낙찰 데이터를 가져오는 중 오류가 발생했습니다.", error);
@@ -57,11 +63,11 @@ export default function CartDropdownDohee() {
 
     const currentDate = new Date();
     const filteredAwardList = awardContent.filter((item) => {
-            const { createdAt } = item;
-            const payDate = new Date(createdAt);
-            payDate.setDate(payDate.getDate() + 3);
-            return payDate >= currentDate;
-        }) || [];
+        const {createdAt} = item;
+        const payDate = new Date(createdAt);
+        payDate.setDate(payDate.getDate() + 3);
+        return payDate >= currentDate;
+    }) || [];
 
     const {data: awardProductList = []} = useFetchAwardProducts(awardData);
     const sizeIds = filteredAwardList.map((item) => item.auction?.sizeId);
@@ -74,7 +80,7 @@ export default function CartDropdownDohee() {
     const totalBid = filteredAwardList.reduce((acc, item) => acc + item.currentBid, 0);
 
     const renderProduct = (
-        item: AwardModel & { product: ProductModel | null; matchedSize: string | null } | null,
+        item: AwardModel & { product: SizeModel | null; matchedSize: string | null } | null,
         index: number,
         close: () => void
     ) => {
@@ -82,8 +88,9 @@ export default function CartDropdownDohee() {
             console.log("Product is null or item is null!!!");
             return null;
         }
-        const { auction, product, currentBid, createdAt } = item;
-        const { id, name, subName, size, sizeProduct } = product;
+        const {auction, product, currentBid, createdAt} = item;
+        const {id, size, sizeProduct} = product;
+        const {name} = sizeProduct;
 
         const payDate = new Date(createdAt);
         payDate.setDate(payDate.getDate() + 3);
@@ -94,7 +101,7 @@ export default function CartDropdownDohee() {
         return (
             <div key={index} className="flex py-5 last:pb-0">
                 <div className="relative h-24 w-20 flex-shrink-0 overflow-hidden rounded-xl bg-slate-100">
-                    <ImageFetcher id={id} altText={name}/>
+                    <ImageFetcher id={String(id)} altText={name}/>
                     <Link onClick={close} className="absolute inset-0" href={`/auction/${auction.id}`}/>
                 </div>
 
@@ -118,7 +125,7 @@ export default function CartDropdownDohee() {
                     <div className="flex flex-1 items-end justify-between text-sm">
                         <p className="text-gray-500 dark:text-slate-400">결제 기간: {formattedDate}까지</p>
                         <div className="flex">
-                            <button
+                            <Link
                                 type="button"
                                 className={`flex items-center justify-center px-4 py-2 rounded-md border border-blue-600 text-blue-600 font-semibold transition duration-200 shadow-sm hover:bg-blue-100 hover:text-blue-800 hover:shadow-lg active:bg-blue-200`}
                                 href={`/checkout?awardId=${item?.auction.id}&productId=${id}`}
@@ -126,7 +133,7 @@ export default function CartDropdownDohee() {
                             >
                                 <span className="mr-1 text-lg">🛒</span>
                                 결제
-                            </button>
+                            </Link>
 
 
                         </div>
@@ -209,10 +216,10 @@ export default function CartDropdownDohee() {
                                         <div className="divide-y divide-slate-100 dark:divide-slate-700">
                                             {loading ? (
                                                 <div className="flex justify-center items-center py-5">
-                                                    <Spinner />
+                                                    <Spinner/>
                                                 </div>
                                             ) : mapDataWithAwardModel(filteredAwardList, matchedAwardProductList!!)?.length > 0 ? (
-                                                mapDataWithAwardModel(filteredAwardList, matchedAwardProductList!!).map((item, index) => renderProduct(item, index, close))
+                                                mapDataWithAwardModel(filteredAwardList, matchedAwardProductList!!).map((item, index) => renderProduct(item as any as AwardModel & {product: SizeModel | null, matchedSize: string | null}, index, close))
                                             ) : (
                                                 <p className="text-center mt-8 mb-2 text-lg">결제 대기 중인 상품이 없습니다.</p>
                                             )}
@@ -222,7 +229,8 @@ export default function CartDropdownDohee() {
                                         <p className="flex justify-between font-semibold text-slate-900 dark:text-slate-100">
                                           <span>
                                             <span>Subtotal</span>
-                                            <span className="block text-sm text-slate-500 dark:text-slate-400 font-normal">
+                                            <span
+                                                className="block text-sm text-slate-500 dark:text-slate-400 font-normal">
                                               Shipping and taxes calculated at checkout.
                                             </span>
                                           </span>
