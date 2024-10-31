@@ -9,7 +9,7 @@ export const TermsModalContent = () => {
             <h3 className="text-xl font-semibold mt-4 mb-2">제 1 조 (목적)</h3>
             <p className="mb-4 text-gray-700">
                 이 약관은 &quot;회원&quot; 개인 상호 간 또는 &quot;제휴 사업자&quot;, &quot;입점 사업자&quot;와 &quot;회원&quot; 개인 간에 상품 등을 매매하는 것을 중개하고,
-                &quot;상품&quot; 등에 관한 정보를 상호 교환할 수 있도록 크림 주식회사(이하 &quot;회사&quot;라 합니다)가 운영, 제공하는 KREAM 서비스(이하 &quot;서비스&quot;)에 대한 것으로
+                &quot;상품&quot; 등에 관한 정보를 상호 교환할 수 있도록 비데이 주식회사(이하 &quot;회사&quot;라 합니다)가 운영, 제공하는 BiDay 서비스(이하 &quot;서비스&quot;)에 대한 것으로
                 본 약관에서는 &quot;서비스&quot;의 이용과 관련하여 &quot;회사&quot;와 &quot;회원&quot;과의 권리, 의무 및 책임사항, 기타 필요한 사항을 규정합니다.
             </p>
 
@@ -19,7 +19,7 @@ export const TermsModalContent = () => {
                 개인정보취급방침, 상관례 등에 의합니다.
             </p>
             <ul className="list-disc ml-6 mb-4 text-gray-700">
-                <li>&quot;서비스&quot;: 회사가 PC 및/또는 모바일 환경에서 제공하는 KREAM 서비스 및 관련 제반 서비스를 말합니다.</li>
+                <li>&quot;서비스&quot;: 회사가 PC 및/또는 모바일 환경에서 제공하는 BiDay 서비스 및 관련 제반 서비스를 말합니다.</li>
                 <li>&quot;회원&quot;: 회사의 서비스에 접속하여 이 약관에 따라 회사와 이용계약을 체결하고 회사가 제공하는 서비스를 이용하는 고객을 말합니다.</li>
                 <li>&quot;구매자&quot;: 상품을 구매하거나 또는 구매할 의사로 서비스를 이용하는 회원을 말합니다.</li>
                 <li>&quot;판매자&quot;: 서비스에 상품을 등록하여 판매하거나 또는 제공할 의사로 서비스를 이용하는 회원을 말합니다.</li>
@@ -35,7 +35,7 @@ export const TermsModalContent = () => {
                 <li>&quot;포인트&quot;: 서비스의 효율적 이용을 위해 회사가 임의로 책정 또는 지급, 조정할 수 있는 서비스 상의 가상 데이터를 의미합니다.</li>
                 <li>&quot;할인쿠폰&quot;: 상품 등을 구매할 때나 서비스를 이용할 때 표시된 금액 또는 비율만큼 할인 받을 수 있는 쿠폰을 말합니다.</li>
                 <li>&quot;상품&quot;: 본 약관에 따라 회원 간 거래 대상으로서 서비스에 등록된 재화 또는 용역을 말합니다.</li>
-                <li>&quot;제휴 사업자&quot;: KREAM EXCLUSIVE DROPS 및 B2C 상품 페이지에서 제공하는 통신판매중개를 이용하여 회원과 제휴 사업자 판매 상품을
+                <li>&quot;제휴 사업자&quot;: BiDay EXCLUSIVE DROPS 및 B2C 상품 페이지에서 제공하는 통신판매중개를 이용하여 회원과 제휴 사업자 판매 상품을
                     거래하고자 회사와 별도의 계약을 체결한 사업자를 말합니다.
                 </li>
                 <li>&quot;입점 사업자&quot;: 서비스에서 제공하는 통신판매중개를 이용하여 회원에게 입점 사업자 판매 상품을 판매하고자 회사와 별도 계약을 체결한 사업자를
@@ -44,7 +44,7 @@ export const TermsModalContent = () => {
                 <li>&quot;매입 사업자&quot;: 매입 사업자 전용 서비스 페이지에서 제공하는 통신판매중개를 이용하여 회원으로부터 매입 요청 상품을 구매하고자 회사와 별도의 계약을
                     체결한 사업자를 말합니다.
                 </li>
-                <li>&quot;제휴 사업자 판매 상품&quot;: 상품과는 달리 제휴 사업자가 회사와 체결한 별도의 계약에 따라 KREAM EXCLUSIVE DROPS 및 B2C 상품
+                <li>&quot;제휴 사업자 판매 상품&quot;: 상품과는 달리 제휴 사업자가 회사와 체결한 별도의 계약에 따라 BiDay EXCLUSIVE DROPS 및 B2C 상품
                     페이지에서 회원에게 판매하는 재화 또는 용역을 말합니다.
                 </li>
                 <li>&quot;입점 사업자 판매 상품&quot;: 상품과는 달리 입점 사업자가 회사와 체결한 별도 계약에 따라 서비스에서 회원에게 판매하는 재화 또는 용역을 말합니다.
@@ -87,9 +87,9 @@ export const TermsModalContent = () => {
                 className="font-semibold">&quot;개별 약관 등&quot;</span>이 우선하여 적용됩니다.
             </p>
             <p className="mb-4 text-gray-700">
-                이 약관에 명시되지 않은 사항은 '약관의 규제에 관한 법률'(이하 <span className="font-semibold">&quot;약관법&quot;</span>),
-                ‘전자상거래 등에서의 소비자보호에 관한 법률’(이하 <span className="font-semibold">&quot;전자상거래법&quot;</span>),
-                ‘정보통신망이용촉진및정보보호등에관한법률’(이하 <span className="font-semibold">&quot;정보통신망법&quot;</span>), 공정거래위원회가 정하는
+                이 약관에 명시되지 않은 사항은 &apos;약관의 규제에 관한 법률&apos;(이하 <span className="font-semibold">&quot;약관법&quot;</span>),
+                &apos;전자상거래 등에서의 소비자보호에 관한 법률’(이하 <span className="font-semibold">&quot;전자상거래법&quot;</span>),
+                &apos;정보통신망이용촉진및정보보호등에관한법률’(이하 <span className="font-semibold">&quot;정보통신망법&quot;</span>), 공정거래위원회가 정하는
                 전자상거래 등에서의 소비자보호지침(이하 <span className="font-semibold">&quot;소비자보호지침&quot;</span>) 및 관계 법령 또는 상관례에
                 따릅니다.
             </p>
@@ -109,7 +109,7 @@ export const TermsModalContent = () => {
                         <li>타인의 명의를 도용하여 이용신청을 하는 경우</li>
                         <li>허위의 정보를 기재하거나, 회사가 제시하는 내용을 기재하지 않은 경우</li>
                         <li>14세 미만 아동이 회원가입 시 법정대리인(부모 등)의 동의를 얻지 아니한 경우</li>
-                        <li>사업자(이하 ‘사업자’에는 개인사업자 포함)가 이용신청을 하는 경우 (단, <span
+                        <li>사업자(이하 &apos;사업자’에는 개인사업자 포함)가 이용신청을 하는 경우 (단, <span
                             className="font-semibold">&quot;회사&quot;</span>와 별도 계약을 체결한 <span
                             className="font-semibold">&quot;제휴 사업자&quot;</span>, <span
                             className="font-semibold">&quot;입점 사업자&quot;</span> 또는 <span
@@ -178,7 +178,7 @@ export const TermsModalContent = () => {
                 <li>
                     &quot;회사&quot;는 전항에도 불구하고, &quot;회원&quot;의 의무 위반 행위나 &quot;서비스&quot; 운영 방해 행위에 대하여 사안의 중대성이나 긴급성 등을 토대로 &quot;서비스&quot;에 미치는
                     영향을 고려하여 경고 등의 단계적인 조치를 거치지 않고 곧바로 일시 정지나 영구이용정지, 이용계약 해지(재가입 제한 조치 포함)를 할 수 있습니다.
-                    특히, ‘주민등록법'을 위반한 명의도용 및 결제도용, '저작권법'을 위반한 불법프로그램의 제공 및 운영방해, &quot;정보통신망법&quot;을 위반한 불법통신 및
+                    특히, &apos;주민등록법&apos;을 위반한 명의도용 및 결제도용, &apos;저작권법&apos;을 위반한 불법프로그램의 제공 및 운영방해, &quot;정보통신망법&quot;을 위반한 불법통신 및
                     해킹, 악성프로그램의 배포, 접속권한 초과행위 등과 같이 관련법을 위반하여 서비스에 중대한 영향을 끼친 경우에는 즉시 영구이용정지를 할 수 있으며,
                     영구이용정지를 할 수 있는 위반행위는 이에 제한되지 않습니다. 본 항에 따른 영구이용정지 시 &quot;서비스&quot; 이용을 통해 획득한 &quot;포인트&quot;, &quot;할인쿠폰&quot; 및
                     기타 혜택 등도 모두 소멸되며, &quot;회사&quot;는 이에 대해 별도로 보상하지 않습니다.
@@ -256,7 +256,7 @@ export const TermsModalContent = () => {
                 </li>
             </ol>
 
-            <h2 className="text-xl font-bold mb-2">제 10 조 ("서비스"의 내용)</h2>
+            <h2 className="text-xl font-bold mb-2">제 10 조 (&apos;서비스&apos;의 내용)</h2>
             <ol className="list-decimal list-inside space-y-4 text-gray-700">
                 <li>
                     <strong>&quot;상품&quot; 및 &quot;입점 사업자 판매 상품&quot;의 중개 서비스</strong>
@@ -272,9 +272,9 @@ export const TermsModalContent = () => {
                         및 중개서비스를 신속하고 편리하게 이용하도록 하기 위하여 제공하는 서비스를 말합니다.</p>
                 </li>
                 <li>
-                    <strong>&quot;KREAM EXCLUSIVE DROPS&quot; 및 &quot;B2C 상품 페이지&quot;</strong>
+                    <strong>&quot;BiDay EXCLUSIVE DROPS&quot; 및 &quot;B2C 상품 페이지&quot;</strong>
                     <p>&quot;회사&quot;가 &quot;제휴 사업자&quot;와 체결한 별도의 계약에 따라 제공하는 통신판매중개 서비스 및 관련 부가서비스 일체를 말합니다. &quot;제휴 사업자&quot;는 별도로
-                        마련된 &quot;KREAM EXCLUSIVE DROPS&quot; 및 &quot;B2C 상품 페이지&quot; 이외에 개인 상호간 &quot;상품&quot; 거래 중개 서비스 등 다른 서비스를
+                        마련된 &quot;BiDay EXCLUSIVE DROPS&quot; 및 &quot;B2C 상품 페이지&quot; 이외에 개인 상호간 &quot;상품&quot; 거래 중개 서비스 등 다른 서비스를
                         이용하지 않습니다.</p>
                 </li>
                 <li>
@@ -442,12 +442,12 @@ export const TermsModalContent = () => {
                 </li>
             </ol>
 
-            <h3 className="text-xl font-semibold mt-6 mb-2">제 17 조 ("대리행위의 부인")</h3>
+            <h3 className="text-xl font-semibold mt-6 mb-2">제 17 조 (&apos;대리행위의 부인&apos;)</h3>
             <ol className="list-decimal list-inside space-y-4 text-gray-700">
                 <li>
-                    "회사"는 "상품" 거래의 당사자가 아닌 중개자로서 "회원" 상호 간의 거래에 대해서 효율적인 서비스를 위한 시스템 운영 및 관리 책임만을 부담하며,
-                    "상품"의 거래와 관련하여 "구매자" 또는 "판매자"를 대리하지 아니합니다. "회원" 사이에 성립된 거래 및 "회원"이 제공하고 등록한 정보에 대해서는
-                    해당 "회원"이 그에 대한 모든 책임을 부담하여야 합니다.
+                    &apos;회사&apos;는 &apos;상품&apos; 거래의 당사자가 아닌 중개자로서 &apos;회원&apos; 상호 간의 거래에 대해서 효율적인 서비스를 위한 시스템 운영 및 관리 책임만을 부담하며,
+                    &apos;상품&apos;의 거래와 관련하여 &apos;구매자&apos; 또는 &apos;판매자&apos;를 대리하지 아니합니다. &apos;회원&apos; 사이에 성립된 거래 및 &apos;회원&apos;이 제공하고 등록한 정보에 대해서는
+                    해당 &apos;회원&apos;이 그에 대한 모든 책임을 부담하여야 합니다.
                 </li>
                 <li>
                     &quot;회사&quot;는 &quot;제휴 사업자 판매 상품&quot; 거래의 당사자가 아닌 중개자로서 &quot;회원&quot;과 &quot;제휴 사업자&quot; 간의 거래에 대해서 효율적인 서비스를 위한 시스템 운영
@@ -559,7 +559,7 @@ export const TermsModalContent = () => {
                             아니함에도 마치 &quot;회사&quot;와 관계가 있는 것과 같이 오인하게 하여 &quot;서비스&quot;와의 혼동을 주거나 이에 편승하고자 하는 행위
                         </li>
                         <li>&quot;제휴 사업자&quot;, &quot;입점 사업자&quot; 또는 &quot;매입 사업자&quot;가 아닌 사업자의 &quot;서비스&quot; 이용 또는 거래 시도</li>
-                        <li>&quot;제휴 사업자&quot;의 &quot;KREAM EXCLUSIVE DROPS&quot; 및 &quot;B2C 상품 페이지&quot; 이외의 &quot;서비스&quot; 이용 또는 거래 시도</li>
+                        <li>&quot;제휴 사업자&quot;의 &quot;BiDay EXCLUSIVE DROPS&quot; 및 &quot;B2C 상품 페이지&quot; 이외의 &quot;서비스&quot; 이용 또는 거래 시도</li>
                         <li>&quot;입점 사업자&quot;의 &quot;입점 사업자&quot; 계정 외 타 개인 &quot;회원&quot; 계정을 통한 &quot;서비스&quot; 이용 또는 거래 시도</li>
                         <li>&quot;제휴 사업자&quot;, &quot;입점 사업자&quot; 또는 &quot;매입 사업자&quot;가 해당 사업자에게 허용되지 않은 경로로 &quot;서비스&quot;를 이용한 경우</li>
                         <li>&quot;제휴 사업자&quot;, &quot;입점 사업자&quot; 또는 &quot;매입 사업자&quot;가 사업자 아닌 개인임을 가장하여 &quot;서비스&quot;를 이용한 경우</li>
@@ -601,7 +601,7 @@ export const TermsModalContent = () => {
                     목록에 대해서 공지사항으로 고지하거나 등록 가능 상품 지정(또는 제한) 등의 방법으로 &quot;회원&quot;이 알 수 있도록 합니다.
                 </li>
                 <li>
-                    &quot;서비스&quot;에서는 &quot;회사&quot;가 등록 대상으로 삼은 &quot;상품&quot;만이 거래의 대상이 될 수 있습니다. &quot;회원&quot;은 거래적합대상 품목에 속하지 않은 상품(이하 ‘거래
+                    &quot;서비스&quot;에서는 &quot;회사&quot;가 등록 대상으로 삼은 &quot;상품&quot;만이 거래의 대상이 될 수 있습니다. &quot;회원&quot;은 거래적합대상 품목에 속하지 않은 상품(이하 &apos;거래
                     부적합 상품’)에 대해서는 &quot;서비스&quot;를 통해 거래를 하여서는 안되며, &quot;회사&quot;는 거래 부적합 상품에 대한 등록 및 거래를 제한할 수 있습니다.
                 </li>
                 <li>
@@ -665,15 +665,15 @@ export const TermsModalContent = () => {
                 </li>
             </ol>
 
-            <h2 className="text-xl font-semibold mt-6 mb-2">제 24 조 ("서비스수수료")</h2>
+            <h2 className="text-xl font-semibold mt-6 mb-2">제 24 조 (&apos;서비스수수료&apos;)</h2>
             <ol className="list-decimal list-inside space-y-4 text-gray-700">
                 <li>
-                    "회사"가 부과하는 "서비스수수료"는 "상품"의 중개 및 검수 등 제반 "서비스"를 이용함에 따라 부과되는 이용료로서 거래 완료 시, 대금 결제/지급
-                    시 또는 부가서비스 제공 시 등에 부과될 수 있습니다. "회사"는 서비스 제공 비용, 시장상황, 취급품목, 거래방식등을 고려하여 "회원"에게 제공하는
-                    "서비스"에 대한 서비스수수료를 정합니다.
+                    &apos;회사&apos;가 부과하는 &apos;서비스수수료&apos;는 &apos;상품&apos;의 중개 및 검수 등 제반 &apos;서비스&apos;를 이용함에 따라 부과되는 이용료로서 거래 완료 시, 대금 결제/지급
+                    시 또는 부가서비스 제공 시 등에 부과될 수 있습니다. &apos;회사&apos;는 서비스 제공 비용, 시장상황, 취급품목, 거래방식등을 고려하여 &apos;회원&apos;에게 제공하는
+                    &apos;서비스&apos;에 대한 서비스수수료를 정합니다.
                 </li>
                 <li>
-                    "회사"는 각 "서비스" 및 서비스이용료의 구체적인 내용(서비스의 내용, 이용 방법, 실시 기간, 수수료율 등)을 KREAM 사이트의 공지사항 또는
+                    &apos;회사&apos;는 각 &apos;서비스&apos; 및 서비스이용료의 구체적인 내용(서비스의 내용, 이용 방법, 실시 기간, 수수료율 등)을 BiDay 사이트의 공지사항 또는
                     판매자/구매자 화면에 별도로 게시합니다.
                     <div className="mt-2">
                         <a href="#" className="text-blue-500 underline">관련정책: 판매자수수료 링크</a>,
@@ -715,10 +715,10 @@ export const TermsModalContent = () => {
                     등록한 카드에서 자동 결제됩니다.
                     <ol className="list-decimal list-inside space-y-2 mt-2">
                         <li>
-                            &quot;회원&quot;은 &quot;판매자&quot;로서 &quot;상품&quot; 등록 시 동의한 ‘페널티 부과 규정’에 따라 페널티 수수료 발생 시 카드에서 자동 결제됩니다.
+                            &quot;회원&quot;은 &quot;판매자&quot;로서 &quot;상품&quot; 등록 시 동의한 &apos;페널티 부과 규정’에 따라 페널티 수수료 발생 시 카드에서 자동 결제됩니다.
                         </li>
                         <li>
-                            &quot;회원&quot;은 &quot;구매자&quot;로서 상품 구매 시 동의한 ‘페널티 부과 규정’에 따라 페널티 수수료 발생 시 카드에서 자동 결제됩니다.
+                            &quot;회원&quot;은 &quot;구매자&quot;로서 상품 구매 시 동의한 &apos;페널티 부과 규정’에 따라 페널티 수수료 발생 시 카드에서 자동 결제됩니다.
                         </li>
                         <li>
                             &quot;회사&quot;가 설정한 특정 시기에 누적된 거래 건수에 따라 설정된 페널티 수수료 발생 시에는 지급의무가 발생하지 않으며, &quot;회원&quot;이 원할
@@ -735,7 +735,7 @@ export const TermsModalContent = () => {
                     &quot;구매자&quot;의 구매 조건에 응하여 &quot;판매자&quot;가 판매 의사를 표시함으로써 체결됩니다.
                 </li>
                 <li className="mb-2">
-                    &quot;제휴 사업자 판매 상품&quot;의 매매계약은 &quot;회원&quot;이 &quot;제휴 사업자&quot;가 &quot;KREAM EXCLUSIVE DROPS&quot; 및 &quot;B2C 상품 페이지&quot;를
+                    &quot;제휴 사업자 판매 상품&quot;의 매매계약은 &quot;회원&quot;이 &quot;제휴 사업자&quot;가 &quot;BiDay EXCLUSIVE DROPS&quot; 및 &quot;B2C 상품 페이지&quot;를
                     통하여 제시한 &quot;제휴 사업자 판매 상품&quot;의 판매 조건에 응하여 구매 신청의 의사표시를 하고 이에 대하여 &quot;제휴 사업자&quot;로부터 위탁 받은
                     &quot;회사&quot;가 제23조 제3항의 수신확인통지형태로 승낙함으로써 체결됩니다.
                 </li>
@@ -1043,7 +1043,7 @@ export const TermsModalContent = () => {
                     청약철회에 따른 환불, 교환이 적용되지 않기 때문에 &quot;거래체결&quot; 이후에는 다른 일반 전자 상거래와 달리 단순 변심에 따른 계약 철회, 취소 등이
                     불가능하고, 검수기준을 충족하지 못하는 &quot;이상 상품&quot;인 경우만 계약 취소 및 환불 청구가 가능합니다. 구매자는 구매 시에 이 점에 대해 반드시 유의하여
                     진행해 주시기 바랍니다.</p>
-                <p className="mb-2">2. &quot;서비스&quot; 중 (1) &quot;KREAM EXCLUSIVE DROPS&quot; 및 &quot;B2C 상품 페이지&quot;에서 &quot;회원&quot;과 &quot;제휴
+                <p className="mb-2">2. &quot;서비스&quot; 중 (1) &quot;BiDay EXCLUSIVE DROPS&quot; 및 &quot;B2C 상품 페이지&quot;에서 &quot;회원&quot;과 &quot;제휴
                     사업자&quot; 간 이뤄진 &quot;제휴 사업자 판매 상품&quot;의 매매 및 (2) &quot;회원&quot;과 &quot;입점 사업자&quot; 간 이뤄진 &quot;입점 사업자 판매 상품&quot;의 매매에 한하여서는
                     원칙적으로 전자상거래법 제17조에서 정한 청약철회권이 인정될 수 있으며, 구체적인 내용은 개별 &quot;제휴 사업자 판매 상품&quot; 판매 페이지에 고지한 내용과
                     전자상거래법 관련 규정에 따릅니다.</p>
@@ -1448,14 +1448,14 @@ export const TermsModalContent = () => {
                 </li>
                 <li>
                     &quot;회사&quot;는 &quot;회원&quot;과 &quot;제휴 사업자&quot; 간의 &quot;제휴 사업자 판매 상품&quot; 매매에 대하여 &quot;회원&quot;과 &quot;제휴 사업자&quot;들에게 온라인 거래 장소를 제공하고 기타
-                    부가 서비스를 제공하는 것을 &quot;서비스&quot; 중 &quot;KREAM EXCLUSIVE DROPS&quot; 및 &quot;B2C 상품 페이지&quot;의 내용으로 합니다. 이에 &quot;회사&quot;는
+                    부가 서비스를 제공하는 것을 &quot;서비스&quot; 중 &quot;BiDay EXCLUSIVE DROPS&quot; 및 &quot;B2C 상품 페이지&quot;의 내용으로 합니다. 이에 &quot;회사&quot;는
                     원칙적으로 &quot;제휴 사업자&quot;가 등록한 &quot;제휴 사업자 판매 상품&quot;에 관한 정보, &quot;회원&quot;과의 거래 및 관련 분쟁에 대하여 개입하지 않으며 이에 대한 모든
                     책임은 &quot;제휴 사업자 판매 상품&quot; 매매의 당사자인 &quot;제휴 사업자&quot; 또는 해당 &quot;제휴 사업자 판매 상품&quot;을 구매한 &quot;회원&quot;이 부담합니다. 다만, &quot;제휴
                     사업자&quot;와 &quot;회원&quot; 간 거래에 있어 &quot;제휴 사업자&quot;의 과실 없이 &quot;회사&quot;의 귀책사유로 인하여 &quot;제휴 사업자 판매 상품&quot;을 구매한 &quot;회원&quot;에게 손해가
                     발생한 경우에는 그러하지 아니합니다.
                 </li>
                 <li>
-                    본 약관 조항 중 검수, 배송에 관한 사항 등 오직 &quot;회원&quot; 간 거래만을 전제로 하는 경우 &quot;제휴 사업자&quot;, &quot;제휴 사업자 판매 상품&quot;, &quot;KREAM
+                    본 약관 조항 중 검수, 배송에 관한 사항 등 오직 &quot;회원&quot; 간 거래만을 전제로 하는 경우 &quot;제휴 사업자&quot;, &quot;제휴 사업자 판매 상품&quot;, &quot;BiDay
                     EXCLUSIVE DROPS&quot; 및 &quot;B2C 상품 페이지&quot;와 관련하여서는 원칙적으로 적용되지 않으며, 본 약관의 내용과 &quot;제휴 사업자 판매 상품&quot; 관련
                     페이지에 고지된 내용이 다를 경우 &quot;제휴 사업자 판매 상품&quot; 관련 페이지에 고지된 내용이 우선 적용됩니다.
                 </li>
