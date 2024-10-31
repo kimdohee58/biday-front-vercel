@@ -72,7 +72,15 @@ export default function AvatarDropdown() {
                                                         <>
                                                             <h4 className="font-semibold mr-2">{user.name}</h4>
                                                             <p className="text-sm text-gray-500">
-                                                                {Array.isArray(user.role) && user.role.length > 0 ? user.role[0] : "비회원"}
+                                                                {Array.isArray(user.role) && user.role.length > 0
+                                                                    ? user.role[0] === 'ROLE_USER'
+                                                                        ? '회원'
+                                                                        : user.role[0] === 'ROLE_SELLER'
+                                                                            ? '판매자'
+                                                                            : user.role[0] === 'ROLE_ADMIN'
+                                                                                ? '관리자'
+                                                                                : '비회원'
+                                                                    : '비회원'}
                                                             </p>
                                                         </>
                                                     ) : (

@@ -157,10 +157,10 @@ export default function AccountPage() {
                             <div className="flex-1">
                                 <Label>이름</Label>
                                 <div className="mt-1.5 flex">
-            <span
-                className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
-                <i className="text-2xl las la-user"></i> {/* 이름 아이콘 */}
-            </span>
+                                    <span
+                                        className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
+                                        <i className="text-2xl las la-user"></i> {/* 이름 아이콘 */}
+                                    </span>
                                     <Input className="!rounded-l-none" defaultValue={user.name}
                                            disabled={true}/>
                                 </div>
@@ -168,13 +168,25 @@ export default function AccountPage() {
                             <div className="flex-1"> {/* 등급 입력 필드 */}
                                 <Label>등급</Label>
                                 <div className="mt-1.5 flex">
-            <span
-                className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
-                <i className="text-2xl las la-star"></i>
-            </span>
-                                    {/* TODO 등급 나오게 처리 */}
-                                    <Input className="!rounded-l-none" defaultValue={user.role}
-                                           disabled={true}/>
+                                    <span
+                                        className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
+                                        <i className="text-2xl las la-star"></i>
+                                    </span>
+                                    <Input
+                                        className="!rounded-l-none"
+                                        defaultValue={
+                                            Array.isArray(user.role) && user.role.length > 0
+                                                ? user.role[0] === 'ROLE_USER'
+                                                    ? '회원'
+                                                    : user.role[0] === 'ROLE_SELLER'
+                                                        ? '판매자'
+                                                        : user.role[0] === 'ROLE_ADMIN'
+                                                            ? '관리자'
+                                                            : '비회원'
+                                                : '비회원'
+                                        }
+                                        disabled={true}
+                                    />
                                 </div>
                             </div>
                         </div>
