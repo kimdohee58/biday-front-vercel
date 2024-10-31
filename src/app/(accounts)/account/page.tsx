@@ -153,8 +153,8 @@ export default function AccountPage() {
                 <h2 className="text-2xl sm:text-3xl font-semibold">회원정보</h2>
                 <div className="flex flex-col md:flex-row">
                     <div className="flex-grow mt-10 md:mt-0 md:pl-16 max-w-3xl space-y-6">
-                        <div className="flex gap-4"> {/* Flexbox 사용하여 수평 배치 */}
-                            <div className="flex-1"> {/* 이름 입력 필드 */}
+                        <div className="flex gap-4">
+                            <div className="flex-1">
                                 <Label>이름</Label>
                                 <div className="mt-1.5 flex">
             <span
@@ -170,7 +170,7 @@ export default function AccountPage() {
                                 <div className="mt-1.5 flex">
             <span
                 className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
-                <i className="text-2xl las la-star"></i> {/* 등급 아이콘 */}
+                <i className="text-2xl las la-star"></i>
             </span>
                                     {/* TODO 등급 나오게 처리 */}
                                     <Input className="!rounded-l-none" defaultValue={user.role}

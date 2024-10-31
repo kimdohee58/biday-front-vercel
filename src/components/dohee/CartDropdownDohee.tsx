@@ -14,12 +14,10 @@ import React, {useEffect, useState} from "react";
 import {Spinner} from "@chakra-ui/react";
 import {AwardModel} from "@/model/auction/award.model";
 import {findByUserAward} from "@/service/auction/award.service";
-import {extractSizeIds} from "@/utils/extract";
 import {useFetchAwardProducts} from "@/components/AccountuseQuery/useQuery";
 import {ProductModel} from "@/model/product/product.model";
 import {mapDataWithAwardModel} from "@/utils/mapDataWithProducts";
 import {useRouter} from "next/navigation";
-import Image from "next/image";
 import ImageFetcher from "../ImageFetcher";
 
 export default function CartDropdownDohee() {
@@ -76,7 +74,7 @@ export default function CartDropdownDohee() {
     const totalBid = filteredAwardList.reduce((acc, item) => acc + item.currentBid, 0);
 
     const renderProduct = (
-        item: AwardModel & { product: ProductModel | null; matchedSize: string | null } | null, // item이 null일 수 있도록 수정
+        item: AwardModel & { product: ProductModel | null; matchedSize: string | null } | null,
         index: number,
         close: () => void
     ) => {
@@ -84,30 +82,21 @@ export default function CartDropdownDohee() {
             console.log("Product is null or item is null!!!");
             return null;
         }
-        // `product` 객체가 존재할 경우에만 아래 코드를 실행
-        const { product, matchedSize, currentBid, createdAt } = item;
-        const { id, name } = product;
+        const { auction, product, currentBid, createdAt } = item;
+        const { id, name, subName, size, sizeProduct } = product;
+        console.log("product name", subName)
 
-        // bidedAt을 Date 객체로 변환하고 3일 더하기
         const payDate = new Date(createdAt);
         payDate.setDate(payDate.getDate() + 3);
 
-        // 결제 가능 기간을 원하는 형식으로 포맷하기
         const options: Intl.DateTimeFormatOptions = {year: 'numeric', month: '2-digit', day: '2-digit'};
-        const formattedDate = payDate.toLocaleDateString('ko-KR', options); // 한국어 형식으로 변환
-
-        const handleCheckoutClick = () => {
-            router.push(`/checkout?awardId=${item?.auction.id}&productId=${id}`);
-        };
-        const handleImgClick = (auctionId: string) => {
-            router.push(`/auction/${item?.auction.id}`);
-        };
+        const formattedDate = payDate.toLocaleDateString('ko-KR', options);
 
         return (
             <div key={index} className="flex py-5 last:pb-0">
                 <div className="relative h-24 w-20 flex-shrink-0 overflow-hidden rounded-xl bg-slate-100">
                     <ImageFetcher id={id} altText={name}/>
-                    <Link onClick={close} className="absolute inset-0" href={`/product/${id}`}/>
+                    <Link onClick={close} className="absolute inset-0" href={`/auction/${auction.id}`}/>
                 </div>
 
                 <div className="ml-4 flex flex-1 flex-col">
@@ -116,11 +105,11 @@ export default function CartDropdownDohee() {
                             <div>
                                 <h3 className="text-base font-medium ">
                                     <Link onClick={close} href={`/product/${product.id}`}>
-                                        {product.name || "이름이 없습니다."}
+                                        {sizeProduct?.name || "이름이 없습니다."}
                                     </Link>
                                 </h3>
                                 <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                                    <span>{matchedSize || "사이즈 정보 없음"}</span>
+                                    <span>{size || "사이즈 정보 없음"}</span>
                                 </p>
                             </div>
                             <Prices price={currentBid} className="mt-0.5"/>
@@ -132,12 +121,14 @@ export default function CartDropdownDohee() {
                         <div className="flex">
                             <button
                                 type="button"
-                                className={`font-medium flex items-center px-4 py-2 rounded-md border transition duration-200 border-blue-600 bg-white text-blue-600 shadow-sm hover:bg-blue-50 hover:shadow-md active:bg-blue-100`}
-                                onClick={handleCheckoutClick}
+                                className={`flex items-center justify-center px-4 py-2 rounded-md border border-blue-600 text-blue-600 font-semibold transition duration-200 shadow-sm hover:bg-blue-100 hover:text-blue-800 hover:shadow-lg active:bg-blue-200`}
+                                href={`/checkout?awardId=${item?.auction.id}&productId=${id}`}
+                                onClick={close}
                             >
-                                <span className="mr-2">🛒</span>
+                                <span className="mr-1 text-lg">🛒</span>
                                 결제
                             </button>
+
 
                         </div>
                     </div>
@@ -226,10 +217,6 @@ export default function CartDropdownDohee() {
                                             ) : (
                                                 <p className="text-center mt-8 mb-2 text-lg">결제 대기 중인 상품이 없습니다.</p>
                                             )}
-                                            {/*/!*{renderAwardHistory(mapDataWithAwardModel({content: awardData}, awardProductList!!))}*!/*/}
-                                            {/*{mapDataWithAwardModel({content: awardData}, filteredAwardProductList!!).map(*/}
-                                            {/*    (item, index) => renderProduct(item, index, close)*/}
-                                            {/*)}*/}
                                         </div>
                                     </div>
                                     <div className="bg-neutral-50 dark:bg-slate-900 p-5">
