@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@amcharts/amcharts5": "^5.10.5",
@@ -58,6 +59,7 @@
     "next-auth": "^4.24.8",
     "next-redux-wrapper": "^8.1.0",
     "packages": "^0.0.8",
+    "patch-package": "^8.0.0",
     "prisma": "^5.20.0",
     "rc-slider": "^10.6.2",
     "react": "18.3.1",
