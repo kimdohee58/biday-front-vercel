@@ -23,7 +23,7 @@ import {
     mapDataWithPaymentModel
 } from "@/utils/mapDataWithProducts";
 import {PaymentRequestModel} from "@/model/order/payment.model";
-import {AuctionModel} from "@/model/auction/auction.model";
+import {AuctionDTO, AuctionModel} from "@/model/auction/auction.model";
 import {AwardModel} from "@/model/auction/award.model";
 
 const AccountOrder = () => {
@@ -44,11 +44,11 @@ const AccountOrder = () => {
     const { data: awardProductList } = useFetchAwardProducts(awardData);
     const { data: paymentProductList } = useFetchPaymentProducts(paymentData);
 
-    const hasContent = (data: any): data is { content: AuctionModel[] } => {
+    const hasContent = (data: any): data is { content: AuctionDTO[] } => {
         return data && Array.isArray(data.content);
     };
 
-    const auctionContent = hasContent(auctionData) ? auctionData.content : auctionData as AuctionModel[];
+    const auctionContent = hasContent(auctionData) ? auctionData.content : auctionData as AuctionDTO[];
 
     const hasAwardContent = (data: any): data is { content: AwardModel[] } => {
         return data && Array.isArray(data.content) && data.content.length > 0 && 'userId' in data.content[0];

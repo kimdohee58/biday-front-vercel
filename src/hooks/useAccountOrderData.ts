@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {AwardModel} from "@/model/auction/award.model";
-import { AuctionModel } from "@/model/auction/auction.model";
+import {AuctionDTO, AuctionModel} from "@/model/auction/auction.model";
 import {fetchAuction, findByUserAuction} from "@/service/auction/auction.service";
 import {fetchSizeIdsFromAwards, findByUserAward} from "@/service/auction/award.service";
 import {fetchAllPaymentByUserId} from "@/service/order/payment.service";
@@ -11,7 +11,7 @@ import {PaymentRequestModel} from "@/model/order/payment.model";
 
 
 export const useFetchData = (activeTab: string) => {
-    const [auctionData, setAuctionData] = useState<AuctionModel[]>([]);
+    const [auctionData, setAuctionData] = useState<AuctionDTO[]>([]);
     const [bidData, setBidData] = useState<BidLoadModel[]>([]);
     const [awardData, setAwardData] = useState<AwardModel[]>([]);
     const [paymentData, setPaymentData] = useState<PaymentRequestModel[]>([]);

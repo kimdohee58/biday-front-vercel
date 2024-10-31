@@ -1,4 +1,4 @@
-import { AuctionModel } from "@/model/auction/auction.model";
+import {AuctionDTO, AuctionModel} from "@/model/auction/auction.model";
 import { AwardModel } from "@/model/auction/award.model";
 import { PaymentRequestModel} from "@/model/order/payment.model";
 import {ProductDTO, ProductModel} from "@/model/product/product.model";
@@ -8,20 +8,20 @@ import {BidLoadModel} from "@/model/auction/bid.model";
 import {SizeModel} from "@/model/product/size.model"; // ProductModel 경로는 가정입니다.
 
 interface DataModel {
-    content?: AuctionModel[] | AwardModel[] ;
+    content?: AuctionDTO[] | AwardModel[] ;
 }
 
 export const mapDataWithAuctionModel = (
-    auctionData: AuctionModel[] | undefined, // undefined도 허용
+    auctionData: AuctionDTO[] | undefined, // undefined도 허용
     productList: ProductModel[]
-): (AuctionModel & { product: ProductModel | null })[] => {
+) => {
     const dataArray = Array.isArray(auctionData) ? auctionData : [];
 
     if (dataArray.length === 0 || !productList || productList.length === 0) {
         return [];
     }
 
-    return dataArray.map((item: AuctionModel) => {
+    return dataArray.map((item: AuctionDTO) => {
         const matchedProduct = productList.find(
             (product: ProductModel) => product.id === (item as any).sizeId || (item as any).size
         );
