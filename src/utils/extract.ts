@@ -6,6 +6,13 @@ export const extractSizeIds = (data: any) => {
     return [];
 };
 
+export const extractSizeId = (data: any) => {
+    if (data && Array.isArray(data)) {
+        return data.map((item: any) => item.auction?.sizeId || item.sizeId);
+    }
+    return [];
+};
+
 export const extractAwardIdsFromPaymentData = (paymentData: any[]) => {
     return paymentData.map((payment) => payment.awardId);
 };

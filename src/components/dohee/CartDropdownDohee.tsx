@@ -19,17 +19,22 @@ import {useFetchAwardProducts} from "@/components/AccountuseQuery/useQuery";
 import {ProductModel} from "@/model/product/product.model";
 import {mapDataWithAwardModel} from "@/utils/mapDataWithProducts";
 import {useRouter} from "next/navigation";
+import Image from "next/image";
+import ImageFetcher from "../ImageFetcher";
 
 export default function CartDropdownDohee() {
     const router = useRouter();
     const [awardData, setAwardData] = useState<AwardModel[]>([]);
+    const [awardContent, setAwardContent] = useState<AwardModel[]>([]);
     const [loading, setLoading] = useState(true);
 
     const fetchAwardData = async () => {
         setLoading(true);
         try {
-            const data = await findByUserAward();
-            setAwardData(Array.isArray(data) ? data : []);
+            const data: AwardModel[] = await findByUserAward();
+            setAwardData(data)
+            const award: AwardModel[] = data?.content || []
+            setAwardContent(award)
         } catch (error) {
             console.error("낙찰 데이터를 가져오는 중 오류가 발생했습니다.", error);
         } finally {
@@ -52,69 +57,57 @@ export default function CartDropdownDohee() {
         fetchData();
     }, []);
 
-    console.log("awardData", awardData)
-
     const currentDate = new Date();
-    const filteredAwardList = awardData.filter((item) => {
+    const filteredAwardList = awardContent.filter((item) => {
             const { createdAt } = item;
             const payDate = new Date(createdAt);
             payDate.setDate(payDate.getDate() + 3);
             return payDate >= currentDate;
         }) || [];
-    console.log("filteredAwardList", filteredAwardList)
 
-    const {data: awardProductList} = useFetchAwardProducts(awardData);
-    console.log("awardProductList", awardProductList)
+    const {data: awardProductList = []} = useFetchAwardProducts(awardData);
+    const sizeIds = filteredAwardList.map((item) => item.auction?.sizeId);
+    const matchedAwardProductList = awardProductList.filter((size) =>
+        sizeIds.includes(size.id)
+    );
 
-// awardProductList에서 결제 가능 기간이 유효한 상품만 필터링
-//     const currentDate = new Date();
-    const filteredAwardProductList = (awardProductList || []).filter((item) => {
-        const { bidedAt } = item;
+    console.log("matchedAwardProductList", matchedAwardProductList);
 
-        // bidedAt을 Date 객체로 변환하고 3일 더하기
-        const bidedDate = new Date(bidedAt);
-        bidedDate.setDate(bidedDate.getDate() + 3);
-
-        // 결제 가능 기간이 현재 날짜 이후인지 확인
-        return bidedDate >= currentDate;
-    });
-
-// 필터링된 리스트 로그 출력
-    console.log("Filtered awardProductList", filteredAwardProductList);
-    const totalBid = filteredAwardProductList.reduce((acc, item) => acc + item.currentBid, 0);
+    const totalBid = filteredAwardList.reduce((acc, item) => acc + item.currentBid, 0);
 
     const renderProduct = (
         item: AwardModel & { product: ProductModel | null; matchedSize: string | null } | null, // item이 null일 수 있도록 수정
         index: number,
         close: () => void
     ) => {
-        const {product, matchedSize, currentBid, bidedAt} = item; // currentBid 추가
-
-        if (!product) {
-            console.log("Product is null!!!");
+        if (!item || !item.product) {
+            console.log("Product is null or item is null!!!");
             return null;
-        } else {
-            console.log("Product:", product);
         }
-
-        const {name, price} = product;
+        // `product` 객체가 존재할 경우에만 아래 코드를 실행
+        const { product, matchedSize, currentBid, createdAt } = item;
+        const { id, name } = product;
 
         // bidedAt을 Date 객체로 변환하고 3일 더하기
-        const bidedDate = new Date(bidedAt);
-        bidedDate.setDate(bidedDate.getDate() + 3);
+        const payDate = new Date(createdAt);
+        payDate.setDate(payDate.getDate() + 3);
 
         // 결제 가능 기간을 원하는 형식으로 포맷하기
         const options: Intl.DateTimeFormatOptions = {year: 'numeric', month: '2-digit', day: '2-digit'};
-        const formattedDate = bidedDate.toLocaleDateString('ko-KR', options); // 한국어 형식으로 변환
+        const formattedDate = payDate.toLocaleDateString('ko-KR', options); // 한국어 형식으로 변환
 
         const handleCheckoutClick = () => {
-            router.push(`/checkout?awardId=${item?.auction.id}&productId=${product.id}`);
+            router.push(`/checkout?awardId=${item?.auction.id}&productId=${id}`);
+        };
+        const handleImgClick = (auctionId: string) => {
+            router.push(`/auction/${item?.auction.id}`);
         };
 
         return (
             <div key={index} className="flex py-5 last:pb-0">
                 <div className="relative h-24 w-20 flex-shrink-0 overflow-hidden rounded-xl bg-slate-100">
-                    <Link onClick={close} className="absolute inset-0" href={"/product-detail"}/>
+                    <ImageFetcher id={id} altText={name}/>
+                    <Link onClick={close} className="absolute inset-0" href={`/product/${id}`}/>
                 </div>
 
                 <div className="ml-4 flex flex-1 flex-col">
@@ -123,11 +116,11 @@ export default function CartDropdownDohee() {
                             <div>
                                 <h3 className="text-base font-medium ">
                                     <Link onClick={close} href={`/product/${product.id}`}>
-                                        {product.name}
+                                        {product.name || "이름이 없습니다."}
                                     </Link>
                                 </h3>
                                 <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                                    <span>{item.matchedSize || "사이즈"}</span>
+                                    <span>{matchedSize || "사이즈 정보 없음"}</span>
                                 </p>
                             </div>
                             <Prices price={currentBid} className="mt-0.5"/>
@@ -135,18 +128,17 @@ export default function CartDropdownDohee() {
                     </div>
 
                     <div className="flex flex-1 items-end justify-between text-sm">
-                        <p className="text-gray-500 dark:text-slate-400">결제 가능 기간: {formattedDate}까지</p>
+                        <p className="text-gray-500 dark:text-slate-400">결제 기간: {formattedDate}까지</p>
                         <div className="flex">
-                            <button type="button" className="font-medium text-primary-6000 dark:text-primary-500 ">
-                                Remove
-                            </button>
                             <button
                                 type="button"
-                                className="font-medium text-primary-6000 dark:text-primary-500"
-                                onClick={handleCheckoutClick} // handleCheckoutClick 함수 연결
+                                className={`font-medium flex items-center px-4 py-2 rounded-md border transition duration-200 border-blue-600 bg-white text-blue-600 shadow-sm hover:bg-blue-50 hover:shadow-md active:bg-blue-100`}
+                                onClick={handleCheckoutClick}
                             >
-                                결제하러 가기
+                                <span className="mr-2">🛒</span>
+                                결제
                             </button>
+
                         </div>
                     </div>
                 </div>
@@ -165,7 +157,7 @@ export default function CartDropdownDohee() {
                     >
                         <div
                             className="w-3.5 h-3.5 flex items-center justify-center bg-primary-500 absolute top-1.5 right-1.5 rounded-full text-[10px] leading-none text-white font-medium">
-                            <span className="mt-[1px]">{filteredAwardProductList.length}</span>
+                            <span className="mt-[1px]">{filteredAwardList.length}</span>
                         </div>
                         <svg
                             className="w-6 h-6"
@@ -229,8 +221,8 @@ export default function CartDropdownDohee() {
                                                 <div className="flex justify-center items-center py-5">
                                                     <Spinner />
                                                 </div>
-                                            ) : filteredAwardProductList?.length > 0 ? (
-                                                filteredAwardProductList.map((item, index) => renderProduct(item, index, close))
+                                            ) : mapDataWithAwardModel(filteredAwardList, matchedAwardProductList!!)?.length > 0 ? (
+                                                mapDataWithAwardModel(filteredAwardList, matchedAwardProductList!!).map((item, index) => renderProduct(item, index, close))
                                             ) : (
                                                 <p className="text-center mt-8 mb-2 text-lg">결제 대기 중인 상품이 없습니다.</p>
                                             )}

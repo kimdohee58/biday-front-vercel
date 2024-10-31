@@ -172,8 +172,8 @@ export default function AccountPage() {
                 className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
                 <i className="text-2xl las la-star"></i> {/* 등급 아이콘 */}
             </span>
-                                    // TODO user role 고치기
-                                    <Input className="!rounded-l-none" defaultValue={user.role.toString()}
+                                    {/* TODO 등급 나오게 처리 */}
+                                    <Input className="!rounded-l-none" defaultValue={user.role}
                                            disabled={true}/>
                                 </div>
                             </div>
