@@ -84,7 +84,6 @@ export default function CartDropdownDohee() {
         }
         const { auction, product, currentBid, createdAt } = item;
         const { id, name, subName, size, sizeProduct } = product;
-        console.log("product name", subName)
 
         const payDate = new Date(createdAt);
         payDate.setDate(payDate.getDate() + 3);
@@ -221,28 +220,28 @@ export default function CartDropdownDohee() {
                                     </div>
                                     <div className="bg-neutral-50 dark:bg-slate-900 p-5">
                                         <p className="flex justify-between font-semibold text-slate-900 dark:text-slate-100">
-                      <span>
-                        <span>Subtotal</span>
-                        <span className="block text-sm text-slate-500 dark:text-slate-400 font-normal">
-                          Shipping and taxes calculated at checkout.
-                        </span>
-                      </span>
+                                          <span>
+                                            <span>Subtotal</span>
+                                            <span className="block text-sm text-slate-500 dark:text-slate-400 font-normal">
+                                              Shipping and taxes calculated at checkout.
+                                            </span>
+                                          </span>
                                             <span className="">₩{totalBid.toLocaleString()}</span>
                                         </p>
                                         <div className="flex space-x-2 mt-5">
                                             <ButtonSecondary
-                                                href="/cart"
+                                                href="/account-savelists"
                                                 className="flex-1 border border-slate-200 dark:border-slate-700"
                                                 onClick={close}
                                             >
-                                                View cart
+                                                찜 목록
                                             </ButtonSecondary>
                                             <ButtonPrimary
-                                                href="/checkout"
+                                                href="/account-order"
                                                 onClick={close}
                                                 className="flex-1"
                                             >
-                                                Check out
+                                                결제 목록
                                             </ButtonPrimary>
                                         </div>
                                     </div>

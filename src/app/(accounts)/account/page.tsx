@@ -220,22 +220,6 @@ export default function AccountPage() {
                         <div>
                             {/* 주소와 우편번호를 수평으로 나란히 배치 */}
                             <div className="flex gap-4">
-                                <div className="flex-1" style={{flex: "1 1 0%"}}>
-                                    <Label>우편번호</Label>
-                                    <div className="mt-1.5 flex">
-                                        <span
-                                            className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
-                                            <i className="text-2xl las la-map-marker-alt"></i> {/* 아이콘 변경 가능 */}
-                                        </span>
-                                        <Input
-                                            className="!rounded-l-none"
-                                            value={zipcode}
-                                            placeholder="우편번호"
-                                            readOnly
-                                        />
-                                    </div>
-                                </div>
-
                                 <div className="flex-1" style={{flex: "3 1 0%"}}>
                                     <Label>주소</Label>
                                     <div className="mt-1.5 flex">
@@ -249,6 +233,22 @@ export default function AccountPage() {
                                             placeholder="주소를 선택하세요"
                                             readOnly
                                             onClick={() => setShowDropdown(prev => !prev)} // 드롭다운 토글
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="flex-1" style={{flex: "1 1 0%"}}>
+                                    <Label>우편번호</Label>
+                                    <div className="mt-1.5 flex">
+                                        <span
+                                            className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
+                                            <i className="text-2xl las la-map-marker-alt"></i> {/* 아이콘 변경 가능 */}
+                                        </span>
+                                        <Input
+                                            className="!rounded-l-none"
+                                            value={zipcode}
+                                            placeholder="우편번호"
+                                            readOnly
                                         />
                                     </div>
                                 </div>
@@ -271,7 +271,7 @@ export default function AccountPage() {
                                             }}
                                         >
                                             <div>
-                                                {/* streetAddress와 detailAddress를 합쳐서 표시하고, type을 매핑하여 표시 */}
+                                            {/* streetAddress와 detailAddress를 합쳐서 표시하고, type을 매핑하여 표시 */}
                                                 {`${address.streetAddress} ${address.detailAddress} (${mapAddressType(address.type)})`}
                                                 <span
                                                     className="ml-2 text-gray-500">({address.zipcode})</span> {/* 우편번호 표시 */}
