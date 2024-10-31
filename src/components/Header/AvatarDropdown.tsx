@@ -1,3 +1,4 @@
+// Header/AvatarDropdown.tsx
 "use client";
 
 import {
@@ -17,8 +18,6 @@ export default function AvatarDropdown() {
     const dispatch = useDispatch();
     const { handleLogout } = useLogout(); // useLogout 훅 사용
     const user = useSelector((state: RootState) => state.user.user);
-
-
 
     return (
         <div className="AvatarDropdown">
@@ -69,9 +68,29 @@ export default function AvatarDropdown() {
                                     >
                                         <div className="flex items-center space-x-3">
                                             <div className="flex-grow">
-                                                <h4 className="font-semibold">
-                                                    {user?.name || "Guest"}
-                                                </h4>
+                                                <div className="flex items-center">
+                                                    {user?.name ? (
+                                                        <>
+                                                            <h4 className="font-semibold mr-2">{user.name}</h4>
+                                                            <p className="text-sm text-gray-500">
+                                                                {Array.isArray(user.role) && user.role.length > 0
+                                                                    ? user.role[0] === 'ROLE_USER'
+                                                                        ? '회원'
+                                                                        : user.role[0] === 'ROLE_SELLER'
+                                                                            ? '판매자'
+                                                                            : user.role[0] === 'ROLE_ADMIN'
+                                                                                ? '관리자'
+                                                                                : '비회원'
+                                                                    : '비회원'}
+                                                            </p>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <h4 className="font-semibold mr-2">Guest</h4>
+                                                            <p className="text-sm text-gray-500">비회원</p>
+                                                        </>
+                                                    )}
+                                                </div>
                                                 <p className="text-xs mt-0.5">
                                                     {user?.email || "No email"}
                                                 </p>
