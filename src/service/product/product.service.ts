@@ -7,8 +7,6 @@ import {
     ProductWithImageModel,
     SearchFilter
 } from "@/model/product/product.model";
-import {AuctionModel} from "@/model/auction/auction.model";
-import {fetchAuctionsBySize} from "@/service/auction/auction.service";
 import {setLoading} from "@/lib/features/products.slice";
 import {fetchAllProductImage, fetchImageOne} from "@/service/ftp/image.service";
 import {defaultImage, ImageType} from "@/model/ftp/image.model";
@@ -23,7 +21,6 @@ export async function fetchAllProductCards(): Promise<ProductCardModel[]> {
         if (!products) {
             console.error("products 값이 undefined");
             throw new Error("");
-            // TODO error enum
         }
 
         return await Promise.all(products.map(async (product) => {

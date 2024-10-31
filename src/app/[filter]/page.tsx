@@ -13,6 +13,7 @@ import {getCategoryProducts, getProductCards, isProductsInRedux, updateIsLiked} 
 import {useWishlist} from "@/hooks/react-query/useWishlist";
 import {setProductCards} from "@/lib/features/productCard.slice";
 import {useProductCardList} from "@/hooks/react-query/useProductlist";
+import Heading from "@/shared/Heading/Heading";
 
 export default function PageCollection({params}: { params: { filter: string } }) {
     const dispatch = useDispatch();
@@ -135,9 +136,10 @@ export default function PageCollection({params}: { params: { filter: string } })
             <div className="container py-16 lg:pb-28 lg:pt-20 space-y-16 sm:space-y-20 lg:space-y-28">
                 <div className="space-y-10 lg:space-y-14">
                     <div className="max-w-screen-sm">
-                        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold">
-                            {params.filter ? params.filter.charAt(0).toUpperCase() + params.filter.slice(1) : ""}
-                        </h2>
+                        <Heading>{params.filter ? params.filter.charAt(0).toUpperCase() + params.filter.slice(1) : ""}</Heading>
+                        {/*<h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold">*/}
+                        {/*    {params.filter ? params.filter.charAt(0).toUpperCase() + params.filter.slice(1) : ""}*/}
+                        {/*</h2>*/}
                     </div>
                     <hr className="border-slate-200 dark:border-slate-700"/>
                     <main>
