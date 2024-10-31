@@ -35,7 +35,7 @@ export default function PageSignUp() {
     const [isCustomDomain, setIsCustomDomain] = useState<boolean>(false);
     const [isEmailChecked, setIsEmailChecked] = useState(false);
     const [isPhoneChecked, setIsPhoneChecked] = useState(false);
-    const [termsChecked, setTermsChecked] = useState([]);
+    const [termsChecked, setTermsChecked] = useState<string[]>([]);
 
     // 이메일 도메인 목록
     const emailDomains = [
@@ -133,7 +133,7 @@ export default function PageSignUp() {
         }
     };
 
-    const handleTermsChange = (checkedTerms) => {
+    const handleTermsChange = (checkedTerms:string[]) => {
         setTermsChecked(checkedTerms);
     };
 
