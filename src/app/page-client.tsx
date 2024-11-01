@@ -16,10 +16,11 @@ import {
 } from "@/lib/features/productCard.slice";
 import {useWishlist} from "@/hooks/react-query/useWishlist";
 import {ProductCardSkeleton} from "@/components/skeleton/ProductCardSkeleton";
+import {fetchAllProductsWithImages} from "@/service/product/product.service";
+import {useQuery} from "@tanstack/react-query";
 
 interface ClientComponentProps {
     authorizationToken: string;
-    products: ProductCardModel[];
 }
 
 function RandomProductsByCategory({category}: { category: string }) {
@@ -63,14 +64,15 @@ function RandomProductsByCategory({category}: { category: string }) {
     );
 }
 
-export default function PageClient({products}: ClientComponentProps) {
+export default function PageClient(props: ClientComponentProps) {
+    const {data: products, isLoading: isProductLoading, isSuccess} = useQuery<>({queryKey: ["allProductCards"], queryFn: () => fetchAllProductsWithImages});
     const dispatch = useDispatch();
     const productsInRedux = useSelector(isProductsInRedux);
     const categoryArray = ["outer", "top", "bottom"];
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        if (!productsInRedux && products.length > 0) {
+        if (!productsInRedux && isSuccess && products.length > 0) {
             dispatch(setProductCards(products));
             setIsLoading(false);
         } else {

@@ -9,15 +9,13 @@ export default async function PageHome({params}: {params:{filter:string}}) {
     const authorizationToken = cookieStore.get('token')?.value || '';
 
     const queryClient = new QueryClient();
-    await queryClient.prefetchQuery({queryKey: ["allProductCards"], queryFn: () => fetchAllProductsWithImages()});
+    await queryClient.prefetchQuery({queryKey: ["allProductCards"], queryFn: () => fetchAllProductsWithImages});
     const dehydratedState = dehydrate(queryClient);
 
     return (
         <div>
             <HydrationBoundary state={dehydratedState}>
-                <PageClient authorizationToken={authorizationToken}
-                            products={productWithImagesData}
-                />
+                <PageClient authorizationToken={authorizationToken}/>
                 <TokenManager/>
             </HydrationBoundary>
         </div>
