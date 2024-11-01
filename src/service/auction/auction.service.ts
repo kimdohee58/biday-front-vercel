@@ -211,7 +211,7 @@ export async function fetchAuctionDetails(auctionId: string): Promise<{auction: 
     }
 }
 
-// 판매 도중 멈추기
+// 판매 도중 경매 취소(판매자만 가능)
 export async function CancelAuction(auctionId: number): Promise<string> {
     try {
         const userToken = Cookies.get('userToken')
@@ -229,5 +229,27 @@ export async function CancelAuction(auctionId: number): Promise<string> {
     } catch (error) {
         console.error("CancelAuction 에러 발생", error)
         throw new Error("경매를 취소하는 중 에러가 발생했습니다.")
+    }
+}
+
+// 헤더에서 쓰일 경매 리스트 호출
+export async function headerAuctions(): Promise<AuctionDTO[]> {
+    try {
+        console.log("headerAuctions");
+        const options = {
+        };
+
+        console.log("options", options);
+
+        const result = await auctionAPI.findBySize(options);
+        console.log("result", result);
+        return result;
+
+    } catch (error) {
+        if (isApiError(error) && error.status === 404) {
+            console.log("404에러");
+            return [] as AuctionDTO[];
+        }
+        throw error;
     }
 }

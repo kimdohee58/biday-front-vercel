@@ -1,47 +1,46 @@
-import React from "react";
-import SectionHowItWork from "@/components/SectionHowItWork/SectionHowItWork";
-import BackgroundSection from "@/components/BackgroundSection/BackgroundSection";
-import SectionSliderLargeProduct from "@/components/SectionSliderLargeProduct";
-import SectionSliderProductCard from "@/components/SectionSliderProductCard";
-import SectionGridMoreExplore from "@/components/SectionGridMoreExplore/SectionGridMoreExplore";
-import { DEMO_MORE_EXPLORE_DATA_2 } from "@/components/SectionGridMoreExplore/data";
-import SectionPromo2 from "@/components/SectionPromo2";
-import SectionHero3 from "@/components/SectionHero/SectionHero3";
+// last-chance
+'use client'
+
+import React, {useEffect, useState} from "react";
 import SectionPromo1 from "@/components/SectionPromo1";
-import { SPORT_PRODUCTS } from "@/data/data";
-import SectionGridFeatureItems from "@/components/SectionGridFeatureItems";
-import { RootState } from "@/lib/store";
+import {fetchAuctionDetails, fetchAuctionWithImages, headerAuctions} from "@/service/auction/auction.service";
+import {AuctionDTO, AuctionWithImageModel} from "@/model/auction/auction.model";
+import {auctionAPI} from "@/api/auction/auction.api";
+import SectionGridFeatureItemsDohee from "@/components/dohee/SectionGridFeatureItemsDohee";
 
 export default function PageHome2() {
+// TODO 경매 임박 페이지
 
-  return (
-    <div className="nc-PageHome2 relative overflow-hidden">
-      {/*<div className="container px-4">*/}
-      {/*  <SectionHero3 />*/}
-      {/*</div>*/}
+    const [auctionData, setAuctionData] = useState<AuctionWithImageModel[]>([]);
 
-      <div className="container relative space-y-24 my-24 lg:space-y-32 lg:my-32">
-        {/*<SectionHowItWork />*/}
+    useEffect(() => {
+        const fetchAuctionsWithImages = async () => {
+            try {
+                // 경매 데이터를 불러오고 각 항목에 대해 fetchAuctionWithImages 호출
+                const auctionDTOs = await auctionAPI.findBySize({});
+                const auctionContents = auctionDTOs.content || [];
+                const auctionsWithImages = await Promise.all(
+                    auctionContents.map(async (auction: AuctionDTO) => {
+                        return await fetchAuctionDetails(String(auction.id));
+                    })
+                );
+                setAuctionData(auctionsWithImages);
+            } catch (error) {
+                console.error("fetchAuctionsWithImages 중 오류 발생", error);
+                setAuctionData([]);
+            }
+        };
 
-        {/*<SectionSliderProductCard*/}
-        {/*  data={SPORT_PRODUCTS.filter((_, i) => i < 8)}*/}
-        {/*  subHeading="New Sports equipment"*/}
-        {/*/>*/}
+        fetchAuctionsWithImages();
+    }, []);
 
-        {/*<SectionPromo2 />*/}
+    return (
+        <div className="nc-PageHome2 relative overflow-hidden">
+            <div className="container relative space-y-24 my-24 lg:space-y-32 lg:my-32">
+                <SectionGridFeatureItemsDohee data={auctionData}/>
 
-        {/*<div className="relative py-24 lg:py-32">*/}
-        {/*  <BackgroundSection />*/}
-        {/*  <SectionGridMoreExplore data={DEMO_MORE_EXPLORE_DATA_2} />*/}
-        {/*</div>*/}
-
-        {/* SECTION */}
-        <SectionGridFeatureItems data={SPORT_PRODUCTS} />
-
-        <SectionPromo1 />
-
-        <SectionSliderLargeProduct />
-      </div>
-    </div>
-  );
+                <SectionPromo1/>
+            </div>
+        </div>
+    );
 }

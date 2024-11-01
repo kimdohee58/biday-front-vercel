@@ -59,6 +59,7 @@ export default function AuctionDetailPage() {
 
     const {auction, images: auctionImages = []} = auctionData.data.auction || {auction: null, images: []};
     const {product, image: productImage, size} = auctionData.data.product;
+    const {id: userId, name: username} = auctionData.data.user;
 
     // 접속자 판매자 본인인지 여부
     const [isSeller, setIsSeller] = useState(false);
@@ -69,8 +70,8 @@ export default function AuctionDetailPage() {
 
         if (!userToken) return; // userToken이 없을 때 바로 종료
 
-        if (auction?.user) {
-            setIsSeller(auction.user === userToken.userId);
+        if (auctionData.data.user) {
+            setIsSeller(userId === userToken.userId);
         } else {
             setIsSeller(false);
         }
@@ -338,10 +339,29 @@ export default function AuctionDetailPage() {
         );
     };
 
+    const maskUsername = (username: string | undefined) => {
+        if (!username) {
+            return '';
+        }
+
+        if (username.length === 1) {
+            return username;
+        }
+        if (username.length === 2) {
+            return username.charAt(0) + '*';
+        }
+
+        const firstChar = username.charAt(0); // 첫 번째 문자
+        const lastChar = username.charAt(username.length - 1);
+        const maskedPart = '*'.repeat(username.length - 2);
+
+        return `${firstChar}${maskedPart}${lastChar}`;
+    };
+
     const section1Data = [
         {
             name: "판매자 정보",
-            content: auction?.user,
+            content: maskUsername(username),
         },
         {
             name: "경매 상품 설명",
