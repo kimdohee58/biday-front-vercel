@@ -75,15 +75,15 @@ export default function PageHome2() {
                             return endedAtDate === todayString || endedAtDate === tomorrowString;
                         }
                         return false;
-                    })
-                    .sort((a, b) => {
-                        if (!a.auction.status && b.auction.status) return -1;
-                        if (a.auction.status && !b.auction.status) return 1;
-
-                        const endedAtA = new Date(a.auction.endedAt).getTime();
-                        const endedAtB = new Date(b.auction.endedAt).getTime();
-                        return endedAtA - endedAtB;
                     });
+                    // .sort((a, b) => {
+                    //     if (!a.auction.status && b.auction.status) return -1;
+                    //     if (a.auction.status && !b.auction.status) return 1;
+                    //
+                    //     const endedAtA = new Date(a.auction.endedAt).getTime();
+                    //     const endedAtB = new Date(b.auction.endedAt).getTime();
+                    //     return endedAtA - endedAtB;
+                    // });
 
                 setAuctionData(filteredAndSortedData);
             } catch (error) {
@@ -98,7 +98,7 @@ export default function PageHome2() {
     return (
         <div className="nc-PageHome2 relative overflow-hidden">
             <div className="container relative space-y-24 my-24 lg:space-y-32 lg:my-32">
-                <SectionGridFeatureItemsDohee data={auctionData}/>
+                <SectionGridFeatureItemsDohee header={"Last Chance"} data={auctionData}/>
 
                 <SectionPromo1/>
             </div>

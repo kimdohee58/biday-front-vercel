@@ -11,17 +11,19 @@ import { Transition } from "@/app/headlessui";
 
 export interface HeaderFilterSectionProps {
     className?: string;
+    header?: string;
 }
 
 const HeaderFilterSectionDohee: FC<HeaderFilterSectionProps> = ({
                                                                className = "mb-12",
+    header = ""
                                                            }) => {
     const [isOpen, setIsOpen] = useState(true);
     const [tabActive, setTabActive] = useState("All items");
 
     return (
         <div className={`flex flex-col relative ${className}`}>
-            <Heading>{`Last Chance`}</Heading>
+            <Heading>{header}</Heading>
             <div className="flex flex-col lg:flex-row lg:items-center justify-between space-y-6 lg:space-y-0 lg:space-x-2 ">
                 <Nav
                     className="sm:space-x-2"

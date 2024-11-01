@@ -101,6 +101,14 @@ export const NAVIGATION_DEMO_2: NavItemType[] = [
   //   type: "megaMenu",
   //   children: MEGAMENU_TEMPLATES,
   // },
+
+  {
+    id: ncNanoId(),
+    href: "/search",
+    name: "탐색",
+    type: "dropdown",
+    children: OTHER_PAGE_CHILD,
+  },
   {
     id: ncNanoId(),
     href: "/about",
@@ -118,13 +126,6 @@ export const NAVIGATION_DEMO_2: NavItemType[] = [
         name: "회원가입",
       },
     ],
-  },
-  {
-    id: ncNanoId(),
-    href: "/search",
-    name: "탐색",
-    type: "dropdown",
-    children: OTHER_PAGE_CHILD,
   },
   {
     id: ncNanoId(),
