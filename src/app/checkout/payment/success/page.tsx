@@ -47,6 +47,7 @@ export default function SuccessPage() {
                 router.push("/checkout/payment/complete");
             } catch (error) {
                 console.error("결제 처리 중 오류 발생", error);
+                router.push("/checkout/payment/fail")
             }
         };
 

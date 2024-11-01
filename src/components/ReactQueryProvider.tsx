@@ -12,6 +12,8 @@ function Providers({ children }: React.PropsWithChildren) {
             defaultOptions: {
                 queries: {
                     refetchOnWindowFocus: false,
+                    refetchOnReconnect: false,
+                    retryOnMount: true,
                     retry: false,
                 }
             }

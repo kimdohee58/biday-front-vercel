@@ -2,8 +2,6 @@ import {useQuery, useSuspenseQuery} from "@tanstack/react-query";
 import {
     fetchAuctionBySizesWithUser,
     fetchAuctionDetails,
-    fetchAuctionsBySize,
-    fetchAuctionsBySizes,
     fetchAuctionWithImages
 } from "@/service/auction/auction.service";
 
