@@ -1,22 +1,25 @@
-// src/app/page.tsx (서버 컴포넌트)
-import PageClient from './page-client'; // 클라이언트 컴포넌트 import
+import PageClient from './page-client';
 import {cookies, headers} from 'next/headers';
 import TokenManager from "@/components/TestToken";
 import {fetchAllProductCards, fetchAllProductsWithImages} from "@/service/product/product.service";
+import {dehydrate, HydrationBoundary, QueryClient} from "@tanstack/react-query";
 
 export default async function PageHome({params}: {params:{filter:string}}) {
-    // 서버 사이드에서 Authorization 헤더 가져오기
     const cookieStore = cookies();
     const authorizationToken = cookieStore.get('token')?.value || '';
 
-    const productWithImagesData = await fetchAllProductCards();
+    const queryClient = new QueryClient();
+    await queryClient.prefetchQuery({queryKey: ["allProductCards"], queryFn: () => fetchAllProductsWithImages()});
+    const dehydratedState = dehydrate(queryClient);
 
     return (
         <div>
-            <PageClient authorizationToken={authorizationToken}
-                        products={productWithImagesData}
-            />
-            <TokenManager/>
+            <HydrationBoundary state={dehydratedState}>
+                <PageClient authorizationToken={authorizationToken}
+                            products={productWithImagesData}
+                />
+                <TokenManager/>
+            </HydrationBoundary>
         </div>
     );
 }
