@@ -3,6 +3,7 @@
   "version": "1.2.0",
   "private": true,
   "scripts": {
+    "prebuild": "ts-node scripts/modifyLibrary.ts",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -59,7 +60,6 @@
     "next-auth": "^4.24.8",
     "next-redux-wrapper": "^8.1.0",
     "packages": "^0.0.8",
-    "patch-package": "^8.0.0",
     "prisma": "^5.20.0",
     "rc-slider": "^10.6.2",
     "react": "18.3.1",
@@ -78,6 +78,7 @@
     "react-window": "^1.8.10",
     "redux-persist": "^6.0.0",
     "sass": "^1.77.2",
+    "sharp": "^0.33.5",
     "typescript": "5.4.5",
     "ui": "^0.2.4",
     "zod": "^3.23.8"

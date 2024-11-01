@@ -14,15 +14,6 @@ export const MEGAMENU_TEMPLATES: NavItemType[] = [
   {
     id: ncNanoId(),
     href: "/#",
-    name: "쇼핑 페이지",
-    children: [
-      { id: ncNanoId(), href: "/account-order", name: "주문 내역" },
-      { id: ncNanoId(), href: "/account-savelists", name: "위시리스트" },
-    ],
-  },
-  {
-    id: ncNanoId(),
-    href: "/#",
     name: "기타 페이지",
     children: [
       { id: ncNanoId(), href: "/checkout", name: "결제 페이지" },
@@ -48,12 +39,6 @@ const OTHER_PAGE_CHILD: NavItemType[] = [
     id: ncNanoId(),
     href: "/dohee/auction/last-chance",
     name: "마감 임박 경매",
-  }
-  ,
-  {
-    id: ncNanoId(),
-    href: "/cart",
-    name: "장바구니 페이지",
   },
   {
     id: ncNanoId(),
@@ -93,14 +78,6 @@ export const NAVIGATION_DEMO_2: NavItemType[] = [
     href: "/acc" as Route,
     name: "Acc",
   },
-
-  // {
-  //   id: ncNanoId(),
-  //   href: "/collection" as Route,
-  //   name: "템플릿",
-  //   type: "megaMenu",
-  //   children: MEGAMENU_TEMPLATES,
-  // },
 
   {
     id: ncNanoId(),

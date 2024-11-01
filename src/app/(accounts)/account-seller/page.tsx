@@ -2,23 +2,21 @@
 
 import React, {Suspense} from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
-import {Input, Select, Typography,} from "@material-tailwind/react";
+import {Input, Typography, InputProps } from "@material-tailwind/react";
 import {AccountModel} from "@/model/user/account.model";
 import {useSuspenseQuery} from "@tanstack/react-query";
 import useRandomId from "@/hooks/useRandomId";
-import {getAccount, saveAccount} from "@/service/user/account.service";
+import {getAccount} from "@/service/user/account.service";
 import {useSelector} from "react-redux";
 import {getUser} from "@/lib/features/user.slice";
-import {UserModel, UserRole} from "@/model/user/user.model";
+import {UserModel} from "@/model/user/user.model";
 import {getBankName, getRandomBankCode} from "@/utils/accountUtils";
-
 
 function AccountDetails({user, onClick}: { user: UserModel, onClick: () => void }) {
     const accountData = useSuspenseQuery({
         queryKey: ["account", user.id],
         queryFn: () => getAccount(),
     });
-
 
     return (
         <div>
@@ -31,11 +29,9 @@ function AccountDetails({user, onClick}: { user: UserModel, onClick: () => void 
                             </Typography>
                             <Input
                                 size="lg"
+                                labelProps={{className: "hidden"}}
                                 value={user.name}
-                                labelProps={{
-                                    className: "hidden",
-                                }}
-                                disabled
+                                disabled={true}
                                 className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
                             />
                         </div>

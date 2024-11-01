@@ -19,12 +19,11 @@ export default function PageCollection({params}: { params: { filter: string } })
     const dispatch = useDispatch();
 
     const productsInRedux = useSelector(isProductsInRedux);
-    console.log("productInRedux", productsInRedux);
 
     const categoryProducts = useSelector(getCategoryProducts(params.filter));
-    console.log("categoryProducts", categoryProducts);
 
     const allProducts = useProductCardList(productsInRedux);
+
     const [isLoading, setIsLoading] = useState(true);
 
     const itemsPerPage = 20;
@@ -41,7 +40,6 @@ export default function PageCollection({params}: { params: { filter: string } })
     const selectedProducts = filteredProducts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
     useEffect(() => {
-        console.log("첫번째 useEffect 진입")
         if (!productsInRedux && allProducts.data && allProducts.data.length > 0) {
             dispatch(setProductCards(allProducts.data));
             setIsLoading(false);
@@ -51,7 +49,6 @@ export default function PageCollection({params}: { params: { filter: string } })
     }, [productsInRedux, allProducts.data, dispatch]);
 
     useEffect(() => {
-        console.log("두번째 useEffect 진입");
         if (categoryProducts.length > 0) {
             setProducts(categoryProducts);
             setFilteredProducts(categoryProducts);

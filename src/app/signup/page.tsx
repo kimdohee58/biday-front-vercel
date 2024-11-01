@@ -35,7 +35,7 @@ export default function PageSignUp() {
     const [isCustomDomain, setIsCustomDomain] = useState<boolean>(false);
     const [isEmailChecked, setIsEmailChecked] = useState(false);
     const [isPhoneChecked, setIsPhoneChecked] = useState(false);
-    const [termsChecked, setTermsChecked] = useState([]);
+    const [termsChecked, setTermsChecked] = useState<string[]>([]);
 
     // 이메일 도메인 목록
     const emailDomains = [
@@ -69,9 +69,11 @@ export default function PageSignUp() {
         const {name, value} = e.target;
 
         let newValue = value;
+
         if (name === "phoneNum") {
-            // 자동으로 하이픈 추가
+
             const cleanedValue = value.replace(/\D/g, '');
+
             if (cleanedValue.length <= 3) {
                 newValue = cleanedValue;
             } else if (cleanedValue.length <= 7) {
@@ -83,7 +85,6 @@ export default function PageSignUp() {
 
         setFormData({...formData, [name]: newValue});
 
-        // 각 필드에 대한 유효성 검사 직접 구현
         switch (name) {
             case "name":
                 if (value.length > 6) {
@@ -133,24 +134,22 @@ export default function PageSignUp() {
         }
     };
 
-    // @ts-ignore
-    // TODO 타입 오류 고쳐주셔야 합니다
-    const handleTermsChange = (checkedTerms) => {
+    const handleTermsChange = (checkedTerms:string[]) => {
         setTermsChecked(checkedTerms);
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
         const fullEmail = isCustomDomain
             ? `${emailLocalPart}@${customEmailDomain}`
             : `${emailLocalPart}@${emailDomain}`;
 
-        // 전체 유효성 검사
         if (!formData.name || formData.name.length > 6) {
             alert("이름은 6글자 이하로 입력해주세요.");
             return;
         }
 
-        // 중복 확인 버튼 클릭을 하기
         if (!isEmailChecked) {
             alert("이메일 중복 확인을 해주세요.");
             return;
@@ -194,8 +193,6 @@ export default function PageSignUp() {
         const requiredTerms = ['age', 'terms', 'privacy'];
         handleTermsChange(requiredTerms);
 
-        // TODO 타입 오류 고쳐주셔야 합니다
-        // @ts-ignore
         const allRequiredChecked = requiredTerms.every((term) => termsChecked.includes(term));
         if (!allRequiredChecked) {
             alert('모든 필수 약관에 동의해야 합니다.');
@@ -281,7 +278,7 @@ export default function PageSignUp() {
                             className="absolute left-0 w-full top-1/2 transform -translate-y-1/2 border-2 border-neutral-100 dark:border-neutral-800"></div>
                     </div>
                     {/* 회원가입 폼 */}
-                    <form className="grid grid-cols-1 gap-6" onClick={handleSubmit}>
+                    <form className="grid grid-cols-1 gap-6" onSubmit={handleSubmit}>
                         {/* 이름 입력 필드 */}
                         <label className="block">
                             <span className="text-neutral-800 dark:text-neutral-200">이름</span>
@@ -293,8 +290,14 @@ export default function PageSignUp() {
                                 onChange={handleChange}
                                 className="mt-1"
                             />
-                            <span className="text-sm text-gray-500">이름은 6글자 이하로 입력해주세요.</span>
-                            {fieldErrors.name && <span className="text-sm text-red-500">{fieldErrors.name}</span>}
+                            {/* 기본 안내 메시지 */}
+                            {!fieldErrors.name && (
+                                <span className="text-sm text-gray-500">이름은 6글자 이하로 입력해주세요.</span>
+                            )}
+                            {/* 오류 메시지 */}
+                            {fieldErrors.name && (
+                                <span className="text-sm text-red-500">{fieldErrors.name}</span>
+                            )}
                         </label>
 
                         {/* 이메일 입력 필드 */}
@@ -367,9 +370,16 @@ export default function PageSignUp() {
                                 className="mt-1"
                                 placeholder="비밀번호 입력"
                             />
-                            <span className="text-sm text-gray-500">비밀번호는 최소 8글자 이상이어야 하며, 대문자와 특수문자를 포함해야 합니다.</span>
-                            {fieldErrors.password &&
-                                <span className="text-sm text-red-500">{fieldErrors.password}</span>}
+                            {/* 기본 안내 메시지 */}
+                            {!fieldErrors.password && (
+                                <span className="text-sm text-gray-500">
+            비밀번호는 최소 8글자 이상이어야 하며, 대문자와 특수문자를 포함해야 합니다.
+        </span>
+                            )}
+                            {/* 오류 메시지 */}
+                            {fieldErrors.password && (
+                                <span className="text-sm text-red-500">{fieldErrors.password}</span>
+                            )}
                         </label>
 
                         {/* 비밀번호 재확인 필드 */}
@@ -383,10 +393,11 @@ export default function PageSignUp() {
                                 className="mt-1"
                                 placeholder="비밀번호 재입력"
                             />
-                            {fieldErrors.confirmPassword &&
-                                <span className="text-sm text-red-500">{fieldErrors.confirmPassword}</span>}
+                            {/* 오류 메시지 */}
+                            {fieldErrors.confirmPassword && (
+                                <span className="text-sm text-red-500">{fieldErrors.confirmPassword}</span>
+                            )}
                         </label>
-
 
                         {/* 핸드폰 번호 입력 필드 */}
                         <label htmlFor="phoneNum">전화번호</label>

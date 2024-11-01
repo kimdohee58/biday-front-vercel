@@ -77,12 +77,7 @@ export async function fetchImage(type: ImageType, id?: string): Promise<ImageMod
             return [];
         }
 
-        const data: ImageModel[] = await response.json();
-
-        console.log("fetchImageFromClient 이미지 확인: ", data);
-
-
-        return data;
+        return await response.json();
 
     } catch (error) {
         console.error("이미지 로드 중 오류 발생", error);

@@ -28,6 +28,14 @@ export async function fetchAuction(auctionId: string):Promise<AuctionModel> {
 
         return await auctionAPI.findById(options);
     } catch (error) {
+        if (isApiError(error)) {
+            if (error.status === 404) {
+                return {} as AuctionModel;
+            } else {
+                handleApiError(error.status);
+                throw new Error();
+            }
+        }
         console.log(error);
         throw new Error();
     }
@@ -43,11 +51,7 @@ export async function fetchAuctionWithImages(auctionId: string): Promise<Auction
             throw new Error("");
         }
 
-        console.log("auction", auction);
-
         const images = await fetchImage(ImageType.AUCTION, auctionId) || [defaultImage, defaultImage, defaultImage];
-
-        console.log("images", images);
 
         return {
             auction,
