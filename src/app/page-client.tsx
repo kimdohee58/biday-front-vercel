@@ -16,10 +16,12 @@ import {
 } from "@/lib/features/productCard.slice";
 import {useWishlist} from "@/hooks/react-query/useWishlist";
 import {ProductCardSkeleton} from "@/components/skeleton/ProductCardSkeleton";
+import {fetchAllProductCards, fetchAllProductsWithImages} from "@/service/product/product.service";
+import {useQuery} from "@tanstack/react-query";
+import {useProductCardList} from "@/hooks/react-query/useProductlist";
 
 interface ClientComponentProps {
     authorizationToken: string;
-    products: ProductCardModel[];
 }
 
 function RandomProductsByCategory({category}: { category: string }) {
@@ -63,14 +65,16 @@ function RandomProductsByCategory({category}: { category: string }) {
     );
 }
 
-export default function PageClient({products}: ClientComponentProps) {
-    const dispatch = useDispatch();
+export default function PageClient(props: ClientComponentProps) {
     const productsInRedux = useSelector(isProductsInRedux);
+
+    const {data: products, isLoading: isProductLoading, isSuccess} = useProductCardList(productsInRedux);
+    const dispatch = useDispatch();
     const categoryArray = ["outer", "top", "bottom"];
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        if (!productsInRedux && products.length > 0) {
+        if (!productsInRedux && isSuccess && products.length > 0) {
             dispatch(setProductCards(products));
             setIsLoading(false);
         } else {
@@ -88,7 +92,7 @@ export default function PageClient({products}: ClientComponentProps) {
         }
     }, [wishList, isWishLoading, isError]);
 
-    if (isLoading) {
+    if (isLoading || isProductLoading) {
         return (
             <div className="container py-16 lg:pb-28 lg:pt-20 space-y-16 sm:space-y-20 lg:space-y-28">
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-x-8 gap-y-10 mt-8 lg:mt-10">

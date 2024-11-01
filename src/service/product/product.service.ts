@@ -12,6 +12,7 @@ import {fetchAllProductImage, fetchImageOne} from "@/service/ftp/image.service";
 import {defaultImage, ImageType} from "@/model/ftp/image.model";
 import {SizeModel} from "@/model/product/size.model";
 import {getColorsArray} from "@/utils/productUtils";
+import {ApiErrors, handleApiError, isApiError} from "@/utils/error/error";
 
 export async function fetchAllProductCards(): Promise<ProductCardModel[]> {
     try {
@@ -39,8 +40,14 @@ export async function fetchAllProductCards(): Promise<ProductCardModel[]> {
         }));
 
     } catch (error) {
-        console.error("fetchAllProductCards 중 오류 발생", error);
-        throw new Error("fetchAllProductsCards 중 오류 발생");
+        if (isApiError(error)) {
+            if (error.status === 404 || error.status === 504) {
+                return [];
+            } else {
+                handleApiError(error.status);
+            }
+        }
+        throw new Error("알 수 없는 에러");
     }
 
 }

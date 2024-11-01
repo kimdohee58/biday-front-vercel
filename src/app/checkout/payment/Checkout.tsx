@@ -91,7 +91,7 @@ export default function Checkout({value, product, orderId, customerKey, awardId}
 
                 {/* 결제하기 버튼 */}
                 <button
-                    className="button"
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                     disabled={!ready}
                     onClick={async () => {
                         try {
@@ -110,7 +110,7 @@ export default function Checkout({value, product, orderId, customerKey, awardId}
                         }
                     }}
                 >
-                    야이새끼야
+                    결제하기
                 </button>
             </div>
         </div>
