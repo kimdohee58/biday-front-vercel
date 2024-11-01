@@ -13,6 +13,7 @@ export interface ProductDTO {
     category: string;
     name: string;
     subName: string;
+    description: string;
     productCode: string;
     price: number;
     color: ColorType;

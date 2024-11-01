@@ -41,7 +41,7 @@ interface User {
 export interface AuctionWithProduct {
     auction: Auction;
     product: Product;
-    user: User; // 유저 객체
+    user: User;
 }
 
 // TODO 경매 임박 페이지
@@ -55,37 +55,29 @@ export default function PageHome2() {
                 const auctionDTOs = await auctionAPI.findBySize({});
                 const auctionContents = auctionDTOs.content || [];
 
-                const auctionsWithImages = await Promise.all(
-                    auctionContents.map(async (auction: AuctionDTO) => {
-                        return await fetchAuctionDetails(String(auction.id));
-                    })
-                );
-
                 const today = new Date();
                 const tomorrow = new Date(today);
                 tomorrow.setDate(today.getDate() + 1);
                 const todayString = today.toISOString().split("T")[0];
                 const tomorrowString = tomorrow.toISOString().split("T")[0];
 
-                const filteredAndSortedData = auctionsWithImages
-                    .filter(item => {
-                        if (item.auction.auction.endedAt) {
-                            const endedAtDate = new Date(item.auction.auction.endedAt).toISOString().split("T")[0];
-                            console.log(`auction ${item.auction.auction.id}, auction EndedAt ${endedAtDate}`);
-                            return endedAtDate === todayString || endedAtDate === tomorrowString;
-                        }
-                        return false;
-                    });
-                    // .sort((a, b) => {
-                    //     if (!a.auction.status && b.auction.status) return -1;
-                    //     if (a.auction.status && !b.auction.status) return 1;
-                    //
-                    //     const endedAtA = new Date(a.auction.endedAt).getTime();
-                    //     const endedAtB = new Date(b.auction.endedAt).getTime();
-                    //     return endedAtA - endedAtB;
-                    // });
+                // 종료 날짜 필터링
+                const filteredContents = auctionContents.filter((auction: AuctionDTO) => {
+                    if (auction.endedAt) {
+                        const endedAtDate = new Date(auction.endedAt).toISOString().split("T")[0];
+                        return endedAtDate === todayString || endedAtDate === tomorrowString;
+                    }
+                    return false;
+                });
 
-                setAuctionData(filteredAndSortedData);
+                // 필터링된 경매에 대해 fetchAuctionDetails 호출
+                const auctionsWithImages = await Promise.all(
+                    filteredContents.map(async (auction: AuctionDTO) => {
+                        return await fetchAuctionDetails(String(auction.id));
+                    })
+                );
+
+                setAuctionData(auctionsWithImages);
             } catch (error) {
                 console.error("fetchAuctionsWithImages 중 오류 발생", error);
                 setAuctionData([]);
@@ -98,7 +90,7 @@ export default function PageHome2() {
     return (
         <div className="nc-PageHome2 relative overflow-hidden">
             <div className="container relative space-y-24 my-24 lg:space-y-32 lg:my-32">
-                <SectionGridFeatureItemsDohee header={"Last Chance"} data={auctionData}/>
+                <SectionGridFeatureItemsDohee header={"마감 임박 경매"} data={auctionData}/>
 
                 <SectionPromo1/>
             </div>

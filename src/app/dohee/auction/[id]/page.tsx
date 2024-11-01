@@ -360,16 +360,14 @@ export default function AuctionDetailPage() {
 
     const section1Data = [
         {
-            name: "판매자 정보",
+            name: <strong>판매자 정보</strong>,
             content: maskUsername(username),
         },
         {
-            name: "경매 상품 설명",
+            name: <strong>경매 상품 설명</strong>,
             content: auction?.description,
-
         }
     ];
-
 
     const renderSection1 = () => {
         return (
@@ -412,12 +410,17 @@ export default function AuctionDetailPage() {
     };
 
     const renderSection2 = () => {
+        const convertNewlinesToBr = (text: string) => {
+            return text.replace(/\n/g, '<br />');
+        };
+
         return (
             <div className="listingSection__wrap !border-b-0 !pb-0">
                 <h2 className="text-2xl font-semibold">Product details</h2>
-                <div className="prose prose-sm sm:prose dark:prose-invert sm:max-w-4xl">
-                    {auction.description}
-                </div>
+                <div
+                    className="prose prose-sm sm:prose dark:prose-invert sm:max-w-4xl"
+                    dangerouslySetInnerHTML={{ __html: convertNewlinesToBr(product.description) }}
+                />
             </div>
         );
     };

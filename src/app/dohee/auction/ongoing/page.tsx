@@ -95,7 +95,7 @@ export default function PageHome2() {
     return (
         <div className="nc-PageHome2 relative overflow-hidden">
             <div className="container relative space-y-24 my-24 lg:space-y-32 lg:my-32">
-                <SectionGridFeatureItemsDohee header={"OnGoing"} data={auctionData}/>
+                <SectionGridFeatureItemsDohee header={"진행 중인 경매"} data={auctionData}/>
 
                 <SectionPromo1/>
             </div>

@@ -1,14 +1,16 @@
-import { HeartIcon } from "@heroicons/react/24/solid";
-import { FC } from "react";
+import {HeartIcon} from "@heroicons/react/24/solid";
+import React, { FC } from "react";
 import NcImage from "@/shared/NcImage/NcImage";
 import Link from "next/link";
 import { ImageModel } from "@/model/ftp/image.model";
 import Prices from "@/components/Prices";
+import {BoltIcon} from "@heroicons/react/16/solid";
+// import {BoltIcon} from "@heroicons/react/20/solid";
 
 export interface CollectionCard2Props {
     id?: number;
     className?: string;
-    imgs?: (string | ImageModel)[];
+    imgs?: ImageModel[];
     name?: string;
     price?: number;
     description?: string;
@@ -36,7 +38,7 @@ const CollectionCard2Dohee: FC<CollectionCard2Props> = ({
     };
 
     const formatUser = (userName: string) => {
-        if (userName.length <= 2) return "*"; // 2글자 이하일 경우 별표로 표시
+        if (userName.length <= 2) return "*";
         return `${userName[0]}*${userName[userName.length - 1]}`;
     };
 
@@ -44,41 +46,39 @@ const CollectionCard2Dohee: FC<CollectionCard2Props> = ({
         const endDate = new Date(date);
         const today = new Date();
 
-        // 오늘 날짜의 시간 부분을 0으로 설정하여 비교
-        today.setHours(0, 0, 0, 0);
-        endDate.setHours(0, 0, 0, 0);
+        const remainingTime = endDate.getTime() - today.getTime();
+        const isSoon = remainingTime > 0 && remainingTime <= 24 * 60 * 60 * 1000;
+        const isPast = endDate < today;
 
-        // 날짜 비교
-        const isToday = endDate.getTime() === today.getTime(); // 오늘인지 확인
-        const isPast = endDate < today; // 과거인지 확인
-
-        // 원래 날짜 객체와 상태 반환
-        return { originalDate: endDate, isToday, isPast, fullDate: date };
+        return { endDate, isSoon, isPast };
     };
 
-// formatDate 호출
-    const { originalDate, isToday, isPast, fullDate } = formatDate(endedAt);
+    const { endDate, isSoon, isPast } = formatDate(endedAt);
 
-// 포맷된 날짜 문자열 생성
-    const formattedDate = `${new Date(fullDate).getFullYear().toString().slice(-2)}/${
-        String(new Date(fullDate).getMonth() + 1).padStart(2, "0")
-    }/${String(new Date(fullDate).getDate()).padStart(2, "0")} ${String(new Date(fullDate).getHours()).padStart(
+    const formattedDate = `${endDate.getFullYear().toString().slice(-2)}/${
+        String(endDate.getMonth() + 1).padStart(2, "0")
+    }/${String(endDate.getDate()).padStart(2, "0")} ${String(endDate.getHours()).padStart(
         2,
         "0"
-    )}:${String(new Date(fullDate).getMinutes()).padStart(2, "0")}:${String(new Date(fullDate).getSeconds()).padStart(
+    )}:${String(endDate.getMinutes()).padStart(2, "0")}:${String(endDate.getSeconds()).padStart(
         2,
         "0"
     )}`;
 
     return (
-        <div className={`CollectionCard2 group ${className}`}>
+        <div className={`CollectionCard2 group relative ${className}`}>
+            {isSoon && (
+                <div className="absolute top-2 left-2 z-10">
+                    <BoltIcon className="w-16 h-16 text-red-500"/>
+                </div>
+                )}
             <div className={"flex"}>
                 <div className="flex-none w-3/4 pr-2 flex justify-center items-center">
-                    {/* Main Image */}
+                {/* Main Image */}
                     <NcImage
                         containerClassName="aspect-w-20 aspect-h-15 bg-neutral-100 rounded-2xl overflow-hidden"
                         className="bg-cover w-full h-full rounded-2xl"
-                        src={getImageSrc(imgs[0]) || "/images/products/detail1.jpg"} // Fallback to default image
+                        src={getImageSrc(imgs[0]) || "/images/products/detail1.jpg"}
                         alt="Main Image"
                         width={400}
                         height={250}
@@ -92,7 +92,7 @@ const CollectionCard2Dohee: FC<CollectionCard2Props> = ({
                             key={idx}
                             containerClassName="w-full h-24 sm:h-28"
                             className="object-cover w-full h-full rounded-2xl"
-                            src={getImageSrc(img) || "/images/products/detail1.jpg"} // Fallback if image is missing
+                            src={getImageSrc(img) || "/images/products/detail1.jpg"}
                             alt={`Image ${idx + 2}`}
                             width={150}
                             height={100}
@@ -114,7 +114,7 @@ const CollectionCard2Dohee: FC<CollectionCard2Props> = ({
                         <span className="h-5 mx-1 sm:mx-2 border-l border-slate-200 dark:border-slate-700"></span>
                         <span className="flex text-sm">
                             <span
-                                className={`overflow-hidden whitespace-nowrap ${isToday ? '' : isPast ? 'text-red-600 font-bold' : ''}`}>
+                                className={`overflow-hidden whitespace-nowrap ${isSoon ? 'text-red-600 font-bold' : isPast ? 'text-red-600 font-bold' : ''}`}>
                                 {`~ ${formattedDate} 까지` || "종료 날짜"}
                             </span>
                         </span>

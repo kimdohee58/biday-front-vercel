@@ -84,7 +84,7 @@ export default function AuctionDetailPage() {
     const isEnded = auction.status;
     console.log("isEnded", isEnded)
 
-    const { data: awardData } = useSuspenseQuery({
+    const {data: awardData} = useSuspenseQuery({
         queryKey: ["auctionId", auction?.id],
         queryFn: () => findByAuctionId(Number(auction?.id)),
     });
@@ -366,7 +366,6 @@ export default function AuctionDetailPage() {
         {
             name: "경매 상품 설명",
             content: auction?.description,
-
         }
     ];
 
@@ -415,8 +414,10 @@ export default function AuctionDetailPage() {
         return (
             <div className="listingSection__wrap !border-b-0 !pb-0">
                 <h2 className="text-2xl font-semibold">Product details</h2>
-                <div className="prose prose-sm sm:prose dark:prose-invert sm:max-w-4xl">
-                    {auction.description}
+                <div
+                    className="prose prose-sm sm:prose dark:prose-invert sm:max-w-4xl whitespace-pre-wrap"
+                >
+                    {product.description}
                 </div>
             </div>
         );

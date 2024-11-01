@@ -1,30 +1,50 @@
 "use client";
 
-import React, { FC, useState } from "react";
+import React, {FC, useState} from "react";
 import Heading from "@/shared/Heading/Heading";
 import Nav from "@/shared/Nav/Nav";
 import NavItem from "@/shared/NavItem/NavItem";
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import {ChevronDownIcon} from "@heroicons/react/24/outline";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import TabFilters from "@/components/TabFilters";
-import { Transition } from "@/app/headlessui";
+import {Transition} from "@/app/headlessui";
+import TabFiltersProduct from "@/components/dohee/TabFiltersProduct";
 
 export interface HeaderFilterSectionProps {
-    className?: string;
     header?: string;
+    onFilterChange?: (filter: string) => void;
 }
 
 const HeaderFilterSectionDohee: FC<HeaderFilterSectionProps> = ({
-                                                               className = "mb-12",
-    header = ""
-                                                           }) => {
+                                                                    header = "",
+                                                                    onFilterChange,
+                                                                }) => {
     const [isOpen, setIsOpen] = useState(true);
     const [tabActive, setTabActive] = useState("All items");
 
+    const [selectedPrices, setSelectedPrices] = useState<number[]>([100000, 500000]);
+    const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+    const [selectedColors, setSelectedColors] = useState<string[]>([]);
+    const [selectedOrder, setSelectedOrder] = useState<string>("");
+
+    const handleTabClick = (item: string) => {
+        setTabActive(item);
+        if (onFilterChange) {
+            onFilterChange(item); // 선택된 필터를 부모 컴포넌트로 전달
+        }
+    };
+
+    const handleFilterChange = (filters) => {
+        if (onFilterChange) {
+            onFilterChange(filters); // TabFiltersProduct에서 전달된 필터 값을 그대로 부모로 전달
+        }
+    };
+
     return (
-        <div className={`flex flex-col relative ${className}`}>
-            <Heading>{header}</Heading>
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between space-y-6 lg:space-y-0 lg:space-x-2 ">
+        <div className={"flex flex-col relative mb-12"}>
+            <Heading desc={"당신이 원하는 상품을 찾아보세요."}>{header}</Heading>
+            <div
+                className="flex flex-col lg:flex-row lg:items-center justify-between space-y-6 lg:space-y-0 lg:space-x-2 ">
                 <Nav
                     className="sm:space-x-2"
                     containerClassName="relative flex w-full overflow-x-auto text-sm md:text-base hiddenScrollbar"
@@ -34,7 +54,7 @@ const HeaderFilterSectionDohee: FC<HeaderFilterSectionProps> = ({
                             <NavItem
                                 key={index}
                                 isActive={tabActive === item}
-                                onClick={() => setTabActive(item)}
+                                onClick={() => handleTabClick(item)}
                             >
                                 {item}
                             </NavItem>
@@ -96,7 +116,14 @@ const HeaderFilterSectionDohee: FC<HeaderFilterSectionProps> = ({
                 leaveTo="opacity-0"
             >
                 <div className="w-full border-b border-neutral-200 dark:border-neutral-700 my-8"></div>
-                <TabFilters />
+                {/*<TabFiltersProduct*/}
+                {/*    selectedPrices={selectedPrices}*/}
+                {/*    selectedBrands={selectedBrands}*/}
+                {/*    selectedColors={selectedColors}*/}
+                {/*    selectedOrder={selectedOrder}*/}
+                {/*    onFilterChange={handleFilterChange}*/}
+                {/*/>*/}
+                <TabFilters/>
             </Transition>
         </div>
     );
