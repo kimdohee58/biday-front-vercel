@@ -18,16 +18,6 @@ function AccountDetails({user, onClick}: { user: UserModel, onClick: () => void 
         queryFn: () => getAccount(),
     });
 
-    type CustomInputProps = Omit<InputProps, "onPointerEnterCapture" | "onPointerLeaveCapture" | "crossOrigin">;
-
-    const myInput: CustomInputProps = {
-        size: "lg",
-        labelProps: {className: "hidden"},
-        value: user.name,
-        disabled: true,
-        className: "w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
-    };
-
     return (
         <div>
             {accountData.data && Object.keys(accountData.data).length > 0 ? (
