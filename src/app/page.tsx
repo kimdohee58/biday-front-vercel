@@ -4,12 +4,12 @@ import TokenManager from "@/components/TestToken";
 import {fetchAllProductCards, fetchAllProductsWithImages} from "@/service/product/product.service";
 import {dehydrate, HydrationBoundary, QueryClient} from "@tanstack/react-query";
 
-export default async function PageHome({params}: {params:{filter:string}}) {
+export default async function PageHome() {
     const cookieStore = cookies();
     const authorizationToken = cookieStore.get('token')?.value || '';
 
     const queryClient = new QueryClient();
-    await queryClient.prefetchQuery({queryKey: ["allProductCards"], queryFn: () => fetchAllProductsWithImages});
+    await queryClient.prefetchQuery({queryKey: ["allProductCards"], queryFn: fetchAllProductCards});
     const dehydratedState = dehydrate(queryClient);
 
     return (
