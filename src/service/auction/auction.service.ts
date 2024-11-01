@@ -13,8 +13,9 @@ import {fetchImage} from "@/service/ftp/image.service";
 import {defaultImage, ImageModel, ImageType} from "@/model/ftp/image.model";
 import {fetchProductWithImageBySizeId} from "@/service/product/product.service";
 import {ProductDTO} from "@/model/product/product.model";
-import {isApiError} from "@/utils/error/error";
+import {ApiErrors, handleApiError, isApiError} from "@/utils/error/error";
 import {findUserById} from "@/service/user/user.api";
+import {UserModel} from "@/model/user/user.model";
 
 
 export async function fetchAuction(auctionId: string):Promise<AuctionModel> {
@@ -186,19 +187,27 @@ type ProductDTOWithImage = {
     size: string;
 }
 
-export async function fetchAuctionDetails(auctionId: string): Promise<{auction: AuctionWithImageModel, product: ProductDTOWithImage}> {
+export async function fetchAuctionDetails(auctionId: string): Promise<{auction: AuctionWithImageModel, product: ProductDTOWithImage, user: UserModel}> {
     try {
         const auction = await fetchAuctionWithImages(auctionId);
         const product = await fetchProductWithImageBySizeId(auction.auction.size);
+        console.log("auction", auction);
+        // auction.user
+        const user = await findUserById(auction.auction.user) || {};
 
         return {
             auction,
             product,
-        }
+            user,
+        };
 
     } catch (error) {
-        console.error("auctionDetails 에러 발생", error);
-        throw new Error();
+        if (isApiError(error)) {
+            handleApiError(error.status);
+            throw new Error();
+        } else {
+            throw new Error();
+        }
     }
 }
 

@@ -2,7 +2,7 @@
 
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 import type {RootState} from '@/lib/store'
-import {initialUser, UserModel } from '@/model/user/user.model';
+import {initialUser, UserModel, UserRole} from '@/model/user/user.model';
 import {initialUserToken, UserToken} from "@/model/user/userToken";
 import {AddressModel} from "@/model/user/address.model";
 
@@ -52,12 +52,16 @@ const userSlice = createSlice({
             state.addresses = state.addresses.map(address =>
                 address.id === action.payload ? { ...address, pick: true } : { ...address, pick: false });
         },
+        updateRole(state, action: PayloadAction<UserRole>) {
+            state.userInfo.userRole = action.payload;
+            state.user.role = action.payload;
+        },
     },
 });
 
 
 // 액션과 셀렉터를 export
-export const {saveUser, clearUser, saveUserToken, addAddress, removeAddress, updatePickAddress} = userSlice.actions;
+export const {saveUser, clearUser, saveUserToken, addAddress, removeAddress, updatePickAddress, updateRole} = userSlice.actions;
 export const getUser = (state: RootState) => state.user.user;
 export const getToken = (state: RootState) => state.user.token;
 export const getUserToken = (state: RootState) => state.user.userInfo;

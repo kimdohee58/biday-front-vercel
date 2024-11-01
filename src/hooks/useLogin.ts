@@ -40,6 +40,7 @@ export const useLogin = () => {
                             email: user.email,
                             phoneNum: user.phoneNum,
                             status: user.status ? String(user.status) : '',
+                            role : user.role,
                         };
 
                         dispatch(saveUser({user: userData, token: accessToken}));

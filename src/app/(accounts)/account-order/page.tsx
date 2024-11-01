@@ -23,12 +23,12 @@ import {
     mapDataWithPaymentModel
 } from "@/utils/mapDataWithProducts";
 import {PaymentRequestModel} from "@/model/order/payment.model";
-import {AuctionModel} from "@/model/auction/auction.model";
+import {AuctionDTO, AuctionModel} from "@/model/auction/auction.model";
 import {AwardModel} from "@/model/auction/award.model";
 
 const AccountOrder = () => {
     const router = useRouter(); // Initialize the router
-    const [activeTab, setActiveTab] = useState("auction");
+    const [activeTab, setActiveTab] = useState("award");
     const [mappedPaymentData, setMappedPaymentData] = useState<PaymentRequestModel[]>([]);
 
     const {
@@ -44,11 +44,11 @@ const AccountOrder = () => {
     const { data: awardProductList } = useFetchAwardProducts(awardData);
     const { data: paymentProductList } = useFetchPaymentProducts(paymentData);
 
-    const hasContent = (data: any): data is { content: AuctionModel[] } => {
+    const hasContent = (data: any): data is { content: AuctionDTO[] } => {
         return data && Array.isArray(data.content);
     };
 
-    const auctionContent = hasContent(auctionData) ? auctionData.content : auctionData as AuctionModel[];
+    const auctionContent = hasContent(auctionData) ? auctionData.content : auctionData as AuctionDTO[];
 
     const hasAwardContent = (data: any): data is { content: AwardModel[] } => {
         return data && Array.isArray(data.content) && data.content.length > 0 && 'userId' in data.content[0];
@@ -81,16 +81,20 @@ const AccountOrder = () => {
             <div>
                 <div className="flex space-x-8 mb-8">
                     <h2
-                        className={`text-2xl sm:text-3xl font-semibold cursor-pointer ${activeTab === "auction" ? "text-indigo-600 border-b-2 border-indigo-600" : "text-gray-800"}`}
-                        onClick={() => {setActiveTab("auction")}}
-                    >
-                        경매 내역
-                    </h2>
-                    <h2
                         className={`text-2xl sm:text-3xl font-semibold cursor-pointer ${activeTab === "award" ? "text-indigo-600 border-b-2 border-indigo-600" : "text-gray-800"}`}
-                        onClick={() => {setActiveTab("award")}}
+                        onClick={() => {
+                            setActiveTab("award")
+                        }}
                     >
                         낙찰 내역
+                    </h2>
+                    <h2
+                        className={`text-2xl sm:text-3xl font-semibold cursor-pointer ${activeTab === "auction" ? "text-indigo-600 border-b-2 border-indigo-600" : "text-gray-800"}`}
+                        onClick={() => {
+                            setActiveTab("auction")
+                        }}
+                    >
+                        경매 내역
                     </h2>
                 </div>
                 {loading ? <div className="flex h-screen items-center justify-center">

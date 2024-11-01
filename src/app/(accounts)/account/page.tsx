@@ -153,14 +153,14 @@ export default function AccountPage() {
                 <h2 className="text-2xl sm:text-3xl font-semibold">회원정보</h2>
                 <div className="flex flex-col md:flex-row">
                     <div className="flex-grow mt-10 md:mt-0 md:pl-16 max-w-3xl space-y-6">
-                        <div className="flex gap-4"> {/* Flexbox 사용하여 수평 배치 */}
-                            <div className="flex-1"> {/* 이름 입력 필드 */}
+                        <div className="flex gap-4">
+                            <div className="flex-1">
                                 <Label>이름</Label>
                                 <div className="mt-1.5 flex">
-            <span
-                className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
-                <i className="text-2xl las la-user"></i> {/* 이름 아이콘 */}
-            </span>
+                                    <span
+                                        className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
+                                        <i className="text-2xl las la-user"></i> {/* 이름 아이콘 */}
+                                    </span>
                                     <Input className="!rounded-l-none" defaultValue={user.name}
                                            disabled={true}/>
                                 </div>
@@ -168,13 +168,25 @@ export default function AccountPage() {
                             <div className="flex-1"> {/* 등급 입력 필드 */}
                                 <Label>등급</Label>
                                 <div className="mt-1.5 flex">
-            <span
-                className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
-                <i className="text-2xl las la-star"></i> {/* 등급 아이콘 */}
-            </span>
-                                    // TODO user role 고치기
-                                    <Input className="!rounded-l-none" defaultValue={user.role.toString()}
-                                           disabled={true}/>
+                                    <span
+                                        className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
+                                        <i className="text-2xl las la-star"></i>
+                                    </span>
+                                    <Input
+                                        className="!rounded-l-none"
+                                        defaultValue={
+                                            Array.isArray(user.role) && user.role.length > 0
+                                                ? user.role[0] === 'ROLE_USER'
+                                                    ? '회원'
+                                                    : user.role[0] === 'ROLE_SELLER'
+                                                        ? '판매자'
+                                                        : user.role[0] === 'ROLE_ADMIN'
+                                                            ? '관리자'
+                                                            : '비회원'
+                                                : '비회원'
+                                        }
+                                        disabled={true}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -208,22 +220,6 @@ export default function AccountPage() {
                         <div>
                             {/* 주소와 우편번호를 수평으로 나란히 배치 */}
                             <div className="flex gap-4">
-                                <div className="flex-1" style={{flex: "1 1 0%"}}>
-                                    <Label>우편번호</Label>
-                                    <div className="mt-1.5 flex">
-                                        <span
-                                            className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
-                                            <i className="text-2xl las la-map-marker-alt"></i> {/* 아이콘 변경 가능 */}
-                                        </span>
-                                        <Input
-                                            className="!rounded-l-none"
-                                            value={zipcode}
-                                            placeholder="우편번호"
-                                            readOnly
-                                        />
-                                    </div>
-                                </div>
-
                                 <div className="flex-1" style={{flex: "3 1 0%"}}>
                                     <Label>주소</Label>
                                     <div className="mt-1.5 flex">
@@ -237,6 +233,22 @@ export default function AccountPage() {
                                             placeholder="주소를 선택하세요"
                                             readOnly
                                             onClick={() => setShowDropdown(prev => !prev)} // 드롭다운 토글
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="flex-1" style={{flex: "1 1 0%"}}>
+                                    <Label>우편번호</Label>
+                                    <div className="mt-1.5 flex">
+                                        <span
+                                            className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
+                                            <i className="text-2xl las la-map-marker-alt"></i> {/* 아이콘 변경 가능 */}
+                                        </span>
+                                        <Input
+                                            className="!rounded-l-none"
+                                            value={zipcode}
+                                            placeholder="우편번호"
+                                            readOnly
                                         />
                                     </div>
                                 </div>
@@ -259,7 +271,7 @@ export default function AccountPage() {
                                             }}
                                         >
                                             <div>
-                                                {/* streetAddress와 detailAddress를 합쳐서 표시하고, type을 매핑하여 표시 */}
+                                            {/* streetAddress와 detailAddress를 합쳐서 표시하고, type을 매핑하여 표시 */}
                                                 {`${address.streetAddress} ${address.detailAddress} (${mapAddressType(address.type)})`}
                                                 <span
                                                     className="ml-2 text-gray-500">({address.zipcode})</span> {/* 우편번호 표시 */}

@@ -6,8 +6,9 @@ import {
 } from "@material-tailwind/react";
 import dynamic from "next/dynamic";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
+import {Props as ApexChartProps} from "react-apexcharts";
 
-const chartConfig = {
+const chartConfig: ApexChartProps = {
     type: "line",
     height: 240,
     series: [
@@ -23,7 +24,7 @@ const chartConfig = {
             },
         },
         title: {
-            show: "",
+            text: "",
         },
         dataLabels: {
             enabled: false,

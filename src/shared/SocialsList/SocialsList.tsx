@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import facebook from "@/images/socials/facebook.svg";
 import twitter from "@/images/socials/twitter.svg";
-import telegram from "@/images/socials/telegram.svg";
+import naver from "@/images/socials/naver.svg";
 import youtube from "@/images/socials/youtube.svg";
 import Image from "next/image";
 
@@ -11,10 +11,10 @@ export interface SocialsListProps {
 }
 
 const socialsDemo = [
+  { name: "Naver", icon: naver, href: "#" },
   { name: "Facebook", icon: facebook, href: "#" },
   { name: "Twitter", icon: twitter, href: "#" },
   { name: "Youtube", icon: youtube, href: "#" },
-  { name: "Telegram", icon: telegram, href: "#" },
 ];
 
 const SocialsList: FC<SocialsListProps> = ({

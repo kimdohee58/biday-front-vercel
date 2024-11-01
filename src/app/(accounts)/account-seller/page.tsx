@@ -121,6 +121,7 @@ export default function Account1() {
 
 
     const user: UserModel = useSelector(getUser);
+    console.log("user", user);
 
     /*useEffect(() => {
         switch (bankCode) {
@@ -169,6 +170,7 @@ export default function Account1() {
 
         }
     }, []);*/
+
 
 
     const onClickButton = () => {

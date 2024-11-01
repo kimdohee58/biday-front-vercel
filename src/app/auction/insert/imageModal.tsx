@@ -134,7 +134,7 @@ export default function ImageModal({isOpen, onClose, onSubmit, files}: ImageModa
                     </svg>
                 </IconButton>
             </DialogHeader>
-            <DialogBody className="overflow-y-scroll pt-0">
+            <DialogBody className="overflow-y-auto pt-0">
                 <Typography
                     variant="small"
                     className="font-normal text-gray-600"
@@ -169,9 +169,9 @@ export default function ImageModal({isOpen, onClose, onSubmit, files}: ImageModa
                 <div className="!mt-4 flex flex-col md:flex-row justify-between gap-4">
                     {tempFile.map((file, index) => (
                         file && (
-                        <ImageCard key={index} img={URL.createObjectURL(file)} name={file.name}
-                                   size={(file.size / 1024).toFixed(2)}
-                                   onDelete={() => handleDelete(index)}/>
+                            <ImageCard key={index} img={URL.createObjectURL(file)} name={file.name}
+                                       size={(file.size / 1024).toFixed(2)}
+                                       onDelete={() => handleDelete(index)}/>
                         )
                     ))}
                 </div>
@@ -180,7 +180,13 @@ export default function ImageModal({isOpen, onClose, onSubmit, files}: ImageModa
                 <Button onClick={onClose} variant="outlined">
                     취소
                 </Button>
-                <Button onClick={handleConfirm}>저장</Button>
+                <Button
+                    onClick={handleConfirm}
+                    variant="filled" // 버튼을 더 강조하기 위해 variant를 변경
+                    className="bg-blue-600 text-white hover:bg-blue-700" // 색상 및 효과를 조정
+                >
+                    저장
+                </Button>
             </DialogFooter>
         </Dialog>
     );
