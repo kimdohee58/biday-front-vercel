@@ -9,7 +9,6 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import AvatarDropdown from "@/components/Header/AvatarDropdown";
 import CartDropdown from "@/components/Header/CartDropdown";
-import CartDropdownDohee from "./CartDropdownDohee";
 
 export interface MainNav2LoggedProps {}
 
@@ -58,8 +57,8 @@ const MainNav2LoggedDohee: FC<MainNav2LoggedProps> = () => {
                 {renderMagnifyingGlassIcon()}
                 <input
                     type="text"
-                    placeholder="MainNav2Dohee"
-                    // placeholder="Type and press Enter"
+                    // placeholder="MainNav2Dohee"
+                    placeholder="Type and press Enter"
                     className="border-none bg-transparent focus:outline-none focus:ring-0 w-full text-base"
                     value={keyword}
                     onChange={(e) => setKeyword(e.target.value)}
@@ -94,8 +93,7 @@ const MainNav2LoggedDohee: FC<MainNav2LoggedProps> = () => {
                     </button>
                 )}
                 <AvatarDropdown />
-                {/*<CartDropdown />*/}
-                <CartDropdownDohee/>
+                <CartDropdown />
             </div>
         </div>
     );

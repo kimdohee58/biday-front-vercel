@@ -28,7 +28,7 @@ import {AwardModel} from "@/model/auction/award.model";
 
 const AccountOrder = () => {
     const router = useRouter(); // Initialize the router
-    const [activeTab, setActiveTab] = useState("auction");
+    const [activeTab, setActiveTab] = useState("award");
     const [mappedPaymentData, setMappedPaymentData] = useState<PaymentRequestModel[]>([]);
 
     const {
@@ -81,16 +81,20 @@ const AccountOrder = () => {
             <div>
                 <div className="flex space-x-8 mb-8">
                     <h2
-                        className={`text-2xl sm:text-3xl font-semibold cursor-pointer ${activeTab === "auction" ? "text-indigo-600 border-b-2 border-indigo-600" : "text-gray-800"}`}
-                        onClick={() => {setActiveTab("auction")}}
-                    >
-                        경매 내역
-                    </h2>
-                    <h2
                         className={`text-2xl sm:text-3xl font-semibold cursor-pointer ${activeTab === "award" ? "text-indigo-600 border-b-2 border-indigo-600" : "text-gray-800"}`}
-                        onClick={() => {setActiveTab("award")}}
+                        onClick={() => {
+                            setActiveTab("award")
+                        }}
                     >
                         낙찰 내역
+                    </h2>
+                    <h2
+                        className={`text-2xl sm:text-3xl font-semibold cursor-pointer ${activeTab === "auction" ? "text-indigo-600 border-b-2 border-indigo-600" : "text-gray-800"}`}
+                        onClick={() => {
+                            setActiveTab("auction")
+                        }}
+                    >
+                        경매 내역
                     </h2>
                 </div>
                 {loading ? <div className="flex h-screen items-center justify-center">

@@ -137,7 +137,7 @@ export default function PageSearch() {
                         ) : (
                             <>
                                 <p className="text-3xl text-red-600 font-semibold text-center mb-10">
-                                    {"'{keyword}'에 해당하는 상품이 없습니다."}
+                                    &apos;{keyword}&apos;에 해당하는 상품이 없습니다.
                                 </p>
                                 <div className="bg-gray-100 rounded-lg p-6 shadow-md mt-8">
                                     <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">

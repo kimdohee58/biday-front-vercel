@@ -39,16 +39,16 @@ export const MEGAMENU_TEMPLATES: NavItemType[] = [
 
 const OTHER_PAGE_CHILD: NavItemType[] = [
   {
-
     id: ncNanoId(),
-    href: "/",
-    name: "홈1 (현재 진행중인 경매)",
+    href: "/dohee/auction/ongoing",
+    name: "진행 중인 경매",
   },
   {
     id: ncNanoId(),
-    href: "/home-2",
-    name: "홈2 (마감 입박중인 경매)",
-  },
+    href: "/dohee/auction/last-chance",
+    name: "마감 임박 경매",
+  }
+  ,
   {
     id: ncNanoId(),
     href: "/cart",

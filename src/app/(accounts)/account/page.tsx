@@ -271,7 +271,7 @@ export default function AccountPage() {
                                             }}
                                         >
                                             <div>
-                                                {/* streetAddress와 detailAddress를 합쳐서 표시하고, type을 매핑하여 표시 */}
+                                            {/* streetAddress와 detailAddress를 합쳐서 표시하고, type을 매핑하여 표시 */}
                                                 {`${address.streetAddress} ${address.detailAddress} (${mapAddressType(address.type)})`}
                                                 <span
                                                     className="ml-2 text-gray-500">({address.zipcode})</span> {/* 우편번호 표시 */}
