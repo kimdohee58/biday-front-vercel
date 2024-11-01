@@ -1,72 +1,51 @@
 import React, {FC} from "react";
 import HeaderFilterSectionDohee from "@/components/dohee/HeaderFilterSectionDohee";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
-import {Product, PRODUCTS} from "@/data/data";
-import {AuctionWithImageModel} from "@/model/auction/auction.model";
-import {DEMO_LARGE_PRODUCTS} from "@/components/SectionSliderLargeProduct2";
-import Link from "next/link";
 import CollectionCard2Dohee from "@/components/dohee/CollectionCard2Dohee";
 import {ImageModel} from "@/model/ftp/image.model";
+import {AuctionWithProduct} from "@/app/dohee/auction/last-chance/page";
 
-//
 export interface SectionGridFeatureItemsProps {
-    data: Array<{
-        auction: {
-            id: number;
-            user: string;
-            size: number;
-            description: string;
-            currentBid: number;
-            images: ImageModel[]; // images 배열 타입 설정
-        };
-        product: {
-            name: string; // product 객체의 타입
-            image: ImageModel; // image 객체의 타입
-            size: string;
-        };
-        user: {
-            id: string;
-            oauthName: string | null;
-            name: string;
-            email: string;
-            password: string;
-        };
-    }>;
+    data: AuctionWithProduct[];
 }
 
 const SectionGridFeatureItemsDohee: FC<SectionGridFeatureItemsProps> = ({data = []}) => {
-    console.log("data", data)
+    console.log("sectionGridData", data)
     return (
         <div className="nc-SectionGridFeatureItems relative">
             <HeaderFilterSectionDohee/>
-            <div
-                className={`grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 `}
-            >
-                {data.map((item, index) => {
-                    const auction = item.auction; // auction 객체
-                    const product = item.product; // product 객체
-                    const user = item.user; // user 객체
+            <div className={`grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`}>
+                {data.length > 0 ? (
+                    data.map((item, index) => {
+                        console.log("item", item)
+                        console.log("item.auction", item.auction.auction)
+                        console.log("item.product", item.product.product)
+                        console.log("item.user", item.user)
+                        const auction = item.auction.auction;
+                        const product = item.product.product;
+                        const combinedImages = [product.image, ...auction.images];
 
-                    // 경매 이미지와 제품 이미지를 결합
-                    const combinedImages = [
-                        product.image, // 제품 이미지
-                        ...auction.images, // 경매 이미지
-                    ];
+                        // 데이터 확인
+                        console.log(`Auction ID: ${auction.id}, Product Name: ${product.name}, Price: ${auction.currentBid}, Wishes: ${product.wishes}`);
 
-                    return (
-                        <li className={`glide__slide`} key={index}>
-                            <CollectionCard2Dohee
-                                name={product.name}
-                                price={auction.currentBid}
-                                imgs={combinedImages}
-                                description={auction.description}
-                            />
-                        </li>
-                    );
-                })}
-            </div>
-            <div className="flex mt-16 justify-center items-center">
-                <ButtonPrimary loading>Show me more</ButtonPrimary>
+                        return (
+                            <li className={`glide__slide`} key={index}>
+                                <CollectionCard2Dohee
+                                    id={auction.id}
+                                    name={product.name}
+                                    price={auction.currentBid}
+                                    imgs={combinedImages}
+                                    description={auction.description}
+                                    wishes={product.wishes}
+                                />
+                            </li>
+                        );
+                    })
+                ) : (
+                    <p className="text-center text-xl font-semibold text-gray-700 my-10">
+                        곧 종료될 경매가 없습니다.
+                    </p>
+                )}
             </div>
         </div>
     );

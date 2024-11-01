@@ -16,7 +16,8 @@ export const MEGAMENU_TEMPLATES: NavItemType[] = [
     href: "/#",
     name: "쇼핑 페이지",
     children: [
-      { id: ncNanoId(), href: "/cart", name: "장바구니" },
+      { id: ncNanoId(), href: "/account-order", name: "주문 내역" },
+      { id: ncNanoId(), href: "/account-savelists", name: "위시리스트" },
     ],
   },
   {
@@ -69,24 +70,6 @@ const OTHER_PAGE_CHILD: NavItemType[] = [
     href: "/account",
     name: "마이 페이지",
   },
-  {
-    id: ncNanoId(),
-    href: "/about",
-    name: "고객센터",
-    type: "dropdown",
-    children: [
-      {
-        id: ncNanoId(),
-        href: "/contact",
-        name: "문의하기",
-      },
-      {
-        id: ncNanoId(),
-        href: "/signup",
-        name: "회원가입",
-      },
-    ],
-  },
 ];
 
 export const NAVIGATION_DEMO_2: NavItemType[] = [
@@ -111,12 +94,30 @@ export const NAVIGATION_DEMO_2: NavItemType[] = [
     name: "Acc",
   },
 
+  // {
+  //   id: ncNanoId(),
+  //   href: "/collection" as Route,
+  //   name: "템플릿",
+  //   type: "megaMenu",
+  //   children: MEGAMENU_TEMPLATES,
+  // },
   {
     id: ncNanoId(),
-    href: "/collection" as Route,
-    name: "템플릿",
-    type: "megaMenu",
-    children: MEGAMENU_TEMPLATES,
+    href: "/about",
+    name: "고객센터",
+    type: "dropdown",
+    children: [
+      {
+        id: ncNanoId(),
+        href: "/contact",
+        name: "문의하기",
+      },
+      {
+        id: ncNanoId(),
+        href: "/signup",
+        name: "회원가입",
+      },
+    ],
   },
   {
     id: ncNanoId(),
