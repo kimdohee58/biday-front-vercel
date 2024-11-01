@@ -14,15 +14,12 @@ const SectionGridFeatureItemsDohee: FC<SectionGridFeatureItemsProps> = ({data = 
     return (
         <div className="nc-SectionGridFeatureItems relative">
             <HeaderFilterSectionDohee/>
-            <div className={`grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`}>
+            <div className={`grid gap-8 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3`}>
                 {data.length > 0 ? (
                     data.map((item, index) => {
-                        console.log("item", item)
-                        console.log("item.auction", item.auction.auction)
-                        console.log("item.product", item.product.product)
-                        console.log("item.user", item.user)
-                        const auction = item.auction.auction;
-                        const product = item.product.product;
+                        const auction = item.auction;
+                        const product = item.product;
+                        const user = item.user;
                         const combinedImages = [product.image, ...auction.images];
 
                         // 데이터 확인
@@ -31,12 +28,14 @@ const SectionGridFeatureItemsDohee: FC<SectionGridFeatureItemsProps> = ({data = 
                         return (
                             <li className={`glide__slide`} key={index}>
                                 <CollectionCard2Dohee
-                                    id={auction.id}
-                                    name={product.name}
-                                    price={auction.currentBid}
+                                    id={auction.auction.id}
+                                    name={product.product.name}
+                                    price={auction.auction.currentBid}
                                     imgs={combinedImages}
-                                    description={auction.description}
-                                    wishes={product.wishes}
+                                    description={auction.auction.description}
+                                    wishes={product.product.wishes}
+                                    endedAt={auction.auction.endedAt}
+                                    user={user.name}
                                 />
                             </li>
                         );
