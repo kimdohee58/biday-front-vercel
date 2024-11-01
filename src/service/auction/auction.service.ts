@@ -51,11 +51,7 @@ export async function fetchAuctionWithImages(auctionId: string): Promise<Auction
             throw new Error("");
         }
 
-        console.log("auction", auction);
-
         const images = await fetchImage(ImageType.AUCTION, auctionId) || [defaultImage, defaultImage, defaultImage];
-
-        console.log("images", images);
 
         return {
             auction,
