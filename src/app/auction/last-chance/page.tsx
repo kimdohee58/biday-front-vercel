@@ -3,10 +3,7 @@
 
 import React, {useEffect, useState} from "react";
 import SectionPromo1 from "@/components/SectionPromo1";
-import {
-    fetchAuctionDetails,
-    ProductDTOWithImage
-} from "@/service/auction/auction.service";
+import {fetchAuctionDetails, ProductDTOWithImage} from "@/service/auction/auction.service";
 import {AuctionDTO, AuctionDTOs, AuctionWithImageModel} from "@/model/auction/auction.model";
 import {auctionAPI} from "@/api/auction/auction.api";
 import SectionGridFeatureItemsDohee from "@/components/dohee/SectionGridFeatureItemsDohee";
@@ -19,14 +16,14 @@ export interface AuctionWithProduct {
 }
 
 // TODO 경매 임박 페이지
-export default function PageHome2() {
+export default function LastChance() {
     const [auctionData, setAuctionData] = useState<AuctionWithProduct[]>([]);
 
     useEffect(() => {
         const fetchAuctionsWithImages = async () => {
             try {
                 // 경매 데이터를 불러오고 각 항목에 대해 fetchAuctionWithImages 호출
-                const auctionDTOs = await auctionAPI.findBySize({}) as AuctionDTOs;
+                const auctionDTOs = await auctionAPI.findByHeader({}) as AuctionDTOs;
                 const auctionContents = auctionDTOs.content || [];
 
                 const today = new Date();
@@ -45,7 +42,7 @@ export default function PageHome2() {
                 });
 
                 // 필터링된 경매에 대해 fetchAuctionDetails 호출
-                const auctionsWithImages:AuctionWithProduct[] = await Promise.all(
+                const auctionsWithImages: AuctionWithProduct[] = await Promise.all(
                     filteredContents.map(async (auction: AuctionDTO) => {
                         return await fetchAuctionDetails(String(auction.id));
                     })

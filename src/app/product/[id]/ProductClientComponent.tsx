@@ -63,6 +63,7 @@ function RenderSizeList({sizeArray, onClickSizeButton, currentSize, sizes}: Rend
         <div>
             <div className="flex justify-between font-medium text-sm">
                 <label htmlFor="">
+                    throw error;
             <span className="">
               Size:
               <span className="ml-1 font-semibold">{currentSize || "ALL"}</span>
@@ -314,7 +315,7 @@ export default function ProductClientComponent({product}: { product: ProductDeta
                 <div className="flex-1 items-center justify-center mt-5 space-x-3.5">
                     {
                         !auctions.isLoading ? (
-                                <AuctionTable auctions={auctions.data!} product={currentProduct}
+                                <AuctionTable auctions={auctions.data} product={currentProduct}
                                               size={currentSizeId}/>)
                             :
                             (<div>Loading...</div>)

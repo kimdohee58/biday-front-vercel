@@ -15,9 +15,13 @@ type findBySizeParams = {
     order?: string,
     cursor?: number
 }
-const findBySize = async (options: RequestOptions<findBySizeParams, null>): Promise<AuctionDTO[] | AuctionDTOs> => {
+const findBySize = async (options: RequestOptions<findBySizeParams, null>): Promise<AuctionDTO[]> => {
     return await strategy.GET(`${api.auction}/findBySize`, options);
 };
+
+const findByHeader = async (options: Omit<RequestOptions<any, null>, "params">): Promise<AuctionDTOs> => {
+    return await strategy.GET(`${api.auction}/findBySize`, options);
+}
 
 // 상품 상세 경매 목록 조회 (GET 요청)
 const findAllBySize = async (options: RequestOptions<findBySizeParams, null>): Promise<AuctionDTO[]> => {
@@ -58,6 +62,7 @@ const cancel = async (options: RequestOptions<{auctionId: number}, null>): Promi
 export const auctionAPI = {
     findById,
     findBySize,
+    findByHeader,
     findAllBySize,
     findByUser,
     update,

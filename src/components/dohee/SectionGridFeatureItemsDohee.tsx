@@ -24,8 +24,6 @@ const SectionGridFeatureItemsDohee: FC<SectionGridFeatureItemsProps> = ({header 
     const [selectedColors, setSelectedColors] = useState<string[]>([]);
     const [selectedOrder, setSelectedOrder] = useState<string>("");
 
-    // const sortedData = [...data].sort((a, b) => new Date(a.auction.endedAt).getTime() - new Date(b.auction.endedAt).getTime());
-
     useEffect(() => {
         setFilteredData(data.sort((a, b) => new Date(a.auction.auction.endedAt).getTime() - new Date(b.auction.auction.endedAt).getTime()));
     }, [data]);

@@ -3,7 +3,7 @@
 import {auctionAPI} from "@/api/auction/auction.api";
 import Cookies from "js-cookie";
 import {
-    AuctionDTO, AuctionDTOs,
+    AuctionDTO,
     AuctionDTOWithImageModel,
     AuctionModel,
     AuctionWithImageModel,
@@ -111,23 +111,27 @@ export async function deleteAuction(id: number): Promise<void> {
 
 export async function fetchAuctionsBySize(sizeId: number): Promise<AuctionDTO[]> {
     try {
-        console.log("fetchAuctionBySize");
         const options = {
             params: {sizeId: sizeId},
         };
 
         console.log("options", options);
 
-        const result = await auctionAPI.findAllBySize(options);
-        console.log("result", result);
-        return result;
+        return await auctionAPI.findAllBySize(options);
 
     } catch (error) {
-        if (isApiError(error) && error.status === 404) {
-            console.log("404에러");
+        if (isApiError(error)) {
+            if (error.status === 404) {
+                console.log("404 에러");
+                return [] as AuctionDTO[];
+            } else {
+                handleApiError(error.status);
+                return [] as AuctionDTO[];
+            }
+        } else {
+            console.log("apiError 아님");
             return [] as AuctionDTO[];
         }
-        throw error;
     }
 }
 
@@ -146,14 +150,17 @@ export async function fetchAuctionBySizesWithUser(sizeIds: number[]): Promise<Au
     console.log("auctions in service", auctions)
     const users = await Promise.all(auctions.map(auction => findUserById(auction.userId)));
 
-
-    return auctions.map((auction) => {
+    const result = auctions.map((auction) => {
         const user = users.find(user => user!.id === auction.userId) || {};
         return {
             ...auction,
             userId: user.name || "",
         }
     });
+
+    if (result.every(item => Object.keys(item).length === 0)) {
+        return [] as AuctionDTO[];
+    }
 
 }
 // findByUserAuction 함수 수정
@@ -185,7 +192,7 @@ export async function findByUserAuction(): Promise<AuctionDTO[]> {
     }
 }
 
-export type ProductDTOWithImage = {
+type ProductDTOWithImage = {
     product: ProductDTO,
     image: ImageModel,
     size: string;
@@ -237,23 +244,23 @@ export async function CancelAuction(auctionId: number): Promise<string> {
 }
 
 // 헤더에서 쓰일 경매 리스트 호출
-export async function headerAuctions(): Promise<AuctionDTO[] | AuctionDTOs> {
-    try {
-        console.log("headerAuctions");
-        const options = {
-        };
-
-        console.log("options", options);
-
-        const result = await auctionAPI.findBySize(options);
-        console.log("result", result);
-        return result;
-
-    } catch (error) {
-        if (isApiError(error) && error.status === 404) {
-            console.log("404에러");
-            return [] as AuctionDTO[];
-        }
-        throw error;
-    }
-}
+// export async function headerAuctions(): Promise<AuctionDTO[]> {
+//     try {
+//         console.log("headerAuctions");
+//         const options = {
+//         };
+//
+//         console.log("options", options);
+//
+//         const result = await auctionAPI.findBySize(options);
+//         console.log("result", result);
+//         return result;
+//
+//     } catch (error) {
+//         if (isApiError(error) && error.status === 404) {
+//             console.log("404에러");
+//             return [] as AuctionDTO[];
+//         }
+//         throw error;
+//     }
+// }

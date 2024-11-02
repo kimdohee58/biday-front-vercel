@@ -3,57 +3,20 @@
 
 import React, {useEffect, useState} from "react";
 import SectionPromo1 from "@/components/SectionPromo1";
-import {
-    fetchAuctionDetails,
-    fetchAuctionWithImages,
-    headerAuctions,
-    ProductDTOWithImage
-} from "@/service/auction/auction.service";
-import {AuctionDTO, AuctionDTOs, AuctionWithImageModel} from "@/model/auction/auction.model";
+import { fetchAuctionDetails } from "@/service/auction/auction.service";
+import {AuctionDTO, AuctionDTOs} from "@/model/auction/auction.model";
 import {auctionAPI} from "@/api/auction/auction.api";
 import SectionGridFeatureItemsDohee from "@/components/dohee/SectionGridFeatureItemsDohee";
-import {UserModel} from "@/model/user/user.model";
 import {AuctionWithProduct} from "@/app/auction/last-chance/page";
 
-interface ImageModel {
-    uploadUrl: string;
-}
-
-interface Auction {
-    id: number;
-    user: string;
-    size: number;
-    description: string;
-    currentBid: number;
-    endedAt: string;
-    status: boolean;
-    images: ImageModel[];
-}
-
-interface Product {
-    name: string;
-    image: ImageModel;
-    size: string;
-    wishes: number;
-}
-
-interface User {
-    id: string;
-    oauthName: string | null;
-    name: string;
-    email: string;
-    password: string;
-}
-
-// TODO 경매 임박 페이지
-export default function PageHome2() {
+export default function OnGoing() {
     const [auctionData, setAuctionData] = useState<AuctionWithProduct[]>([]);
 
     useEffect(() => {
         const fetchAuctionsWithImages = async () => {
             try {
                 // 경매 데이터를 불러오고 각 항목에 대해 fetchAuctionWithImages 호출
-                const auctionDTOs = await auctionAPI.findBySize({}) as AuctionDTOs;
+                const auctionDTOs = await auctionAPI.findByHeader({}) as AuctionDTOs;
                 const auctionContents = auctionDTOs.content || [];
 
                 const auctionsWithImages = await Promise.all(
