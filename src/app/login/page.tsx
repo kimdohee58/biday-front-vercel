@@ -173,7 +173,11 @@ const PageLogin = () => {
 
                     <form className="grid grid-cols-1 gap-6" onSubmit={handleSubmit}>
                         <label className="block">
-                            <span className="text-neutral-800 dark:text-neutral-200">Email address</span>
+                            <span className="flex justify-between items-center text-neutral-800 dark:text-neutral-200">
+                                Email address
+                                <Link href="/forgot-pass" className="text-sm text-green-600">
+                                    forgot email?
+                                </Link></span>
                             <Input
                                 type="email"
                                 name="email"
@@ -187,9 +191,6 @@ const PageLogin = () => {
                         <label className="block">
                             <span className="flex justify-between items-center text-neutral-800 dark:text-neutral-200">
                                 Password
-                                <Link href="/forgot-pass" className="text-sm text-green-600">
-                                    forgot Email?
-                                </Link>
                             </span>
                             <Input
                                 type="password"

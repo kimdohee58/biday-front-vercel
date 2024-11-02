@@ -62,18 +62,29 @@ export async function checkPasswordService(): Promise<boolean> {
     }
 }
 
-export async function emailByPhoneRetrieve(userData: UserModel): Promise<UserModel> {
-    console.log("emailByPhoneRetrieve 진입 확인 하는 로그 :",emailByPhoneRetrieve)
+export async function emailByPhoneRetrieve(userData: UserModel): Promise<{ email: string | undefined } | null> {
+    console.log("emailByPhoneRetrieve 진입 확인 하는 로그 :", userData);
     try {
         const options = {
             data: userData
         };
-        const emailPhone = await userAPI.emailByPhone(options);
-        console.log("return 전에 확인 하는 코드 : ", emailPhone)
-        return emailPhone;
+
+        // 응답 타입을 any로 임시 설정 및 JSON 파싱 확인
+        const response: any = await userAPI.emailByPhone(options);
+        const parsedResponse = typeof response === 'string' ? JSON.parse(response) : response;
+        console.log("emailByPhoneRetrieve 리스폰스 데이터:", parsedResponse);
+
+        // 최상위 수준에서 이메일 추출
+        const email = parsedResponse?.email;
+
+        if (email) {
+            return { email };
+        } else {
+            console.error("응답에 이메일 정보가 없습니다.");
+            throw new Error("응답에 이메일 정보가 없습니다.");
+        }
     } catch (error) {
-        console.error("emailByPhoneRetrieve 에러 발생 :", error);
+        console.error("emailByPhoneRetrieve 에러 발생:", error);
         throw new Error("핸드폰으로 이메일 찾기가 불가능합니다.");
-        //TODO error enum
     }
 }

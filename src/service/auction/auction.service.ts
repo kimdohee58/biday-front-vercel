@@ -147,20 +147,14 @@ export async function fetchAuctionsBySizes(sizeIds: number[]): Promise<AuctionDT
 // product 상세페이지에서 사용하는 함수, sizeId[] 을 가지고 auction[]과 유저 이름을 함께 반환
 export async function fetchAuctionBySizesWithUser(sizeIds: number[]): Promise<AuctionDTO[]> {
     const auctions = await fetchAuctionsBySizes(sizeIds);
-    console.log("auctions in service", auctions)
     const users = await Promise.all(auctions.map(auction => findUserById(auction.userId)));
-
-    const result = auctions.map((auction) => {
+    return auctions.map((auction) => {
         const user = users.find(user => user!.id === auction.userId) || {};
         return {
             ...auction,
             userId: user.name || "",
         }
     });
-
-    if (result.every(item => Object.keys(item).length === 0)) {
-        return [] as AuctionDTO[];
-    }
 
 }
 // findByUserAuction 함수 수정
@@ -192,7 +186,7 @@ export async function findByUserAuction(): Promise<AuctionDTO[]> {
     }
 }
 
-type ProductDTOWithImage = {
+export type ProductDTOWithImage = {
     product: ProductDTO,
     image: ImageModel,
     size: string;
