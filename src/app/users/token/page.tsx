@@ -17,7 +17,7 @@ export default function Home() {
             const response = await fetch('http://211.188.54.218:8080/users/UsersList', {
                 method: 'GET',
                 headers: {
-                    "Authorization": `Bearer ${accessToken}`, // accessToken 사용
+                    "Authorization": `Bearer ${accessToken}`,
                     "Content-Type": "application/json",
                 },
                 credentials: 'include',
