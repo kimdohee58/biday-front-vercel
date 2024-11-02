@@ -11,8 +11,7 @@ import SectionPromo2 from "@/components/SectionPromo2";
 import Image from "next/image";
 import {Route} from "@/routers/types";
 import {ImageModel} from "@/model/ftp/image.model"
-import React, {Suspense, useState} from "react";
-import {AuctionModel} from "@/model/auction/auction.model"
+import React, {useState} from "react";
 import {formatProductName, getColor} from "@/utils/productUtils";
 import AuctionTable from "@/app/product/[id]/AuctionTable";
 import {HeartIcon} from "@heroicons/react/24/solid";
@@ -21,7 +20,10 @@ import {useFetchAuctionBySizeIdsWithUser} from "@/hooks/react-query/useAuctionli
 import {Colors} from "@/data/color";
 import LikeButton from "@/components/LikeButton";
 import Chart from "@/app/product/[id]/Chart";
-import {useSearchParams} from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
+import Cookies from "js-cookie";
+import {UserToken} from "@/model/user/userToken";
+import {UserRole} from "@/model/user/user.model";
 
 type ProductDetailProps = {
     product: ProductWithImageModel,
@@ -61,9 +63,10 @@ function RenderSizeList({sizeArray, onClickSizeButton, currentSize, sizes}: Rend
         <div>
             <div className="flex justify-between font-medium text-sm">
                 <label htmlFor="">
+                    throw error;
             <span className="">
               Size:
-              <span className="ml-1 font-semibold">{currentSize || "선택 사이즈 없음"}</span>
+              <span className="ml-1 font-semibold">{currentSize || "ALL"}</span>
             </span>
                 </label>
                 <a
@@ -99,6 +102,7 @@ function RenderSizeList({sizeArray, onClickSizeButton, currentSize, sizes}: Rend
 }
 
 export default function ProductClientComponent({product}: { product: ProductDetailProps}) {
+    const router = useRouter();
 
     const searchParams = useSearchParams();
     const size = searchParams.get("size");
@@ -150,13 +154,25 @@ export default function ProductClientComponent({product}: { product: ProductDeta
     };
 
     const sizes = initialProduct.sizes.map((size) => size.id);
-    console.log("sizes", sizes);
-
     const auctions = useFetchAuctionBySizeIdsWithUser(sizes);
 
-    console.log("auctions", auctions);
-
-    const insertAuctionUrl = `/auction/insert?productId=${currentProduct.id}`;
+    const onClickSaleButton = () => {
+        const userToken = Cookies.get("userToken");
+        if (!userToken) {
+            router.push("/login");
+        } else {
+            const parsedToken:UserToken = JSON.parse(userToken);
+            const role = parsedToken.userRole[0];
+            switch (role) {
+                case UserRole.USER :
+                    router.push("/account-seller");
+                    break;
+                case UserRole.SELLER :
+                    router.push(`/auction/insert?productId=${currentProduct.id}`);
+                    break;
+            }
+        }
+    }
 
     /* const renderStatus = () => {
          if (!status) {
@@ -289,7 +305,7 @@ export default function ProductClientComponent({product}: { product: ProductDeta
                 <div className="flex space-x-3.5">
                     <ButtonPrimary
                         className="flex-1 flex-shrink-0"
-                        href={insertAuctionUrl as Route}
+                        onClick={onClickSaleButton}
                     >
                         <BagIcon className="hidden sm:inline-block w-5 h-5 mb-0.5"/>
                         <span className="ml-3">판매하기</span>
@@ -299,7 +315,7 @@ export default function ProductClientComponent({product}: { product: ProductDeta
                 <div className="flex-1 items-center justify-center mt-5 space-x-3.5">
                     {
                         !auctions.isLoading ? (
-                                <AuctionTable auctions={auctions.data!} product={currentProduct}
+                                <AuctionTable auctions={auctions.data || []} product={currentProduct}
                                               size={currentSizeId}/>)
                             :
                             (<div>Loading...</div>)

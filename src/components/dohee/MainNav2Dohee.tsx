@@ -1,20 +1,14 @@
-// Header/MainNav2 수정본
+// Header/MainNav2 덮기 완료
 "use client";
 
 import React, { FC, useState } from "react";
 import Logo from "@/shared/Logo/Logo";
 import MenuBar from "@/shared/MenuBar/MenuBar";
-// import LangDropdown from "./LangDropdown";
-// import AvatarDropdown from "./AvatarDropdown";
-// import TemplatesDropdown from "./compo/TemplatesDropdown";
-// import DropdownCategories from "./DropdownCategories";
-// import CartDropdown from "./CartDropdown";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import DropdownCategories from "@/components/Header/DropdownCategories";
 import TemplatesDropdown from "@/components/Header/TemplatesDropdown";
 import LangDropdown from "@/components/Header/LangDropdown";
-import CartDropdownDohee from "@/components/dohee/CartDropdownDohee";
 import CartDropdown from "@/components/Header/CartDropdown";
 
 export interface MainNav2Props {
@@ -127,8 +121,7 @@ const MainNav2Dohee: FC<MainNav2Props> = ({ className = "" }) => {
                                 {renderMagnifyingGlassIcon()}
                             </button>
                         )}
-                        {/*<CartDropdown/>*/}
-                        <CartDropdownDohee />
+                        <CartDropdown/>
                     </div>
                 </div>
             </div>

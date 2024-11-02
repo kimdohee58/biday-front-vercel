@@ -8,9 +8,7 @@ import {getColorsArray} from "@/utils/productUtils";
 export async function productTest(productId: number): Promise<ProductCardModel[]> {
     try {
 
-        const products = await fetchProduct(productId);
-
-        console.log("products", products);
+        const products = await fetchProduct(String(productId));
 
         const wishes = await fetchWishes();
         const wishProductIds = wishes.map((item) => item.product.id);

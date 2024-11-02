@@ -54,7 +54,7 @@ interface Props {
   panelClassName?: string;
   data: {
     name: string,
-    content: string;
+    content: any;
   }[];
 }
 

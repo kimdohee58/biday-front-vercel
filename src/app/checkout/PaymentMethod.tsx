@@ -18,12 +18,12 @@ const PaymentMethod: FC<Props> = ({
   onCloseActive,
   onOpenActive,
 }) => {
-  const [mothodActive, setMethodActive] = useState<
+  const [methodActive, setMethodActive] = useState<
     "Credit-Card" | "Internet-banking" | "Wallet"
   >("Credit-Card");
 
   const renderDebitCredit = () => {
-    const active = mothodActive === "Credit-Card";
+    const active = methodActive === "Credit-Card";
     return (
       <div className="flex items-start space-x-4 sm:space-x-6">
         <Radio
@@ -131,7 +131,7 @@ const PaymentMethod: FC<Props> = ({
   };
 
   const renderInterNetBanking = () => {
-    const active = mothodActive === "Internet-banking";
+    const active = methodActive === "Internet-banking";
     return (
       <div className="flex items-start space-x-4 sm:space-x-6">
         <Radio
@@ -251,7 +251,7 @@ const PaymentMethod: FC<Props> = ({
   };
 
   const renderWallet = () => {
-    const active = mothodActive === "Wallet";
+    const active = methodActive === "Wallet";
     return (
       <div className="flex items-start space-x-4 sm:space-x-6">
         <Radio

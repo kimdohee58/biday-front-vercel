@@ -13,8 +13,9 @@ import {fetchImage} from "@/service/ftp/image.service";
 import {defaultImage, ImageModel, ImageType} from "@/model/ftp/image.model";
 import {fetchProductWithImageBySizeId} from "@/service/product/product.service";
 import {ProductDTO} from "@/model/product/product.model";
-import {isApiError} from "@/utils/error/error";
+import {ApiErrors, handleApiError, isApiError} from "@/utils/error/error";
 import {findUserById} from "@/service/user/user.api";
+import {UserModel} from "@/model/user/user.model";
 
 
 export async function fetchAuction(auctionId: string):Promise<AuctionModel> {
@@ -27,6 +28,14 @@ export async function fetchAuction(auctionId: string):Promise<AuctionModel> {
 
         return await auctionAPI.findById(options);
     } catch (error) {
+        if (isApiError(error)) {
+            if (error.status === 404) {
+                return {} as AuctionModel;
+            } else {
+                handleApiError(error.status);
+                throw new Error();
+            }
+        }
         console.log(error);
         throw new Error();
     }
@@ -42,11 +51,7 @@ export async function fetchAuctionWithImages(auctionId: string): Promise<Auction
             throw new Error("");
         }
 
-        console.log("auction", auction);
-
         const images = await fetchImage(ImageType.AUCTION, auctionId) || [defaultImage, defaultImage, defaultImage];
-
-        console.log("images", images);
 
         return {
             auction,
@@ -106,23 +111,27 @@ export async function deleteAuction(id: number): Promise<void> {
 
 export async function fetchAuctionsBySize(sizeId: number): Promise<AuctionDTO[]> {
     try {
-        console.log("fetchAuctionBySize");
         const options = {
             params: {sizeId: sizeId},
         };
 
         console.log("options", options);
 
-        const result = await auctionAPI.findAllBySize(options);
-        console.log("result", result);
-        return result;
+        return await auctionAPI.findAllBySize(options);
 
     } catch (error) {
-        if (isApiError(error) && error.status === 404) {
-            console.log("404에러");
+        if (isApiError(error)) {
+            if (error.status === 404) {
+                console.log("404 에러");
+                return [] as AuctionDTO[];
+            } else {
+                handleApiError(error.status);
+                return [] as AuctionDTO[];
+            }
+        } else {
+            console.log("apiError 아님");
             return [] as AuctionDTO[];
         }
-        throw error;
     }
 }
 
@@ -138,10 +147,7 @@ export async function fetchAuctionsBySizes(sizeIds: number[]): Promise<AuctionDT
 // product 상세페이지에서 사용하는 함수, sizeId[] 을 가지고 auction[]과 유저 이름을 함께 반환
 export async function fetchAuctionBySizesWithUser(sizeIds: number[]): Promise<AuctionDTO[]> {
     const auctions = await fetchAuctionsBySizes(sizeIds);
-    console.log("auctions in service", auctions)
     const users = await Promise.all(auctions.map(auction => findUserById(auction.userId)));
-
-
     return auctions.map((auction) => {
         const user = users.find(user => user!.id === auction.userId) || {};
         return {
@@ -180,29 +186,37 @@ export async function findByUserAuction(): Promise<AuctionDTO[]> {
     }
 }
 
-type ProductDTOWithImage = {
+export type ProductDTOWithImage = {
     product: ProductDTO,
     image: ImageModel,
     size: string;
 }
 
-export async function fetchAuctionDetails(auctionId: string): Promise<{auction: AuctionWithImageModel, product: ProductDTOWithImage}> {
+export async function fetchAuctionDetails(auctionId: string): Promise<{auction: AuctionWithImageModel, product: ProductDTOWithImage, user: UserModel}> {
     try {
         const auction = await fetchAuctionWithImages(auctionId);
         const product = await fetchProductWithImageBySizeId(auction.auction.size);
+        console.log("auction", auction);
+        // auction.user
+        const user = await findUserById(auction.auction.user) || {};
 
         return {
             auction,
             product,
-        }
+            user,
+        };
 
     } catch (error) {
-        console.error("auctionDetails 에러 발생", error);
-        throw new Error();
+        if (isApiError(error)) {
+            handleApiError(error.status);
+            throw new Error();
+        } else {
+            throw new Error();
+        }
     }
 }
 
-// 판매 도중 멈추기
+// 판매 도중 경매 취소(판매자만 가능)
 export async function CancelAuction(auctionId: number): Promise<string> {
     try {
         const userToken = Cookies.get('userToken')
@@ -222,3 +236,25 @@ export async function CancelAuction(auctionId: number): Promise<string> {
         throw new Error("경매를 취소하는 중 에러가 발생했습니다.")
     }
 }
+
+// 헤더에서 쓰일 경매 리스트 호출
+// export async function headerAuctions(): Promise<AuctionDTO[]> {
+//     try {
+//         console.log("headerAuctions");
+//         const options = {
+//         };
+//
+//         console.log("options", options);
+//
+//         const result = await auctionAPI.findBySize(options);
+//         console.log("result", result);
+//         return result;
+//
+//     } catch (error) {
+//         if (isApiError(error) && error.status === 404) {
+//             console.log("404에러");
+//             return [] as AuctionDTO[];
+//         }
+//         throw error;
+//     }
+// }

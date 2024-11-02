@@ -1,7 +1,7 @@
 
 import {useQuery} from "@tanstack/react-query";
 import {fetchProductBySizeId} from "@/service/product/product.service";
-import {extractSizeIds} from "@/utils/extract";
+import {extractSizeId, extractSizeIds} from "@/utils/extract";
 import {BidLoadModel} from "@/model/auction/bid.model";
 
 export const useFetchAuctionProducts = (auctionData: any) => {
@@ -41,12 +41,18 @@ export const useFetchBidProducts = (bidayData: any) => {
 
 export const useFetchAwardProducts = (awardData: any) => {
     const awardSizeIds = extractSizeIds(awardData);
+    console.log("Extracted awardSizeIds:", awardSizeIds); // 확인용 로그
+
     return useQuery({
         queryKey: ["awardSizeIds", awardSizeIds],
         queryFn: async () => {
             const productLists = await Promise.all(
-                awardSizeIds.map((sizeId: number) => fetchProductBySizeId(sizeId))
+                awardSizeIds.map((sizeId: number) => {
+                    console.log("Fetching product for sizeId:", sizeId); // 확인용 로그
+                    return fetchProductBySizeId(sizeId);
+                })
             );
+            console.log("Fetched product lists:", productLists); // 확인용 로그
             return productLists.flat();
         },
         enabled: awardSizeIds.length > 0,

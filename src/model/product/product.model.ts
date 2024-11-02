@@ -13,6 +13,7 @@ export interface ProductDTO {
     category: string;
     name: string;
     subName: string;
+    description: string;
     productCode: string;
     price: number;
     color: ColorType;
@@ -71,6 +72,7 @@ export const initialProduct: ProductModel = {
     brand: '',
     category: '',
     name: '',
+    subName: '',
     productCode: "",
     price: 0,
     color: '' as ColorType,
@@ -86,6 +88,7 @@ export const defaultProduct: ProductModel = {
     brand: 'default',
     category: 'default',
     name: 'default',
+    subName: '',
     productCode: "default",
     price: 0,
     color: 'default' as ColorType,

@@ -14,14 +14,6 @@ export const MEGAMENU_TEMPLATES: NavItemType[] = [
   {
     id: ncNanoId(),
     href: "/#",
-    name: "쇼핑 페이지",
-    children: [
-      { id: ncNanoId(), href: "/cart", name: "장바구니" },
-    ],
-  },
-  {
-    id: ncNanoId(),
-    href: "/#",
     name: "기타 페이지",
     children: [
       { id: ncNanoId(), href: "/checkout", name: "결제 페이지" },
@@ -39,20 +31,14 @@ export const MEGAMENU_TEMPLATES: NavItemType[] = [
 
 const OTHER_PAGE_CHILD: NavItemType[] = [
   {
-
     id: ncNanoId(),
-    href: "/",
-    name: "홈1 (현재 진행중인 경매)",
+    href: "/auction/ongoing",
+    name: "진행 중인 경매",
   },
   {
     id: ncNanoId(),
-    href: "/home-2",
-    name: "홈2 (마감 입박중인 경매)",
-  },
-  {
-    id: ncNanoId(),
-    href: "/cart",
-    name: "장바구니 페이지",
+    href: "/auction/last-chance",
+    name: "마감 임박 경매",
   },
   {
     id: ncNanoId(),
@@ -68,24 +54,6 @@ const OTHER_PAGE_CHILD: NavItemType[] = [
     id: ncNanoId(),
     href: "/account",
     name: "마이 페이지",
-  },
-  {
-    id: ncNanoId(),
-    href: "/about",
-    name: "고객센터",
-    type: "dropdown",
-    children: [
-      {
-        id: ncNanoId(),
-        href: "/contact",
-        name: "문의하기",
-      },
-      {
-        id: ncNanoId(),
-        href: "/signup",
-        name: "회원가입",
-      },
-    ],
   },
 ];
 
@@ -113,17 +81,28 @@ export const NAVIGATION_DEMO_2: NavItemType[] = [
 
   {
     id: ncNanoId(),
-    href: "/collection" as Route,
-    name: "템플릿",
-    type: "megaMenu",
-    children: MEGAMENU_TEMPLATES,
-  },
-  {
-    id: ncNanoId(),
     href: "/search",
     name: "탐색",
     type: "dropdown",
     children: OTHER_PAGE_CHILD,
+  },
+  {
+    id: ncNanoId(),
+    href: "/about",
+    name: "고객센터",
+    type: "dropdown",
+    children: [
+      {
+        id: ncNanoId(),
+        href: "/contact",
+        name: "문의하기",
+      },
+      {
+        id: ncNanoId(),
+        href: "/signup",
+        name: "회원가입",
+      },
+    ],
   },
   {
     id: ncNanoId(),

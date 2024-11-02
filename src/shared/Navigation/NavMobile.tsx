@@ -73,25 +73,25 @@ const NavMobile: React.FC<NavMobileProps> = ({data = NAVIGATION_DEMO_2, onClickC
     };
 
     const _renderItem = (item: NavItemType, index: number) => {
-        if (item.name === "경매 등록" && userRole !== "ROLE_SELLER") {
-            return null;
-        }
+        const href = !userRole ? "/login"
+            : (item.name === "경매 등록" && userRole !== "ROLE_SELLER") ? "/account-seller"
+                : item.href;
 
         return (
             <Disclosure key={index} as="li" className="text-slate-900 dark:text-white">
                 <Link
                     className="flex w-full items-center py-2.5 px-4 font-medium uppercase tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg"
-                    href={{pathname: item.href || undefined}}
+                    href={{ pathname: href || undefined }}
                 >
-                    <span className={!item.children ? "block w-full" : ""} onClick={onClickClose}>
-                        {item.name}
-                    </span>
+                <span className={!item.children ? "block w-full" : ""} onClick={onClickClose}>
+                    {item.name}
+                </span>
                     {item.children && (
                         <span className="block flex-grow" onClick={(e) => e.preventDefault()}>
-                            <Disclosure.Button as="span" className="flex justify-end flex-grow">
-                                <ChevronDownIcon className="ml-2 h-4 w-4 text-neutral-500" aria-hidden="true"/>
-                            </Disclosure.Button>
-                        </span>
+                        <Disclosure.Button as="span" className="flex justify-end flex-grow">
+                            <ChevronDownIcon className="ml-2 h-4 w-4 text-neutral-500" aria-hidden="true" />
+                        </Disclosure.Button>
+                    </span>
                     )}
                 </Link>
                 {item.children && <Disclosure.Panel>{_renderMenuChild(item)}</Disclosure.Panel>}

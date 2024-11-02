@@ -4,13 +4,14 @@ import {
     fetchProductWithImage,
     fetchProductWithImageBySizeId
 } from "@/service/product/product.service";
+import {ProductCardModel} from "@/model/product/product.model";
 
 export const useProductCardList = (isProductInRedux: boolean) => {
-    return useQuery({
-        queryKey: ["productCardList"],
-        queryFn: () => fetchAllProductCards(),
+    return useQuery<ProductCardModel[]>({
+        queryKey: ["allProductCards"],
+        queryFn: fetchAllProductCards,
         enabled: !isProductInRedux,
-    })
+    });
 };
 
 export const useProductWithImageBySizeId = (sizeId: number, enabled: boolean = true) => {

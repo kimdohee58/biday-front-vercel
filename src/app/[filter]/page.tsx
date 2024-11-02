@@ -13,17 +13,17 @@ import {getCategoryProducts, getProductCards, isProductsInRedux, updateIsLiked} 
 import {useWishlist} from "@/hooks/react-query/useWishlist";
 import {setProductCards} from "@/lib/features/productCard.slice";
 import {useProductCardList} from "@/hooks/react-query/useProductlist";
+import Heading from "@/shared/Heading/Heading";
 
 export default function PageCollection({params}: { params: { filter: string } }) {
     const dispatch = useDispatch();
 
     const productsInRedux = useSelector(isProductsInRedux);
-    console.log("productInRedux", productsInRedux);
 
     const categoryProducts = useSelector(getCategoryProducts(params.filter));
-    console.log("categoryProducts", categoryProducts);
 
     const allProducts = useProductCardList(productsInRedux);
+
     const [isLoading, setIsLoading] = useState(true);
 
     const itemsPerPage = 20;
@@ -40,7 +40,6 @@ export default function PageCollection({params}: { params: { filter: string } })
     const selectedProducts = filteredProducts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
     useEffect(() => {
-        console.log("첫번째 useEffect 진입")
         if (!productsInRedux && allProducts.data && allProducts.data.length > 0) {
             dispatch(setProductCards(allProducts.data));
             setIsLoading(false);
@@ -50,7 +49,6 @@ export default function PageCollection({params}: { params: { filter: string } })
     }, [productsInRedux, allProducts.data, dispatch]);
 
     useEffect(() => {
-        console.log("두번째 useEffect 진입");
         if (categoryProducts.length > 0) {
             setProducts(categoryProducts);
             setFilteredProducts(categoryProducts);
@@ -135,9 +133,7 @@ export default function PageCollection({params}: { params: { filter: string } })
             <div className="container py-16 lg:pb-28 lg:pt-20 space-y-16 sm:space-y-20 lg:space-y-28">
                 <div className="space-y-10 lg:space-y-14">
                     <div className="max-w-screen-sm">
-                        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold">
-                            {params.filter ? params.filter.charAt(0).toUpperCase() + params.filter.slice(1) : ""}
-                        </h2>
+                        <Heading desc={"BiDay에서 당신만의 개성을 찾아보세요."}>{params.filter ? params.filter.charAt(0).toUpperCase() + params.filter.slice(1) : ""}</Heading>
                     </div>
                     <hr className="border-slate-200 dark:border-slate-700"/>
                     <main>

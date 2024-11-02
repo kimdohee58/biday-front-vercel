@@ -60,7 +60,7 @@ export async function findByUserAward(): Promise<AwardModel[]> {
     }
 }
 
-export async function findByAuctionId(auctionId: number): Promise<AwardDto | null> {
+export async function findByAuctionId(auctionId: number): Promise<AwardDto> {
     try {
         const options = {
             params: {auctionId: auctionId},
@@ -68,7 +68,7 @@ export async function findByAuctionId(auctionId: number): Promise<AwardDto | nul
         return await awardAPI.findByAuctionId(options);
     } catch (error) {
         console.error("findByAuctionId 에러 발생", error)
-        return null;
+        return {} as AwardDto;
     }
 }
 

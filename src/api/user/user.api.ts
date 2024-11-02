@@ -20,8 +20,15 @@ const checkPassword = async (options: RequestOptions<{}, null>): Promise<boolean
     return response;
 }
 
+const emailByPhone = async (options: RequestOptions<{}, UserModel>): Promise<UserModel> => {
+    const response = await strategy.POST(`${api.user}/retrieve`, options);
+    const data = typeof response.json === 'function' ? await response.json() : response;
+    return response;
+};
+
 
 export const userAPI = {
     changePassword,
-    checkPassword
+    checkPassword,
+    emailByPhone
 }
