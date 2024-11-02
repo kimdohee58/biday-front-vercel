@@ -314,7 +314,7 @@ export default function ProductClientComponent({product}: { product: ProductDeta
                 <div className="flex-1 items-center justify-center mt-5 space-x-3.5">
                     {
                         !auctions.isLoading ? (
-                                <AuctionTable auctions={auctions.data!} product={currentProduct}
+                                <AuctionTable auctions={auctions.data || []} product={currentProduct}
                                               size={currentSizeId}/>)
                             :
                             (<div>Loading...</div>)
