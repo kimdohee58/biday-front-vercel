@@ -28,6 +28,7 @@ import {getUserToken} from "@/lib/features/user.slice";
 import {differenceInMinutes, isAfter} from "date-fns";
 import {CancelAuction} from "@/service/auction/auction.service";
 import {AwardDto} from "@/model/auction/award.model";
+import {useAward} from "@/hooks/react-query/useAward";
 
 export default function AuctionDetailPage() {
     const thisPathname = usePathname();
@@ -86,10 +87,7 @@ export default function AuctionDetailPage() {
     const isEnded = auction.status;
     console.log("isEnded", isEnded)
 
-    const {data: awardData} = useSuspenseQuery({
-        queryKey: ["award", "auctionId", auction?.id],
-        queryFn: () => findByAuctionId(Number(auction?.id)),
-    });
+    const {data: awardData} = useAward(auction.id, isEnded)
 
     const [award, setAward] = useState<AwardDto | null>(null);
 
@@ -544,11 +542,6 @@ export default function AuctionDetailPage() {
             <Suspense>
                 <div>
                     {isEnded && (
-                        // <div
-                        //     className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -rotate-43 text-red-600 border-8 border-red-600 font-bold text-8xl bg-white rounded-md shadow-md w-[700px] h-[200px] flex items-center justify-center text-center leading-none overflow-hidden"
-                        // >
-                        //     <span className="whitespace-nowrap">SOLD OUT</span>
-                        // </div>
                         <div
                             className="absolute top-[35%] left-1/2 transform -translate-x-1/2 -rotate-40 bg-red-600 border-8 border-white font-bold text-8xl text-white rounded-md shadow-md w-[700px] h-[200px] flex items-center justify-center text-center leading-none overflow-hidden z-10"
                         >

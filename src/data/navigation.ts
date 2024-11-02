@@ -32,12 +32,12 @@ export const MEGAMENU_TEMPLATES: NavItemType[] = [
 const OTHER_PAGE_CHILD: NavItemType[] = [
   {
     id: ncNanoId(),
-    href: "/dohee/auction/ongoing",
+    href: "/auction/ongoing",
     name: "진행 중인 경매",
   },
   {
     id: ncNanoId(),
-    href: "/dohee/auction/last-chance",
+    href: "/auction/last-chance",
     name: "마감 임박 경매",
   },
   {

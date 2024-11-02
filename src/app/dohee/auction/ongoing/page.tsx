@@ -3,10 +3,17 @@
 
 import React, {useEffect, useState} from "react";
 import SectionPromo1 from "@/components/SectionPromo1";
-import {fetchAuctionDetails, fetchAuctionWithImages, headerAuctions} from "@/service/auction/auction.service";
-import {AuctionDTO, AuctionWithImageModel} from "@/model/auction/auction.model";
+import {
+    fetchAuctionDetails,
+    fetchAuctionWithImages,
+    headerAuctions,
+    ProductDTOWithImage
+} from "@/service/auction/auction.service";
+import {AuctionDTO, AuctionDTOs, AuctionWithImageModel} from "@/model/auction/auction.model";
 import {auctionAPI} from "@/api/auction/auction.api";
 import SectionGridFeatureItemsDohee from "@/components/dohee/SectionGridFeatureItemsDohee";
+import {UserModel} from "@/model/user/user.model";
+import {AuctionWithProduct} from "@/app/auction/last-chance/page";
 
 interface ImageModel {
     uploadUrl: string;
@@ -38,12 +45,6 @@ interface User {
     password: string;
 }
 
-export interface AuctionWithProduct {
-    auction: Auction;
-    product: Product;
-    user: User; // 유저 객체
-}
-
 // TODO 경매 임박 페이지
 export default function PageHome2() {
     const [auctionData, setAuctionData] = useState<AuctionWithProduct[]>([]);
@@ -52,7 +53,7 @@ export default function PageHome2() {
         const fetchAuctionsWithImages = async () => {
             try {
                 // 경매 데이터를 불러오고 각 항목에 대해 fetchAuctionWithImages 호출
-                const auctionDTOs = await auctionAPI.findBySize({});
+                const auctionDTOs = await auctionAPI.findBySize({}) as AuctionDTOs;
                 const auctionContents = auctionDTOs.content || [];
 
                 const auctionsWithImages = await Promise.all(
@@ -74,11 +75,11 @@ export default function PageHome2() {
                         return false;
                     })
                     .sort((a, b) => {
-                        if (!a.auction.status && b.auction.status) return -1;
-                        if (a.auction.status && !b.auction.status) return 1;
+                        if (!a.auction.auction.status && b.auction.auction.status) return -1;
+                        if (a.auction.auction.status && !b.auction.auction.status) return 1;
 
-                        const endedAtA = new Date(a.auction.endedAt).getTime();
-                        const endedAtB = new Date(b.auction.endedAt).getTime();
+                        const endedAtA = new Date(a.auction.auction.endedAt).getTime();
+                        const endedAtB = new Date(b.auction.auction.endedAt).getTime();
                         return endedAtA - endedAtB;
                     });
 

@@ -1,5 +1,4 @@
 import React, {FC, useEffect, useState} from "react";
-import HeaderFilterSectionDohee from "@/components/dohee/HeaderFilterSectionDohee";
 import CollectionCard2Dohee from "@/components/dohee/CollectionCard2Dohee";
 import {AuctionWithProduct} from "@/app/dohee/auction/last-chance/page";
 import Heading from "@/shared/Heading/Heading";
@@ -28,7 +27,7 @@ const SectionGridFeatureItemsDohee: FC<SectionGridFeatureItemsProps> = ({header 
     // const sortedData = [...data].sort((a, b) => new Date(a.auction.endedAt).getTime() - new Date(b.auction.endedAt).getTime());
 
     useEffect(() => {
-        setFilteredData(data.sort((a, b) => new Date(a.auction.endedAt).getTime() - new Date(b.auction.endedAt).getTime()));
+        setFilteredData(data.sort((a, b) => new Date(a.auction.auction.endedAt).getTime() - new Date(b.auction.auction.endedAt).getTime()));
     }, [data]);
 
     const handleFilterChange = (filter: string) => {
@@ -90,13 +89,13 @@ const SectionGridFeatureItemsDohee: FC<SectionGridFeatureItemsProps> = ({header 
     const sortProductsByOrder = (auctions: AuctionWithProduct[], order: string): AuctionWithProduct[] => {
         switch (order) {
             case "newest":
-                return [...auctions].sort((a, b) => new Date(b.auction.endedAt).getTime() - new Date(a.auction.endedAt).getTime());
+                return [...auctions].sort((a, b) => new Date(b.auction.auction.endedAt).getTime() - new Date(a.auction.auction.endedAt).getTime());
             case "oldest":
-                return [...auctions].sort((a, b) => new Date(a.auction.endedAt).getTime() - new Date(b.auction.endedAt).getTime());
+                return [...auctions].sort((a, b) => new Date(a.auction.auction.endedAt).getTime() - new Date(b.auction.auction.endedAt).getTime());
             case "price-low-to-high":
-                return [...auctions].sort((a, b) => a.auction.currentBid - b.auction.currentBid);
+                return [...auctions].sort((a, b) => a.auction.auction.currentBid - b.auction.auction.currentBid);
             case "price-high-to-low":
-                return [...auctions].sort((a, b) => b.auction.currentBid - a.auction.currentBid);
+                return [...auctions].sort((a, b) => b.auction.auction.currentBid - a.auction.auction.currentBid);
             case "wishlist-low-to-high":
                 return [...auctions].sort((a, b) => a.product.product.wishes - b.product.product.wishes);
             case "wishlist-high-to-low":
@@ -203,7 +202,7 @@ const SectionGridFeatureItemsDohee: FC<SectionGridFeatureItemsProps> = ({header 
 
                         return (
                             <CollectionCard2Dohee
-                                key={auction.id}
+                                key={auction.auction.id}
                                 id={auction.auction.id}
                                 name={product.product.name}
                                 price={auction.auction.currentBid}

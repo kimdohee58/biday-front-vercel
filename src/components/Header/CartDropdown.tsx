@@ -196,7 +196,7 @@ export default function CartDropdownDohee() {
                   />
                 </svg>
 
-                <Link className="block md:hidden absolute inset-0" href={"//account-order"}/>
+                <Link className="block md:hidden absolute inset-0" href={"/account-order"}/>
               </PopoverButton>
               <Transition
                   enter="transition ease-out duration-200"
