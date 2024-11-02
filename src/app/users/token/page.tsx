@@ -7,10 +7,9 @@ import Cookies from 'js-cookie';
 export default function Home() {
     const router = useRouter();
 
-    // accessToken으로 API 요청
     const fetchUsers = async () => {
         try {
-            const accessToken = Cookies.get('accessToken'); // accessToken 가져오기
+            const accessToken = Cookies.get('accessToken');
             if (!accessToken) {
                 throw new Error('Access token is missing');
             }
