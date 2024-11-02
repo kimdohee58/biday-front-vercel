@@ -3,7 +3,7 @@ import { fetchAPI } from './fetch';
 import {handleReissueToken} from "@/utils/reissue/reissueToken";
 import {RequestOptions} from "@/model/api/RequestOptions";
 import {HTTPRequest} from "@/utils/headers";
-import {ApiErrors} from "@/utils/error/error";
+import {ApiErrors, isApiError} from "@/utils/error/error";
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | "PATCH" ;
 
@@ -50,17 +50,12 @@ const apiRequest = async (url: string, method: HttpMethod, {params, data, header
         ...(cache && {cache: {cache}}),
         ...(data && !contentType && {body: JSON.stringify(data)}),
         ...(data && contentType === "multipart/form-data" && {body: data}),
-        signal: controller.signal,
+        // signal: controller.signal,
     };
 
     try {
         let response = await fetchAPI(`${url}${queryString}`, options);
         clearTimeout(id);
-
-
-        if (!response.ok) {
-            return handleApiErrorResponse(response.status);
-        }
 
         const responseType = response.headers.get("Content-Type");
 
@@ -74,7 +69,7 @@ const apiRequest = async (url: string, method: HttpMethod, {params, data, header
             return response.text();
         }
     } catch (error) {
-        clearTimeout(id);
+        // clearTimeout(id);
 
         if (error instanceof Error) {
             if (error.name === 'AbortError') {
@@ -84,7 +79,9 @@ const apiRequest = async (url: string, method: HttpMethod, {params, data, header
                 throw new Error("상태가 정의되지 않은 에러 발생");
             }
         } else {
-            console.error("알 수 없는 에러", error);
+            if (isApiError(error)) {
+                handleApiErrorResponse(error.status);
+            }
         }
     }
 

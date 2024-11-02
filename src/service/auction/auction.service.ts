@@ -111,23 +111,27 @@ export async function deleteAuction(id: number): Promise<void> {
 
 export async function fetchAuctionsBySize(sizeId: number): Promise<AuctionDTO[]> {
     try {
-        console.log("fetchAuctionBySize");
         const options = {
             params: {sizeId: sizeId},
         };
 
         console.log("options", options);
 
-        const result = await auctionAPI.findAllBySize(options);
-        console.log("result", result);
-        return result;
+        return await auctionAPI.findAllBySize(options);
 
     } catch (error) {
-        if (isApiError(error) && error.status === 404) {
-            console.log("404에러");
+        if (isApiError(error)) {
+            if (error.status === 404) {
+                console.log("404 에러");
+                return [] as AuctionDTO[];
+            } else {
+                handleApiError(error.status);
+                return [] as AuctionDTO[];
+            }
+        } else {
+            console.log("apiError 아님");
             return [] as AuctionDTO[];
         }
-        throw error;
     }
 }
 
@@ -143,10 +147,7 @@ export async function fetchAuctionsBySizes(sizeIds: number[]): Promise<AuctionDT
 // product 상세페이지에서 사용하는 함수, sizeId[] 을 가지고 auction[]과 유저 이름을 함께 반환
 export async function fetchAuctionBySizesWithUser(sizeIds: number[]): Promise<AuctionDTO[]> {
     const auctions = await fetchAuctionsBySizes(sizeIds);
-    console.log("auctions in service", auctions)
     const users = await Promise.all(auctions.map(auction => findUserById(auction.userId)));
-
-
     return auctions.map((auction) => {
         const user = users.find(user => user!.id === auction.userId) || {};
         return {
@@ -185,7 +186,7 @@ export async function findByUserAuction(): Promise<AuctionDTO[]> {
     }
 }
 
-type ProductDTOWithImage = {
+export type ProductDTOWithImage = {
     product: ProductDTO,
     image: ImageModel,
     size: string;
@@ -215,7 +216,7 @@ export async function fetchAuctionDetails(auctionId: string): Promise<{auction: 
     }
 }
 
-// 판매 도중 멈추기
+// 판매 도중 경매 취소(판매자만 가능)
 export async function CancelAuction(auctionId: number): Promise<string> {
     try {
         const userToken = Cookies.get('userToken')
@@ -235,3 +236,25 @@ export async function CancelAuction(auctionId: number): Promise<string> {
         throw new Error("경매를 취소하는 중 에러가 발생했습니다.")
     }
 }
+
+// 헤더에서 쓰일 경매 리스트 호출
+// export async function headerAuctions(): Promise<AuctionDTO[]> {
+//     try {
+//         console.log("headerAuctions");
+//         const options = {
+//         };
+//
+//         console.log("options", options);
+//
+//         const result = await auctionAPI.findBySize(options);
+//         console.log("result", result);
+//         return result;
+//
+//     } catch (error) {
+//         if (isApiError(error) && error.status === 404) {
+//             console.log("404에러");
+//             return [] as AuctionDTO[];
+//         }
+//         throw error;
+//     }
+// }

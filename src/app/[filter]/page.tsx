@@ -133,10 +133,7 @@ export default function PageCollection({params}: { params: { filter: string } })
             <div className="container py-16 lg:pb-28 lg:pt-20 space-y-16 sm:space-y-20 lg:space-y-28">
                 <div className="space-y-10 lg:space-y-14">
                     <div className="max-w-screen-sm">
-                        <Heading>{params.filter ? params.filter.charAt(0).toUpperCase() + params.filter.slice(1) : ""}</Heading>
-                        {/*<h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold">*/}
-                        {/*    {params.filter ? params.filter.charAt(0).toUpperCase() + params.filter.slice(1) : ""}*/}
-                        {/*</h2>*/}
+                        <Heading desc={"BiDay에서 당신만의 개성을 찾아보세요."}>{params.filter ? params.filter.charAt(0).toUpperCase() + params.filter.slice(1) : ""}</Heading>
                     </div>
                     <hr className="border-slate-200 dark:border-slate-700"/>
                     <main>
