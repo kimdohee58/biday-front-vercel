@@ -1,4 +1,4 @@
-name: sync to k8 vercel
+name: sync to docker vercel
 
 on:
   push:
@@ -21,14 +21,14 @@ jobs:
         id: push_directory
         uses: cpina/github-action-push-to-another-repository@main
         env:
-          API_TOKEN_GITHUB: ${{ secrets.AUTO_ACTIONS }}
+          API_TOKEN_GITHUB: ${{ secrets.AUTO_ACTIONS_SONG }}
         with:
           source-directory: 'output'
-          destination-github-username: POKITONG
+          destination-github-username: jh328
           destination-repository-name: biday-vercel
-          user-email: ${{ secrets.EMAIL }}
+          user-email: ${{ secrets.EMAIL_SONG }}
           commit-message: ${{ github.event.commits[0].message }}
           target-branch: main
 
-      - name: push k8-vercel
+      - name: push docker-vercel
         run: echo "$DESTINATION_CLONED_DIRECTORY"
