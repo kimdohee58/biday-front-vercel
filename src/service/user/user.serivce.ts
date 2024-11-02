@@ -62,3 +62,18 @@ export async function checkPasswordService(): Promise<boolean> {
     }
 }
 
+export async function emailByPhoneRetrieve(userData: UserModel): Promise<UserModel> {
+    console.log("emailByPhoneRetrieve 진입 확인 하는 로그 :",emailByPhoneRetrieve)
+    try {
+        const options = {
+            data: userData
+        };
+        const emailPhone = await userAPI.emailByPhone(options);
+        console.log("return 전에 확인 하는 코드 : ", emailPhone)
+        return emailPhone;
+    } catch (error) {
+        console.error("emailByPhoneRetrieve 에러 발생 :", error);
+        throw new Error("핸드폰으로 이메일 찾기가 불가능합니다.");
+        //TODO error enum
+    }
+}

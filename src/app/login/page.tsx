@@ -1,4 +1,3 @@
-//src/app/login/page.tsx
 "use client";
 
 import React, { useState, useEffect, FormEvent } from 'react';
@@ -96,18 +95,17 @@ const PageLogin = () => {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        try {
-            await login(email, password);
-            // 로그인 성공 시 알림창 띄우기
+
+        const isLoginSuccess = await login(email, password);
+
+        if (isLoginSuccess) {
             window.alert('로그인 성공!');
-            router.push('/'); // 성공 후 리디렉션
-        } catch (err) {
-            setError("Login failed. Please check your email or password.");
-            console.log("실패다.", err);
-            // 로그인 실패 시 알림창 띄우기
-            window.alert('로그인 실패! 이메일이나 비밀번호를 확인해 주세요.');
+            router.push('/');
+        } else {
+            setError("로그인에 실패했습니다. 이메일이나 비밀번호를 확인해 주세요.");
         }
     };
+
 
     const handleSocialLogin = async (href: string) => {
         window.location.href = href;
@@ -190,7 +188,7 @@ const PageLogin = () => {
                             <span className="flex justify-between items-center text-neutral-800 dark:text-neutral-200">
                                 Password
                                 <Link href="/forgot-pass" className="text-sm text-green-600">
-                                    Forgot password?
+                                    forgot Email?
                                 </Link>
                             </span>
                             <Input

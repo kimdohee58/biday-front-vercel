@@ -20,8 +20,14 @@ const checkPassword = async (options: RequestOptions<{}, null>): Promise<boolean
     return response;
 }
 
+const emailByPhone = async (options: RequestOptions<{}, UserModel>):Promise<UserModel> =>{
+    console.log("emailByPhone 진입 하는 확인 하는 코드 : ", emailByPhone)
+    return await strategy.POST(`${api.user}/retrieve`, options);
+}
+
 
 export const userAPI = {
     changePassword,
-    checkPassword
+    checkPassword,
+    emailByPhone
 }
