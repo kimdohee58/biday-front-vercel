@@ -16,29 +16,28 @@ import {Colors} from "@/data/color";
 
 const PRICE_RANGE = [10000, 1000000];
 
-// const DATA_colors = [
-//     { name: "Red" },
-//     { name: "Orange" },
-//     { name: "Yellow" },
-//     { name: "Green" },
-//     { name: "Blue" },
-//     { name: "Purple" },
-//     { name: "Charcoal" },
-//     { name: "Gray" },
-//     { name: "Black" },
-//     { name: "Brown" },
-//     { name: "White" },
-//     { name: "Cream" },
-//     { name: "Ivory" },
-//     { name: "Khaki" },
-//     { name: "Melange" },
-//     { name: "Navy" },
-//     { name: "Pink" },
-//     { name: "Beige" },
-//     { name: "Olive" },
-//     { name: "Burgundy" }
-// ];
-const DATA_colors = Colors;
+const DATA_colors = [
+    { name: "Red" },
+    { name: "Orange" },
+    { name: "Yellow" },
+    { name: "Green" },
+    { name: "Blue" },
+    { name: "Purple" },
+    { name: "Charcoal" },
+    { name: "Gray" },
+    { name: "Black" },
+    { name: "Brown" },
+    { name: "White" },
+    { name: "Cream" },
+    { name: "Ivory" },
+    { name: "Khaki" },
+    { name: "Melange" },
+    { name: "Navy" },
+    { name: "Pink" },
+    { name: "Beige" },
+    { name: "Olive" },
+    { name: "Burgundy" }
+];
 
 const DATA_brands = [
     {name: "esfai"},

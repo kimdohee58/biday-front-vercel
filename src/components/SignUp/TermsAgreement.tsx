@@ -13,8 +13,8 @@ interface ModalProps {
 
 const Modal = ({title, content, onClose} : ModalProps) => {
     const handleClickOutside = (event: React.MouseEvent<HTMLDivElement>) => {
-        event.stopPropagation(); // 모달 외부 클릭 시 이벤트 전파를 막음
-        onClose(); // 모달 닫기
+        event.stopPropagation();
+        onClose();
     };
 
     return (
