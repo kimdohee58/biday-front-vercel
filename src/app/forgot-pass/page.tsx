@@ -61,19 +61,21 @@ export default function PageForgotPass() {
         <div className="container mb-24 lg:mb-32">
             <header className="text-center max-w-2xl mx-auto - mb-14 sm:mb-16 lg:mb-20">
                 <h2 className="mt-20 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
-                    Forgot Email
+                    Forgot Password
                 </h2>
                 <span className="block text-sm mt-4 text-neutral-700 sm:text-base dark:text-neutral-200">
                     Welcome to BiDay
                 </span>
             </header>
 
+            {/* TODO 준한 : 이메일 입력 먼저 받고 회원가입-중복확인 버튼 그대로 쓰되, 이름은 아이디 확인으로 바꿀것, 아이디 확인되고 나면 비밀번호 변경 폼을 띄워서 변경 시키고 로그인 화면으로 router 처리
+             todo 아이디를 틀렸다면 똑같이 forgot email? 띄워서 그 버튼으로 이동하게 해서, 전화번호 입력하게 하고 아이디 앞자리 3글자 제외 (ex).sel***@naver.com 이렇게 보여주기) *로 처리해서 보여주게 한다음 다시 비밀번호 변경 폼으로 돌릴 */}
             <div className="max-w-md mx-auto space-y-6">
                 {/* FORM */}
                 <form className="grid grid-cols-1 gap-6" onSubmit={handleSubmit}>
                     <label className="block">
                         <span className="text-neutral-800 dark:text-neutral-200">
-                            전화번호 입력
+                            이메일 입력
                         </span>
                         <Input
                             type="text"

@@ -9,7 +9,6 @@ import {auctionAPI} from "@/api/auction/auction.api";
 import SectionGridFeatureItemsDohee from "@/components/dohee/SectionGridFeatureItemsDohee";
 import {AuctionWithProduct} from "@/app/auction/last-chance/page";
 
-// TODO 경매 임박 페이지
 export default function OnGoing() {
     const [auctionData, setAuctionData] = useState<AuctionWithProduct[]>([]);
 

@@ -175,9 +175,7 @@ const PageLogin = () => {
                         <label className="block">
                             <span className="flex justify-between items-center text-neutral-800 dark:text-neutral-200">
                                 Email address
-                                <Link href="/forgot-pass" className="text-sm text-green-600">
-                                    forgot email?
-                                </Link></span>
+                            </span>
                             <Input
                                 type="email"
                                 name="email"
@@ -191,6 +189,9 @@ const PageLogin = () => {
                         <label className="block">
                             <span className="flex justify-between items-center text-neutral-800 dark:text-neutral-200">
                                 Password
+                                <Link href="/forgot-pass" className="text-sm text-green-600">
+                                    forgot password?
+                                </Link>
                             </span>
                             <Input
                                 type="password"

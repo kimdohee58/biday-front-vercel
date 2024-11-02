@@ -15,7 +15,6 @@ export interface AuctionWithProduct {
     user: UserModel
 }
 
-// TODO 경매 임박 페이지
 export default function LastChance() {
     const [auctionData, setAuctionData] = useState<AuctionWithProduct[]>([]);
 
