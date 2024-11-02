@@ -3,7 +3,7 @@
 import {auctionAPI} from "@/api/auction/auction.api";
 import Cookies from "js-cookie";
 import {
-    AuctionDTO,
+    AuctionDTO, AuctionDTOs,
     AuctionDTOWithImageModel,
     AuctionModel,
     AuctionWithImageModel,
@@ -185,7 +185,7 @@ export async function findByUserAuction(): Promise<AuctionDTO[]> {
     }
 }
 
-type ProductDTOWithImage = {
+export type ProductDTOWithImage = {
     product: ProductDTO,
     image: ImageModel,
     size: string;
@@ -237,7 +237,7 @@ export async function CancelAuction(auctionId: number): Promise<string> {
 }
 
 // 헤더에서 쓰일 경매 리스트 호출
-export async function headerAuctions(): Promise<AuctionDTO[]> {
+export async function headerAuctions(): Promise<AuctionDTO[] | AuctionDTOs> {
     try {
         console.log("headerAuctions");
         const options = {

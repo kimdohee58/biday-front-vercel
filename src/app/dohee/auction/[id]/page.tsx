@@ -129,7 +129,6 @@ export default function AuctionDetailPage() {
         router.push(`${thisPathname}/?productId=${productId}&modal=PHOTO_TOUR_SCROLLABLE` as Route);
     };
 
-    //
     const renderVariants = () => {
 
         return (
@@ -360,11 +359,11 @@ export default function AuctionDetailPage() {
 
     const section1Data = [
         {
-            name: <strong>판매자 정보</strong>,
+            name:"판매자 정보",
             content: maskUsername(username),
         },
         {
-            name: <strong>경매 상품 설명</strong>,
+            name: "경매 상품 설명",
             content: auction?.description,
         }
     ];

@@ -57,6 +57,8 @@ export default function AuctionDetailPage() {
 
     const auctionData = useSuspenseAuctionAndProduct(id);
 
+    console.log("auctionData", auctionData);
+
     const {auction, images: auctionImages = []} = auctionData.data.auction || {auction: null, images: []};
     const {product, image: productImage, size} = auctionData.data.product;
     const {id: userId, name: username} = auctionData.data.user;
@@ -85,7 +87,7 @@ export default function AuctionDetailPage() {
     console.log("isEnded", isEnded)
 
     const {data: awardData} = useSuspenseQuery({
-        queryKey: ["auctionId", auction?.id],
+        queryKey: ["award", "auctionId", auction?.id],
         queryFn: () => findByAuctionId(Number(auction?.id)),
     });
 
