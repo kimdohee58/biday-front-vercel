@@ -20,7 +20,7 @@ export default function Home() {
                     "Authorization": `Bearer ${accessToken}`, // accessToken 사용
                     "Content-Type": "application/json",
                 },
-                credentials: 'include', // 쿠키 자동 전송
+                credentials: 'include',
             });
 
             if (response.status === 401) {
