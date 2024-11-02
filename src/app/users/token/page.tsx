@@ -24,7 +24,6 @@ export default function Home() {
             });
 
             if (response.status === 401) {
-                // accessToken 만료 시 refreshToken을 사용해 새로 발급받음
                 await handleReissueToken();
                 fetchUsers(); // 토큰 재발급 후 다시 요청
             } else if (!response.ok) {
