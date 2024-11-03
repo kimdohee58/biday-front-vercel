@@ -66,7 +66,6 @@ const renderProductItem = (product: any, index: number, type: string,
         awardId = product.id;
     }
 
-
     const price = product.amount || product.currentBid || 0;
 
     const createdAt = formatDate(findNestedProperty<string>(product, ["createdAt"]) || "Invalid Date");

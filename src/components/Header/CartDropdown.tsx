@@ -77,9 +77,8 @@ export default function CartDropdown() {
 
   const totalBid = filteredAwardList.reduce((acc, item) => acc + item.currentBid, 0);
 
-  // TODO AWARD ID 로 해서 award.id로 checkout 걸기
   const renderProduct = (
-      item: { award: AwardModel } & { product: SizeModel | null; matchedSize: string | null } | null,
+      item: AwardModel & { product: SizeModel | null; matchedSize: string | null } | null,
       index: number,
       close: () => void
   ) => {
@@ -87,13 +86,10 @@ export default function CartDropdown() {
       console.log("Product is null or item is null!!!");
       return null;
     }
-    console.log("item", item)
-    const { award, product } = item;
-    const { auction, currentBid, createdAt } = award;
-    const {id, size, sizeProduct} = product;
-    const {name} = sizeProduct;
 
-    console.log("award", award)
+    const { auction, currentBid, createdAt, product } = item;
+    const { id, size, sizeProduct } = product;
+    const { name } = sizeProduct;
 
     const payDate = new Date(createdAt);
     payDate.setDate(payDate.getDate() + 3);
@@ -131,7 +127,7 @@ export default function CartDropdown() {
                 <Link
                     type="button"
                     className={`flex items-center justify-center px-4 py-2 rounded-md border border-blue-600 text-blue-600 font-semibold transition duration-200 shadow-sm hover:bg-blue-100 hover:text-blue-800 hover:shadow-lg active:bg-blue-200`}
-                    href={`/checkout?awardId=${award.id}&productId=${id}`}
+                    href={`/checkout?awardId=${item.id}&productId=${id}`}
                     onClick={close}
                 >
                   <span className="mr-1 text-lg">🛒</span>
@@ -220,7 +216,7 @@ export default function CartDropdown() {
                                 <Spinner/>
                               </div>
                           ) : mapDataWithAwardModel(filteredAwardList, matchedAwardProductList!!)?.length > 0 ? (
-                              mapDataWithAwardModel(filteredAwardList, matchedAwardProductList!!).map((item, index) => renderProduct(item as { award: AwardModel } & { product: SizeModel | null; matchedSize: string | null }, index, close))
+                              mapDataWithAwardModel(filteredAwardList, matchedAwardProductList!!).map((item, index) => renderProduct(item as any as AwardModel & { product: SizeModel | null; matchedSize: string | null }, index, close))
                           ) : (
                               <p className="text-center mt-8 mb-2 text-lg">결제 대기 중인 상품이 없습니다.</p>
                           )}
