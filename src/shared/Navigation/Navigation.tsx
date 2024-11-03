@@ -1,27 +1,28 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import NavigationItem from "./NavigationItem";
-import {NAVIGATION_DEMO_2} from "@/data/navigation";
-import {useSelector} from "react-redux";
-import {getUserToken} from "@/lib/features/user.slice";
-import {useRouter} from "next/navigation";
+import { NAVIGATION_DEMO_2 } from "@/data/navigation";
+import { useSelector } from "react-redux";
+import { getUserToken } from "@/lib/features/user.slice";
+import { useRouter } from "next/navigation";
 
 function Navigation() {
-    // TODO 경매 등록 role = seller 아니라면 판매자 등록 페이지로 넘어가기
     const userToken = useSelector(getUserToken);
     const [userRole, setUserRole] = useState("");
     const router = useRouter();
 
     useEffect(() => {
-        const role = userToken && userToken.userRole ? userToken.userRole[0] : "ROLE_USER";
-        setUserRole(role);
-    }, [userToken]);
+        console.log(userToken?.userRole?.[0])
+        setUserRole(userToken?.userRole?.[0] || "null")
+    }, []);
 
     const handleRoleCheck = () => {
-        router.push(
-            !userToken ? '/login' :
-                userRole === "ROLE_SELLER" ? '/auction/insert' :
-                    '/account-seller'
-        );
+        if (userRole === "null") {
+            router.push('/login');
+        } else if (userRole === "ROLE_SELLER") {
+            router.push('/auction/insert');
+        } else {
+            router.push('/account-seller');
+        }
     };
 
     return (

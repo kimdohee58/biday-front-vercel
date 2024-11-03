@@ -161,8 +161,9 @@ export default function InsertAuction() {
             }
 
             const endDate = new Date(currentDate);
-            endDate.setDate(currentDate.getDate() + days);
-
+            // endDate.setDate(currentDate.getDate() + days);
+            endDate.setMinutes(currentDate.getMinutes() + days);
+            console.log("data", endDate);
             setStartedAt(currentDate);
             setEndedAt(endDate);
         };

@@ -75,10 +75,9 @@ export default function CartDropdownDohee() {
       sizeIds.includes(size.id)
   );
 
-  console.log("matchedAwardProductList", matchedAwardProductList);
-
   const totalBid = filteredAwardList.reduce((acc, item) => acc + item.currentBid, 0);
 
+  // TODO AWARD ID 로 해서 award.id로 checkout 걸기
   const renderProduct = (
       item: AwardModel & { product: SizeModel | null; matchedSize: string | null } | null,
       index: number,
@@ -88,7 +87,9 @@ export default function CartDropdownDohee() {
       console.log("Product is null or item is null!!!");
       return null;
     }
-    const {auction, product, currentBid, createdAt} = item;
+    console.log("item", item)
+    const { auction, product, currentBid, createdAt} = item;
+    // const { award } = item.awardModel;
     const {id, size, sizeProduct} = product;
     const {name} = sizeProduct;
 
@@ -128,14 +129,12 @@ export default function CartDropdownDohee() {
                 <Link
                     type="button"
                     className={`flex items-center justify-center px-4 py-2 rounded-md border border-blue-600 text-blue-600 font-semibold transition duration-200 shadow-sm hover:bg-blue-100 hover:text-blue-800 hover:shadow-lg active:bg-blue-200`}
-                    href={`/checkout?awardId=${item?.auction.id}&productId=${id}`}
+                    href={`/checkout?awardId=${auction.id}&productId=${id}`}
                     onClick={close}
                 >
                   <span className="mr-1 text-lg">🛒</span>
                   결제
                 </Link>
-
-
               </div>
             </div>
           </div>
