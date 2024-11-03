@@ -100,3 +100,16 @@ export async function fetchSizeIdsFromAwards(awardIds: number[]): Promise<number
         throw new Error("sizeId 추출 실패");
     }
 }
+
+// 결제 완료되었다면 호출될 updateAwardStatus
+export async function updateAwardStatus(awardId: number): Promise<AwardModel> {
+    try {
+        const options = {
+            params: {awardId: awardId},
+        };
+        return await awardAPI.updateAwardStatus(options);
+    } catch (error) {
+        console.error("Award updateStatus 에러 발생", error)
+        return {} as AwardModel;
+    }
+}

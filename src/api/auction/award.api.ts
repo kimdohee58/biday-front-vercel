@@ -34,8 +34,15 @@ const findByAuctionId = async (options: RequestOptions<{auctionId: number}, null
     return await strategy.GET(`${api.award}/findByAuction`, options);
 }
 
+// 결제가 성공적으로 되었다면 호출될 award updateStatus
+const updateAwardStatus = async (options: RequestOptions<{awardId: number}, null>): Promise<AwardModel> => {
+    console.log("updateAwardStatus 확인: ", options)
+    return await strategy.PATCH(`${api.award}/updateStatus`, options);
+}
+
 export const awardAPI= {
     findByUser,
     findById,
     findByAuctionId,
+    updateAwardStatus,
 };
