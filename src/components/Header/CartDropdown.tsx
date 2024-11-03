@@ -1,4 +1,4 @@
-//dohee/CartDropdownDohee
+// CartDropdown
 "use client";
 
 import {
@@ -26,7 +26,7 @@ interface ContentAward {
   content: AwardModel[];
 }
 
-export default function CartDropdownDohee() {
+export default function CartDropdown() {
   const router = useRouter();
   const [awardData, setAwardData] = useState<ContentAward>();
   const [awardContent, setAwardContent] = useState<AwardModel[]>([]);
@@ -79,7 +79,7 @@ export default function CartDropdownDohee() {
 
   // TODO AWARD ID 로 해서 award.id로 checkout 걸기
   const renderProduct = (
-      item: AwardModel & { product: SizeModel | null; matchedSize: string | null } | null,
+      item: { award: AwardModel } & { product: SizeModel | null; matchedSize: string | null } | null,
       index: number,
       close: () => void
   ) => {
@@ -88,10 +88,12 @@ export default function CartDropdownDohee() {
       return null;
     }
     console.log("item", item)
-    const { auction, product, currentBid, createdAt} = item;
-    // const { award } = item.awardModel;
+    const { award, product } = item;
+    const { auction, currentBid, createdAt } = award;
     const {id, size, sizeProduct} = product;
     const {name} = sizeProduct;
+
+    console.log("award", award)
 
     const payDate = new Date(createdAt);
     payDate.setDate(payDate.getDate() + 3);
@@ -129,7 +131,7 @@ export default function CartDropdownDohee() {
                 <Link
                     type="button"
                     className={`flex items-center justify-center px-4 py-2 rounded-md border border-blue-600 text-blue-600 font-semibold transition duration-200 shadow-sm hover:bg-blue-100 hover:text-blue-800 hover:shadow-lg active:bg-blue-200`}
-                    href={`/checkout?awardId=${auction.id}&productId=${id}`}
+                    href={`/checkout?awardId=${award.id}&productId=${id}`}
                     onClick={close}
                 >
                   <span className="mr-1 text-lg">🛒</span>
@@ -218,7 +220,7 @@ export default function CartDropdownDohee() {
                                 <Spinner/>
                               </div>
                           ) : mapDataWithAwardModel(filteredAwardList, matchedAwardProductList!!)?.length > 0 ? (
-                              mapDataWithAwardModel(filteredAwardList, matchedAwardProductList!!).map((item, index) => renderProduct(item as any as AwardModel & {product: SizeModel | null, matchedSize: string | null}, index, close))
+                              mapDataWithAwardModel(filteredAwardList, matchedAwardProductList!!).map((item, index) => renderProduct(item as { award: AwardModel } & { product: SizeModel | null; matchedSize: string | null }, index, close))
                           ) : (
                               <p className="text-center mt-8 mb-2 text-lg">결제 대기 중인 상품이 없습니다.</p>
                           )}

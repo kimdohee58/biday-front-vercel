@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import DropdownCategories from "@/components/Header/DropdownCategories";
 import TemplatesDropdown from "@/components/Header/TemplatesDropdown";
 import LangDropdown from "@/components/Header/LangDropdown";
-import CartDropdownDohee from "@/components/Header/CartDropdown";
+import CartDropdown from "@/components/Header/CartDropdown";
 
 export interface MainNav2Props {
   className?: string;
@@ -120,7 +120,7 @@ const MainNav2Dohee: FC<MainNav2Props> = ({ className = "" }) => {
                     {renderMagnifyingGlassIcon()}
                   </button>
               )}
-              <CartDropdownDohee/>
+              <CartDropdown/>
             </div>
           </div>
         </div>
