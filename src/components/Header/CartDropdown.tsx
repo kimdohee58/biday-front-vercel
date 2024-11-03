@@ -16,9 +16,7 @@ import {Spinner} from "@chakra-ui/react";
 import {AwardModel} from "@/model/auction/award.model";
 import {findByUserAward} from "@/service/auction/award.service";
 import {useFetchAwardProducts} from "@/components/AccountuseQuery/useQuery";
-import {ProductModel} from "@/model/product/product.model";
 import {mapDataWithAwardModel} from "@/utils/mapDataWithProducts";
-import {useRouter} from "next/navigation";
 import ImageFetcher from "../ImageFetcher";
 import {SizeModel} from "@/model/product/size.model";
 
@@ -27,7 +25,6 @@ interface ContentAward {
 }
 
 export default function CartDropdown() {
-  const router = useRouter();
   const [awardData, setAwardData] = useState<ContentAward>();
   const [awardContent, setAwardContent] = useState<AwardModel[]>([]);
   const [loading, setLoading] = useState(true);
@@ -63,10 +60,10 @@ export default function CartDropdown() {
 
   const currentDate = new Date();
   const filteredAwardList = awardContent.filter((item) => {
-    const {createdAt} = item;
+    const { status, createdAt } = item;
     const payDate = new Date(createdAt);
     payDate.setDate(payDate.getDate() + 3);
-    return payDate >= currentDate;
+    return !status && payDate >= currentDate;
   }) || [];
 
   const {data: awardProductList = []} = useFetchAwardProducts(awardData);
