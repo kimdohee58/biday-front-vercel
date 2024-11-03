@@ -3,7 +3,7 @@
 import React, {useEffect, useMemo, useState} from "react";
 import {ProductCardModel} from "@/model/product/product.model";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
-import SectionSliderCollections from "@/components/SectionSliderLargeProduct";
+import SectionSliderLargeProductDohee from "@/components/dohee/SectionSliderLargeProductDohee";
 import SectionPromo1 from "@/components/SectionPromo1";
 import ProductCard from "@/components/ProductCard";
 import {useRouter} from "next/navigation";
@@ -115,7 +115,8 @@ export default function PageClient(props: ClientComponentProps) {
 
                 <hr className="border-slate-200 dark:border-slate-700"/>
 
-                <SectionSliderCollections/>
+                {/*<SectionSliderCollections/>*/}
+                <SectionSliderLargeProductDohee/>
                 <hr className="border-slate-200 dark:border-slate-700"/>
 
                 <SectionPromo1/>
