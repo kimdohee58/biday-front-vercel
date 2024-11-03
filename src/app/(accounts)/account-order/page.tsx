@@ -80,19 +80,27 @@ const AccountOrder = () => {
     return (
         <div className="space-y-10 sm:space-y-12">
             <div>
-                <div className="flex space-x-8 mb-8">
+                <div className="flex justify-center space-x-8 mb-8">
                     <h2
-                        className={`text-2xl sm:text-3xl font-semibold cursor-pointer ${activeTab === "award" ? "text-indigo-600 border-b-2 border-indigo-600" : "text-gray-800"}`}
+                        className={`text-2xl sm:text-3xl font-semibold cursor-pointer py-2 px-4 rounded-md transition-all duration-300 ease-in-out transform ${
+                            activeTab === "award"
+                                ? "text-indigo-700 border-b-2 border-indigo-700 bg-indigo-100 shadow-md"
+                                : "text-gray-700 hover:text-indigo-700 hover:bg-indigo-50 hover:shadow-md"
+                        }`}
                         onClick={() => {
-                            setActiveTab("award")
+                            setActiveTab("award");
                         }}
                     >
                         낙찰 내역
                     </h2>
                     <h2
-                        className={`text-2xl sm:text-3xl font-semibold cursor-pointer ${activeTab === "auction" ? "text-indigo-600 border-b-2 border-indigo-600" : "text-gray-800"}`}
+                        className={`text-2xl sm:text-3xl font-semibold cursor-pointer py-2 px-4 rounded-md transition-all duration-300 ease-in-out transform ${
+                            activeTab === "auction"
+                                ? "text-indigo-700 border-b-2 border-indigo-700 bg-indigo-100 shadow-md"
+                                : "text-gray-700 hover:text-indigo-700 hover:bg-indigo-50 hover:shadow-md"
+                        }`}
                         onClick={() => {
-                            setActiveTab("auction")
+                            setActiveTab("auction");
                         }}
                     >
                         경매 내역
@@ -128,17 +136,17 @@ const AccountOrder = () => {
                         {activeTab === "auction" && (
                             <>
                                 <div className="mb-8">
-                                    {renderAuctionHistory(mapDataWithAuctionModel(auctionContent, auctionProductList!!),handleImgClick)}
+                                    {renderAuctionHistory(mapDataWithAuctionModel(auctionContent, auctionProductList!!), handleImgClick)}
                                 </div>
                                 <div className="mb-8">
-                                    {renderBidHistory(mapDataWithBidModel(bidData, bidProductList!!),handleImgClick)}
+                                    {renderBidHistory(mapDataWithBidModel(bidData, bidProductList!!), handleImgClick)}
                                 </div>
                             </>
                         )}
                         {activeTab === "award" && (
                             <>
                                 <div className="mb-8">
-                                    {renderAwardHistory(mapDataWithAwardModel(awardContent, awardProductList!!), handleImgClick,handleCheckoutClick)}
+                                    {renderAwardHistory(mapDataWithAwardModel(awardContent, awardProductList!!), handleImgClick, handleCheckoutClick)}
                                 </div>
                                 <div className="mb-8">
                                     {renderPaymentHistory(mappedPaymentData)}

@@ -543,7 +543,7 @@ export default function AuctionDetailPage() {
                 <div>
                     {isEnded && (
                         <div
-                            className="absolute top-[35%] left-1/2 transform -translate-x-1/2 -rotate-40 bg-red-600 border-8 border-white font-bold text-8xl text-white rounded-md shadow-md w-[700px] h-[200px] flex items-center justify-center text-center leading-none overflow-hidden z-10"
+                            className="absolute top left-1/2 transform -translate-x-1/2 -rotate-40 bg-red-600 border-8 border-white font-bold text-8xl text-white rounded-md shadow-md w-[700px] h-[200px] flex items-center justify-center text-center leading-none overflow-hidden z-10"
                         >
                             <span className="whitespace-nowrap">SOLD OUT</span>
                         </div>
