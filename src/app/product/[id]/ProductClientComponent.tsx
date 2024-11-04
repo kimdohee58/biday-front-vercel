@@ -24,6 +24,7 @@ import {useRouter, useSearchParams} from "next/navigation";
 import Cookies from "js-cookie";
 import {UserToken} from "@/model/user/userToken";
 import {UserRole} from "@/model/user/user.model";
+import {useProductDetail} from "@/hooks/react-query/useProductlist";
 
 type ProductDetailProps = {
     product: ProductWithImageModel,
@@ -100,13 +101,12 @@ function RenderSizeList({sizeArray, onClickSizeButton, currentSize, sizes}: Rend
     );
 }
 
-export default function ProductClientComponent({product}: { product: ProductDetailProps}) {
+export default function ProductClientComponent({productId} : { productId: string}) {
+    const {data: product} = useProductDetail(productId);
     const router = useRouter();
 
     const searchParams = useSearchParams();
     const size = searchParams.get("size");
-    console.log("size", size);
-
     const {product: productWithImage, size: sizeArray, colors, productWithImagesArray} = product;
     const {product: initialProduct} = productWithImage;
     const productArray = productWithImagesArray.map((product) => {

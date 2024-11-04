@@ -21,6 +21,13 @@ export interface ProductDTO {
     wishes: number;
 }
 
+export interface ProductDetails {
+    product: ProductWithImageModel,
+    size: string[],
+    colors: ColorType[],
+    productWithImagesArray: ProductWithImageModel[];
+}
+
 export enum ColorType {
     CHARCOAL = "CHARCOAL",
     GRAY = "GRAY",

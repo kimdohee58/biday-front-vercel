@@ -3,7 +3,7 @@ import { fetchAPI } from './fetch';
 import {handleReissueToken} from "@/utils/reissue/reissueToken";
 import {RequestOptions} from "@/model/api/RequestOptions";
 import {HTTPRequest} from "@/utils/headers";
-import {ApiErrors} from "@/utils/error/error";
+import {ApiErrors, handleApiErrorResponse} from "@/utils/error/error";
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | "PATCH" ;
 
@@ -15,27 +15,6 @@ const apiRequest = async (url: string, method: HttpMethod, {params, data, header
     if (userToken) {
         console.log("token", HTTPRequest(userToken));
     }
-
-    const handleApiErrorResponse = (status: number) => {
-        switch (status) {
-            case 404:
-                throw ApiErrors.NOT_FOUND;
-            case 401:
-                throw ApiErrors.UNAUTHORIZED;
-            case 403:
-                throw ApiErrors.FORBIDDEN;
-            case 409:
-                throw ApiErrors.CONFLICT;
-            case 500:
-                throw ApiErrors.INTERNAL_SERVER_ERROR;
-            case 503:
-                throw ApiErrors.SERVICE_UNAVAILABLE;
-            case 504:
-                throw ApiErrors.GATEWAY_TIMEOUT;
-            default:
-                throw ApiErrors.UNKNOWN;
-        }
-    };
 
     const queryString = params ? `?${new URLSearchParams(params)}` : '';
 
@@ -56,7 +35,6 @@ const apiRequest = async (url: string, method: HttpMethod, {params, data, header
     try {
         let response = await fetchAPI(`${url}${queryString}`, options);
         clearTimeout(id);
-
 
         if (!response.ok) {
             return handleApiErrorResponse(response.status);
