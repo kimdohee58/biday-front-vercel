@@ -116,7 +116,7 @@ const PageLogin = () => {
     const loginSocials = [
         {
             name: "NaverLogin",
-            href: `${axiosInstance.defaults.baseURL}/oauth2/authorization/naver`,
+            href: `${process.env.NEXT_PUBLIC_API_SERVER_URL}/oauth2/authorization/naver`,
             icon: naver,
         },
         {
