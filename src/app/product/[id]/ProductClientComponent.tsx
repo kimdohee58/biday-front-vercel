@@ -61,7 +61,7 @@ function RenderSizeList({sizeArray, onClickSizeButton, currentSize, sizes}: Rend
         <div>
             <div className="flex justify-between font-medium text-sm">
                 <label htmlFor="">
-                    throw error;
+
             <span className="">
               Size:
               <span className="ml-1 font-semibold">{currentSize || "ALL"}</span>

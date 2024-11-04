@@ -192,6 +192,10 @@ const PageLogin = () => {
                                 <Link href="/forgot-pass" className="text-sm text-green-600">
                                     forgot password?
                                 </Link>
+
+                                 <Link href="/forgot-resetPassword" className="text-sm text-green-600">
+                                    forgot resetPassword?
+                                </Link>
                             </span>
                             <Input
                                 type="password"
