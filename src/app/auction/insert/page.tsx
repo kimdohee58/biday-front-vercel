@@ -44,7 +44,6 @@ export default function InsertAuction() {
     const [endedAt, setEndedAt] = useState<Date>();
     const [auctionId, setAuctionId] = useState();
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
 
     const productList = useQuery({
         queryKey: ["allProductsWithImages"],
@@ -138,7 +137,6 @@ export default function InsertAuction() {
 
             const endDate = new Date(currentDate);
             endDate.setDate(currentDate.getDate() + days);
-            // endDate.setMinutes(currentDate.getMinutes() + days);
             console.log("data", endDate);
             setStartedAt(currentDate);
             setEndedAt(endDate);
@@ -181,8 +179,6 @@ export default function InsertAuction() {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
 
-        setIsLoading(true);
-
         if (isFormValid) {
             // errorMessage 초기화
             setErrorMessage("");
@@ -190,8 +186,8 @@ export default function InsertAuction() {
             const body: SaveAuctionModel = {
                 sizeId: size,
                 description: description,
-                startingBid: 10000,
-                currentBid: 10000,
+                startingBid: selectedProduct.product.price * 0.4,
+                currentBid: selectedProduct.product.price * 0.4,
                 startedAt: startedAt,
                 endedAt: endedAt,
             };
@@ -209,31 +205,29 @@ export default function InsertAuction() {
 
                 // 성공적인 경우 리다이렉트
                 if (message === "success") {
-                    router.push("/dohee/auction/insert/success");
+                    router.push("/auction/insert/success");
                 } else {
                     if (data.id != null) {
                         await auctionDelete.mutateAsync(data.id);
                         console.log("image message", message);
                     }
                     // 오류 메시지를 URL에 담아 리다이렉트
-                    router.push(`/dohee/auction/insert/fail?message=이미지%20업로드에%20실패했습니다.`);
+                    router.push(`/auction/insert/fail?message=이미지%20업로드에%20실패했습니다.`);
                 }
 
             } catch (error: unknown) {
                 if (error instanceof Error) {
                     handleErrorResponse(error);
                 } else {
-                    router.push(`/dohee/auction/insert/fail?message=네트워크%20오류가%20발생했습니다.%20확인해%20주세요.`);
+                    router.push(`/auction/insert/fail?message=네트워크%20오류가%20발생했습니다.%20확인해%20주세요.`);
                 }
 
                 console.error("옥션 등록 중 오류 발생", error);
-            } finally {
-                setIsLoading(false);
             }
 
         } else {
             setErrorMessage("모든 필드를 올바르게 입력해주세요.");
-            // router.push(`/dohee/auction/insert/fail?message=모든%20필드를%20올바르게%20입력해주세요.`);
+            // router.push(`/auction/insert/fail?message=모든%20필드를%20올바르게%20입력해주세요.`);
         }
     };
 
@@ -245,16 +239,16 @@ export default function InsertAuction() {
                 // HTTP 상태 코드에 따라 메시지 설정
                 switch (customError.response.status) {
                     case 400:
-                        router.push(`/dohee/auction/insert/fail?message=잘못된%20요청입니다.%20입력을%20확인하세요.`);
+                        router.push(`/auction/insert/fail?message=잘못된%20요청입니다.%20입력을%20확인하세요.`);
                         break;
                     case 404:
-                        router.push(`/dohee/auction/insert/fail?message=요청한%20자원이%20존재하지%20않습니다.`);
+                        router.push(`/auction/insert/fail?message=요청한%20자원이%20존재하지%20않습니다.`);
                         break;
                     case 500:
-                        router.push(`/dohee/auction/insert/fail?message=서버%20오류가%20발생했습니다.`);
+                        router.push(`/auction/insert/fail?message=서버%20오류가%20발생했습니다.`);
                         break;
                     default:
-                        router.push(`/dohee/auction/insert/fail?message=알 수 없는 오류가 발생했습니다.`);
+                        router.push(`/auction/insert/fail?message=알 수 없는 오류가 발생했습니다.`);
                         break;
                 }
             }
@@ -360,15 +354,11 @@ export default function InsertAuction() {
                         <button
                             type="submit"
                             className={`py-3 px-8 rounded-lg text-white font-semibold transition duration-300 ease-in-out shadow-md hover:shadow-lg ${
-                                isLoading
-                                    ? 'bg-gray-500 cursor-not-allowed' // 로딩 중 비활성화된 색상
-                                    : isFormValid
-                                        ? 'bg-blue-600 hover:bg-blue-700'
-                                        : 'bg-gray-400 cursor-not-allowed'
+                                isFormValid ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'
                             }`}
-                            disabled={isLoading || !isFormValid} // 로딩 중이거나 폼이 유효하지 않으면 비활성화
+                            disabled={!isFormValid}
                         >
-                            {isLoading ? '등록 중...' : '경매 등록'} {/* 로딩 중 텍스트 변경 */}
+                            경매 등록
                         </button>
                     </div>
                 </div>

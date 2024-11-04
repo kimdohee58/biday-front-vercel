@@ -336,8 +336,8 @@ export default function AuctionDetailPage() {
                             >
                                 <BagIcon className="hidden sm:inline-block w-5 h-5 mb-0.5" />
                                 <span className="ml-3">
-        {isEnded ? '경매 종료' : (isSeller ? (isCancel ? '경매 취소' : '취소 불가') : '입찰 참여')}
-    </span>
+                                    {isEnded ? '경매 종료' : (isSeller ? (isCancel ? '경매 취소' : '취소 불가') : '입찰 참여')}
+                                </span>
                             </ButtonPrimary>
                         </div>
                     </div>
@@ -557,7 +557,7 @@ export default function AuctionDetailPage() {
                 <div>
                     {isEnded && (
                         <div
-                            className="absolute top left-1/2 transform -translate-x-1/2 -rotate-40 bg-red-600 border-8 border-white font-bold text-8xl text-white rounded-md shadow-md w-[700px] h-[200px] flex items-center justify-center text-center leading-none overflow-hidden z-10"
+                            className="absolute top-[33%] left-1/2 transform -translate-x-1/2 -rotate-40 bg-red-600 border-8 border-white font-bold text-8xl text-white rounded-md shadow-md w-[700px] h-[200px] flex items-center justify-center text-center leading-none overflow-hidden z-10"
                         >
                             <span className="whitespace-nowrap">SOLD OUT</span>
                         </div>
