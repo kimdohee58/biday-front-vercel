@@ -14,6 +14,7 @@ import ImageModal from "./imageModal";
 import {deleteAuction, saveAuction} from "@/service/auction/auction.service";
 import {SaveAuctionModel} from "@/model/auction/auction.model";
 import {uploadImages} from "@/service/ftp/image.service";
+import {Spinner} from "@/shared/Spinner/Spinner";
 
 interface CustomError extends Error {
     response?: {
@@ -43,6 +44,7 @@ export default function InsertAuction() {
     const [endedAt, setEndedAt] = useState<Date>();
     const [auctionId, setAuctionId] = useState();
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const productList = useQuery({
         queryKey: ["allProductsWithImages"],
@@ -135,8 +137,8 @@ export default function InsertAuction() {
             }
 
             const endDate = new Date(currentDate);
-            // endDate.setDate(currentDate.getDate() + days);
-            endDate.setMinutes(currentDate.getMinutes() + days);
+            endDate.setDate(currentDate.getDate() + days);
+            // endDate.setMinutes(currentDate.getMinutes() + days);
             console.log("data", endDate);
             setStartedAt(currentDate);
             setEndedAt(endDate);
@@ -178,6 +180,8 @@ export default function InsertAuction() {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
+
+        setIsLoading(true);
 
         if (isFormValid) {
             // errorMessage 초기화
@@ -223,6 +227,8 @@ export default function InsertAuction() {
                 }
 
                 console.error("옥션 등록 중 오류 발생", error);
+            } finally {
+                setIsLoading(false);
             }
 
         } else {
@@ -270,59 +276,6 @@ export default function InsertAuction() {
             </div>
         );
     };
-
-    // return (
-    //     <form onSubmit={handleSubmit}
-    //           className="flex flex-col items-center min-h-screen mx-auto p-8 rounded-lg shadow-xl">
-    //         <div className="w-full max-w-3xl space-y-6">
-    //             <Label className="block text-xl font-bold text-gray-800">상품:</Label>
-    //             <div className="w-full">
-    //                 <ProductSection openModal={openModalProduct} selectedProduct={selectedProduct}
-    //                                 handleSize={handleSize}/>
-    //                 {isOpen && currentModal === "product" && (
-    //                     <ProductModal onClose={closeModal} productList={productList.data}
-    //                                   onClick={handleSelectProduct}/>
-    //                 )}
-    //                 <input type="hidden" name="productId" value={selectedProduct?.product.id}/>
-    //             </div>
-    //
-    //             <div className="w-full">
-    //                 <Label className="block text-xl font-bold text-gray-800">경매 기간:</Label>
-    //                 {/*<span className="ml-2 font-light text-gray-600">{getDuration()}</span>*/}
-    //                 {durationSelectButton()}
-    //                 <input type="hidden" name="duration"/>
-    //             </div>
-    //
-    //             <div className="w-full">
-    //                 <Label className="block text-xl font-bold text-gray-800">업로드 이미지:</Label>
-    //                 <div className="flex gap-4 mt-4">
-    //                     {files.map((file, index) => (
-    //                         <ImageCard key={index} file={file} onClick={() => openModal("image", index)}/>
-    //                     ))}
-    //                 </div>
-    //                 {isOpen && currentModal === "image" && (
-    //                     <ImageModal onClose={closeModal} isOpen={isOpen} onSubmit={handleImageSubmit} files={files}/>
-    //                 )}
-    //             </div>
-    //
-    //             {renderDescription()}
-    //
-    //             <div className="flex justify-end items-center mt-4 w-full">
-    //                 {errorMessage && (
-    //                     <div className="text-red-500 text-sm font-medium mr-4">
-    //                         {errorMessage}
-    //                     </div>
-    //                 )}
-    //                 <button
-    //                     type="submit"
-    //                     className={`py-3 px-8 rounded-lg text-white font-semibold transition duration-300 ease-in-out shadow-md hover:shadow-lg ${isFormValid ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'}`}
-    //                     disabled={!isFormValid}>
-    //                     경매 등록
-    //                 </button>
-    //             </div>
-    //         </div>
-    //     </form>
-    // );
 
     return (
         <div className="max-w-5xl mx-auto pt-14 pb-24 lg:pb-32">
@@ -407,11 +360,15 @@ export default function InsertAuction() {
                         <button
                             type="submit"
                             className={`py-3 px-8 rounded-lg text-white font-semibold transition duration-300 ease-in-out shadow-md hover:shadow-lg ${
-                                isFormValid ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'
+                                isLoading
+                                    ? 'bg-gray-500 cursor-not-allowed' // 로딩 중 비활성화된 색상
+                                    : isFormValid
+                                        ? 'bg-blue-600 hover:bg-blue-700'
+                                        : 'bg-gray-400 cursor-not-allowed'
                             }`}
-                            disabled={!isFormValid}
+                            disabled={isLoading || !isFormValid} // 로딩 중이거나 폼이 유효하지 않으면 비활성화
                         >
-                            경매 등록
+                            {isLoading ? '등록 중...' : '경매 등록'} {/* 로딩 중 텍스트 변경 */}
                         </button>
                     </div>
                 </div>

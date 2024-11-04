@@ -3,7 +3,7 @@ import {useQuery} from "@tanstack/react-query";
 import Image from "next/image";
 import {fetchImageOne} from "@/service/ftp/image.service";
 import {ImageType} from "@/model/ftp/image.model";
-import {Spinner} from "@chakra-ui/react";
+import {Spinner} from "@/shared/Spinner/Spinner";
 
 // 이미지 데이터를 가져오는 컴포넌트
 const ImageFetcher = ({ id, altText }: { id: string, altText: string }) => {

@@ -322,14 +322,22 @@ export default function AuctionDetailPage() {
                                 🪙 : {isEnded ? '---' : adjustBid}
                             </div>
                             <ButtonPrimary
-                                className={`flex-1 flex-shrink-0 ${isEnded ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'hover:bg-blue-600'}`}
+                                className={`flex-1 flex-shrink-0 ${
+                                    isEnded
+                                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                        : isSeller && !isCancel
+                                            ? 'bg-red-700 text-white' // 취소 불가 시 빨간색
+                                            : isCancel
+                                                ? 'bg-yellow-500 text-white' // 경매 취소 시 노란색으로 변경
+                                                : 'hover:bg-blue-600'
+                                }`}
                                 onClick={onClickBidButton}
                                 disabled={isEnded || (isSeller && !isCancel)}
                             >
-                                <BagIcon className="hidden sm:inline-block w-5 h-5 mb-0.5"/>
+                                <BagIcon className="hidden sm:inline-block w-5 h-5 mb-0.5" />
                                 <span className="ml-3">
-                                    {isEnded ? '경매 종료' : (isSeller ? (isCancel ? '경매 취소' : '취소 불가') : '입찰 참여')}
-                                </span>
+        {isEnded ? '경매 종료' : (isSeller ? (isCancel ? '경매 취소' : '취소 불가') : '입찰 참여')}
+    </span>
                             </ButtonPrimary>
                         </div>
                     </div>
@@ -410,13 +418,20 @@ export default function AuctionDetailPage() {
     };
 
     const renderSection2 = () => {
+        const convertNewlinesToBr = (text: string) => {
+            return text.split('\n').map((line, index) => (
+                <React.Fragment key={index}>
+                    {line}
+                    {index < text.split('\n').length - 1 && <br />}
+                </React.Fragment>
+            ));
+        };
+
         return (
             <div className="listingSection__wrap !border-b-0 !pb-0">
                 <h2 className="text-2xl font-semibold">Product details</h2>
-                <div
-                    className="prose prose-sm sm:prose dark:prose-invert sm:max-w-4xl whitespace-pre-wrap"
-                >
-                    {product.description}
+                <div className="prose prose-sm sm:prose dark:prose-invert sm:max-w-4xl">
+                    {convertNewlinesToBr(product.description)} {/* JSX 표현으로 줄바꿈 처리 */}
                 </div>
             </div>
         );

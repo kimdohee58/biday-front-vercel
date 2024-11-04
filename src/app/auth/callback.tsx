@@ -4,7 +4,7 @@ import React, {useEffect} from "react";
 import {useRouter} from "next/router";
 import axiosInstance from "@/app/api/axiosInstance/axiosInstance";
 import Cookies from "js-cookie";
-import {Spinner} from "@chakra-ui/react";
+import {Spinner} from "@/shared/Spinner/Spinner";
 
 const OAuthCallback = () => {
     const router = useRouter();
