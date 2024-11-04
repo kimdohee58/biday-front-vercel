@@ -120,14 +120,15 @@ export async function fetchAuctionsBySize(sizeId: number): Promise<AuctionDTO[]>
 
         const result = await auctionAPI.findAllBySize(options);
         console.log("result", result);
-        return result;
+        return result || [];
 
     } catch (error) {
         if (isApiError(error) && error.status === 404) {
             console.log("404에러");
             return [] as AuctionDTO[];
+        } else {
+            return [] as AuctionDTO[];
         }
-        throw error;
     }
 }
 

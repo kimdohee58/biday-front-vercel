@@ -220,13 +220,15 @@ export async function fetchProductDetails(productId: string): Promise<ProductDet
 
     } catch (error) {
         if (isApiError(error)) {
-            handleApiError(error);
-            handleApiErrorResponse(error.status);
-            return Promise.reject("fetchProductError") as Promise<ProductDetails>;
+            if (error.status === 404) {
+                return {} as ProductDetails;
+            } else {
+                return {} as ProductDetails;
+            }
 
         } else {
-            throw new Error("fetchProductError");
-            // TODO error enum
+            console.error("정의되지 않은 에러", error)
+            return {} as ProductDetails;
         }
     }
 }

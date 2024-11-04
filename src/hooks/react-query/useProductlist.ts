@@ -26,6 +26,13 @@ export const useProductDetail = (productId: string) => {
     return useQuery<ProductDetails>({
         queryKey: ["product", productId],
         queryFn: () => fetchProductDetails(productId),
-
     });
 }
+
+export const useSuspenseProductDetail = (productId: string) => {
+    return useSuspenseQuery<ProductDetails>({
+        queryKey: ["product", productId],
+        queryFn: () => fetchProductDetails(productId),
+        }
+    )
+};

@@ -9,7 +9,6 @@ import SectionSliderProductCard from "@/components/SectionSliderProductCard";
 import Policy from "./Policy";
 import SectionPromo2 from "@/components/SectionPromo2";
 import Image from "next/image";
-import {Route} from "@/routers/types";
 import {ImageModel} from "@/model/ftp/image.model"
 import React, {useState} from "react";
 import {formatProductName, getColor} from "@/utils/productUtils";
@@ -24,7 +23,7 @@ import {useRouter, useSearchParams} from "next/navigation";
 import Cookies from "js-cookie";
 import {UserToken} from "@/model/user/userToken";
 import {UserRole} from "@/model/user/user.model";
-import {useProductDetail} from "@/hooks/react-query/useProductlist";
+import {useSuspenseProductDetail} from "@/hooks/react-query/useProductlist";
 
 type ProductDetailProps = {
     product: ProductWithImageModel,
@@ -102,7 +101,8 @@ function RenderSizeList({sizeArray, onClickSizeButton, currentSize, sizes}: Rend
 }
 
 export default function ProductClientComponent({productId} : { productId: string}) {
-    const {data: product} = useProductDetail(productId);
+    const {data: product} = useSuspenseProductDetail(productId);
+
     const router = useRouter();
 
     const searchParams = useSearchParams();
