@@ -54,7 +54,6 @@ export async function checkPasswordService(): Promise<boolean> {
 }
 
 export async function emailByPhoneRetrieve(userData: UserModel): Promise<{ email: string | undefined } | null> {
-    console.log("emailByPhoneRetrieve 진입 확인 하는 로그 :", userData);
     try {
         const options = {
             data: userData
@@ -63,7 +62,6 @@ export async function emailByPhoneRetrieve(userData: UserModel): Promise<{ email
         // 응답 타입을 any로 임시 설정 및 JSON 파싱 확인
         const response: any = await userAPI.emailByPhone(options);
         const parsedResponse = typeof response === 'string' ? JSON.parse(response) : response;
-        console.log("emailByPhoneRetrieve 리스폰스 데이터:", parsedResponse);
 
         // 최상위 수준에서 이메일 추출
         const email = parsedResponse?.email;
@@ -77,5 +75,25 @@ export async function emailByPhoneRetrieve(userData: UserModel): Promise<{ email
     } catch (error) {
         console.error("emailByPhoneRetrieve 에러 발생:", error);
         throw new Error("핸드폰으로 이메일 찾기가 불가능합니다.");
+    }
+}
+
+export async function randomPassword(email: string, phoneNum: string): Promise<UserModel> {
+    try {
+        // 요청 데이터 설정 (RequestOptions 형태로 설정)
+        const options: RequestOptions<{}, { email: string; phoneNum: string }> = {
+            data: {
+                email: email,
+                phoneNum: phoneNum, // API에서 예상하는 속성 이름을 맞춤
+            },
+        };
+
+        const response: UserModel = await userAPI.resetPassword(options);
+        console.log("서버에서 들어오는 응답 로그:", response);
+
+        return response; // 성공 시 응답 반환
+    } catch (error) {
+        console.error("randomPassword 호출 실패:", error);
+        throw new Error("비밀번호 초기화에 실패했습니다.");
     }
 }
