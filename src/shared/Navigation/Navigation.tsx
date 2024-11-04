@@ -3,39 +3,40 @@ import NavigationItem from "./NavigationItem";
 import {NAVIGATION_DEMO_2} from "@/data/navigation";
 import {useSelector} from "react-redux";
 import {getUserToken} from "@/lib/features/user.slice";
-import {useRouter} from "next/navigation";
 
 function Navigation() {
     const userToken = useSelector(getUserToken);
     const [userRole, setUserRole] = useState("");
-    const router = useRouter();
 
     useEffect(() => {
-        console.log(userToken?.userRole?.[0])
-        setUserRole(userToken?.userRole?.[0] || "null")
-    }, []);
+        setUserRole(userToken?.userRole?.[0] || "null");
+    }, [userToken]);
 
-    const handleRoleCheck = () => {
+    const getDynamicHref = () => {
+        console.log("getDynamicHref");
         if (userRole === "null") {
-            router.push('/login');
+            return '/login';
         } else if (userRole === "ROLE_SELLER") {
-            router.push('/auction/insert');
+            return '/auction/insert';
         } else {
-            router.push('/account-seller');
+            return '/account-seller';
         }
     };
 
     return (
         <ul className="nc-Navigation flex items-center">
             {NAVIGATION_DEMO_2.map((item) => {
+                const updatedItem = {...item};
+
                 if (item.name === "경매 등록") {
-                    return (
-                        <li key={item.id} onClick={handleRoleCheck}>
-                            <NavigationItem menuItem={item} />
-                        </li>
-                    );
+                    updatedItem.href = getDynamicHref(); // 권한 체크를 통해 href 동적 설정
                 }
-                return <NavigationItem key={item.id} menuItem={item} />;
+
+                return (
+                    <li key={item.id}>
+                        <NavigationItem menuItem={updatedItem}/>
+                    </li>
+                );
             })}
         </ul>
     );
