@@ -1,5 +1,6 @@
-import React, { FC } from "react";
+import React, {FC} from "react";
 import MainNav2Dohee from "@/components/dohee/MainNav2Dohee";
+
 // import MainNav2 from "./MainNav2";
 
 export interface HeaderProps {}

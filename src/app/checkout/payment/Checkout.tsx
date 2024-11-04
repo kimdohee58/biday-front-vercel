@@ -1,6 +1,6 @@
 "use client";
 
-import {loadTossPayments, ANONYMOUS, TossPaymentsWidgets} from "@tosspayments/tosspayments-sdk";
+import {loadTossPayments, TossPaymentsWidgets} from "@tosspayments/tosspayments-sdk";
 import {useEffect, useState} from "react";
 
 const clientKey = `${process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY}`;

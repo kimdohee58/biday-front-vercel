@@ -1,9 +1,8 @@
 "use client";
 
 // Import necessary hooks and functions
-import React, { FormEvent, useEffect, useState } from "react";
-import { useRouter, useParams } from "next/navigation";
-import { RootState } from "@/lib/store";
+import React, {FormEvent, useEffect, useState} from "react";
+import {useParams, useRouter} from "next/navigation";
 
 // Define the UsersModel interface
 interface UsersModel {

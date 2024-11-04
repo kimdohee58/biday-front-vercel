@@ -5,11 +5,9 @@ import BagIcon from "@/components/BagIcon";
 
 import {SparklesIcon} from "@heroicons/react/24/outline";
 import Prices from "@/components/Prices";
-import SectionSliderProductCard from "@/components/SectionSliderProductCard";
 import Policy from "./Policy";
 import SectionPromo2 from "@/components/SectionPromo2";
 import Image from "next/image";
-import {Route} from "@/routers/types";
 import {ImageModel} from "@/model/ftp/image.model"
 import React, {useState} from "react";
 import {formatProductName, getColor} from "@/utils/productUtils";

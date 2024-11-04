@@ -2,7 +2,6 @@ import {AwardDto, AwardModel} from "@/model/auction/award.model"; // 필요에 �
 import {api} from "../request";
 import {strategy} from "../api.strategy";
 import {RequestOptions} from "@/model/api/RequestOptions";
-import {AuctionModel} from "@/model/auction/auction.model";
 
 // 사용자 낙찰 목록 조회 (GET 요청)
 type awardsParams = {

@@ -2,7 +2,7 @@
 
 import Label from "@/components/Label/Label";
 import Prices from "@/components/Prices";
-import React, {Suspense, useEffect, useState} from "react";
+import React, {useState} from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import Input from "@/shared/Input/Input";
 import ContactInfo from "./ContactInfo";
@@ -10,7 +10,7 @@ import ShippingAddress from "./ShippingAddress";
 import Image from "next/image";
 import Link from "next/link";
 import {PaymentTempModel} from "@/model/order/paymentTemp.model";
-import {useMutation, useQuery, useSuspenseQuery} from "@tanstack/react-query";
+import {useMutation, useSuspenseQuery} from "@tanstack/react-query";
 import {savePaymentTemp} from "@/service/order/payment.service";
 import {useRouter, useSearchParams} from "next/navigation";
 import useRandomId from "@/hooks/useRandomId";

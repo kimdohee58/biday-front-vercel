@@ -1,8 +1,8 @@
-import { avatarColors } from "@/contains/contants";
-import React, { FC } from "react";
-import { avatarImgs } from "@/contains/fakeData";
+import {avatarColors} from "@/contains/contants";
+import React, {FC} from "react";
+import {avatarImgs} from "@/contains/fakeData";
 import VerifyIcon from "@/components/VerifyIcon";
-import Image, { StaticImageData } from "next/image";
+import Image, {StaticImageData} from "next/image";
 
 export interface AvatarProps {
   containerClassName?: string;

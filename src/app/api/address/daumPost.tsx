@@ -1,15 +1,14 @@
 //src/app/api/address/daumPost.tsx
 import React from 'react';
 import {
+    Button,
     Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
     ModalBody,
     ModalCloseButton,
-    Button,
-    useDisclosure
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay
 } from '@chakra-ui/react';
 import DaumPostcode from 'react-daum-postcode';
 

@@ -1,7 +1,6 @@
-
 import {useQuery} from "@tanstack/react-query";
 import {fetchProductBySizeId} from "@/service/product/product.service";
-import {extractSizeId, extractSizeIds} from "@/utils/extract";
+import {extractSizeIds} from "@/utils/extract";
 import {BidLoadModel} from "@/model/auction/bid.model";
 
 export const useFetchAuctionProducts = (auctionData: any) => {

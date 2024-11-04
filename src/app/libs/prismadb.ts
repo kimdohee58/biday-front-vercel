@@ -1,5 +1,5 @@
 // 개발 환경에서의 prisma 중복생성 방지 코드
-import { PrismaClient } from "@prisma/client";
+import {PrismaClient} from "@prisma/client";
 
 declare global {
     var prisma: PrismaClient | undefined;

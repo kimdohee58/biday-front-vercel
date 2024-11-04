@@ -1,10 +1,11 @@
-import {HeartIcon, StarIcon} from "@heroicons/react/24/solid";
-import React, { FC } from "react";
+import {HeartIcon} from "@heroicons/react/24/solid";
+import React, {FC} from "react";
 import NcImage from "@/shared/NcImage/NcImage";
 import Link from "next/link";
-import { ImageModel } from "@/model/ftp/image.model";
+import {ImageModel} from "@/model/ftp/image.model";
 import Prices from "@/components/Prices";
 import {BoltIcon} from "@heroicons/react/16/solid";
+
 // import {BoltIcon} from "@heroicons/react/20/solid";
 
 export interface CollectionCard2Props {
@@ -108,8 +109,8 @@ const CollectionCard2Dohee: FC<CollectionCard2Props> = ({
                     <h2 className="font-semibold text-lg sm:text-xl ">{name || "이름 없음"}</h2>
                     {/* AUTHOR */}
                     <div className="mt-3 flex items-center text-slate-500 dark:text-slate-400">
-                        <span className="text-sm ">
-                          <span className="line-clamp-1">{formatUser(user) || "판매자 없음"}</span>
+                        <span className="flex text-sm">
+                          <span className="overflow-hidden whitespace-nowrap">{formatUser(user) || "판매자 없음"}</span>
                         </span>
                         <span className="h-5 mx-1 sm:mx-2 border-l border-slate-200 dark:border-slate-700"></span>
                         <span className="flex text-sm">

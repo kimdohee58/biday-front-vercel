@@ -1,12 +1,7 @@
 // Header/AvatarDropdown.tsx
 "use client";
 
-import {
-    Popover,
-    PopoverButton,
-    PopoverPanel,
-    Transition,
-} from "@/app/headlessui";
+import {Popover, PopoverButton, PopoverPanel, Transition,} from "@/app/headlessui";
 import {Fragment} from "react";
 import SwitchDarkMode2 from "@/shared/SwitchDarkMode/SwitchDarkMode2";
 import Link from "next/link";

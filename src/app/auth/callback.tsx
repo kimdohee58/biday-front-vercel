@@ -1,7 +1,7 @@
 //src/app/auth/callback.tsx
 
-import React, { useEffect } from "react";
-import { useRouter } from "next/router";
+import React, {useEffect} from "react";
+import {useRouter} from "next/router";
 import axiosInstance from "@/app/api/axiosInstance/axiosInstance";
 import Cookies from "js-cookie";
 

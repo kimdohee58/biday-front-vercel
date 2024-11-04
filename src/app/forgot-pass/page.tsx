@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import Input from '@/shared/Input/Input';
 import ButtonPrimary from '@/shared/Button/ButtonPrimary';
 import Link from 'next/link';
-import { UserModel } from '@/model/user/user.model';
+import {UserModel} from '@/model/user/user.model';
 import {emailByPhoneRetrieve} from "@/service/user/user.serivce";
 import {setLoading} from "@/lib/features/products.slice";
 

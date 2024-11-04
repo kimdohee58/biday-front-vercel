@@ -1,8 +1,8 @@
-import React, { FC } from "react";
-import { Transition } from "@/app/headlessui";
+import React, {FC} from "react";
+import {Transition} from "@/app/headlessui";
 import Prices from "@/components/Prices";
-import { PRODUCTS } from "@/data/data";
-import Image, { StaticImageData } from "next/image";
+import {PRODUCTS} from "@/data/data";
+import Image, {StaticImageData} from "next/image";
 
 interface Props {
   show: boolean;

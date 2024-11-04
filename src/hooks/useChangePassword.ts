@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useState} from "react";
 import {changePasswordService} from "@/service/user/user.serivce";
 
 export const useChangePassword = () => {

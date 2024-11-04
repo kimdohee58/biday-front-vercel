@@ -1,7 +1,7 @@
 // src/lib/features/wish.slice.ts
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { WishModel } from '@/model/product/wish.model';
-import { RootState } from '@/lib/store';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {WishModel} from '@/model/product/wish.model';
+import {RootState} from '@/lib/store';
 
 // 초기 상태: 빈 WishModel 배열
 const initialState: WishModel[] = [];

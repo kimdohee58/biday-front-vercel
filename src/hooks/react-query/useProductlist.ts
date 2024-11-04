@@ -1,9 +1,5 @@
-import {useQuery, useSuspenseQuery} from "@tanstack/react-query";
-import {
-    fetchAllProductCards,
-    fetchProductWithImage,
-    fetchProductWithImageBySizeId
-} from "@/service/product/product.service";
+import {useQuery} from "@tanstack/react-query";
+import {fetchAllProductCards, fetchProductWithImageBySizeId} from "@/service/product/product.service";
 import {ProductCardModel} from "@/model/product/product.model";
 
 export const useProductCardList = (isProductInRedux: boolean) => {

@@ -4,11 +4,11 @@ import React, {ChangeEvent, useEffect, useState} from "react";
 import {
     Button,
     Dialog,
-    DialogHeader,
     DialogBody,
+    DialogFooter,
+    DialogHeader,
     IconButton,
     Typography,
-    DialogFooter,
 } from "@material-tailwind/react";
 import {ArrowUpTrayIcon} from "@heroicons/react/24/outline";
 import {TrashIcon} from "@heroicons/react/24/solid";

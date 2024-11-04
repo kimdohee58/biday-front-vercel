@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useState, useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useWishDelete, useWishlistWithImages} from "@/hooks/react-query/useWishlist";
 import {Spinner} from "@/shared/Spinner/Spinner";
 import WishCard from "@/components/WishCard";

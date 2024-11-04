@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import NavigationItem from "./NavigationItem";
-import { NAVIGATION_DEMO_2 } from "@/data/navigation";
-import { useSelector } from "react-redux";
-import { getUserToken } from "@/lib/features/user.slice";
-import { useRouter } from "next/navigation";
+import {NAVIGATION_DEMO_2} from "@/data/navigation";
+import {useSelector} from "react-redux";
+import {getUserToken} from "@/lib/features/user.slice";
+import {useRouter} from "next/navigation";
 
 function Navigation() {
     const userToken = useSelector(getUserToken);

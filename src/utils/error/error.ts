@@ -1,5 +1,3 @@
-import {Alert} from "@/shared/Alert/Alert";
-
 export const ApiErrors = {
     UNAUTHORIZED: { message: "UNAUTHORIZED", status: 401 },
     FORBIDDEN: { message: "FORBIDDEN", status: 403 },

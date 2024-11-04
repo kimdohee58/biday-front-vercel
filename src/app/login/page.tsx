@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, FormEvent } from 'react';
+import React, {FormEvent, useEffect, useState} from 'react';
 import facebookSvg from "@/images/Facebook.svg";
 import twitterSvg from "@/images/Twitter.svg";
 import googleSvg from "@/images/Google.svg";
@@ -8,16 +8,16 @@ import Input from "@/shared/Input/Input";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import Image from "next/image";
 import Link from "next/link";
-import { useLogin } from "@/hooks/useLogin";
+import {useLogin} from "@/hooks/useLogin";
 import naver from "@/images/naver.svg";
 import axiosInstance from "@/app/api/axiosInstance/axiosInstance";
-import { useRouter } from 'next/navigation';
+import {useRouter} from 'next/navigation';
 import Cookies from "js-cookie";
 import {AuthorizationToken, saveToken, saveUserTokenToCookie} from "@/utils/cookie/cookie.api";
-import { extractUserInfoFromToken } from "@/utils/jwt.utils";
-import { findUserById } from "@/service/user/user.api";
+import {extractUserInfoFromToken} from "@/utils/jwt.utils";
+import {findUserById} from "@/service/user/user.api";
 import {saveUser, saveUserToken} from "@/lib/features/user.slice";
-import { useDispatch } from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {UserToken} from "@/model/user/userToken";
 
 const PageLogin = () => {

@@ -1,8 +1,8 @@
-import React, { FC } from "react";
+import React, {FC} from "react";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
 import Link from "next/link";
-import Image, { StaticImageData } from "next/image";
-import { CATS_DISCOVER } from "./data";
+import Image, {StaticImageData} from "next/image";
+import {CATS_DISCOVER} from "./data";
 
 export interface CardCategory3Props {
   className?: string;

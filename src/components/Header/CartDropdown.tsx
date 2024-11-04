@@ -1,12 +1,7 @@
 // CartDropdown
 "use client";
 
-import {
-  Popover,
-  PopoverButton,
-  PopoverPanel,
-  Transition,
-} from "@/app/headlessui";
+import {Popover, PopoverButton, PopoverPanel, Transition,} from "@/app/headlessui";
 import Prices from "@/components/Prices";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";

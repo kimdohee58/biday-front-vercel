@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import React, {useEffect, useState} from "react";
+import {useQuery} from "@tanstack/react-query";
 import Image from "next/image";
-import { fetchImageOne } from "@/service/ftp/image.service";
-import { ImageType } from "@/model/ftp/image.model";
+import {fetchImageOne} from "@/service/ftp/image.service";
+import {ImageType} from "@/model/ftp/image.model";
 
 // 이미지 데이터를 가져오는 컴포넌트
 const ImageFetcher = ({ id, altText }: { id: string, altText: string }) => {

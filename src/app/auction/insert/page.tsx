@@ -1,21 +1,19 @@
 'use client';
 
 import Label from "@/components/Label/Label";
-import React, {ChangeEvent, FormEvent, useEffect, useState} from "react";
+import React, {ChangeEvent, FormEvent, useState} from "react";
 import {defaultProduct, ProductWithImageModel} from "@/model/product/product.model";
-import {useQuery} from "@tanstack/react-query";
+import {useMutation, useQuery} from "@tanstack/react-query";
 import {fetchAllProductsWithImages} from "@/service/product/product.service";
 import {defaultImage, ImageType} from "@/model/ftp/image.model";
 import ProductModal from "./ProductModal";
-import {useSearchParams} from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
 import ProductSection from "./productSection";
 import ImageCard from "./imageCard";
 import ImageModal from "./imageModal";
-import {useMutation} from "@tanstack/react-query";
 import {deleteAuction, saveAuction} from "@/service/auction/auction.service";
 import {SaveAuctionModel} from "@/model/auction/auction.model";
 import {uploadImages} from "@/service/ftp/image.service";
-import {useRouter} from "next/navigation";
 
 interface CustomError extends Error {
     response?: {

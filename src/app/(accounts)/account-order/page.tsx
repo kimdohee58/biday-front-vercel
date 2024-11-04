@@ -1,7 +1,7 @@
 // src/app/(accounts)/account-order/page.tsx
 "use client";
 import React, {useEffect, useState} from "react";
-import { useRouter } from "next/navigation";
+import {useRouter} from "next/navigation";
 
 import {useFetchData} from "@/hooks/useAccountOrderData";
 import {
@@ -13,17 +13,18 @@ import {
 
 import {
     renderAuctionHistory,
-    renderBidHistory,
     renderAwardHistory,
+    renderBidHistory,
     renderPaymentHistory
 } from "@/components/RenderAccountOrder";
 import {
     mapDataWithAuctionModel,
-    mapDataWithAwardModel, mapDataWithBidModel,
+    mapDataWithAwardModel,
+    mapDataWithBidModel,
     mapDataWithPaymentModel
 } from "@/utils/mapDataWithProducts";
 import {PaymentRequestModel} from "@/model/order/payment.model";
-import {AuctionDTO, AuctionModel} from "@/model/auction/auction.model";
+import {AuctionDTO} from "@/model/auction/auction.model";
 import {AwardModel} from "@/model/auction/award.model";
 import {Spinner} from "@chakra-ui/react";
 

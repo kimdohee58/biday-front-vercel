@@ -1,7 +1,7 @@
 // src/hooks/useSignUpUser.ts
-import { useState } from "react";
-import { UserModel } from "@/model/user/user.model";
-import { checkEmailDuplication, checkPhoneDuplication, insertUser } from "@/service/user/user.api";
+import {useState} from "react";
+import {UserModel} from "@/model/user/user.model";
+import {checkEmailDuplication, checkPhoneDuplication, insertUser} from "@/service/user/user.api";
 
 const useSignUpUser = () => {
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');

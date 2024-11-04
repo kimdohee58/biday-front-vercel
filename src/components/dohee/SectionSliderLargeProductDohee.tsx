@@ -1,11 +1,8 @@
 "use client";
 
-import React, {FC, useEffect, useId, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import Heading from "@/components/Heading/Heading";
 import Link from "next/link";
-import CollectionCard from "@/components/CollectionCard";
-import CollectionCard2 from "@/components/CollectionCard2";
-import {DEMO_LARGE_PRODUCTS} from "@/components/SectionSliderLargeProduct2";
 import Glide from "@glidejs/glide";
 import {AuctionWithProduct} from "@/app/auction/last-chance/page";
 import {auctionAPI} from "@/api/auction/auction.api";

@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, {useState} from "react";
 import Checkbox from "@/shared/Checkbox/Checkbox";
 import Slider from "rc-slider";
 import Radio from "@/shared/Radio/Radio";
-import MySwitch from "@/components/MySwitch";
 
 // DEMO DATA
 const DATA_categories = [
