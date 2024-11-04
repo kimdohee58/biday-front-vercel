@@ -43,7 +43,8 @@ const SectionSliderLargeProductDohee = () => {
                         const endedAtA = new Date(a.auction.auction.endedAt).getTime();
                         const endedAtB = new Date(b.auction.auction.endedAt).getTime();
                         return endedAtA - endedAtB;
-                    });
+                    })
+                    .slice(0, 5);
 
                 setAuctionData(filteredAndSortedData);
             } catch (error) {
@@ -101,31 +102,35 @@ const SectionSliderLargeProductDohee = () => {
                 <Heading desc={"BiDay에서 원하는 상품을 지금 찾아보세요."} isCenter={false} hasNextPrev>
                     현재 진행 중인 경매
                 </Heading>
+
                 <div className="glide__track" data-glide-el="track">
-                    <ul className="glide__slides">
-                        {auctionData.map((item, index) => {
+                    {/*<ul className="glide__slides">*/}
+                    <ul className="glide__slides flex space-x-4 overflow-x-auto">
+                        {auctionData.slice(0,4).map((item, index) => {
                             const auction = item.auction;
                             const product = item.product;
                             const user = item.user;
                             const combinedImages = [product.image, ...auction.images];
 
                             return (
-                                <CollectionCard2Dohee
-                                    key={auction.auction.id}
-                                    id={auction.auction.id}
-                                    name={product.product.name}
-                                    price={auction.auction.currentBid}
-                                    imgs={combinedImages}
-                                    description={auction.auction.description}
-                                    wishes={product.product.wishes}
-                                    endedAt={auction.auction.endedAt}
-                                    user={user.name}
-                                />
+                                <li className="glide__slide flex-none w-[calc(20%_-_0.5rem)]" key={auction.auction.id}>
+                                    <CollectionCard2Dohee
+                                        key={auction.auction.id}
+                                        id={auction.auction.id}
+                                        name={product.product.name}
+                                        price={auction.auction.currentBid}
+                                        imgs={combinedImages}
+                                        description={auction.auction.description}
+                                        wishes={product.product.wishes}
+                                        endedAt={auction.auction.endedAt}
+                                        user={user.name}
+                                    />
+                                </li>
                             );
                         })}
 
                         <li className={`glide__slide   `}>
-                            <Link href={"/ongoing"} className="block relative group">
+                        <Link href={"/ongoing"} className="block relative group">
                                 <div className="relative rounded-2xl overflow-hidden h-[410px]">
                                     <div className="h-[410px] bg-black/5 dark:bg-neutral-800"></div>
                                     <div

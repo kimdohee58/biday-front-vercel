@@ -322,11 +322,19 @@ export default function AuctionDetailPage() {
                                 🪙 : {isEnded ? '---' : adjustBid}
                             </div>
                             <ButtonPrimary
-                                className={`flex-1 flex-shrink-0 ${isEnded ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'hover:bg-blue-600'}`}
+                                className={`flex-1 flex-shrink-0 ${
+                                    isEnded
+                                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                        : isSeller && !isCancel
+                                            ? 'bg-red-700 text-white'
+                                            : isCancel
+                                                ? 'bg-yellow-500 text-white'
+                                                : 'hover:bg-blue-600'
+                                }`}
                                 onClick={onClickBidButton}
                                 disabled={isEnded || (isSeller && !isCancel)}
                             >
-                                <BagIcon className="hidden sm:inline-block w-5 h-5 mb-0.5"/>
+                                <BagIcon className="hidden sm:inline-block w-5 h-5 mb-0.5" />
                                 <span className="ml-3">
                                     {isEnded ? '경매 종료' : (isSeller ? (isCancel ? '경매 취소' : '취소 불가') : '입찰 참여')}
                                 </span>
@@ -410,13 +418,20 @@ export default function AuctionDetailPage() {
     };
 
     const renderSection2 = () => {
+        const convertNewlinesToBr = (text: string) => {
+            return text.split('\n').map((line, index) => (
+                <React.Fragment key={index}>
+                    {line}
+                    {index < text.split('\n').length - 1 && <br />}
+                </React.Fragment>
+            ));
+        };
+
         return (
             <div className="listingSection__wrap !border-b-0 !pb-0">
                 <h2 className="text-2xl font-semibold">Product details</h2>
-                <div
-                    className="prose prose-sm sm:prose dark:prose-invert sm:max-w-4xl whitespace-pre-wrap"
-                >
-                    {product.description}
+                <div className="prose prose-sm sm:prose dark:prose-invert sm:max-w-4xl">
+                    {convertNewlinesToBr(product.description)} {/* JSX 표현으로 줄바꿈 처리 */}
                 </div>
             </div>
         );
@@ -542,7 +557,7 @@ export default function AuctionDetailPage() {
                 <div>
                     {isEnded && (
                         <div
-                            className="absolute top left-1/2 transform -translate-x-1/2 -rotate-40 bg-red-600 border-8 border-white font-bold text-8xl text-white rounded-md shadow-md w-[700px] h-[200px] flex items-center justify-center text-center leading-none overflow-hidden z-10"
+                            className="absolute top-[33%] left-1/2 transform -translate-x-1/2 -rotate-40 bg-red-600 border-8 border-white font-bold text-8xl text-white rounded-md shadow-md w-[700px] h-[200px] flex items-center justify-center text-center leading-none overflow-hidden z-10"
                         >
                             <span className="whitespace-nowrap">SOLD OUT</span>
                         </div>

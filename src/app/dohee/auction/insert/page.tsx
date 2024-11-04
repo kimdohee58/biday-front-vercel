@@ -14,7 +14,7 @@ import ImageModal from "./imageModal";
 import {deleteAuction, saveAuction} from "@/service/auction/auction.service";
 import {SaveAuctionModel} from "@/model/auction/auction.model";
 import {uploadImages} from "@/service/ftp/image.service";
-import {Spinner} from "@chakra-ui/react";
+import {Spinner} from "@/shared/Spinner/Spinner";
 
 interface CustomError extends Error {
     response?: {

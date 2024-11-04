@@ -12,6 +12,7 @@ function Navigation() {
         setUserRole(userToken?.userRole?.[0] || "null");
     }, [userToken]);
 
+    // todo 경매 등록 옵션 불러오기 안됨
     const getDynamicHref = () => {
         console.log("getDynamicHref");
         if (userRole === "null") {

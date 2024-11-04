@@ -7,7 +7,7 @@ import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
 import Link from "next/link";
 import React, {useEffect, useState} from "react";
-import {Spinner} from "@chakra-ui/react";
+import {Spinner} from "@/shared/Spinner/Spinner";
 import {AwardModel} from "@/model/auction/award.model";
 import {findByUserAward} from "@/service/auction/award.service";
 import {useFetchAwardProducts} from "@/components/AccountuseQuery/useQuery";
@@ -81,7 +81,6 @@ export default function CartDropdown() {
 
     const { auction, currentBid, createdAt, product } = item;
     const { id, size, sizeProduct } = product;
-    const { name } = sizeProduct;
 
     const payDate = new Date(createdAt);
     payDate.setDate(payDate.getDate() + 3);
@@ -92,7 +91,7 @@ export default function CartDropdown() {
     return (
         <div key={index} className="flex py-5 last:pb-0">
           <div className="relative h-24 w-20 flex-shrink-0 overflow-hidden rounded-xl bg-slate-100">
-            <ImageFetcher id={String(id)} altText={name}/>
+            <ImageFetcher id={String(id)} altText={sizeProduct.name}/>
             <Link onClick={close} className="absolute inset-0" href={`/auction/${auction.id}`}/>
           </div>
 
@@ -101,7 +100,7 @@ export default function CartDropdown() {
               <div className="flex justify-between ">
                 <div>
                   <h3 className="text-base font-medium ">
-                    <Link onClick={close} href={`/product/${product.id}`}>
+                    <Link onClick={close} href={`/product/${sizeProduct.id}`}>
                       {sizeProduct?.name || "이름이 없습니다."}
                     </Link>
                   </h3>
@@ -119,7 +118,7 @@ export default function CartDropdown() {
                 <Link
                     type="button"
                     className={`flex items-center justify-center px-4 py-2 rounded-md border border-blue-600 text-blue-600 font-semibold transition duration-200 shadow-sm hover:bg-blue-100 hover:text-blue-800 hover:shadow-lg active:bg-blue-200`}
-                    href={`/checkout?awardId=${item.id}&productId=${id}`}
+                    href={`/checkout?awardId=${item.id}&productId=${sizeProduct.id}`}
                     onClick={close}
                 >
                   <span className="mr-1 text-lg">🛒</span>

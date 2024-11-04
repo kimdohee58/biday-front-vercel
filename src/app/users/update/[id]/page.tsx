@@ -3,7 +3,7 @@
 // Import necessary hooks and functions
 import React, {FormEvent, useEffect, useState} from "react";
 import {useParams, useRouter} from "next/navigation";
-import {Spinner} from "@chakra-ui/react";
+import {Spinner} from "@/shared/Spinner/Spinner";
 
 // Define the UsersModel interface
 interface UsersModel {

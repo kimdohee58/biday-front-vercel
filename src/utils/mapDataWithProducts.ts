@@ -1,6 +1,6 @@
-import {AuctionDTO} from "@/model/auction/auction.model";
-import {AwardModel} from "@/model/auction/award.model";
-import {PaymentRequestModel} from "@/model/order/payment.model";
+import {AuctionDTO, AuctionModel} from "@/model/auction/auction.model";
+import { AwardModel } from "@/model/auction/award.model";
+import { PaymentRequestModel} from "@/model/order/payment.model";
 import {ProductDTO, ProductModel} from "@/model/product/product.model";
 import {extractAwardIdsFromPaymentData} from "@/utils/extract";
 import {fetchSizeIdsFromAwards} from "@/service/auction/award.service";

@@ -1,7 +1,7 @@
 // src/app/(accounts)/account-order/page.tsx
 "use client";
 import React, {useEffect, useState} from "react";
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import {useFetchData} from "@/hooks/useAccountOrderData";
 import {
@@ -13,20 +13,19 @@ import {
 
 import {
     renderAuctionHistory,
-    renderAwardHistory,
     renderBidHistory,
+    renderAwardHistory,
     renderPaymentHistory
 } from "@/components/RenderAccountOrder";
 import {
     mapDataWithAuctionModel,
-    mapDataWithAwardModel,
-    mapDataWithBidModel,
+    mapDataWithAwardModel, mapDataWithBidModel,
     mapDataWithPaymentModel
 } from "@/utils/mapDataWithProducts";
 import {PaymentRequestModel} from "@/model/order/payment.model";
-import {AuctionDTO} from "@/model/auction/auction.model";
+import {AuctionDTO, AuctionModel} from "@/model/auction/auction.model";
 import {AwardModel} from "@/model/auction/award.model";
-import {Spinner} from "@chakra-ui/react";
+import {Spinner} from "@/shared/Spinner/Spinner";
 
 // TODO userRole 체크해서 노션 참조해 만들 것
 const AccountOrder = () => {
@@ -108,7 +107,7 @@ const AccountOrder = () => {
                         경매 내역
                     </h2>
                 </div>
-                {loading ? <Spinner /> : (
+                {loading ? <Spinner/> : (
                     <>
                         {activeTab === "auction" && (
                             <>

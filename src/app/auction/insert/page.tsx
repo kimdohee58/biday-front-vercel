@@ -14,6 +14,7 @@ import ImageModal from "./imageModal";
 import {deleteAuction, saveAuction} from "@/service/auction/auction.service";
 import {SaveAuctionModel} from "@/model/auction/auction.model";
 import {uploadImages} from "@/service/ftp/image.service";
+import {Spinner} from "@/shared/Spinner/Spinner";
 
 interface CustomError extends Error {
     response?: {
@@ -135,8 +136,7 @@ export default function InsertAuction() {
             }
 
             const endDate = new Date(currentDate);
-            // endDate.setDate(currentDate.getDate() + days);
-            endDate.setMinutes(currentDate.getMinutes() + days);
+            endDate.setDate(currentDate.getDate() + days);
             console.log("data", endDate);
             setStartedAt(currentDate);
             setEndedAt(endDate);
@@ -186,8 +186,8 @@ export default function InsertAuction() {
             const body: SaveAuctionModel = {
                 sizeId: size,
                 description: description,
-                startingBid: 10000,
-                currentBid: 10000,
+                startingBid: selectedProduct.product.price * 0.4,
+                currentBid: selectedProduct.product.price * 0.4,
                 startedAt: startedAt,
                 endedAt: endedAt,
             };
@@ -205,21 +205,21 @@ export default function InsertAuction() {
 
                 // 성공적인 경우 리다이렉트
                 if (message === "success") {
-                    router.push("/dohee/auction/insert/success");
+                    router.push("/auction/insert/success");
                 } else {
                     if (data.id != null) {
                         await auctionDelete.mutateAsync(data.id);
                         console.log("image message", message);
                     }
                     // 오류 메시지를 URL에 담아 리다이렉트
-                    router.push(`/dohee/auction/insert/fail?message=이미지%20업로드에%20실패했습니다.`);
+                    router.push(`/auction/insert/fail?message=이미지%20업로드에%20실패했습니다.`);
                 }
 
             } catch (error: unknown) {
                 if (error instanceof Error) {
                     handleErrorResponse(error);
                 } else {
-                    router.push(`/dohee/auction/insert/fail?message=네트워크%20오류가%20발생했습니다.%20확인해%20주세요.`);
+                    router.push(`/auction/insert/fail?message=네트워크%20오류가%20발생했습니다.%20확인해%20주세요.`);
                 }
 
                 console.error("옥션 등록 중 오류 발생", error);
@@ -227,7 +227,7 @@ export default function InsertAuction() {
 
         } else {
             setErrorMessage("모든 필드를 올바르게 입력해주세요.");
-            // router.push(`/dohee/auction/insert/fail?message=모든%20필드를%20올바르게%20입력해주세요.`);
+            // router.push(`/auction/insert/fail?message=모든%20필드를%20올바르게%20입력해주세요.`);
         }
     };
 
@@ -239,16 +239,16 @@ export default function InsertAuction() {
                 // HTTP 상태 코드에 따라 메시지 설정
                 switch (customError.response.status) {
                     case 400:
-                        router.push(`/dohee/auction/insert/fail?message=잘못된%20요청입니다.%20입력을%20확인하세요.`);
+                        router.push(`/auction/insert/fail?message=잘못된%20요청입니다.%20입력을%20확인하세요.`);
                         break;
                     case 404:
-                        router.push(`/dohee/auction/insert/fail?message=요청한%20자원이%20존재하지%20않습니다.`);
+                        router.push(`/auction/insert/fail?message=요청한%20자원이%20존재하지%20않습니다.`);
                         break;
                     case 500:
-                        router.push(`/dohee/auction/insert/fail?message=서버%20오류가%20발생했습니다.`);
+                        router.push(`/auction/insert/fail?message=서버%20오류가%20발생했습니다.`);
                         break;
                     default:
-                        router.push(`/dohee/auction/insert/fail?message=알 수 없는 오류가 발생했습니다.`);
+                        router.push(`/auction/insert/fail?message=알 수 없는 오류가 발생했습니다.`);
                         break;
                 }
             }
@@ -270,59 +270,6 @@ export default function InsertAuction() {
             </div>
         );
     };
-
-    // return (
-    //     <form onSubmit={handleSubmit}
-    //           className="flex flex-col items-center min-h-screen mx-auto p-8 rounded-lg shadow-xl">
-    //         <div className="w-full max-w-3xl space-y-6">
-    //             <Label className="block text-xl font-bold text-gray-800">상품:</Label>
-    //             <div className="w-full">
-    //                 <ProductSection openModal={openModalProduct} selectedProduct={selectedProduct}
-    //                                 handleSize={handleSize}/>
-    //                 {isOpen && currentModal === "product" && (
-    //                     <ProductModal onClose={closeModal} productList={productList.data}
-    //                                   onClick={handleSelectProduct}/>
-    //                 )}
-    //                 <input type="hidden" name="productId" value={selectedProduct?.product.id}/>
-    //             </div>
-    //
-    //             <div className="w-full">
-    //                 <Label className="block text-xl font-bold text-gray-800">경매 기간:</Label>
-    //                 {/*<span className="ml-2 font-light text-gray-600">{getDuration()}</span>*/}
-    //                 {durationSelectButton()}
-    //                 <input type="hidden" name="duration"/>
-    //             </div>
-    //
-    //             <div className="w-full">
-    //                 <Label className="block text-xl font-bold text-gray-800">업로드 이미지:</Label>
-    //                 <div className="flex gap-4 mt-4">
-    //                     {files.map((file, index) => (
-    //                         <ImageCard key={index} file={file} onClick={() => openModal("image", index)}/>
-    //                     ))}
-    //                 </div>
-    //                 {isOpen && currentModal === "image" && (
-    //                     <ImageModal onClose={closeModal} isOpen={isOpen} onSubmit={handleImageSubmit} files={files}/>
-    //                 )}
-    //             </div>
-    //
-    //             {renderDescription()}
-    //
-    //             <div className="flex justify-end items-center mt-4 w-full">
-    //                 {errorMessage && (
-    //                     <div className="text-red-500 text-sm font-medium mr-4">
-    //                         {errorMessage}
-    //                     </div>
-    //                 )}
-    //                 <button
-    //                     type="submit"
-    //                     className={`py-3 px-8 rounded-lg text-white font-semibold transition duration-300 ease-in-out shadow-md hover:shadow-lg ${isFormValid ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'}`}
-    //                     disabled={!isFormValid}>
-    //                     경매 등록
-    //                 </button>
-    //             </div>
-    //         </div>
-    //     </form>
-    // );
 
     return (
         <div className="max-w-5xl mx-auto pt-14 pb-24 lg:pb-32">
