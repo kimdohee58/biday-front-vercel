@@ -107,6 +107,18 @@ export default function PageForgotPass() {
 
                 {/* 오류 메시지 출력 */}
                 {error && <p className="text-red-500 text-center">{error}</p>}
+
+                {/* ==== */}
+                <span className="block text-center text-neutral-700 dark:text-neutral-300">
+                    Go back for {` `}
+                    <Link href="/login" className="text-green-600">
+                        Sign in
+                    </Link>
+                    {` / `}
+                    <Link href="/signup" className="text-green-600">
+                        Sign up
+                    </Link>
+                </span>
             </div>
         </div>
     );
