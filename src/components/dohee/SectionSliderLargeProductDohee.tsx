@@ -128,7 +128,7 @@ const SectionSliderLargeProductDohee = () => {
                         })}
 
                         <li className={`glide__slide   `}>
-                            <Link href={"/search"} className="block relative group">
+                            <Link href={"/ongoing"} className="block relative group">
                                 <div className="relative rounded-2xl overflow-hidden h-[410px]">
                                     <div className="h-[410px] bg-black/5 dark:bg-neutral-800"></div>
                                     <div
