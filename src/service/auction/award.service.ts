@@ -91,9 +91,12 @@ export async function fetchSizeIdsFromAwards(awardIds: number[]): Promise<number
                 return await awardAPI.findById(options);
             })
         );
+        console.log("📌 fetchSizeIdsFromAwards 내부 awards:", awards);
+        const sizeIds = awards
+            .map(award => award.auction?.sizeId) // auction이 없는 경우를 대비하여 안전하게 접근
+            .filter(sizeId => sizeId !== undefined); // undefined 값 제거
 
-        const sizeIds = awards.map(award => award.auction.sizeId);
-        console.log("🟢 추출된 sizeIds:", sizeIds);
+        console.log("📌 fetchSizeIdsFromAwards 내부 sizeIds:", sizeIds);
         return sizeIds
     } catch (error) {
         console.error("sizeId를 추출하는 도중 오류 발생: ", error);
