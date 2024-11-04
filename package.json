@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "prebuild": "ts-node scripts/modifyLibrary.ts",
+    "prebuild": "ts-node scripts/modifyLibrary.ts && prisma generate",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
