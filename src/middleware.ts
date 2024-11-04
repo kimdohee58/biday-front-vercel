@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
-import { getTokenRemainingTime } from "@/utils/cookie/cookie.api";
+import type {NextRequest} from 'next/server';
+import {NextResponse} from 'next/server';
+import {getTokenRemainingTime} from "@/utils/cookie/cookie.api";
 
 // 백엔드 API URL
 const REISSUE_API_URL = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/reissue`;

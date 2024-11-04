@@ -1,12 +1,5 @@
 import React from "react";
-import {
-    Card,
-    Avatar,
-    Button,
-    CardBody,
-    CardHeader,
-    Typography,
-} from "@material-tailwind/react";
+import {Avatar, Card, CardBody, CardHeader, Typography,} from "@material-tailwind/react";
 import {UserModel} from "@/model/user/user.model";
 
 interface StatsPropsType {

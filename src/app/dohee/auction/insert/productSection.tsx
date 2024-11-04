@@ -1,21 +1,8 @@
 'use client';
 
-import {
-    Button,
-    Dialog,
-    DialogHeader,
-    DialogBody,
-    IconButton,
-    Typography,
-    DialogFooter,
-    Input,
-    Select,
-    Option,
-    Textarea,
-} from "@material-tailwind/react";
+import {Input, Option, Select, Typography,} from "@material-tailwind/react";
 import {ProductWithImageModel} from "@/model/product/product.model";
 import {getColor} from "@/utils/productUtils";
-import {ChangeEvent} from "react";
 
 type ProductSectionProps = {
     openModal: () => void,

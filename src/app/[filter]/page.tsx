@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useEffect, useState, useMemo} from "react";
+import React, {useEffect, useState} from "react";
 import {ProductCardModel} from "@/model/product/product.model";
 import TabFiltersProduct from "@/components/dohee/TabFiltersProduct";
 import Pagination from "@/shared/Pagination/Pagination";
@@ -9,11 +9,11 @@ import SectionSliderCollections from "@/components/SectionSliderLargeProduct";
 import SectionPromo1 from "@/components/SectionPromo1";
 import ProductCard from "@/components/ProductCard";
 import {useDispatch, useSelector} from "react-redux";
-import {getCategoryProducts, getProductCards, isProductsInRedux, updateIsLiked} from "@/lib/features/productCard.slice";
+import {getCategoryProducts, isProductsInRedux, setProductCards, updateIsLiked} from "@/lib/features/productCard.slice";
 import {useWishlist} from "@/hooks/react-query/useWishlist";
-import {setProductCards} from "@/lib/features/productCard.slice";
 import {useProductCardList} from "@/hooks/react-query/useProductlist";
 import Heading from "@/shared/Heading/Heading";
+import SectionSliderLargeProductDohee from "@/components/dohee/SectionSliderLargeProductDohee";
 
 export default function PageCollection({params}: { params: { filter: string } }) {
     const dispatch = useDispatch();
@@ -159,7 +159,8 @@ export default function PageCollection({params}: { params: { filter: string } })
                     </main>
                 </div>
                 <hr className="border-slate-200 dark:border-slate-700"/>
-                <SectionSliderCollections/>
+                {/*<SectionSliderCollections/>*/}
+                <SectionSliderLargeProductDohee/>
                 <hr className="border-slate-200 dark:border-slate-700"/>
                 <SectionPromo1/>
             </div>

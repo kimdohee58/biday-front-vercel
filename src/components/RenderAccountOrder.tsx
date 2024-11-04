@@ -66,7 +66,6 @@ const renderProductItem = (product: any, index: number, type: string,
         awardId = product.id;
     }
 
-
     const price = product.amount || product.currentBid || 0;
 
     const createdAt = formatDate(findNestedProperty<string>(product, ["createdAt"]) || "Invalid Date");
@@ -92,12 +91,11 @@ const renderProductItem = (product: any, index: number, type: string,
     // 결제 불가 버튼 찍기
     const now = new Date();
     const endedDate = new Date(formatDate(endedAt));
-    const isSoldOut = new Date(endedDate.getTime() + 3 * 24 * 60 * 60 * 1000) < now;
-    console.log(">>>>>>>>>>>>>>>>>>>awardId", awardId, isSoldOut)
+    const isAvailable = new Date(endedDate.getTime() + 3 * 24 * 60 * 60 * 1000) < now;
+    console.log(">>>>>>>>>>>>>>>>>>>awardId", awardId, endedAt.toString(), isAvailable)
 
     return (
         <div key={index} className="flex py-4 sm:py-7 last:pb-0 first:pt-0 mb-2">
-
             <div
                 onClick={['auction', 'bid', 'award'].includes(type) && onImg && auctionId ? () => {
                     onImg(auctionId,);
@@ -121,9 +119,9 @@ const renderProductItem = (product: any, index: number, type: string,
                         </div>
 
                         <div>
-                            {isSoldOut ? (
+                            {isAvailable ? (
                                 <button disabled style={{cursor: 'not-allowed'}}>
-                                    Sold Out
+                                    Unavailable
                                 </button>
                             ) : (
                                 <div

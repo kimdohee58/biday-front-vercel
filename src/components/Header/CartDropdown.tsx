@@ -1,12 +1,7 @@
-//dohee/CartDropdownDohee
+// CartDropdown
 "use client";
 
-import {
-  Popover,
-  PopoverButton,
-  PopoverPanel,
-  Transition,
-} from "@/app/headlessui";
+import {Popover, PopoverButton, PopoverPanel, Transition,} from "@/app/headlessui";
 import Prices from "@/components/Prices";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
@@ -16,9 +11,7 @@ import {Spinner} from "@chakra-ui/react";
 import {AwardModel} from "@/model/auction/award.model";
 import {findByUserAward} from "@/service/auction/award.service";
 import {useFetchAwardProducts} from "@/components/AccountuseQuery/useQuery";
-import {ProductModel} from "@/model/product/product.model";
 import {mapDataWithAwardModel} from "@/utils/mapDataWithProducts";
-import {useRouter} from "next/navigation";
 import ImageFetcher from "../ImageFetcher";
 import {SizeModel} from "@/model/product/size.model";
 
@@ -26,8 +19,7 @@ interface ContentAward {
   content: AwardModel[];
 }
 
-export default function CartDropdownDohee() {
-  const router = useRouter();
+export default function CartDropdown() {
   const [awardData, setAwardData] = useState<ContentAward>();
   const [awardContent, setAwardContent] = useState<AwardModel[]>([]);
   const [loading, setLoading] = useState(true);
@@ -63,10 +55,10 @@ export default function CartDropdownDohee() {
 
   const currentDate = new Date();
   const filteredAwardList = awardContent.filter((item) => {
-    const {createdAt} = item;
+    const { status, createdAt } = item;
     const payDate = new Date(createdAt);
     payDate.setDate(payDate.getDate() + 3);
-    return payDate >= currentDate;
+    return !status && payDate >= currentDate;
   }) || [];
 
   const {data: awardProductList = []} = useFetchAwardProducts(awardData);
@@ -74,8 +66,6 @@ export default function CartDropdownDohee() {
   const matchedAwardProductList = awardProductList.filter((size) =>
       sizeIds.includes(size.id)
   );
-
-  console.log("matchedAwardProductList", matchedAwardProductList);
 
   const totalBid = filteredAwardList.reduce((acc, item) => acc + item.currentBid, 0);
 
@@ -88,9 +78,10 @@ export default function CartDropdownDohee() {
       console.log("Product is null or item is null!!!");
       return null;
     }
-    const {auction, product, currentBid, createdAt} = item;
-    const {id, size, sizeProduct} = product;
-    const {name} = sizeProduct;
+
+    const { auction, currentBid, createdAt, product } = item;
+    const { id, size, sizeProduct } = product;
+    const { name } = sizeProduct;
 
     const payDate = new Date(createdAt);
     payDate.setDate(payDate.getDate() + 3);
@@ -128,14 +119,12 @@ export default function CartDropdownDohee() {
                 <Link
                     type="button"
                     className={`flex items-center justify-center px-4 py-2 rounded-md border border-blue-600 text-blue-600 font-semibold transition duration-200 shadow-sm hover:bg-blue-100 hover:text-blue-800 hover:shadow-lg active:bg-blue-200`}
-                    href={`/checkout?awardId=${item?.auction.id}&productId=${id}`}
+                    href={`/checkout?awardId=${item.id}&productId=${id}`}
                     onClick={close}
                 >
                   <span className="mr-1 text-lg">🛒</span>
                   결제
                 </Link>
-
-
               </div>
             </div>
           </div>
@@ -219,7 +208,7 @@ export default function CartDropdownDohee() {
                                 <Spinner/>
                               </div>
                           ) : mapDataWithAwardModel(filteredAwardList, matchedAwardProductList!!)?.length > 0 ? (
-                              mapDataWithAwardModel(filteredAwardList, matchedAwardProductList!!).map((item, index) => renderProduct(item as any as AwardModel & {product: SizeModel | null, matchedSize: string | null}, index, close))
+                              mapDataWithAwardModel(filteredAwardList, matchedAwardProductList!!).map((item, index) => renderProduct(item as any as AwardModel & { product: SizeModel | null; matchedSize: string | null }, index, close))
                           ) : (
                               <p className="text-center mt-8 mb-2 text-lg">결제 대기 중인 상품이 없습니다.</p>
                           )}

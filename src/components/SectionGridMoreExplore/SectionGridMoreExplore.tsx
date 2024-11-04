@@ -1,13 +1,13 @@
 "use client";
 
-import React, { FC, useState } from "react";
+import React, {FC, useState} from "react";
 import CardCategory1 from "@/components/CardCategories/CardCategory1";
 import CardCategory4 from "@/components/CardCategories/CardCategory4";
 import Heading from "@/components/Heading/Heading";
 import NavItem2 from "@/components/NavItem2";
 import Nav from "@/shared/Nav/Nav";
 import CardCategory6 from "@/components/CardCategories/CardCategory6";
-import { DEMO_MORE_EXPLORE_DATA, ExploreType } from "./data";
+import {DEMO_MORE_EXPLORE_DATA, ExploreType} from "./data";
 
 export interface SectionGridMoreExploreProps {
   className?: string;

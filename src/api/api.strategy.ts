@@ -1,6 +1,5 @@
 //src/api/api.strategy.ts
-import { fetchAPI } from './fetch';
-import {handleReissueToken} from "@/utils/reissue/reissueToken";
+import {fetchAPI} from './fetch';
 import {RequestOptions} from "@/model/api/RequestOptions";
 import {HTTPRequest} from "@/utils/headers";
 import {ApiErrors, isApiError} from "@/utils/error/error";

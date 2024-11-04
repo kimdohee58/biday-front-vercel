@@ -1,10 +1,11 @@
 import {HeartIcon} from "@heroicons/react/24/solid";
-import React, { FC } from "react";
+import React, {FC} from "react";
 import NcImage from "@/shared/NcImage/NcImage";
 import Link from "next/link";
-import { ImageModel } from "@/model/ftp/image.model";
+import {ImageModel} from "@/model/ftp/image.model";
 import Prices from "@/components/Prices";
 import {BoltIcon} from "@heroicons/react/16/solid";
+
 // import {BoltIcon} from "@heroicons/react/20/solid";
 
 export interface CollectionCard2Props {
@@ -71,10 +72,10 @@ const CollectionCard2Dohee: FC<CollectionCard2Props> = ({
                 <div className="absolute top-2 left-2 z-10">
                     <BoltIcon className="w-16 h-16 text-red-500"/>
                 </div>
-                )}
+            )}
             <div className={"flex"}>
                 <div className="flex-none w-3/4 pr-2 flex justify-center items-center">
-                {/* Main Image */}
+                    {/* Main Image */}
                     <NcImage
                         containerClassName="aspect-w-20 aspect-h-15 bg-neutral-100 rounded-2xl overflow-hidden"
                         className="bg-cover w-full h-full rounded-2xl"

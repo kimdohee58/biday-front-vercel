@@ -1,7 +1,6 @@
 "use client";
 
 import {useQuery} from "@tanstack/react-query";
-import ProductCard from "@/components/ProductCard";
 import {getColorsArray} from "@/utils/productUtils";
 import {productTest} from "@/service/test/test.service";
 import {Alert} from "@/shared/Alert/Alert";

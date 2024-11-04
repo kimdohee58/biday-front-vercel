@@ -1,5 +1,4 @@
-import React, { FC } from "react";
-import MainNav2Logged from "./MainNav2Logged";
+import React, {FC} from "react";
 import MainNav2LoggedDohee from "@/components/dohee/MainNav2LoggedDohee";
 
 export interface HeaderLoggedProps {}

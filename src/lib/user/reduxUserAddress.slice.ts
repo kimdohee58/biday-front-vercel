@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {initialUser, ReduxUserAddress} from "@/model/redux/store.model";
 
 // Slice 상태 인터페이스 정의

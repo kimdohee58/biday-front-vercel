@@ -12,7 +12,7 @@ import {fetchAllProductImage, fetchImageOne} from "@/service/ftp/image.service";
 import {defaultImage, ImageType} from "@/model/ftp/image.model";
 import {SizeModel} from "@/model/product/size.model";
 import {getColorsArray} from "@/utils/productUtils";
-import {ApiErrors, handleApiError, isApiError} from "@/utils/error/error";
+import {handleApiError, isApiError} from "@/utils/error/error";
 
 export async function fetchAllProductCards(): Promise<ProductCardModel[]> {
     try {

@@ -2,18 +2,12 @@
 
 import {auctionAPI} from "@/api/auction/auction.api";
 import Cookies from "js-cookie";
-import {
-    AuctionDTO,
-    AuctionDTOWithImageModel,
-    AuctionModel,
-    AuctionWithImageModel,
-    SaveAuctionModel
-} from "@/model/auction/auction.model";
+import {AuctionDTO, AuctionModel, AuctionWithImageModel, SaveAuctionModel} from "@/model/auction/auction.model";
 import {fetchImage} from "@/service/ftp/image.service";
 import {defaultImage, ImageModel, ImageType} from "@/model/ftp/image.model";
 import {fetchProductWithImageBySizeId} from "@/service/product/product.service";
 import {ProductDTO} from "@/model/product/product.model";
-import {ApiErrors, handleApiError, isApiError} from "@/utils/error/error";
+import {handleApiError, isApiError} from "@/utils/error/error";
 import {findUserById} from "@/service/user/user.api";
 import {UserModel} from "@/model/user/user.model";
 

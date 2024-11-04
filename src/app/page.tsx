@@ -1,7 +1,7 @@
 import PageClient from './page-client';
-import {cookies, headers} from 'next/headers';
+import {cookies} from 'next/headers';
 import TokenManager from "@/components/TestToken";
-import {fetchAllProductCards, fetchAllProductsWithImages} from "@/service/product/product.service";
+import {fetchAllProductCards} from "@/service/product/product.service";
 import {dehydrate, HydrationBoundary, QueryClient} from "@tanstack/react-query";
 
 export default async function PageHome() {

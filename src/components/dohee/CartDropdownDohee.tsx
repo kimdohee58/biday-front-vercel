@@ -2,12 +2,7 @@
 //dohee/CartDropdownDohee
 "use client";
 
-import {
-    Popover,
-    PopoverButton,
-    PopoverPanel,
-    Transition,
-} from "@/app/headlessui";
+import {Popover, PopoverButton, PopoverPanel, Transition,} from "@/app/headlessui";
 import Prices from "@/components/Prices";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
@@ -17,7 +12,6 @@ import {Spinner} from "@chakra-ui/react";
 import {AwardModel} from "@/model/auction/award.model";
 import {findByUserAward} from "@/service/auction/award.service";
 import {useFetchAwardProducts} from "@/components/AccountuseQuery/useQuery";
-import {ProductModel} from "@/model/product/product.model";
 import {mapDataWithAwardModel} from "@/utils/mapDataWithProducts";
 import {useRouter} from "next/navigation";
 import ImageFetcher from "../ImageFetcher";

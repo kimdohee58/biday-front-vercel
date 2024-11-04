@@ -3,9 +3,7 @@
 import {Route} from "@/routers/types";
 import Link from "next/link";
 import {usePathname} from "next/navigation";
-import React from "react";
-import {FC} from "react";
-import {UserProvider} from "@/utils/userContext";
+import React, {FC} from "react";
 
 export interface CommonLayoutProps {
     children?: React.ReactNode;

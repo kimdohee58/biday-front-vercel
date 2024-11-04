@@ -3,7 +3,7 @@
 
 import React, {useEffect, useState} from "react";
 import SectionPromo1 from "@/components/SectionPromo1";
-import { fetchAuctionDetails } from "@/service/auction/auction.service";
+import {fetchAuctionDetails} from "@/service/auction/auction.service";
 import {AuctionDTO, AuctionDTOs} from "@/model/auction/auction.model";
 import {auctionAPI} from "@/api/auction/auction.api";
 import SectionGridFeatureItemsDohee from "@/components/dohee/SectionGridFeatureItemsDohee";

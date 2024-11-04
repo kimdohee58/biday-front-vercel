@@ -2,7 +2,6 @@ import {AuctionDTO, AuctionDTOs, AuctionModel, SaveAuctionModel} from "@/model/a
 import {api} from "../request";
 import {strategy} from "../api.strategy";
 import {RequestOptions} from "@/model/api/RequestOptions";
-import {AwardDto} from "@/model/auction/award.model";
 
 // 경매 상세보기 (GET 요청)
 const findById = async (options: RequestOptions<{ auctionId: string }, null>): Promise<AuctionModel> => {

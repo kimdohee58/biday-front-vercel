@@ -1,13 +1,6 @@
 "use client";
-import React, {FC} from "react";
-import {Fragment, useState} from "react";
-import {
-    Listbox,
-    ListboxButton,
-    ListboxOption,
-    ListboxOptions,
-    Transition,
-} from "@/app/headlessui";
+import React, {FC, Fragment, useState} from "react";
+import {Listbox, ListboxButton, ListboxOption, ListboxOptions, Transition,} from "@/app/headlessui";
 import {CheckIcon} from "@heroicons/react/24/solid";
 import ButtonDropdown from "./ButtonDropdown";
 

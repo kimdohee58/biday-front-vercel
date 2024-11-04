@@ -1,6 +1,5 @@
-import { _getPersonNameRd } from "@/contains/fakeData";
-import React from "react";
-import { FC } from "react";
+import {_getPersonNameRd} from "@/contains/fakeData";
+import React, {FC} from "react";
 import Avatar from "@/shared/Avatar/Avatar";
 import Link from "next/link";
 

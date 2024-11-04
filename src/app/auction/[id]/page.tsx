@@ -13,19 +13,18 @@ import AccordionInfo from "@/components/AccordionInfo";
 import ListingImageGallery from "@/components/listing-image-gallery/ListingImageGallery";
 import {useParams, usePathname, useRouter, useSearchParams} from "next/navigation";
 import {Route} from "next";
-import {useMutation, useQuery, useSuspenseQuery} from "@tanstack/react-query";
+import {useMutation} from "@tanstack/react-query";
 import Cookies from "js-cookie";
 import {saveBid} from "@/service/auction/bid.service";
 import {Timer} from "./Timer";
 import {getColor} from "@/utils/productUtils";
-import {useAuctionWithImage, useSuspenseAuctionAndProduct} from "@/hooks/react-query/useAuctionlist";
+import {useSuspenseAuctionAndProduct} from "@/hooks/react-query/useAuctionlist";
 import HighestBid from "./HighestBid";
 import NotifyBid from "./NotifyBid";
 import LikeSaveBtns from "@/components/LikeSaveBtns";
-import {fetchAwardOne, findByAuctionId} from "@/service/auction/award.service";
 import {useSelector} from "react-redux";
 import {getUserToken} from "@/lib/features/user.slice";
-import {differenceInMinutes, isAfter} from "date-fns";
+import {differenceInMinutes} from "date-fns";
 import {CancelAuction} from "@/service/auction/auction.service";
 import {AwardDto} from "@/model/auction/award.model";
 import {useAward} from "@/hooks/react-query/useAward";
@@ -543,7 +542,7 @@ export default function AuctionDetailPage() {
                 <div>
                     {isEnded && (
                         <div
-                            className="absolute top-[35%] left-1/2 transform -translate-x-1/2 -rotate-40 bg-red-600 border-8 border-white font-bold text-8xl text-white rounded-md shadow-md w-[700px] h-[200px] flex items-center justify-center text-center leading-none overflow-hidden z-10"
+                            className="absolute top left-1/2 transform -translate-x-1/2 -rotate-40 bg-red-600 border-8 border-white font-bold text-8xl text-white rounded-md shadow-md w-[700px] h-[200px] flex items-center justify-center text-center leading-none overflow-hidden z-10"
                         >
                             <span className="whitespace-nowrap">SOLD OUT</span>
                         </div>

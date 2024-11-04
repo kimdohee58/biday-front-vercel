@@ -1,6 +1,6 @@
 // src/components/TokenCheck.tsx
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import {useRouter} from "next/navigation";
+import {useEffect, useState} from "react";
 import Cookies from "js-cookie"; // 쿠키 사용을 위해 추가
 import axiosInstance from "@/app/api/axiosInstance/axiosInstance"; // Axios 인스턴스 추가
 
