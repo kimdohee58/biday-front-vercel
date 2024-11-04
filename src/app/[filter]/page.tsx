@@ -13,6 +13,7 @@ import {getCategoryProducts, isProductsInRedux, setProductCards, updateIsLiked} 
 import {useWishlist} from "@/hooks/react-query/useWishlist";
 import {useProductCardList} from "@/hooks/react-query/useProductlist";
 import Heading from "@/shared/Heading/Heading";
+import SectionSliderLargeProductDohee from "@/components/dohee/SectionSliderLargeProductDohee";
 
 export default function PageCollection({params}: { params: { filter: string } }) {
     const dispatch = useDispatch();
@@ -158,7 +159,8 @@ export default function PageCollection({params}: { params: { filter: string } })
                     </main>
                 </div>
                 <hr className="border-slate-200 dark:border-slate-700"/>
-                <SectionSliderCollections/>
+                {/*<SectionSliderCollections/>*/}
+                <SectionSliderLargeProductDohee/>
                 <hr className="border-slate-200 dark:border-slate-700"/>
                 <SectionPromo1/>
             </div>
