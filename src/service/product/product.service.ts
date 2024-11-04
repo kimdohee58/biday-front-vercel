@@ -21,7 +21,7 @@ export async function fetchAllProductCards(): Promise<ProductCardModel[]> {
 
         if (!products) {
             console.error("products 값이 undefined");
-            throw new Error("");
+            return [];
         }
 
         return await Promise.all(products.map(async (product) => {
@@ -45,9 +45,10 @@ export async function fetchAllProductCards(): Promise<ProductCardModel[]> {
                 return [];
             } else {
                 handleApiError(error.status);
+                return [];
             }
         }
-        throw new Error("알 수 없는 에러");
+        return [];
     }
 
 }

@@ -7,10 +7,9 @@ import Cookies from 'js-cookie';
 export default function Home() {
     const router = useRouter();
 
-    // accessToken으로 API 요청
     const fetchUsers = async () => {
         try {
-            const accessToken = Cookies.get('accessToken'); // accessToken 가져오기
+            const accessToken = Cookies.get('accessToken');
             if (!accessToken) {
                 throw new Error('Access token is missing');
             }
@@ -18,14 +17,13 @@ export default function Home() {
             const response = await fetch('http://211.188.54.218:8080/users/UsersList', {
                 method: 'GET',
                 headers: {
-                    "Authorization": `Bearer ${accessToken}`, // accessToken 사용
+                    "Authorization": `Bearer ${accessToken}`,
                     "Content-Type": "application/json",
                 },
-                credentials: 'include', // 쿠키 자동 전송
+                credentials: 'include',
             });
 
             if (response.status === 401) {
-                // accessToken 만료 시 refreshToken을 사용해 새로 발급받음
                 await handleReissueToken();
                 fetchUsers(); // 토큰 재발급 후 다시 요청
             } else if (!response.ok) {
