@@ -326,9 +326,9 @@ export default function AuctionDetailPage() {
                                     isEnded
                                         ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                                         : isSeller && !isCancel
-                                            ? 'bg-red-700 text-white' // 취소 불가 시 빨간색
+                                            ? 'bg-red-700 text-white'
                                             : isCancel
-                                                ? 'bg-yellow-500 text-white' // 경매 취소 시 노란색으로 변경
+                                                ? 'bg-yellow-500 text-white'
                                                 : 'hover:bg-blue-600'
                                 }`}
                                 onClick={onClickBidButton}
