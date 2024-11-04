@@ -28,4 +28,4 @@ export const useProductDetail = (productId: string) => {
         queryFn: () => fetchProductDetails(productId),
 
     });
-};
+}
