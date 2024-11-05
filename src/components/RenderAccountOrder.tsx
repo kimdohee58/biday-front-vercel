@@ -89,12 +89,18 @@ const renderProductItem = (product: any, index: number, type: string,
         dateContent = `${startedAt} ~ ${endedAt}`; // Show the range for auction
     }
 
-    // 결제 불가 버튼 찍기
+    // 경매 종료, 결제 불가 버튼 찍기
     const now = new Date();
     const endedDate = new Date(formatDate(endedAt));
     const createdDate = new Date(formatDate(createdAt));
-    const isAvailable = new Date(endedDate.getTime() + 3 * 24 * 60 * 60 * 1000) < now;
-    console.log(">>>>>>>>>>>>>>>>>>>awardId", awardId, isAvailable)
+
+    let isAvailable;
+
+    if (type === 'award') {
+        isAvailable = new Date(createdDate.getTime() + 3 * 24 * 60 * 60 * 1000) < now;
+    } else if (type === 'auction') {
+        isAvailable = new Date(endedDate.getTime() + 3 * 24 * 60 * 60 * 1000) < now;
+    }
 
     return (
         <div key={index} className="flex py-4 sm:py-7 last:pb-0 first:pt-0 mb-2">
@@ -125,9 +131,9 @@ const renderProductItem = (product: any, index: number, type: string,
                             {isAvailable ? (
                                 <button
                                     disabled
-                                    className="bg-gray-400 text-gray-700 border border-gray-500 cursor-not-allowed rounded-md py-1 px-3 font-semibold text-base"
+                                    className="bg-gray-400 text-gray-700 border border-gray-500 cursor-not-allowed rounded-md py-1 px-3 font-semibold text-base w-32"
                                 >
-                                    UnAvailable
+                                    {type === 'auction' ? 'Sold Out' : type === 'award' ? 'Unavailable' : 'Not Available'}
                                 </button>
                             ) : (
                                 <div
