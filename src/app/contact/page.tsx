@@ -10,15 +10,15 @@ import SectionPromo1 from "@/components/SectionPromo1";
 const info = [
   {
     title: "🗺 ADDRESS",
-    desc: "Photo booth tattooed prism, portland taiyaki hoodie neutra typewriter",
+    desc: "서울특별시 강남구 역삼동 819-3",
   },
   {
     title: "💌 EMAIL",
-    desc: "nc.example@example.com",
+    desc: "nc13@biday.com",
   },
   {
     title: "☎ PHONE",
-    desc: "000-123-456-7890",
+    desc: "000-1234-5678",
   },
 ];
 

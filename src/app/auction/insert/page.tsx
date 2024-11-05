@@ -122,7 +122,8 @@ export default function InsertAuction() {
 
     // 기간 선택 핸들러
     const durationSelectButton = () => {
-        const durations = [3, 5, 7];
+        // const durations = [3, 5, 7];
+        const durations = [15, 30, 60];
 
         const handleClick = (days: number) => {
             setDuration(days);

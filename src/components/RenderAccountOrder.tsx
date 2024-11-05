@@ -92,8 +92,9 @@ const renderProductItem = (product: any, index: number, type: string,
     // 결제 불가 버튼 찍기
     const now = new Date();
     const endedDate = new Date(formatDate(endedAt));
-    const isSoldOut = new Date(endedDate.getTime() + 3 * 24 * 60 * 60 * 1000) < now;
-    console.log(">>>>>>>>>>>>>>>>>>>awardId", awardId, isSoldOut)
+    const createdDate = new Date(formatDate(createdAt));
+    const isAvailable = new Date(endedDate.getTime() + 3 * 24 * 60 * 60 * 1000) < now;
+    console.log(">>>>>>>>>>>>>>>>>>>awardId", awardId, isAvailable)
 
     return (
         <div key={index} className="flex py-4 sm:py-7 last:pb-0 first:pt-0 mb-2">
@@ -121,9 +122,12 @@ const renderProductItem = (product: any, index: number, type: string,
                         </div>
 
                         <div>
-                            {isSoldOut ? (
-                                <button disabled style={{cursor: 'not-allowed'}}>
-                                    Sold Out
+                            {isAvailable ? (
+                                <button
+                                    disabled
+                                    className="bg-gray-400 text-gray-700 border border-gray-500 cursor-not-allowed rounded-md py-1 px-3 font-semibold text-base"
+                                >
+                                    UnAvailable
                                 </button>
                             ) : (
                                 <div

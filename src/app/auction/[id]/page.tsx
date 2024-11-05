@@ -431,7 +431,7 @@ export default function AuctionDetailPage() {
             <div className="listingSection__wrap !border-b-0 !pb-0">
                 <h2 className="text-2xl font-semibold">Product details</h2>
                 <div className="prose prose-sm sm:prose dark:prose-invert sm:max-w-4xl">
-                    {convertNewlinesToBr(product.description)} {/* JSX 표현으로 줄바꿈 처리 */}
+                    <p dangerouslySetInnerHTML={{__html: product.description.replace(/\\n/g, '<br/>')}}/>
                 </div>
             </div>
         );
