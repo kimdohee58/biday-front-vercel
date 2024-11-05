@@ -22,8 +22,8 @@ import {useRouter, useSearchParams} from "next/navigation";
 import Cookies from "js-cookie";
 import {UserToken} from "@/model/user/userToken";
 import {UserRole} from "@/model/user/user.model";
-import {useSuspenseProductDetail} from "@/hooks/react-query/useProductlist";
 import {Spinner} from "@/shared/Spinner/Spinner";
+import {useSuspenseProductDetail} from "@/hooks/react-query/useProductlist";
 
 type ProductDetailProps = {
     product: ProductWithImageModel,
