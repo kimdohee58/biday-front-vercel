@@ -2,7 +2,7 @@
 export const api = {
     account:"/api/account",
     address: "/api/addresses",
-    category: "api/categories",
+    category: "/api/categories",
     size: "/api/sizes",
     faq: "/api/faqs",
     bid: "/api/bids",
