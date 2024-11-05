@@ -27,29 +27,28 @@ const SectionPromo3: FC<SectionPromo3Props> = ({ className = "lg:pt-10" }) => {
 
         <div className="lg:w-[50%] max-w-lg relative">
           <h2 className="font-semibold text-4xl md:text-5xl">
-            {`Don't miss out on special offers`}
+            {`특별한 혜택을 놓치지 마세요`}
           </h2>
           <span className="block mt-5 text-neutral-500 dark:text-neutral-400">
-            Register to receive news about the latest, savings combos, discount
-            codes...
+            최신 뉴스, 할인 조합, 할인 코드에 대한 정보를 받으려면 등록하세요...
           </span>
           <ul className="space-y-4 mt-10">
             <li className="flex items-center space-x-4">
               <Badge color="purple" name="01" />
               <span className="font-medium text-neutral-700 dark:text-neutral-300">
-                Savings combos
+                할인 조합
               </span>
             </li>
             <li className="flex items-center space-x-4">
               <Badge name="02" />
               <span className="font-medium text-neutral-700 dark:text-neutral-300">
-                Freeship
+                무료 배송
               </span>
             </li>
             <li className="flex items-center space-x-4">
               <Badge color="red" name="03" />
               <span className="font-medium text-neutral-700 dark:text-neutral-300">
-                Premium magazines
+                프리미엄 잡지
               </span>
             </li>
           </ul>
