@@ -123,7 +123,8 @@ export default function InsertAuction() {
     // 기간 선택 핸들러
     const durationSelectButton = () => {
         // const durations = [3, 5, 7];
-        const durations = [15, 30, 60];
+        const durations = [1, 3, 5];
+        // const durations = [15, 30, 60];
 
         const handleClick = (days: number) => {
             setDuration(days);
@@ -137,7 +138,7 @@ export default function InsertAuction() {
             }
 
             const endDate = new Date(currentDate);
-            endDate.setMinutes(currentDate.getMinutes() + days); // 테스트용
+            endDate.setDate(currentDate.getDate() + days); // 테스트용
             // endDate.setDate(currentDate.getDate() + days);
             console.log("data", endDate);
             setStartedAt(currentDate);

@@ -324,12 +324,16 @@ export default function AuctionDetailPage() {
                             <ButtonPrimary
                                 className={`flex-1 flex-shrink-0 ${
                                     isEnded
-                                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                        ? 'bg-blue-500 text-white hover:bg-blue-600'
                                         : isSeller && !isCancel
-                                            ? 'bg-red-700 text-white'
-                                            : isCancel
-                                                ? 'bg-yellow-500 text-white'
-                                                : 'hover:bg-blue-600'
+                                            ? 'bg-yellow-700 text-white'
+                                            : isSeller && isCancel
+                                                ? 'bg-amber-500 text-white'
+                                                : !isSeller && isEnded
+                                                    ? 'bg-blue-500 text-white hover:bg-blue-600'
+                                                    : !isSeller && !isEnded
+                                                        ? 'bg-yellow-500 text-white'
+                                                        : 'bg-yellow-500 text-white'
                                 }`}
                                 onClick={onClickBidButton}
                                 disabled={isEnded || (isSeller && !isCancel)}
