@@ -12,28 +12,28 @@ export interface People {
 const FOUNDER_DEMO: People[] = [
   {
     id: "1",
-    name: `Niamh O'Shea`,
+    name: `Zero (김영우)`,
     job: "Co-founder and Chief Executive",
     avatar:
       "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
   },
   {
     id: "4",
-    name: `Danien Jame`,
+    name: `Cathy (설유정)`,
     job: "Co-founder and Chief Executive",
     avatar:
       "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
   },
   {
     id: "3",
-    name: `Orla Dwyer`,
+    name: `Hans (정휘재)`,
     job: "Co-founder, Chairman",
     avatar:
       "https://images.unsplash.com/photo-1560365163-3e8d64e762ef?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
   },
   {
     id: "2",
-    name: `Dara Frazier`,
+    name: `Michael`,
     job: "Co-Founder, Chief Strategy Officer",
     avatar:
       "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
