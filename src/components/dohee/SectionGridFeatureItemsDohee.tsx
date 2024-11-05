@@ -186,7 +186,6 @@ const SectionGridFeatureItemsDohee: FC<SectionGridFeatureItemsProps> = ({header 
                         selectedOrder={selectedOrder}
                         onFilterChange={handleDetailFilterChange}
                     />
-                    {/*<TabFilters/>*/}
                 </Transition>
             </div>
 
