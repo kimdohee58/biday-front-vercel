@@ -23,6 +23,7 @@ import Cookies from "js-cookie";
 import {UserToken} from "@/model/user/userToken";
 import {UserRole} from "@/model/user/user.model";
 import {useSuspenseProductDetail} from "@/hooks/react-query/useProductlist";
+import {Spinner} from "@/shared/Spinner/Spinner";
 
 type ProductDetailProps = {
     product: ProductWithImageModel,
@@ -317,7 +318,7 @@ export default function ProductClientComponent({productId} : { productId: string
                                 <AuctionTable auctions={auctions.data || []} product={currentProduct}
                                               size={currentSizeId}/>)
                             :
-                            (<div>Loading...</div>)
+                            (<Spinner/>)
                     }
 
                 </div>
