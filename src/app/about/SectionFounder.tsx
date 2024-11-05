@@ -15,35 +15,35 @@ const FOUNDER_DEMO: People[] = [
     name: `Zero (김영우)`,
     job: "Co-founder and Chief Executive",
     avatar:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
+        "/KakaoTalk_20241106_020155000.jpg",
   },
   {
     id: "2",
     name: `Hans (정휘재)`,
     job: "Co-founder, Chairman",
     avatar:
-        "https://images.unsplash.com/photo-1560365163-3e8d64e762ef?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
+        "/KakaoTalk_20241106_020155000_03.jpg",
   },
   {
     id: "3",
     name: `Michael (송준한)`,
     job: "Co-Founder, Chief Strategy Officer",
     avatar:
-        "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
+        "/KakaoTalk_20241106_020155000_05.jpg",
   },
   {
     id: "4",
     name: `Cathy (설유정)`,
     job: "Co-founder and Chief Executive",
     avatar:
-      "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
+        "/KakaoTalk_20241106_020155000_05.jpg",
   },
   {
     id: "5",
     name: `Dona (김도희)`,
-    job: "Co-founder and Chief Executive",
+    job: "Co-Founder, Chief Operating Officer",
     avatar:
-        "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
+        "/KakaoTalk_20241106_020155000.jpg",
   },
 ];
 
@@ -51,8 +51,7 @@ const SectionFounder = () => {
   return (
     <div className="nc-SectionFounder relative">
       <Heading
-        desc="We’re impartial and independent, and every day we create distinctive,
-          world-class programmes and content"
+        desc="특별한 이야기를 만들어가는 BiDay 팀원을 소개합니다."
       >
         ⛱ Founder
       </Heading>
@@ -63,8 +62,11 @@ const SectionFounder = () => {
                   alt=""
                   fill
                   sizes="300px"
+                  // width={500} // 원하는 너비
+                  // height={500} // 원하는 높이
                   containerClassName="relative h-0 aspect-h-1 aspect-w-1 rounded-xl overflow-hidden"
-                  className="absolute inset-0 object-cover"
+                  // className="absolute inset-0 object-cover"
+                  className="absolute inset-0 object-contain"
                   src={item.avatar}
               />
               <h3 className="text-lg font-semibold text-neutral-900 mt-4 md:text-xl dark:text-neutral-200">

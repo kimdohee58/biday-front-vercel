@@ -35,7 +35,7 @@ const SectionStatistic: FC<SectionStatisticProps> = ({ className = "" }) => {
   return (
     <div className={`nc-SectionStatistic relative ${className}`}>
       <Heading
-        desc="우리는 중립적이며 독립적이고, 매일 차별화된 세계적 수준의 프로그램과 콘텐츠를 창출합니다."
+        desc="우리는 독창적이고 뛰어난 프로그램과 콘텐츠를 통해 새로운 경험을 제공합니다."
       >
         🚀 Fast Facts
       </Heading>
