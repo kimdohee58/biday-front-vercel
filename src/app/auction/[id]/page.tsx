@@ -328,7 +328,7 @@ export default function AuctionDetailPage() {
                                         : isSeller && !isCancel
                                             ? 'bg-yellow-700 text-white'
                                             : isSeller && isCancel
-                                                ? 'bg-amber-500 text-white'
+                                                ? 'bg-red-500 text-white'
                                                 : !isSeller && isEnded
                                                     ? 'bg-blue-500 text-white hover:bg-blue-600'
                                                     : !isSeller && !isEnded
