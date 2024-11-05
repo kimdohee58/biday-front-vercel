@@ -58,19 +58,20 @@ export default function PageFaq() {
 
     return (
         <div className="nc-PageFaq bg-white dark:bg-gray-900 overflow-hidden">
-            <div className="container max-w-5xl mx-auto px-4 py-10">
-                <h2 className="my-10 text-3xl md:text-5xl font-semibold text-center text-neutral-900 dark:text-neutral-100">
-                    자주 묻는 질문
+            <div className="container max-w-4xl mx-auto px-4 py-12">
+                <h2 className="my-10 text-4xl md:text-5xl font-semibold text-center text-neutral-900 dark:text-neutral-100">
+                    자주 묻는 질문 (FaQ)
                 </h2>
 
                 {/* 카테고리 선택 */}
-                <div className="flex justify-center mb-6">
+                <div className="flex justify-center mb-8 space-x-6">
                     {CATEGORIES.map(category => (
                         <button
                             key={category.id}
-                            className={`mx-2 px-5 py-2 rounded-lg font-medium transition duration-200 
-                            ${selectedCategory === category.id ? 'bg-neutral-300 dark:bg-neutral-600' : 'bg-neutral-200 dark:bg-neutral-700'} 
-                            hover:bg-neutral-300 dark:hover:bg-neutral-500`}
+                            className={`px-8 py-3 rounded-lg text-sm font-semibold transition duration-200
+                            ${selectedCategory === category.id ? 'bg-blue-600 text-white shadow-lg' : 'bg-neutral-200 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-100'} 
+                            hover:bg-blue-500 dark:hover:bg-neutral-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 
+                            active:scale-95 transform hover:scale-105`}
                             onClick={() => handleCategoryChange(category.id)}
                         >
                             {category.name}
@@ -82,15 +83,16 @@ export default function PageFaq() {
                     {filteredFAQData.map(item => (
                         <div key={item.id} className="border-b border-neutral-200 dark:border-neutral-700 pb-4">
                             <div
-                                className="flex justify-between items-center p-4 bg-neutral-100 dark:bg-neutral-800 rounded-lg cursor-pointer
-                                hover:bg-neutral-200 dark:hover:bg-neutral-700 transition duration-200"
+                                className="flex justify-between items-center p-5 bg-neutral-50 dark:bg-neutral-800 rounded-xl cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-700 transition duration-200"
                                 onClick={() => toggleAccordion(item.id)}
                             >
-                                <h3 className="text-lg font-semibold text-neutral-800 dark:text-neutral-200">{item.question}</h3>
+                                <h3 className="text-lg font-semibold text-neutral-800 dark:text-neutral-100">
+                                    {item.question}
+                                </h3>
                                 {openIndex === item.id ? <ChevronUpIcon /> : <ChevronDownIcon />}
                             </div>
                             {openIndex === item.id && (
-                                <div className="p-4 bg-neutral-50 dark:bg-neutral-700 rounded-lg">
+                                <div className="p-4 bg-neutral-100 dark:bg-neutral-700 rounded-xl">
                                     <p className="text-neutral-700 dark:text-neutral-300">{item.answer}</p>
                                 </div>
                             )}
