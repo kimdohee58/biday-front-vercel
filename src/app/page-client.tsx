@@ -82,6 +82,12 @@ export default function PageClient(props: ClientComponentProps) {
         }
     }, [productsInRedux, products, dispatch]);
 
+    useEffect(() => {
+        if (productsInRedux) {
+            setIsLoading(false);
+        }
+    }, [productsInRedux]);
+
     const {data: wishList, isLoading: isWishLoading, isError} = useWishlist();
 
     useEffect(() => {

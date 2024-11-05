@@ -5,6 +5,7 @@ import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {PaymentSaveModel} from "@/model/order/paymentSave.model";
+import {Spinner} from "@/shared/Spinner/Spinner";
 
 export default function CompletePage() {
     const router = useRouter();
@@ -24,10 +25,16 @@ export default function CompletePage() {
         }
     }, []);
 
+    if (!paymentData) {
+        return <div className="flex items-center justify-center h-screen w-screen">
+            <Spinner/>
+        </div>
+    }
+
 
     return (
         <section className="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
-            <div className="mx-auto max-w-2xl px-4 2xl:px-0">
+        <div className="mx-auto max-w-2xl px-4 2xl:px-0">
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl mb-2">결제가 완료되었습니다.</h2>
                 <p className="text-gray-500 dark:text-gray-400 mb-6 md:mb-8">주문 번호 <a href="#"
                                                                                       className="font-medium text-gray-900 dark:text-white hover:underline">{paymentData?.orderId}</a>
@@ -36,7 +43,7 @@ export default function CompletePage() {
                     className="space-y-4 sm:space-y-2 rounded-lg border border-gray-100 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800 mb-6 md:mb-8">
                     <dl className="sm:flex items-center justify-between gap-4">
                         <dt className="font-normal mb-1 sm:mb-0 text-gray-500 dark:text-gray-400">결제 일시</dt>
-                        <dd className="font-medium text-gray-900 dark:text-white sm:text-end">{paymentData?.approvedAt.toLocaleString()}</dd>
+                        <dd className="font-medium text-gray-900 dark:text-white sm:text-end">{paymentData.approvedAt.toLocaleString()}</dd>
                     </dl>
                     <dl className="sm:flex items-center justify-between gap-4">
                         <dt className="font-normal mb-1 sm:mb-0 text-gray-500 dark:text-gray-400">결제 상품</dt>

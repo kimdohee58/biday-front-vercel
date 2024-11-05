@@ -16,6 +16,27 @@ export const ApiErrors = {
 
 export type ApiError = typeof ApiErrors[keyof typeof ApiErrors];
 
+export const handleApiErrorResponse = (status: number) => {
+    switch (status) {
+        case 404:
+            throw ApiErrors.NOT_FOUND;
+        case 401:
+            throw ApiErrors.UNAUTHORIZED;
+        case 403:
+            throw ApiErrors.FORBIDDEN;
+        case 409:
+            throw ApiErrors.CONFLICT;
+        case 500:
+            throw ApiErrors.INTERNAL_SERVER_ERROR;
+        case 503:
+            throw ApiErrors.SERVICE_UNAVAILABLE;
+        case 504:
+            throw ApiErrors.GATEWAY_TIMEOUT;
+        default:
+            throw ApiErrors.UNKNOWN;
+    }
+};
+
 export const handleApiError = (error: any, showAlert = true) => {
     const status = error?.status || ApiErrors.UNKNOWN.status;
     const errorInfo: ApiError = Object.values(ApiErrors).find(err => err.status === status) || ApiErrors.UNKNOWN;
@@ -25,6 +46,7 @@ export const handleApiError = (error: any, showAlert = true) => {
     if (showAlert && typeof window !== "undefined") {
         alert(errorInfo.message || "알 수 없는 오류 발생");
     }
+
 };
 
 export const isApiError = (error: any): error is ApiError => {

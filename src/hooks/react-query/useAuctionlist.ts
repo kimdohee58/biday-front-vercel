@@ -32,3 +32,10 @@ export const useFetchAuctionBySizeIdsWithUser = (sizeIds: number[]) => {
         queryFn: () => fetchAuctionBySizesWithUser(sizeIds),
     })
 }
+
+export const useSuspenseAuctionBySizeIdsWithUser = (sizeIds: number[]) => {
+    return useSuspenseQuery({
+        queryKey: ["auction", "size", sizeIds],
+        queryFn: () => fetchAuctionBySizesWithUser(sizeIds),
+    })
+};

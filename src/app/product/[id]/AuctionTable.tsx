@@ -26,6 +26,7 @@ export default function AuctionTable({ auctions, product, size }: AuctionTablePr
     const [currentPageData, setCurrentPageData] = useState<(AuctionDTO | null)[]>([]);
     const [activePage, setActivePage] = useState(1);
     const [sizeList, setSizeList] = useState<SizeListType[]>([]);
+    console.log("auctions in table", auctions);
 
     useEffect(() => {
         setSizeList(getSizeList(product));

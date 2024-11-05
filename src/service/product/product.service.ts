@@ -1,7 +1,7 @@
 import {productAPI} from "@/api/product/product.api";
 import {
     ColorType,
-    ProductCardModel,
+    ProductCardModel, ProductDetails,
     ProductDictionary,
     ProductModel,
     ProductWithImageModel,
@@ -12,7 +12,7 @@ import {fetchAllProductImage, fetchImageOne} from "@/service/ftp/image.service";
 import {defaultImage, ImageType} from "@/model/ftp/image.model";
 import {SizeModel} from "@/model/product/size.model";
 import {getColorsArray} from "@/utils/productUtils";
-import {ApiErrors, handleApiError, isApiError} from "@/utils/error/error";
+import {ApiErrors, handleApiError, handleApiErrorResponse, isApiError} from "@/utils/error/error";
 
 export async function fetchAllProductCards(): Promise<ProductCardModel[]> {
     try {
@@ -201,12 +201,7 @@ export async function fetchProduct(productId: string): Promise<ProductModel[]> {
     }
 }
 
-export async function fetchProductDetails(productId: string): Promise<{
-    product: ProductWithImageModel,
-    size: string[],
-    colors: ColorType[],
-    productWithImagesArray: ProductWithImageModel[];
-}> {
+export async function fetchProductDetails(productId: string): Promise<ProductDetails> {
     try {
         const productWithImagesArray = await fetchProductsWithImages(productId);
         console.log("productWithImagesArray", productWithImagesArray);
@@ -216,7 +211,6 @@ export async function fetchProductDetails(productId: string): Promise<{
         }
 
         const colors = productWithImagesArray.map((item) => item.product.color);
-        const sizes = product.product.sizes.map((size) => size.id);
 
         const size = product.product.sizes.map((size) => size.size);
 
@@ -225,9 +219,17 @@ export async function fetchProductDetails(productId: string): Promise<{
 
 
     } catch (error) {
-        console.error("fetchProductDetail", error);
-        throw new Error("fetchProductError");
-        // TODO error enum
+        if (isApiError(error)) {
+            if (error.status === 404) {
+                return {} as ProductDetails;
+            } else {
+                return {} as ProductDetails;
+            }
+
+        } else {
+            console.error("정의되지 않은 에러", error)
+            return {} as ProductDetails;
+        }
     }
 }
 
