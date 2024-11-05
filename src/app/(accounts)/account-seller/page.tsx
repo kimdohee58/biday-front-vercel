@@ -75,7 +75,7 @@ function AccountDetails({user, onClick}: { user: UserModel, onClick: () => void 
                                     className: "hidden",
                                 }}
                                 disabled
-                                value={accountData.data.accountNumber}
+                                value="111-222-3333"
                                 className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
                             />
                         </div>
