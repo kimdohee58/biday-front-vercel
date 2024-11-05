@@ -132,6 +132,7 @@ export async function fetchAuctionsBySize(sizeId: number): Promise<AuctionDTO[]>
     }
 }
 
+
 export async function fetchAuctionsBySizes(sizeIds: number[]): Promise<AuctionDTO[]> {
     try {
         return (await Promise.all(sizeIds.map(size => fetchAuctionsBySize(size)))).flat();
