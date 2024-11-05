@@ -395,8 +395,9 @@ export default function AuctionDetailPage() {
         return (
             <div className="listingSection__wrap !border-b-0 !pb-0">
                 <h2 className="text-2xl font-semibold">Product details</h2>
-                <div className="prose prose-sm sm:prose dark:prose-invert sm:max-w-4xl">
-                    {auction.description}
+                <div
+                    className="prose prose-sm sm:prose dark:prose-invert sm:max-w-4xl">
+                    <p dangerouslySetInnerHTML={{__html: product.description.replace(/\\n/g, '<br/>')}}/>
                 </div>
             </div>
         );
