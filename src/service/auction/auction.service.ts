@@ -111,7 +111,7 @@ export async function deleteAuction(id: number): Promise<void> {
 
 export async function fetchAuctionsBySize(sizeId: number): Promise<AuctionDTO[]> {
     try {
-        console.log("fetchAuctionBySize");
+        console.log("fetchAuctionBySize sizeId", sizeId);
         const options = {
             params: {sizeId: sizeId},
         };
@@ -144,18 +144,24 @@ export async function fetchAuctionsBySizes(sizeIds: number[]): Promise<AuctionDT
 
 // product 상세페이지에서 사용하는 함수, sizeId[] 을 가지고 auction[]과 유저 이름을 함께 반환
 export async function fetchAuctionBySizesWithUser(sizeIds: number[]): Promise<AuctionDTO[]> {
+    console.log("sizeIds", sizeIds);
     const auctions = await fetchAuctionsBySizes(sizeIds);
     console.log("auctions in service", auctions)
     const users = await Promise.all(auctions.map(auction => findUserById(auction.userId)));
+    console.log("users", users);
 
 
-    return auctions.map((auction) => {
-        const user = users.find(user => user!.id === auction.userId) || {};
+    const result =  auctions.map((auction) => {
+        const user = users.find(user => user?.id === auction.userId) || {};
         return {
             ...auction,
-            userId: user.name || "",
+            userId: user?.name ??  "",
         }
     });
+
+    console.log("fetchAuctionBySizeWithUser result", result);
+
+    return result;
 
 }
 // findByUserAuction 함수 수정

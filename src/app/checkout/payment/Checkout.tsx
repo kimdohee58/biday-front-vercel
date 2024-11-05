@@ -102,7 +102,7 @@ export default function Checkout({value, product, orderId, customerKey, awardId}
                                 orderId: orderId,
                                 orderName: product,
                                 successUrl: window.location.origin + `/checkout/payment/success?awardId=${awardId}`,
-                                failUrl: window.location.origin + "/fail",
+                                failUrl: window.location.origin + "/checkout/payment/fail",
                             });
                         } catch (error) {
                             // 에러 처리하기

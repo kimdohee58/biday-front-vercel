@@ -3,14 +3,17 @@ import { fetchAPI } from './fetch';
 import {handleReissueToken} from "@/utils/reissue/reissueToken";
 import {RequestOptions} from "@/model/api/RequestOptions";
 import {HTTPRequest} from "@/utils/headers";
-import {ApiErrors, handleApiErrorResponse} from "@/utils/error/error";
+import {
+    ApiErrors,
+    handleApiErrorResponse,
+    handlePaymentErrorResponse,
+    isApiError,
+    isPaymentError
+} from "@/utils/error/error";
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | "PATCH" ;
 
 const apiRequest = async (url: string, method: HttpMethod, {params, data, headers, token, userToken, contentType, cache}: RequestOptions<any,any>) => {
-    const controller = new AbortController();
-    const timeout = 9000;
-    const id = setTimeout(() => controller.abort, timeout);
 
     if (userToken) {
         console.log("token", HTTPRequest(userToken));
@@ -29,16 +32,10 @@ const apiRequest = async (url: string, method: HttpMethod, {params, data, header
         ...(cache && {cache: {cache}}),
         ...(data && !contentType && {body: JSON.stringify(data)}),
         ...(data && contentType === "multipart/form-data" && {body: data}),
-        signal: controller.signal,
     };
 
     try {
         let response = await fetchAPI(`${url}${queryString}`, options);
-        clearTimeout(id);
-
-        if (!response.ok) {
-            return handleApiErrorResponse(response.status);
-        }
 
         const responseType = response.headers.get("Content-Type");
 
@@ -52,19 +49,15 @@ const apiRequest = async (url: string, method: HttpMethod, {params, data, header
             return response.text();
         }
     } catch (error) {
-        clearTimeout(id);
-
-        if (error instanceof Error) {
-            if (error.name === 'AbortError') {
-                console.error("응답 시간 만료");
-                handleApiErrorResponse(504);
-            } else {
-                throw new Error("상태가 정의되지 않은 에러 발생");
-            }
+        if (isPaymentError(error)) {
+            handlePaymentErrorResponse(error.status);
+        } else if (isApiError(error)) {
+            handleApiErrorResponse(error.status);
         } else {
-            console.error("알 수 없는 에러", error);
+            throw new Error("정의되지 않은 에러 발생");
         }
     }
+
 
 
 };

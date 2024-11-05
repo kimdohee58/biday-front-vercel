@@ -152,8 +152,14 @@ export default function ProductClientComponent({productId} : { productId: string
         }
     };
 
-    const sizes = initialProduct.sizes.map((size) => size.id);
+    const sizes = productArray.map((product) => {
+        return product.product.sizes.map((size) => size.id);
+    }).flat();
+
+    console.log("sizes", sizes);
+
     const auctions = useFetchAuctionBySizeIdsWithUser(sizes);
+    console.log("auctions in page", auctions);
 
     const onClickSaleButton = () => {
         const userToken = Cookies.get("userToken");

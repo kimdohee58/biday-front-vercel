@@ -1,20 +1,27 @@
 import {Alert} from "@/shared/Alert/Alert";
 
 export const ApiErrors = {
-    UNAUTHORIZED: { message: "UNAUTHORIZED", status: 401 },
-    FORBIDDEN: { message: "FORBIDDEN", status: 403 },
-    NOT_FOUND: { message: "NOT_FOUND", status: 404 },
-    CONFLICT: { message: "CONFLICT", status: 409 },
-    NETWORK_ERROR: { message: "NETWORK_ERROR", status: 408 },
-    BAD_REQUEST: { message: "BAD_REQUEST", status: 400 },
-    INTERNAL_SERVER_ERROR: { message: "INTERNAL_SERVER_ERROR", status: 500 },
-    SERVICE_UNAVAILABLE: { message: "SERVICE_UNAVAILABLE", status: 503 },
-    GATEWAY_TIMEOUT: { message: "GATEWAY_TIMEOUT", status: 504 },
-    NETWORK_AUTHENTICATION_REQUIRED: { message: "NETWORK_AUTHENTICATION_REQUIRED", status: 511 },
-    UNKNOWN: { message: "UNKNOWN", status: 0 },
+    UNAUTHORIZED: {message: "UNAUTHORIZED", status: 401},
+    FORBIDDEN: {message: "FORBIDDEN", status: 403},
+    NOT_FOUND: {message: "NOT_FOUND", status: 404},
+    CONFLICT: {message: "CONFLICT", status: 409},
+    NETWORK_ERROR: {message: "NETWORK_ERROR", status: 408},
+    BAD_REQUEST: {message: "BAD_REQUEST", status: 400},
+    INTERNAL_SERVER_ERROR: {message: "INTERNAL_SERVER_ERROR", status: 500},
+    SERVICE_UNAVAILABLE: {message: "SERVICE_UNAVAILABLE", status: 503},
+    GATEWAY_TIMEOUT: {message: "GATEWAY_TIMEOUT", status: 504},
+    NETWORK_AUTHENTICATION_REQUIRED: {message: "NETWORK_AUTHENTICATION_REQUIRED", status: 511},
+    UNKNOWN: {message: "UNKNOWN", status: 0},
 };
 
+export const PaymentErrors = {
+    INVALID_REQUEST: {status: "BAD_REQUEST", code: "INVALID_REQUEST", message: "잘못된 요청입니다."},
+    INVALID_DATA_REQUEST: {status: "BAD_REQUEST", code: "INVALID_DATA_REQUEST", message: "일치하지 않는 정보입니다."},
+    ALREADY_REPORTED: {status: "208", code: "ALREADY_REPORTED", message: "이미 결제 정보가 존재하는 낙찰입니다."},
+}
+
 export type ApiError = typeof ApiErrors[keyof typeof ApiErrors];
+export type PaymentError = typeof PaymentErrors[keyof typeof PaymentErrors];
 
 export const handleApiErrorResponse = (status: number) => {
     switch (status) {
@@ -37,6 +44,17 @@ export const handleApiErrorResponse = (status: number) => {
     }
 };
 
+export const handlePaymentErrorResponse = (status: string) => {
+    switch (status) {
+        case "INVALID_DATA_REQUEST":
+            throw PaymentErrors.INVALID_DATA_REQUEST;
+        case "ALREADY_REPORTED":
+            throw PaymentErrors.ALREADY_REPORTED;
+        default:
+            throw PaymentErrors.INVALID_REQUEST;
+    }
+}
+
 export const handleApiError = (error: any, showAlert = true) => {
     const status = error?.status || ApiErrors.UNKNOWN.status;
     const errorInfo: ApiError = Object.values(ApiErrors).find(err => err.status === status) || ApiErrors.UNKNOWN;
@@ -49,6 +67,14 @@ export const handleApiError = (error: any, showAlert = true) => {
 
 };
 
+export const handlePaymentError = (error:any) => {
+    const status = error.status;
+}
+
 export const isApiError = (error: any): error is ApiError => {
     return error && typeof error.status === 'number';
+}
+
+export const isPaymentError = (error: any): error is PaymentError => {
+    return error && typeof error.status === 'string';
 }

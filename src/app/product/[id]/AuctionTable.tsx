@@ -67,7 +67,7 @@ export default function AuctionTable({ auctions, product, size }: AuctionTablePr
     const nextPage = () => activePage < totalPages && setActivePage(activePage + 1);
     const prevPage = () => activePage > 1 && setActivePage(activePage - 1);
 
-    const emptyCellContent = String.fromCharCode(160); // &nbsp;
+    const emptyCellContent = String.fromCharCode(160);
 
     return (
         <div className="relative w-full">
