@@ -381,7 +381,7 @@ export default function CheckoutPage() {
                             <div className="flex justify-between py-2.5">
                                 <span>수수료 (판매자부담)</span>
                                 <span className="font-semibold text-slate-900 dark:text-slate-200">
-                  ₩10,000
+                                    ₩{(award.data.currentBid - Math.round(award.data.currentBid - (award.data.currentBid / 1.1))).toLocaleString()}
                 </span>
                             </div>
                             <div className="flex justify-between py-2.5">
