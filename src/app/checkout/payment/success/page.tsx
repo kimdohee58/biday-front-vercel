@@ -44,6 +44,7 @@ export default function SuccessPage() {
                 setPaymentInfo(data);
                 sessionStorage.setItem("paymentData", JSON.stringify(data));
 
+                console.log(">>>>>>>>>>>payment data", data)
                 router.push("/checkout/payment/complete");
             } catch (error) {
                 console.error("결제 처리 중 오류 발생", error);

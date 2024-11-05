@@ -1,7 +1,7 @@
 //src/lib/thunk/user.thunk.ts
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchAllAddressesByUserId } from "@/service/user/address.service";
-import { AddressModel } from '@/model/user/address.model';
+import {createAsyncThunk} from '@reduxjs/toolkit';
+import {fetchAllAddressesByUserId} from "@/service/user/address.service";
+import {AddressModel} from '@/model/user/address.model';
 import {setAddresses} from "@/lib/features/address.slice";
 
 // 주소 데이터를 비동기로 불러와서 Redux에 저장하는 Thunk

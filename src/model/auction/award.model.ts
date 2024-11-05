@@ -8,6 +8,7 @@ export interface AwardModel {
     bidedAt: Date;
     currentBid: number;
     count: number;
+    status: boolean;
     createdAt: Date;
 }
 
@@ -18,5 +19,6 @@ export interface AwardDto {
     bidedAt: Date;
     currentBid: number;
     count: number;
+    status: boolean;
     createdAt: Date;
 }

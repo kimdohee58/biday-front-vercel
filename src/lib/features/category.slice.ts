@@ -1,7 +1,7 @@
 // src/lib/features/category.slice.ts
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CategoryModel } from '@/model/product/category.model';
-import { RootState } from '@/lib/store';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {CategoryModel} from '@/model/product/category.model';
+import {RootState} from '@/lib/store';
 
 // 초기 상태 정의
 const initialState: CategoryModel[] = []; // 카테고리 정보를 배열로 관리

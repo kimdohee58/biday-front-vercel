@@ -2,7 +2,7 @@
 import Heading from "@/shared/Heading/Heading";
 import NcImage from "@/shared/NcImage/NcImage";
 import NcPlayIcon from "@/shared/NcPlayIcon/NcPlayIcon";
-import React, { FC, useState } from "react";
+import React, {FC, useState} from "react";
 import isSafariBrowser from "@/utils/isSafariBrowser";
 
 export interface VideoType {

@@ -1,8 +1,7 @@
-import {AuctionDTO, AuctionModel, SaveAuctionModel} from "@/model/auction/auction.model";
+import {AuctionDTO, AuctionDTOs, AuctionModel, SaveAuctionModel} from "@/model/auction/auction.model";
 import {api} from "../request";
 import {strategy} from "../api.strategy";
 import {RequestOptions} from "@/model/api/RequestOptions";
-import {AwardDto} from "@/model/auction/award.model";
 
 // 경매 상세보기 (GET 요청)
 const findById = async (options: RequestOptions<{ auctionId: string }, null>): Promise<AuctionModel> => {
@@ -11,13 +10,17 @@ const findById = async (options: RequestOptions<{ auctionId: string }, null>): P
 
 // 헤더 경매 목록 조회 (GET 요청)
 type findBySizeParams = {
-    sizeId: number,
+    sizeId?: number,
     order?: string,
     cursor?: number
 }
 const findBySize = async (options: RequestOptions<findBySizeParams, null>): Promise<AuctionDTO[]> => {
     return await strategy.GET(`${api.auction}/findBySize`, options);
 };
+
+const findByHeader = async (options: Omit<RequestOptions<any, null>, "params">): Promise<AuctionDTOs> => {
+    return await strategy.GET(`${api.auction}/findBySize`, options);
+}
 
 // 상품 상세 경매 목록 조회 (GET 요청)
 const findAllBySize = async (options: RequestOptions<findBySizeParams, null>): Promise<AuctionDTO[]> => {
@@ -58,6 +61,7 @@ const cancel = async (options: RequestOptions<{auctionId: number}, null>): Promi
 export const auctionAPI = {
     findById,
     findBySize,
+    findByHeader,
     findAllBySize,
     findByUser,
     update,

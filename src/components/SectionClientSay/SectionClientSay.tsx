@@ -3,8 +3,7 @@
 // @ts-ignore
 import Glide from "@glidejs/glide/dist/glide.esm";
 import Heading from "@/components/Heading/Heading";
-import React, { FC, useId, useRef, useState } from "react";
-import { useEffect } from "react";
+import React, {FC, useEffect, useRef, useState} from "react";
 import clientSayMain from "@/images/clientSayMain.png";
 import clientSay1 from "@/images/clientSay1.png";
 import clientSay2 from "@/images/clientSay2.png";
@@ -14,9 +13,9 @@ import clientSay5 from "@/images/clientSay5.png";
 import clientSay6 from "@/images/clientSay6.png";
 import quotationImg from "@/images/quotation.png";
 import quotationImg2 from "@/images/quotation2.png";
-import { StarIcon } from "@heroicons/react/24/solid";
+import {StarIcon} from "@heroicons/react/24/solid";
 import Image from "next/image";
-import { DEMO_DATA } from "./data";
+import {DEMO_DATA} from "./data";
 
 export interface SectionClientSayProps {
   className?: string;

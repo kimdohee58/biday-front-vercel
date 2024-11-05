@@ -1,8 +1,8 @@
-import { _getImgRd, _getTagNameRd } from "@/contains/fakeData";
-import React, { FC } from "react";
+import {_getImgRd, _getTagNameRd} from "@/contains/fakeData";
+import React, {FC} from "react";
 import NcImage from "@/shared/NcImage/NcImage";
 import Link from "next/link";
-import { StaticImageData } from "next/image";
+import {StaticImageData} from "next/image";
 
 export interface CardCategory1Props {
   className?: string;

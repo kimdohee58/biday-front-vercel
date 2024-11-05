@@ -1,7 +1,7 @@
-import { TwMainColor } from "@/data/types";
-import { Route } from "@/routers/types";
+import {TwMainColor} from "@/data/types";
+import {Route} from "@/routers/types";
 import Link from "next/link";
-import React, { FC, ReactNode } from "react";
+import React, {FC, ReactNode} from "react";
 
 export interface BadgeProps {
   className?: string;

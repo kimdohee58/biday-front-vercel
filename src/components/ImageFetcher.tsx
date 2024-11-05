@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import React, {useEffect, useState} from "react";
+import {useQuery} from "@tanstack/react-query";
 import Image from "next/image";
-import { fetchImageOne } from "@/service/ftp/image.service";
-import { ImageType } from "@/model/ftp/image.model";
+import {fetchImageOne} from "@/service/ftp/image.service";
+import {ImageType} from "@/model/ftp/image.model";
+import {Spinner} from "@/shared/Spinner/Spinner";
 
 // 이미지 데이터를 가져오는 컴포넌트
 const ImageFetcher = ({ id, altText }: { id: string, altText: string }) => {
@@ -38,31 +39,7 @@ const ImageFetcher = ({ id, altText }: { id: string, altText: string }) => {
     const imageSrc = image || "/—Pngtree—loading icon vector_6629917.png"; // 기본 로딩 이미지
 
     if (isLoading) {
-        return <div className="flex h-screen items-center justify-center">
-            <div className="text-center">
-                <svg
-                    className="animate-spin h-12 w-12 text-indigo-600 mx-auto mb-4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                >
-                    <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                    />
-                    <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8v8H4z"
-                    />
-                </svg>
-                <h2 className="text-2xl font-semibold text-indigo-600">Loading...</h2>
-            </div>
-        </div>; // 로딩 중일 때 표시
+        return <Spinner/>;
     }
 
     if (error) {

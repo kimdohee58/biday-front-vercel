@@ -1,10 +1,6 @@
-import {useQuery, useSuspenseQuery} from "@tanstack/react-query";
-import {
-    fetchAllProductCards, fetchProductDetails,
-    fetchProductWithImage,
-    fetchProductWithImageBySizeId
-} from "@/service/product/product.service";
-import {ProductCardModel, ProductDetails} from "@/model/product/product.model";
+import {useQuery} from "@tanstack/react-query";
+import {fetchAllProductCards, fetchProductWithImageBySizeId} from "@/service/product/product.service";
+import {ProductCardModel} from "@/model/product/product.model";
 
 export const useProductCardList = (isProductInRedux: boolean) => {
     return useQuery<ProductCardModel[]>({
@@ -20,19 +16,4 @@ export const useProductWithImageBySizeId = (sizeId: number, enabled: boolean = t
         queryFn: () => fetchProductWithImageBySizeId(sizeId),
         enabled,
     })
-};
-
-export const useProductDetail = (productId: string) => {
-    return useQuery<ProductDetails>({
-        queryKey: ["product", productId],
-        queryFn: () => fetchProductDetails(productId),
-    });
-}
-
-export const useSuspenseProductDetail = (productId: string) => {
-    return useSuspenseQuery<ProductDetails>({
-        queryKey: ["product", productId],
-        queryFn: () => fetchProductDetails(productId),
-        }
-    )
 };

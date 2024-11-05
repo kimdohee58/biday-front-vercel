@@ -1,7 +1,7 @@
 //src/lib/user/address.slice.ts
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { AddressModel } from '@/model/user/address.model';
-import { fetchAllAddressesByUserId, fetchDeleteAddress, fetchInsertAddress, fetchPickAddress } from '@/service/user/address.service';
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {AddressModel} from '@/model/user/address.model';
+import {fetchAllAddressesByUserId} from '@/service/user/address.service';
 import {RootState} from "@/lib/store";
 
 // Thunk for fetching addresses by user ID

@@ -1,14 +1,14 @@
 "use client";
 
-import { Dialog } from "@headlessui/react";
-import { motion } from "framer-motion";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useRef, useState } from "react";
+import {Dialog} from "@headlessui/react";
+import {motion} from "framer-motion";
+import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import {useRef, useState} from "react";
 import useKeypress from "react-use-keypress";
-import { getNewParam } from "../ListingImageGallery";
-import type { ListingGalleryImage } from "../utils/types";
+import {getNewParam} from "../ListingImageGallery";
+import type {ListingGalleryImage} from "../utils/types";
 import SharedModal from "./SharedModal";
-import { Route } from "next";
+import {Route} from "next";
 
 export default function Modal({
   images,

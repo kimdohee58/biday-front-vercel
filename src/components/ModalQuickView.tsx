@@ -1,11 +1,10 @@
 "use client";
 
-import { Dialog, Transition, TransitionChild } from "@/app/headlessui";
-import React, { FC, Fragment } from "react";
+import {Dialog, Transition, TransitionChild} from "@/app/headlessui";
+import React, {FC} from "react";
 import ButtonClose from "@/shared/ButtonClose/ButtonClose";
-import ProductQuickView from "./ProductQuickView";
 // import ProductQuickView2 from "./ProductQuickView2";
-import { usePathname } from "next/navigation";
+import {usePathname} from "next/navigation";
 
 export interface ModalQuickViewProps {
   show: boolean;

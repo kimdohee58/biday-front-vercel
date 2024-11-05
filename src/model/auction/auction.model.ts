@@ -50,5 +50,9 @@ export interface AuctionDTO {
     sizeId: number;
 }
 
+export interface AuctionDTOs {
+    content: AuctionDTO[];
+}
+
 
 

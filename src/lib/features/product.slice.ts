@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ProductModel } from '@/model/product/product.model';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {ProductModel} from '@/model/product/product.model';
 
 interface ProductState {
     products: ProductModel[];

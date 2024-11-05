@@ -2,7 +2,7 @@
 
 import React, {Suspense} from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
-import {Input, Typography, InputProps } from "@material-tailwind/react";
+import {Input, Typography} from "@material-tailwind/react";
 import {AccountModel} from "@/model/user/account.model";
 import {useSuspenseQuery} from "@tanstack/react-query";
 import useRandomId from "@/hooks/useRandomId";

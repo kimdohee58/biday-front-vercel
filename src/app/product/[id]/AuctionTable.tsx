@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import {AuctionDTO} from "@/model/auction/auction.model";
-import { useRouter } from "next/navigation";
-import { getColor } from "@/utils/productUtils";
-import { ProductModel } from "@/model/product/product.model";
-import { Button, IconButton } from "@material-tailwind/react";
-import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
+import {useRouter} from "next/navigation";
+import {getColor} from "@/utils/productUtils";
+import {ProductModel} from "@/model/product/product.model";
+import {Button, IconButton} from "@material-tailwind/react";
+import {ArrowLeftIcon, ArrowRightIcon} from "@heroicons/react/24/outline";
 
 type AuctionTableProps = {
     auctions: AuctionDTO[];

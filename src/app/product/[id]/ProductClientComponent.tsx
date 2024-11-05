@@ -5,7 +5,6 @@ import BagIcon from "@/components/BagIcon";
 
 import {SparklesIcon} from "@heroicons/react/24/outline";
 import Prices from "@/components/Prices";
-import SectionSliderProductCard from "@/components/SectionSliderProductCard";
 import Policy from "./Policy";
 import SectionPromo2 from "@/components/SectionPromo2";
 import Image from "next/image";
@@ -63,6 +62,7 @@ function RenderSizeList({sizeArray, onClickSizeButton, currentSize, sizes}: Rend
         <div>
             <div className="flex justify-between font-medium text-sm">
                 <label htmlFor="">
+
             <span className="">
               Size:
               <span className="ml-1 font-semibold">{currentSize || "ALL"}</span>

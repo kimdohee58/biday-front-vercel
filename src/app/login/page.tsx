@@ -1,7 +1,6 @@
-//src/app/login/page.tsx
 "use client";
 
-import React, { useState, useEffect, FormEvent } from 'react';
+import React, {FormEvent, useEffect, useState} from 'react';
 import facebookSvg from "@/images/Facebook.svg";
 import twitterSvg from "@/images/Twitter.svg";
 import googleSvg from "@/images/Google.svg";
@@ -9,16 +8,16 @@ import Input from "@/shared/Input/Input";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import Image from "next/image";
 import Link from "next/link";
-import { useLogin } from "@/hooks/useLogin";
+import {useLogin} from "@/hooks/useLogin";
 import naver from "@/images/naver.svg";
 import axiosInstance from "@/app/api/axiosInstance/axiosInstance";
-import { useRouter } from 'next/navigation';
+import {useRouter} from 'next/navigation';
 import Cookies from "js-cookie";
 import {AuthorizationToken, saveToken, saveUserTokenToCookie} from "@/utils/cookie/cookie.api";
-import { extractUserInfoFromToken } from "@/utils/jwt.utils";
-import { findUserById } from "@/service/user/user.api";
+import {extractUserInfoFromToken} from "@/utils/jwt.utils";
+import {findUserById} from "@/service/user/user.api";
 import {saveUser, saveUserToken} from "@/lib/features/user.slice";
-import { useDispatch } from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {UserToken} from "@/model/user/userToken";
 
 const PageLogin = () => {
@@ -96,18 +95,17 @@ const PageLogin = () => {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        try {
-            await login(email, password);
-            // 로그인 성공 시 알림창 띄우기
+
+        const isLoginSuccess = await login(email, password);
+
+        if (isLoginSuccess) {
             window.alert('로그인 성공!');
-            router.push('/'); // 성공 후 리디렉션
-        } catch (err) {
-            setError("Login failed. Please check your email or password.");
-            console.log("실패다.", err);
-            // 로그인 실패 시 알림창 띄우기
-            window.alert('로그인 실패! 이메일이나 비밀번호를 확인해 주세요.');
+            router.push('/');
+        } else {
+            setError("로그인에 실패했습니다. 이메일이나 비밀번호를 확인해 주세요.");
         }
     };
+
 
     const handleSocialLogin = async (href: string) => {
         window.location.href = href;
@@ -175,7 +173,9 @@ const PageLogin = () => {
 
                     <form className="grid grid-cols-1 gap-6" onSubmit={handleSubmit}>
                         <label className="block">
-                            <span className="text-neutral-800 dark:text-neutral-200">Email address</span>
+                            <span className="flex justify-between items-center text-neutral-800 dark:text-neutral-200">
+                                Email address
+                            </span>
                             <Input
                                 type="email"
                                 name="email"
@@ -190,7 +190,7 @@ const PageLogin = () => {
                             <span className="flex justify-between items-center text-neutral-800 dark:text-neutral-200">
                                 Password
                                 <Link href="/forgot-pass" className="text-sm text-green-600">
-                                    Forgot password?
+                                    forgot password?
                                 </Link>
                             </span>
                             <Input

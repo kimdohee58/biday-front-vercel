@@ -3,7 +3,6 @@ import {paymentAPI} from "@/api/order/payment.api";
 import {PaymentTempModel} from "@/model/order/paymentTemp.model";
 import {PaymentConfirmModel} from "@/model/order/paymentConfirm.model";
 import {PaymentRequestModel} from "@/model/order/payment.model";
-import {PaymentModel} from "@/model/order/payment.model";
 import {PaymentSaveModel} from "@/model/order/paymentSave.model";
 
 export async function savePaymentTemp(
