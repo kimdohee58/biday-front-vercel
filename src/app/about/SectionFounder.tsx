@@ -15,28 +15,28 @@ const FOUNDER_DEMO: People[] = [
     name: `Zero (김영우)`,
     job: "Co-founder and Chief Executive",
     avatar:
-        "/KakaoTalk_20241106_020155000.jpg",
+        "/woo_profile.png",
   },
   {
     id: "2",
     name: `Hans (정휘재)`,
     job: "Co-founder, Chairman",
     avatar:
-        "/KakaoTalk_20241106_020155000_03.jpg",
+        "/hwi_profile.jpg",
   },
   {
     id: "3",
     name: `Michael (송준한)`,
     job: "Co-Founder, Chief Strategy Officer",
     avatar:
-        "/KakaoTalk_20241106_020155000_05.jpg",
+        "/song_profile.png",
   },
   {
     id: "4",
     name: `Cathy (설유정)`,
     job: "Co-founder and Chief Executive",
     avatar:
-        "/KakaoTalk_20241106_020155000_05.jpg",
+        "/shull_profile.png",
   },
   {
     id: "5",
