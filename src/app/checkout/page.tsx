@@ -9,7 +9,7 @@ import ContactInfo from "./ContactInfo";
 import ShippingAddress from "./ShippingAddress";
 import Image from "next/image";
 import Link from "next/link";
-import {PaymentTempModel} from "@/model/order/paymentTemp.model";
+import {CheckoutDataModel, PaymentTempModel} from "@/model/order/paymentTemp.model";
 import {useMutation, useQuery, useSuspenseQuery} from "@tanstack/react-query";
 import {savePaymentTemp} from "@/service/order/payment.service";
 import {useRouter, useSearchParams} from "next/navigation";
@@ -263,8 +263,19 @@ export default function CheckoutPage() {
         };
 
         mutation.mutate(temp);
-        setIsModalOpen(true);
 
+        const data: CheckoutDataModel = {
+            product: product.data.name,
+            address: address,
+            phoneNum: phoneNum,
+            awardId: awardId,
+        };
+
+        console.log("data in checkoutPage", data);
+
+        sessionStorage.setItem("checkoutData", JSON.stringify(data));
+
+        setIsModalOpen(true);
 
     };
 

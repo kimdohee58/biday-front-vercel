@@ -31,7 +31,7 @@ export default function SuccessPage() {
 
     useEffect(() => {
         const processPayment = async () => {
-            console.log('processPatment 진입');
+            console.log('processPayment 진입');
             const requestData = {
                 awardId: Number(awardId),
                 orderId: orderId,

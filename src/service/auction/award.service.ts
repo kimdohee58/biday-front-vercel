@@ -1,6 +1,7 @@
 import {awardAPI} from "@/api/auction/award.api";
 import Cookies from "js-cookie";
 import {AwardDto, AwardModel} from "@/model/auction/award.model";
+import {handleApiError, isApiError} from "@/utils/error/error";
 
 // awardId: number
 export async function fetchAwardOne(awardId: number): Promise<AwardModel> {
@@ -98,5 +99,21 @@ export async function fetchSizeIdsFromAwards(awardIds: number[]): Promise<number
     } catch (error) {
         console.error("sizeId를 추출하는 도중 오류 발생: ", error);
         throw new Error("sizeId 추출 실패");
+    }
+}
+
+export async function updateStatus(awardId: number) {
+    const options = {
+        params: {
+            awardId,
+        }
+    };
+
+    try {
+        return await awardAPI.updateStatus(options);
+    } catch (error) {
+        if (isApiError(error)) {
+            handleApiError(error);
+        }
     }
 }
