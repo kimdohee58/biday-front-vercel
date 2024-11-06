@@ -105,7 +105,7 @@ export default function PageClient(props: ClientComponentProps) {
 
                 {/*<SectionSliderCollections/>*/}
                 {/*<SectionSliderLargeProductDohee/>*/}
-                <hr className="border-slate-200 dark:border-slate-700"/>
+                {/*<hr className="border-slate-200 dark:border-slate-700"/>*/}
 
                 <SectionPromo1/>
             </div>
