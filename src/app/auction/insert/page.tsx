@@ -122,8 +122,8 @@ export default function InsertAuction() {
 
     // 기간 선택 핸들러
     const durationSelectButton = () => {
-        // const durations = [3, 5, 7];
-        const durations = [60, 120, 180];
+        // const durations = [60, 120, 180];
+        const durations = [3, 5, 7];
 
         const handleClick = (days: number) => {
             setDuration(days);
@@ -137,7 +137,7 @@ export default function InsertAuction() {
             }
 
             const endDate = new Date(currentDate);
-            endDate.setMinutes(currentDate.getMinutes() + days); // 테스트용
+            endDate.setMinutes(currentDate.getMinutes() + days*100); // 테스트용
             // endDate.setDate(currentDate.getDate() + days);
             console.log("data", endDate);
             setStartedAt(currentDate);
@@ -205,17 +205,19 @@ export default function InsertAuction() {
 
                 const message = await imageMutate.mutateAsync(image);
 
+                router.push("/auction/insert/success");
+
                 // 성공적인 경우 리다이렉트
-                if (message === "success") {
-                    router.push("/auction/insert/success");
-                } else {
-                    if (data.id != null) {
-                        await auctionDelete.mutateAsync(data.id);
-                        console.log("image message", message);
-                    }
-                    // 오류 메시지를 URL에 담아 리다이렉트
-                    router.push(`/auction/insert/fail?message=이미지%20업로드에%20실패했습니다.`);
-                }
+                // if (message === "success") {
+                //     router.push("/auction/insert/success");
+                // } else {
+                //     if (data.id != null) {
+                //         await auctionDelete.mutateAsync(data.id);
+                //         console.log("image message", message);
+                //     }
+                //     // 오류 메시지를 URL에 담아 리다이렉트
+                //     router.push(`/auction/insert/fail?message=이미지%20업로드에%20실패했습니다.`);
+                // }
 
             } catch (error: unknown) {
                 if (error instanceof Error) {
