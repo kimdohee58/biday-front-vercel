@@ -1,9 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import React, {useState} from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import Input from "@/shared/Input/Input";
-import { useLogout } from "@/hooks/useLogout";
-import { useRouter } from "next/navigation";
+import {useLogout} from "@/hooks/useLogout";
+import {useRouter} from "next/navigation";
 import {changePasswordService} from "@/service/user/user.serivce";
 
 export default function AccountPass() {

@@ -1,6 +1,6 @@
 // src/api/account/account.api.ts
-import { api } from "../request";
-import { strategy } from "../api.strategy";
+import {api} from "../request";
+import {strategy} from "../api.strategy";
 import {AccountModel} from "@/model/user/account.model";
 import {RequestOptions} from "@/model/api/RequestOptions";
 

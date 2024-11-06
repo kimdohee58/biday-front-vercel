@@ -1,9 +1,5 @@
-import { Button, Typography } from "@material-tailwind/react";
-import Card, {
-    CardBody,
-    CardFooter,
-    CardHeader,
-} from "@material-tailwind/react/components/Card";
+import {Button, Typography} from "@material-tailwind/react";
+import Card, {CardBody, CardFooter, CardHeader,} from "@material-tailwind/react/components/Card";
 
 export function ProductCardSkeleton() {
     return (

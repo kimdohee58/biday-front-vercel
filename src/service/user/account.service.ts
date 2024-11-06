@@ -5,7 +5,9 @@ import {accountAPI} from "@/api/user/account.api";
 const getUserToken = () => {
     const userToken = Cookies.get("userToken");
     if (!userToken) {
-        throw new Error("토큰 없음");
+        // throw new Error("토큰 없음");
+        console.error("UserToken not found")
+
         //TODO error enum
     }
 

@@ -1,7 +1,5 @@
-import React, { FC } from "react";
-import ButtonPrimary, {
-  ButtonPrimaryProps,
-} from "@/shared/Button/ButtonPrimary";
+import React, {FC} from "react";
+import ButtonPrimary, {ButtonPrimaryProps,} from "@/shared/Button/ButtonPrimary";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
 
 export interface FollowButtonProps extends ButtonPrimaryProps {

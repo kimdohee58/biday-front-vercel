@@ -1,7 +1,7 @@
+//src/service/user/login.api.ts
 import axiosInstance from "@/app/api/axiosInstance/axiosInstance";
 import axios, {AxiosError, AxiosResponse} from "axios";
 
-// 백엔드에서 보내는 오류 응답의 타입 정의
 interface ErrorResponse {
     message: string;  // 오류 메시지
 }
@@ -29,25 +29,20 @@ export const handleLogin = async (username: string, password: string): Promise<A
         console.error('Login Error:', error);
 
         if (axios.isAxiosError(error)) {
-            // error가 AxiosError 타입인지 확인
             const axiosError = error as AxiosError<ErrorResponse>;
 
-            if (axiosError.response?.data?.message) {
-                // 백엔드에서 전달된 오류 메시지를 사용자에게 보여줌
-                alert(axiosError.response.data.message);
+            if (axiosError.response?.status === 401) {
+                // 401 Unauthorized 에러 시 잘못된 자격 증명
+                alert("이메일이나 비밀번호가 잘못되었습니다.");
+            } else if (axiosError.response?.status === 500) {
+                alert("서버에 문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
             } else {
-                const statusCode = axiosError.response?.status;
-                if (statusCode === 500) {
-                    alert("서버에 문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
-                } else {
-                    alert(`로그인 중 오류가 발생했습니다. (오류 코드: ${statusCode})`);
-                }
+                alert(`로그인 중 오류가 발생했습니다. (오류 코드: ${axiosError.response?.status})`);
             }
         } else {
-            // 네트워크 오류 등 서버 응답이 없는 경우 처리
             alert('서버와의 연결에 문제가 발생했습니다. 다시 시도해주세요.');
         }
 
-        throw error; // 상위 호출로 전달
+        return null; // 오류 발생 시 null 반환
     }
 };

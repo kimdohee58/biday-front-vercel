@@ -111,22 +111,26 @@ export async function deleteAuction(id: number): Promise<void> {
 
 export async function fetchAuctionsBySize(sizeId: number): Promise<AuctionDTO[]> {
     try {
-        console.log("fetchAuctionBySize sizeId", sizeId);
+        console.log("fetchAuctionBySize");
         const options = {
             params: {sizeId: sizeId},
         };
 
         console.log("options", options);
 
-        const result = await auctionAPI.findAllBySize(options);
-        console.log("result", result);
-        return result || [];
+        return await auctionAPI.findAllBySize(options);
 
     } catch (error) {
-        if (isApiError(error) && error.status === 404) {
-            console.log("404에러");
-            return [] as AuctionDTO[];
+        if (isApiError(error)) {
+            if (error.status === 404) {
+                console.log("404 에러");
+                return [] as AuctionDTO[];
+            } else {
+                handleApiError(error.status);
+                return [] as AuctionDTO[];
+            }
         } else {
+            console.log("apiError 아님");
             return [] as AuctionDTO[];
         }
     }
@@ -144,24 +148,16 @@ export async function fetchAuctionsBySizes(sizeIds: number[]): Promise<AuctionDT
 
 // product 상세페이지에서 사용하는 함수, sizeId[] 을 가지고 auction[]과 유저 이름을 함께 반환
 export async function fetchAuctionBySizesWithUser(sizeIds: number[]): Promise<AuctionDTO[]> {
-    console.log("sizeIds", sizeIds);
     const auctions = await fetchAuctionsBySizes(sizeIds);
     console.log("auctions in service", auctions)
     const users = await Promise.all(auctions.map(auction => findUserById(auction.userId)));
-    console.log("users", users);
-
-
-    const result =  auctions.map((auction) => {
-        const user = users.find(user => user?.id === auction.userId) || {};
+    return auctions.map((auction) => {
+        const user = users.find(user => user!.id === auction.userId) || {};
         return {
             ...auction,
             userId: user?.name ??  "",
         }
     });
-
-    console.log("fetchAuctionBySizeWithUser result", result);
-
-    return result;
 
 }
 // findByUserAuction 함수 수정
@@ -193,7 +189,7 @@ export async function findByUserAuction(): Promise<AuctionDTO[]> {
     }
 }
 
-type ProductDTOWithImage = {
+export type ProductDTOWithImage = {
     product: ProductDTO,
     image: ImageModel,
     size: string;
@@ -223,7 +219,7 @@ export async function fetchAuctionDetails(auctionId: string): Promise<{auction: 
     }
 }
 
-// 판매 도중 멈추기
+// 판매 도중 경매 취소(판매자만 가능)
 export async function CancelAuction(auctionId: number): Promise<string> {
     try {
         const userToken = Cookies.get('userToken')

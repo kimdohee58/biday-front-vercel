@@ -1,8 +1,7 @@
 "use client";
-import Button, { ButtonProps } from "@/shared/Button/Button";
+import Button, {ButtonProps} from "@/shared/Button/Button";
 import React from "react";
 import {useRouter} from "next/navigation";
-import {Route} from "next";
 
 export interface ButtonPrimaryProps extends ButtonProps {
 }

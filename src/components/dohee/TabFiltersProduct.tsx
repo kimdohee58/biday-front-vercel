@@ -10,7 +10,6 @@ import {ChevronDownIcon} from "@heroicons/react/24/outline";
 import Radio from "@/shared/Radio/Radio";
 import ButtonClose from "@/shared/ButtonClose/ButtonClose";
 import Slider from "rc-slider";
-import MySwitch from "@/components/MySwitch";
 import path from "path";
 
 const PRICE_RANGE = [10000, 1000000];

@@ -1,6 +1,6 @@
-import React, { FC } from "react";
-import { ChevronDownIcon } from "@heroicons/react/24/solid";
-import Button, { ButtonProps } from "@/shared/Button/Button";
+import React, {FC} from "react";
+import {ChevronDownIcon} from "@heroicons/react/24/solid";
+import Button, {ButtonProps} from "@/shared/Button/Button";
 
 export interface ButtonDropdownProps extends ButtonProps {}
 

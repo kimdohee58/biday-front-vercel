@@ -1,6 +1,6 @@
 // src/utils/reissue/reissueToken.ts
 import Cookies from 'js-cookie';
-import { saveToken } from "@/utils/cookie/cookie.api";
+import {saveToken} from "@/utils/cookie/cookie.api";
 import axiosInstance from "@/app/api/axiosInstance/axiosInstance";
 
 // const baseUrl = `${axiosInstance.defaults.baseURL}/reissue`;

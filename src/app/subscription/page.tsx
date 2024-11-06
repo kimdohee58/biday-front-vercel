@@ -1,8 +1,7 @@
-import { CheckIcon } from "@heroicons/react/24/solid";
-import React, { FC } from "react";
+import {CheckIcon} from "@heroicons/react/24/solid";
+import React from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
-import { RootState } from "@/lib/store";
 
 export interface PricingItem {
   isPopular: boolean;

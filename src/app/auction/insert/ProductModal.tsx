@@ -1,8 +1,8 @@
 // ProductModal.tsx
 'use client';
 
-import {useState, useEffect} from 'react';
-import { FixedSizeList as List } from 'react-window';
+import {useEffect, useState} from 'react';
+import {FixedSizeList as List} from 'react-window';
 import {ProductWithImageModel} from "@/model/product/product.model";
 import {Avatar, Typography} from "@material-tailwind/react";
 

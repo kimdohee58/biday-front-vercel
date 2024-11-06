@@ -25,7 +25,9 @@ import {
 import {PaymentRequestModel} from "@/model/order/payment.model";
 import {AuctionDTO, AuctionModel} from "@/model/auction/auction.model";
 import {AwardModel} from "@/model/auction/award.model";
+import {Spinner} from "@/shared/Spinner/Spinner";
 
+// TODO userRole 체크해서 노션 참조해 만들 것
 const AccountOrder = () => {
     const router = useRouter(); // Initialize the router
     const [activeTab, setActiveTab] = useState("award");
@@ -79,65 +81,48 @@ const AccountOrder = () => {
     return (
         <div className="space-y-10 sm:space-y-12">
             <div>
-                <div className="flex space-x-8 mb-8">
+                <div className="flex justify-center space-x-8 mb-8">
                     <h2
-                        className={`text-2xl sm:text-3xl font-semibold cursor-pointer ${activeTab === "award" ? "text-indigo-600 border-b-2 border-indigo-600" : "text-gray-800"}`}
+                        className={`text-2xl sm:text-3xl font-semibold cursor-pointer py-2 px-4 rounded-md transition-all duration-300 ease-in-out transform ${
+                            activeTab === "award"
+                                ? "text-indigo-700 border-b-2 border-indigo-700 bg-indigo-100 shadow-md"
+                                : "text-gray-700 hover:text-indigo-700 hover:bg-indigo-50 hover:shadow-md"
+                        }`}
                         onClick={() => {
-                            setActiveTab("award")
+                            setActiveTab("award");
                         }}
                     >
                         낙찰 내역
                     </h2>
                     <h2
-                        className={`text-2xl sm:text-3xl font-semibold cursor-pointer ${activeTab === "auction" ? "text-indigo-600 border-b-2 border-indigo-600" : "text-gray-800"}`}
+                        className={`text-2xl sm:text-3xl font-semibold cursor-pointer py-2 px-4 rounded-md transition-all duration-300 ease-in-out transform ${
+                            activeTab === "auction"
+                                ? "text-indigo-700 border-b-2 border-indigo-700 bg-indigo-100 shadow-md"
+                                : "text-gray-700 hover:text-indigo-700 hover:bg-indigo-50 hover:shadow-md"
+                        }`}
                         onClick={() => {
-                            setActiveTab("auction")
+                            setActiveTab("auction");
                         }}
                     >
                         경매 내역
                     </h2>
                 </div>
-                {loading ? <div className="flex h-screen items-center justify-center">
-                    <div className="text-center">
-                        <svg
-                            className="animate-spin h-12 w-12 text-indigo-600 mx-auto mb-4"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                        >
-                            <circle
-                                className="opacity-25"
-                                cx="12"
-                                cy="12"
-                                r="10"
-                                stroke="currentColor"
-                                strokeWidth="4"
-                            />
-                            <path
-                                className="opacity-75"
-                                fill="currentColor"
-                                d="M4 12a8 8 0 018-8v8H4z"
-                            />
-                        </svg>
-                        <h2 className="text-2xl font-semibold text-indigo-600">Loading...</h2>
-                    </div>
-
-                </div> : (
+                {loading ? <Spinner/> : (
                     <>
                         {activeTab === "auction" && (
                             <>
                                 <div className="mb-8">
-                                    {renderAuctionHistory(mapDataWithAuctionModel(auctionContent, auctionProductList!!),handleImgClick)}
+                                    {renderAuctionHistory(mapDataWithAuctionModel(auctionContent, auctionProductList!!), handleImgClick)}
                                 </div>
                                 <div className="mb-8">
-                                    {renderBidHistory(mapDataWithBidModel(bidData, bidProductList!!),handleImgClick)}
+                                    {renderBidHistory(mapDataWithBidModel(bidData, bidProductList!!), handleImgClick)}
                                 </div>
                             </>
                         )}
                         {activeTab === "award" && (
                             <>
                                 <div className="mb-8">
-                                    {renderAwardHistory(mapDataWithAwardModel(awardContent, awardProductList!!), handleImgClick,handleCheckoutClick)}
+                                    {renderAwardHistory(mapDataWithAwardModel(awardContent, awardProductList!!), handleImgClick, handleCheckoutClick)}
                                 </div>
                                 <div className="mb-8">
                                     {renderPaymentHistory(mappedPaymentData)}

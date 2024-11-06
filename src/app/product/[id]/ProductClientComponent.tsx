@@ -5,7 +5,6 @@ import BagIcon from "@/components/BagIcon";
 
 import {SparklesIcon} from "@heroicons/react/24/outline";
 import Prices from "@/components/Prices";
-import SectionSliderProductCard from "@/components/SectionSliderProductCard";
 import Policy from "./Policy";
 import SectionPromo2 from "@/components/SectionPromo2";
 import Image from "next/image";
@@ -23,6 +22,7 @@ import {useRouter, useSearchParams} from "next/navigation";
 import Cookies from "js-cookie";
 import {UserToken} from "@/model/user/userToken";
 import {UserRole} from "@/model/user/user.model";
+import {Spinner} from "@/shared/Spinner/Spinner";
 import {useSuspenseProductDetail} from "@/hooks/react-query/useProductlist";
 
 type ProductDetailProps = {
@@ -63,6 +63,7 @@ function RenderSizeList({sizeArray, onClickSizeButton, currentSize, sizes}: Rend
         <div>
             <div className="flex justify-between font-medium text-sm">
                 <label htmlFor="">
+
             <span className="">
               Size:
               <span className="ml-1 font-semibold">{currentSize || "ALL"}</span>
@@ -317,7 +318,7 @@ export default function ProductClientComponent({productId} : { productId: string
                                 <AuctionTable auctions={auctions.data || []} product={currentProduct}
                                               size={currentSizeId}/>)
                             :
-                            (<div>Loading...</div>)
+                            (<Spinner/>)
                     }
 
                 </div>

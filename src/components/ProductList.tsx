@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setProductImage, setLoading, setError } from '@/lib/features/products.slice';
-import { RootState } from '@/lib/store';
+import {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {setError, setLoading, setProductImage} from '@/lib/features/products.slice';
+import {RootState} from '@/lib/store';
 import {fetchProducts} from "@/service/product/product.service";
 
 const ProductPage = () => {

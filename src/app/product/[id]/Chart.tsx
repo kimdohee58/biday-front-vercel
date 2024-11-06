@@ -1,12 +1,8 @@
-import {
-    Card,
-    CardBody,
-    CardHeader,
-    Typography,
-} from "@material-tailwind/react";
+import {Card, CardBody, CardHeader, Typography,} from "@material-tailwind/react";
 import dynamic from "next/dynamic";
-const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 import {Props as ApexChartProps} from "react-apexcharts";
+
+const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 const chartConfig: ApexChartProps = {
     type: "line",

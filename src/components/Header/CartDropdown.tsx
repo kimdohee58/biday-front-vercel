@@ -1,24 +1,17 @@
-//dohee/CartDropdownDohee
+// CartDropdown
 "use client";
 
-import {
-  Popover,
-  PopoverButton,
-  PopoverPanel,
-  Transition,
-} from "@/app/headlessui";
+import {Popover, PopoverButton, PopoverPanel, Transition,} from "@/app/headlessui";
 import Prices from "@/components/Prices";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
 import Link from "next/link";
 import React, {useEffect, useState} from "react";
-import {Spinner} from "@chakra-ui/react";
+import {Spinner} from "@/shared/Spinner/Spinner";
 import {AwardModel} from "@/model/auction/award.model";
 import {findByUserAward} from "@/service/auction/award.service";
 import {useFetchAwardProducts} from "@/components/AccountuseQuery/useQuery";
-import {ProductModel} from "@/model/product/product.model";
 import {mapDataWithAwardModel} from "@/utils/mapDataWithProducts";
-import {useRouter} from "next/navigation";
 import ImageFetcher from "../ImageFetcher";
 import {SizeModel} from "@/model/product/size.model";
 
@@ -26,8 +19,7 @@ interface ContentAward {
   content: AwardModel[];
 }
 
-export default function CartDropdownDohee() {
-  const router = useRouter();
+export default function CartDropdown() {
   const [awardData, setAwardData] = useState<ContentAward>();
   const [awardContent, setAwardContent] = useState<AwardModel[]>([]);
   const [loading, setLoading] = useState(true);
@@ -63,10 +55,10 @@ export default function CartDropdownDohee() {
 
   const currentDate = new Date();
   const filteredAwardList = awardContent.filter((item) => {
-    const {createdAt} = item;
+    const { status, createdAt } = item;
     const payDate = new Date(createdAt);
     payDate.setDate(payDate.getDate() + 3);
-    return payDate >= currentDate;
+    return !status && payDate >= currentDate;
   }) || [];
 
   const {data: awardProductList = []} = useFetchAwardProducts(awardData);
@@ -74,8 +66,6 @@ export default function CartDropdownDohee() {
   const matchedAwardProductList = awardProductList.filter((size) =>
       sizeIds.includes(size.id)
   );
-
-  console.log("matchedAwardProductList", matchedAwardProductList);
 
   const totalBid = filteredAwardList.reduce((acc, item) => acc + item.currentBid, 0);
 
@@ -88,9 +78,9 @@ export default function CartDropdownDohee() {
       console.log("Product is null or item is null!!!");
       return null;
     }
-    const {auction, product, currentBid, createdAt} = item;
-    const {id, size, sizeProduct} = product;
-    const {name} = sizeProduct;
+
+    const { auction, currentBid, createdAt, product } = item;
+    const { id, size, sizeProduct } = product;
 
     const payDate = new Date(createdAt);
     payDate.setDate(payDate.getDate() + 3);
@@ -101,7 +91,7 @@ export default function CartDropdownDohee() {
     return (
         <div key={index} className="flex py-5 last:pb-0">
           <div className="relative h-24 w-20 flex-shrink-0 overflow-hidden rounded-xl bg-slate-100">
-            <ImageFetcher id={String(id)} altText={name}/>
+            <ImageFetcher id={String(id)} altText={sizeProduct.name}/>
             <Link onClick={close} className="absolute inset-0" href={`/auction/${auction.id}`}/>
           </div>
 
@@ -110,7 +100,7 @@ export default function CartDropdownDohee() {
               <div className="flex justify-between ">
                 <div>
                   <h3 className="text-base font-medium ">
-                    <Link onClick={close} href={`/product/${product.id}`}>
+                    <Link onClick={close} href={`/product/${sizeProduct.id}`}>
                       {sizeProduct?.name || "이름이 없습니다."}
                     </Link>
                   </h3>
@@ -128,14 +118,12 @@ export default function CartDropdownDohee() {
                 <Link
                     type="button"
                     className={`flex items-center justify-center px-4 py-2 rounded-md border border-blue-600 text-blue-600 font-semibold transition duration-200 shadow-sm hover:bg-blue-100 hover:text-blue-800 hover:shadow-lg active:bg-blue-200`}
-                    href={`/checkout?awardId=${item?.auction.id}&productId=${id}`}
+                    href={`/checkout?awardId=${item.id}&productId=${sizeProduct.id}`}
                     onClick={close}
                 >
                   <span className="mr-1 text-lg">🛒</span>
                   결제
                 </Link>
-
-
               </div>
             </div>
           </div>
@@ -196,7 +184,7 @@ export default function CartDropdownDohee() {
                   />
                 </svg>
 
-                <Link className="block md:hidden absolute inset-0" href={"/cart"}/>
+                <Link className="block md:hidden absolute inset-0" href={"/account-order"}/>
               </PopoverButton>
               <Transition
                   enter="transition ease-out duration-200"
@@ -219,7 +207,7 @@ export default function CartDropdownDohee() {
                                 <Spinner/>
                               </div>
                           ) : mapDataWithAwardModel(filteredAwardList, matchedAwardProductList!!)?.length > 0 ? (
-                              mapDataWithAwardModel(filteredAwardList, matchedAwardProductList!!).map((item, index) => renderProduct(item as any as AwardModel & {product: SizeModel | null, matchedSize: string | null}, index, close))
+                              mapDataWithAwardModel(filteredAwardList, matchedAwardProductList!!).map((item, index) => renderProduct(item as any as AwardModel & { product: SizeModel | null; matchedSize: string | null }, index, close))
                           ) : (
                               <p className="text-center mt-8 mb-2 text-lg">결제 대기 중인 상품이 없습니다.</p>
                           )}

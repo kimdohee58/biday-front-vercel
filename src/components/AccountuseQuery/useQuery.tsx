@@ -1,8 +1,8 @@
-
 import {useQuery} from "@tanstack/react-query";
 import {fetchProductBySizeId} from "@/service/product/product.service";
-import {extractSizeId, extractSizeIds} from "@/utils/extract";
+import {extractSizeIds} from "@/utils/extract";
 import {BidLoadModel} from "@/model/auction/bid.model";
+import {useMemo} from "react";
 
 export const useFetchAuctionProducts = (auctionData: any) => {
     const auctionSizeIds = extractSizeIds(auctionData);
@@ -40,8 +40,10 @@ export const useFetchBidProducts = (bidayData: any) => {
 };
 
 export const useFetchAwardProducts = (awardData: any) => {
-    const awardSizeIds = extractSizeIds(awardData);
-    console.log("Extracted awardSizeIds:", awardSizeIds); // 확인용 로그
+    const awardSizeIds = useMemo(() => extractSizeIds(awardData), [awardData]);
+    console.log("Extracted awardSizeIds:", awardSizeIds);
+    // const awardSizeIds = extractSizeIds(awardData);
+    // console.log("Extracted awardSizeIds:", awardSizeIds); // 확인용 로그
 
     return useQuery({
         queryKey: ["awardSizeIds", awardSizeIds],

@@ -30,14 +30,14 @@ export const MEGAMENU_TEMPLATES: NavItemType[] = [
 ];
 
 const OTHER_PAGE_CHILD: NavItemType[] = [
-/*  {
-    id: ncNanoId(),
-    href: "/dohee/auction/ongoing",
-    name: "진행 중인 경매",
-  },*/
   {
     id: ncNanoId(),
-    href: "/dohee/auction/last-chance",
+    href: "/auction/ongoing",
+    name: "진행 중인 경매",
+  },
+  {
+    id: ncNanoId(),
+    href: "/auction/last-chance",
     name: "마감 임박 경매",
   },
   {
@@ -54,24 +54,6 @@ const OTHER_PAGE_CHILD: NavItemType[] = [
     id: ncNanoId(),
     href: "/account",
     name: "마이 페이지",
-  },
-  {
-    id: ncNanoId(),
-    href: "/about",
-    name: "고객센터",
-    type: "dropdown",
-    children: [
-      {
-        id: ncNanoId(),
-        href: "/contact",
-        name: "문의하기",
-      },
-      {
-        id: ncNanoId(),
-        href: "/signup",
-        name: "회원가입",
-      },
-    ],
   },
 ];
 
@@ -99,17 +81,28 @@ export const NAVIGATION_DEMO_2: NavItemType[] = [
 
   {
     id: ncNanoId(),
-    href: "/collection" as Route,
-    name: "템플릿",
-    type: "megaMenu",
-    children: MEGAMENU_TEMPLATES,
-  },
-  {
-    id: ncNanoId(),
     href: "/search",
     name: "탐색",
     type: "dropdown",
     children: OTHER_PAGE_CHILD,
+  },
+  {
+    id: ncNanoId(),
+    href: "/about",
+    name: "고객센터",
+    type: "dropdown",
+    children: [
+      {
+        id: ncNanoId(),
+        href: "/contact",
+        name: "문의하기",
+      },
+      {
+        id: ncNanoId(),
+        href: "/faq",
+        name: "자주 묻는 질문",
+      },
+    ],
   },
   {
     id: ncNanoId(),

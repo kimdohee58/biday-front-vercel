@@ -1,20 +1,19 @@
 "use client";
 
 import {useQuery} from "@tanstack/react-query";
-import ProductCard from "@/components/ProductCard";
 import {getColorsArray} from "@/utils/productUtils";
 import {productTest} from "@/service/test/test.service";
 import {Alert} from "@/shared/Alert/Alert";
 import PageLogin from "@/app/login/page";
+import {Spinner} from "@/shared/Spinner/Spinner";
+import React from "react";
 
 export default function TestPage() {
 
     const productData = useQuery({queryKey: ["product", "image", "test", "wish"], queryFn: () => productTest(1)})
 
     if(productData.isLoading) return (
-        <div>
-            Loading...
-        </div>
+        <Spinner/>
     );
 
     if (!productData.data) {

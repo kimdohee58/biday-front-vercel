@@ -10,6 +10,7 @@ import {ColorType, ProductModel} from "@/model/product/product.model";
 import {getColorsByTypes} from "@/utils/productUtils";
 import {ImageModel} from "@/model/ftp/image.model";
 import WishDeleteButton from "@/components/WishDeleteButton";
+import {TrashIcon} from "@heroicons/react/24/solid";
 
 export interface ProductCardProps {
     className?: string;
@@ -122,14 +123,13 @@ const ProductCard: FC<ProductCardProps> = ({
     const deleteButton = () => {
         return (
             <div className={`${className}`}>
-                <div
-                    className={`flex items-center border-2 border-red-500 rounded-lg`}
-                >
+                <div className={`flex items-center border-2 border-red-500 rounded-lg`}>
                     <button
-                        className="text-red-500 !leading-none"
+                        className="text-red-500 !leading-none flex items-center"
                         onClick={onDelete}
                     >
-                        삭제
+                        <TrashIcon className="h7- w-7 mr-0" aria-hidden="true" /> {/* 쓰레기통 아이콘 */}
+
                     </button>
                 </div>
             </div>
