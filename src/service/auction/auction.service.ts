@@ -118,18 +118,24 @@ export async function fetchAuctionsBySize(sizeId: number): Promise<AuctionDTO[]>
 
         console.log("options", options);
 
-        const result = await auctionAPI.findAllBySize(options);
-        console.log("result", result);
-        return result;
+        return await auctionAPI.findAllBySize(options);
 
     } catch (error) {
-        if (isApiError(error) && error.status === 404) {
-            console.log("404에러");
+        if (isApiError(error)) {
+            if (error.status === 404) {
+                console.log("404 에러");
+                return [] as AuctionDTO[];
+            } else {
+                handleApiError(error.status);
+                return [] as AuctionDTO[];
+            }
+        } else {
+            console.log("apiError 아님");
             return [] as AuctionDTO[];
         }
-        throw error;
     }
 }
+
 
 export async function fetchAuctionsBySizes(sizeIds: number[]): Promise<AuctionDTO[]> {
     try {
@@ -145,13 +151,11 @@ export async function fetchAuctionBySizesWithUser(sizeIds: number[]): Promise<Au
     const auctions = await fetchAuctionsBySizes(sizeIds);
     console.log("auctions in service", auctions)
     const users = await Promise.all(auctions.map(auction => findUserById(auction.userId)));
-
-
     return auctions.map((auction) => {
         const user = users.find(user => user!.id === auction.userId) || {};
         return {
             ...auction,
-            userId: user.name || "",
+            userId: user?.name ??  "",
         }
     });
 
@@ -168,7 +172,7 @@ export async function findByUserAuction(): Promise<AuctionDTO[]> {
 
         const options = {
             userToken : userToken, // 쿠키에서 가져온 userToken을 사용
-            params: {}
+            params: {},
         };
 
         // findByUser API 호출
@@ -185,7 +189,7 @@ export async function findByUserAuction(): Promise<AuctionDTO[]> {
     }
 }
 
-type ProductDTOWithImage = {
+export type ProductDTOWithImage = {
     product: ProductDTO,
     image: ImageModel,
     size: string;
@@ -215,7 +219,7 @@ export async function fetchAuctionDetails(auctionId: string): Promise<{auction: 
     }
 }
 
-// 판매 도중 멈추기
+// 판매 도중 경매 취소(판매자만 가능)
 export async function CancelAuction(auctionId: number): Promise<string> {
     try {
         const userToken = Cookies.get('userToken')

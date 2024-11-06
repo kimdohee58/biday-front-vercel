@@ -1,5 +1,5 @@
 //src/utils/token/token.ts
-import type { NextApiRequest, NextApiResponse } from 'next';
+import type {NextApiRequest, NextApiResponse} from 'next';
 import {getTokenRemainingTime} from "@/utils/cookie/cookie.api";
 import {handleReissueToken} from "@/utils/reissue/reissueToken";
 

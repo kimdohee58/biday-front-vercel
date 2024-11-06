@@ -12,7 +12,7 @@ import Postcode from "@/components/Postcode";
 import NcModal from "@/shared/NcModal/NcModal";
 import {fetchAllAddressesByUserId, fetchDeleteAddress, fetchPickAddress} from "@/service/user/address.service";
 import OrderList from "@/components/OrderList";
-import {getAddresses, getUserToken, saveUser} from "@/lib/features/user.slice";
+import {getAddresses} from "@/lib/features/user.slice";
 import {saveUserTokenToCookie} from "@/utils/cookie/cookie.api";
 
 const mapAddressType = (type: string) => {
@@ -78,15 +78,14 @@ export default function AccountPage() {
             if (userToken) {
                 await insertAddress(userToken, newAddress);
                 alert("주소가 성공적으로 추가되었습니다.");
-                setIsModalOpen(false);
+                handleAddressComplete(newAddress);  // 주소 추가 후 모달 닫기
+                loadAddresses();  // 주소 목록 새로고침
             } else {
                 alert("유저 토큰이 없습니다.");
-                setIsModalOpen(false);
             }
         } catch (error) {
             console.error("주소 추가 실패: ", error);
             alert("주소 추가 중 오류가 발생했습니다.");
-            setIsModalOpen(false);
         }
     };
 
@@ -306,7 +305,7 @@ export default function AccountPage() {
                                     </ButtonPrimary>
                                 }
                                 renderContent={() => (
-                                    <div> {/* 모든 요소를 하나의 부모 div로 감쌈 */}
+                                    <div>
                                         <Postcode
                                             onComplete={handleAddressComplete}
                                             onClose={() => console.log("모달 닫기")}
@@ -346,7 +345,6 @@ export default function AccountPage() {
                                             />
                                         </div>
 
-                                        {/* 주소 유형 선택 */}
                                         {/* 주소 유형 선택 */}
                                         <div>
                                             <Label>주소 유형</Label>

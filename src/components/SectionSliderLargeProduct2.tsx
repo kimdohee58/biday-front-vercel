@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC, useEffect, useId, useRef, useState } from "react";
+import React, {FC, useEffect, useRef, useState} from "react";
 import Heading from "@/components/Heading/Heading";
 // @ts-ignore
 import Glide from "@glidejs/glide/dist/glide.esm";

@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import {AuctionDTO} from "@/model/auction/auction.model";
-import { useRouter } from "next/navigation";
-import { getColor } from "@/utils/productUtils";
-import { ProductModel } from "@/model/product/product.model";
-import { Button, IconButton } from "@material-tailwind/react";
-import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
+import {useRouter} from "next/navigation";
+import {getColor} from "@/utils/productUtils";
+import {ProductModel} from "@/model/product/product.model";
+import {Button, IconButton} from "@material-tailwind/react";
+import {ArrowLeftIcon, ArrowRightIcon} from "@heroicons/react/24/outline";
 
 type AuctionTableProps = {
     auctions: AuctionDTO[];
@@ -26,6 +26,7 @@ export default function AuctionTable({ auctions, product, size }: AuctionTablePr
     const [currentPageData, setCurrentPageData] = useState<(AuctionDTO | null)[]>([]);
     const [activePage, setActivePage] = useState(1);
     const [sizeList, setSizeList] = useState<SizeListType[]>([]);
+    console.log("auctions in table", auctions);
 
     useEffect(() => {
         setSizeList(getSizeList(product));
@@ -66,7 +67,7 @@ export default function AuctionTable({ auctions, product, size }: AuctionTablePr
     const nextPage = () => activePage < totalPages && setActivePage(activePage + 1);
     const prevPage = () => activePage > 1 && setActivePage(activePage - 1);
 
-    const emptyCellContent = String.fromCharCode(160); // &nbsp;
+    const emptyCellContent = String.fromCharCode(160);
 
     return (
         <div className="relative w-full">

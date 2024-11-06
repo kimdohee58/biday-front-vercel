@@ -1,10 +1,10 @@
-import { StarIcon } from "@heroicons/react/24/solid";
-import { productImgs } from "@/contains/fakeData";
-import React, { FC } from "react";
+import {StarIcon} from "@heroicons/react/24/solid";
+import {productImgs} from "@/contains/fakeData";
+import React, {FC} from "react";
 import NcImage from "@/shared/NcImage/NcImage";
 import Prices from "./Prices";
 import Link from "next/link";
-import { StaticImageData } from "next/image";
+import {StaticImageData} from "next/image";
 
 export interface CollectionCard2Props {
   className?: string;

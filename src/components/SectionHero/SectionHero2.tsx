@@ -1,12 +1,13 @@
 "use client";
 
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, {FC, useEffect, useRef, useState} from "react";
 import backgroundLineSvg from "@/images/Moon.svg";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import Image from "next/image";
-import { HERO2_DEMO_DATA as DATA } from "./data";
+import {HERO2_DEMO_DATA as DATA} from "./data";
 import useInterval from "beautiful-react-hooks/useInterval";
 import useHorizontalSwipe from "beautiful-react-hooks/useHorizontalSwipe";
+
 export interface SectionHero2Props {
   className?: string;
 }

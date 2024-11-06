@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useEffect, useId, useRef, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import Heading from "./Heading/Heading";
 import CardCategory3 from "./CardCategories/CardCategory3";
 // @ts-ignore
 import Glide from "@glidejs/glide/dist/glide.esm";
-import { CATS_DISCOVER } from "./CardCategories/data";
+import {CATS_DISCOVER} from "./CardCategories/data";
 
 const DiscoverMoreSlider = () => {
   const sliderRef = useRef(null);

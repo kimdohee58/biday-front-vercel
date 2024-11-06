@@ -1,9 +1,9 @@
 "use client";
 
-import React, { FC, Fragment } from "react";
-import { Menu, MenuButton, MenuItems, Transition } from "@/app/headlessui";
+import React, {FC, Fragment} from "react";
+import {Menu, MenuButton, MenuItems, Transition} from "@/app/headlessui";
 import Link from "next/link";
-import { Route } from "@/routers/types";
+import {Route} from "@/routers/types";
 
 export interface NcDropDownItem {
   id: string;

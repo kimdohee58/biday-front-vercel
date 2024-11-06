@@ -1,23 +1,21 @@
 "use client";
 
-import React, {useEffect, useMemo, useState} from "react";
-import {ProductCardModel} from "@/model/product/product.model";
+import React, {useEffect, useState} from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
-import SectionSliderCollections from "@/components/SectionSliderLargeProduct";
+import SectionSliderLargeProductDohee from "@/components/dohee/SectionSliderLargeProductDohee";
 import SectionPromo1 from "@/components/SectionPromo1";
 import ProductCard from "@/components/ProductCard";
 import {useRouter} from "next/navigation";
 import {useDispatch, useSelector} from "react-redux";
 import {
-    getRandomCategoryProducts, isProductsInRedux,
+    getRandomCategoryProducts,
+    isProductsInRedux,
     setProductCards,
     setRandomCategoryProducts,
     updateIsLiked
 } from "@/lib/features/productCard.slice";
 import {useWishlist} from "@/hooks/react-query/useWishlist";
 import {ProductCardSkeleton} from "@/components/skeleton/ProductCardSkeleton";
-import {fetchAllProductCards, fetchAllProductsWithImages} from "@/service/product/product.service";
-import {useQuery} from "@tanstack/react-query";
 import {useProductCardList} from "@/hooks/react-query/useProductlist";
 
 interface ClientComponentProps {
@@ -70,17 +68,17 @@ export default function PageClient(props: ClientComponentProps) {
 
     const {data: products, isLoading: isProductLoading, isSuccess} = useProductCardList(productsInRedux);
     const dispatch = useDispatch();
-    const categoryArray = ["outer", "top", "bottom"];
+    const categoryArray = ["outer", "top", "bottom", "acc"];
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        if (!productsInRedux && isSuccess && products.length > 0) {
-            dispatch(setProductCards(products));
-            setIsLoading(false);
-        } else {
-            setIsLoading(false);
+        if (!productsInRedux) {
+            if (isSuccess && products && products.length > 0) {
+                dispatch(setProductCards(products));
+            }
         }
-    }, [productsInRedux, products, dispatch]);
+        setIsLoading(false);
+    }, [productsInRedux, isSuccess, products, dispatch]);
 
     const {data: wishList, isLoading: isWishLoading, isError} = useWishlist();
 
@@ -115,7 +113,8 @@ export default function PageClient(props: ClientComponentProps) {
 
                 <hr className="border-slate-200 dark:border-slate-700"/>
 
-                <SectionSliderCollections/>
+                {/*<SectionSliderCollections/>*/}
+                <SectionSliderLargeProductDohee/>
                 <hr className="border-slate-200 dark:border-slate-700"/>
 
                 <SectionPromo1/>

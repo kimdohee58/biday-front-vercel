@@ -1,5 +1,4 @@
 //src/utils/jwt.utils.ts
-import { JwtPayload } from '@/model/api/JwtPayload';
 
 // 철자 수정: base64Encode로 수정
 const base64Encode = (data: string) => {

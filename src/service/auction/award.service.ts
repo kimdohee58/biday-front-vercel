@@ -1,6 +1,8 @@
 import {awardAPI} from "@/api/auction/award.api";
 import Cookies from "js-cookie";
 import {AwardDto, AwardModel} from "@/model/auction/award.model";
+import {handleApiError, isApiError} from "@/utils/error/error";
+import {CacheOption} from "@/model/api/RequestOptions";
 
 // awardId: number
 export async function fetchAwardOne(awardId: number): Promise<AwardModel> {
@@ -42,7 +44,7 @@ export async function findByUserAward(): Promise<AwardModel[]> {
 
         const options = {
             userToken: userToken, // 쿠키에서 가져온 userToken을 사용
-            params: {}
+            params: {},
         };
 
         // findByUser API 호출
@@ -91,12 +93,31 @@ export async function fetchSizeIdsFromAwards(awardIds: number[]): Promise<number
                 return await awardAPI.findById(options);
             })
         );
+        console.log("📌 fetchSizeIdsFromAwards 내부 awards:", awards);
+        const sizeIds = awards
+            .map(award => award.auction?.sizeId) // auction이 없는 경우를 대비하여 안전하게 접근
+            .filter(sizeId => sizeId !== undefined); // undefined 값 제거
 
-        const sizeIds = awards.map(award => award.auction.sizeId);
-        console.log("🟢 추출된 sizeIds:", sizeIds);
+        console.log("📌 fetchSizeIdsFromAwards 내부 sizeIds:", sizeIds);
         return sizeIds
     } catch (error) {
         console.error("sizeId를 추출하는 도중 오류 발생: ", error);
         throw new Error("sizeId 추출 실패");
+    }
+}
+
+export async function updateStatus(awardId: number) {
+    const options = {
+        params: {
+            awardId,
+        }
+    };
+
+    try {
+        return await awardAPI.updateStatus(options);
+    } catch (error) {
+        if (isApiError(error)) {
+            handleApiError(error);
+        }
     }
 }

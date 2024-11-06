@@ -1,7 +1,7 @@
-import React, { FC } from "react";
+import React, {FC} from "react";
 import HeaderFilterSection from "@/components/HeaderFilterSection";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
-import { Product, PRODUCTS } from "@/data/data";
+import {Product, PRODUCTS} from "@/data/data";
 
 //
 export interface SectionGridFeatureItemsProps {
@@ -22,7 +22,7 @@ const SectionGridFeatureItems: FC<SectionGridFeatureItemsProps> = ({
         ))}*/}
       </div>
       <div className="flex mt-16 justify-center items-center">
-        <ButtonPrimary loading>Show me more</ButtonPrimary>
+        {/*<ButtonPrimary loading>Show me more</ButtonPrimary>*/}
       </div>
     </div>
   );

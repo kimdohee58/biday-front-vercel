@@ -13,12 +13,20 @@ export interface ProductDTO {
     category: string;
     name: string;
     subName: string;
+    description: string;
     productCode: string;
     price: number;
     color: ColorType;
     createdAt: Date;
     updatedAt: Date;
     wishes: number;
+}
+
+export interface ProductDetails {
+    product: ProductWithImageModel,
+    size: string[],
+    colors: ColorType[],
+    productWithImagesArray: ProductWithImageModel[];
 }
 
 export enum ColorType {

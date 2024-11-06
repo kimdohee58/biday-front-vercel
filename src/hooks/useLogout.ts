@@ -1,10 +1,10 @@
 // src/hooks/useLogout.ts
-import { useRouter } from 'next/navigation';
+import {useRouter} from 'next/navigation';
 import {clearToken, removeCookie} from '@/utils/cookie/cookie.api';
-import { useDispatch } from 'react-redux';
-import { clearUser } from '@/lib/features/user.slice';
+import {useDispatch} from 'react-redux';
+import {clearUser} from '@/lib/features/user.slice';
 import {logoutUser} from "@/service/user/user.api";
-import { persistor } from '@/lib/store';
+import {persistor} from '@/lib/store';
 
 export const useLogout = () => {
     const router = useRouter();

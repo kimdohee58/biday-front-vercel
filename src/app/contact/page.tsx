@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React from "react";
 import SocialsList from "@/shared/SocialsList/SocialsList";
 import Label from "@/components/Label/Label";
 import Input from "@/shared/Input/Input";
@@ -6,20 +6,19 @@ import Textarea from "@/shared/Textarea/Textarea";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import BackgroundSection from "@/components/BackgroundSection/BackgroundSection";
 import SectionPromo1 from "@/components/SectionPromo1";
-import { RootState } from "@/lib/store";
 
 const info = [
   {
     title: "🗺 ADDRESS",
-    desc: "Photo booth tattooed prism, portland taiyaki hoodie neutra typewriter",
+    desc: "서울특별시 강남구 역삼동 819-3",
   },
   {
     title: "💌 EMAIL",
-    desc: "nc.example@example.com",
+    desc: "nc13@biday.com",
   },
   {
     title: "☎ PHONE",
-    desc: "000-123-456-7890",
+    desc: "000-1234-5678",
   },
 ];
 

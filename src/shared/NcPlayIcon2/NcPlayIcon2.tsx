@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, {FC} from "react";
 
 export interface NcPlayIcon2Props {
   className?: string;

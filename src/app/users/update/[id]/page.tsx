@@ -1,9 +1,9 @@
 "use client";
 
 // Import necessary hooks and functions
-import React, { FormEvent, useEffect, useState } from "react";
-import { useRouter, useParams } from "next/navigation";
-import { RootState } from "@/lib/store";
+import React, {FormEvent, useEffect, useState} from "react";
+import {useParams, useRouter} from "next/navigation";
+import {Spinner} from "@/shared/Spinner/Spinner";
 
 // Define the UsersModel interface
 interface UsersModel {
@@ -123,31 +123,7 @@ export default function Update() {
     };
 
     // Display loading message or form
-    if (!formData) return <div className="flex h-screen items-center justify-center">
-        <div className="text-center">
-            <svg
-                className="animate-spin h-12 w-12 text-indigo-600 mx-auto mb-4"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-            >
-                <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                />
-                <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8v8H4z"
-                />
-            </svg>
-            <h2 className="text-2xl font-semibold text-indigo-600">Loading...</h2>
-        </div>
-    </div>;
+    if (!formData) return <Spinner/>;
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-between p-24">

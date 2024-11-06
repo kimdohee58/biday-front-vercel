@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, {useState} from "react";
 
 const LikeSaveBtns = () => {
   const [isLiked, setIsLiked] = useState(false);

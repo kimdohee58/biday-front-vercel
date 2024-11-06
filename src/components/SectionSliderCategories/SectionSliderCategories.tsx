@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC, useEffect, useId, useRef, useState } from "react";
+import React, {FC, useEffect, useRef, useState} from "react";
 import Heading from "@/components/Heading/Heading";
 // @ts-ignore
 import Glide from "@glidejs/glide/dist/glide.esm";
@@ -9,7 +9,7 @@ import department1Png from "@/images/collections/department1.png";
 import department2Png from "@/images/collections/department2.png";
 import department3Png from "@/images/collections/department3.png";
 import department4Png from "@/images/collections/department4.png";
-import { StaticImageData } from "next/image";
+import {StaticImageData} from "next/image";
 import Link from "next/link";
 
 export interface CardCategoryData {

@@ -1,4 +1,4 @@
-import { StaticImageData } from "next/image";
+import {StaticImageData} from "next/image";
 import explore1Svg from "@/images/collections/explore1.svg";
 import explore2Svg from "@/images/collections/explore2.svg";
 import explore3Svg from "@/images/collections/explore3.svg";

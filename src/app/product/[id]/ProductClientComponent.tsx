@@ -5,11 +5,9 @@ import BagIcon from "@/components/BagIcon";
 
 import {SparklesIcon} from "@heroicons/react/24/outline";
 import Prices from "@/components/Prices";
-import SectionSliderProductCard from "@/components/SectionSliderProductCard";
 import Policy from "./Policy";
 import SectionPromo2 from "@/components/SectionPromo2";
 import Image from "next/image";
-import {Route} from "@/routers/types";
 import {ImageModel} from "@/model/ftp/image.model"
 import React, {useState} from "react";
 import {formatProductName, getColor} from "@/utils/productUtils";
@@ -24,6 +22,8 @@ import {useRouter, useSearchParams} from "next/navigation";
 import Cookies from "js-cookie";
 import {UserToken} from "@/model/user/userToken";
 import {UserRole} from "@/model/user/user.model";
+import {Spinner} from "@/shared/Spinner/Spinner";
+import {useSuspenseProductDetail} from "@/hooks/react-query/useProductlist";
 
 type ProductDetailProps = {
     product: ProductWithImageModel,
@@ -63,6 +63,7 @@ function RenderSizeList({sizeArray, onClickSizeButton, currentSize, sizes}: Rend
         <div>
             <div className="flex justify-between font-medium text-sm">
                 <label htmlFor="">
+
             <span className="">
               Size:
               <span className="ml-1 font-semibold">{currentSize || "ALL"}</span>
@@ -100,13 +101,13 @@ function RenderSizeList({sizeArray, onClickSizeButton, currentSize, sizes}: Rend
     );
 }
 
-export default function ProductClientComponent({product}: { product: ProductDetailProps}) {
+export default function ProductClientComponent({productId} : { productId: string}) {
+    const {data: product} = useSuspenseProductDetail(productId);
+
     const router = useRouter();
 
     const searchParams = useSearchParams();
     const size = searchParams.get("size");
-    console.log("size", size);
-
     const {product: productWithImage, size: sizeArray, colors, productWithImagesArray} = product;
     const {product: initialProduct} = productWithImage;
     const productArray = productWithImagesArray.map((product) => {
@@ -317,7 +318,7 @@ export default function ProductClientComponent({product}: { product: ProductDeta
                                 <AuctionTable auctions={auctions.data || []} product={currentProduct}
                                               size={currentSizeId}/>)
                             :
-                            (<div>Loading...</div>)
+                            (<Spinner/>)
                     }
 
                 </div>

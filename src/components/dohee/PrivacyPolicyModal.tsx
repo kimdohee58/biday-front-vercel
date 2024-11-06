@@ -1,5 +1,4 @@
 // 덮기 완료
-import { ModalContent, ModalHeader, ModalBody, Button } from '@chakra-ui/react';
 import React from 'react';
 
 // ModalContent만 반환하는 컴포넌트

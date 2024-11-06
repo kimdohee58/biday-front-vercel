@@ -1,6 +1,6 @@
 // src/service/address/address.api.ts
 
-import { AddressModel } from "@/model/user/address.model";
+import {AddressModel} from "@/model/user/address.model";
 import {UserToken} from "@/model/user/userToken";
 
 const baseUrl = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/addresses`;
