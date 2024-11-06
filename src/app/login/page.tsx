@@ -55,6 +55,7 @@ const PageLogin = () => {
                         phoneNum: user.phoneNum,
                         status: user.status ? String(user.status) : "",
                         newPassword: user.newPassword || "",
+                        role:user.role
                     };
 
                     dispatch(saveUser({ user: userData, token: authToken }));
