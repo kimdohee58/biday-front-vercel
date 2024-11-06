@@ -14,21 +14,21 @@ interface Hero2DataType {
 
 export const HERO2_DEMO_DATA: Hero2DataType[] = [
   {
-    image: imageRightPng2,
+    image: "/banner_waifu2x_art_noise1.png",
+    heading: "Exclusive collection <br /> for everyone",
+    subHeading: "마감 임박 경매 🔥",
+    btnText: "Earn product now",
+    btnLink: "/auction/last-chance",
+  },
+  {
+    image: "/esfai_waifu2x_art_noise1.png",
     heading: "Exclusive collection <br /> for everyone",
     subHeading: "In this season, find the best 🔥",
     btnText: "Explore now",
-    btnLink: "/",
+    btnLink: "/search?keyword=esfai",
   },
   {
-    image: imageRightPng3,
-    heading: "Exclusive collection <br /> for everyone",
-    subHeading: "In this season, find the best 🔥",
-    btnText: "Explore now",
-    btnLink: "/",
-  },
-  {
-    image: imageRightPng,
+    image: "/espionage.png",
     heading: "Exclusive collection <br /> for everyone",
     subHeading: "In this season, find the best 🔥",
     btnText: "Explore now",
