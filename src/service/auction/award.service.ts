@@ -91,12 +91,28 @@ export async function fetchSizeIdsFromAwards(awardIds: number[]): Promise<number
                 return await awardAPI.findById(options);
             })
         );
+        console.log("📌 fetchSizeIdsFromAwards 내부 awards:", awards);
+        const sizeIds = awards
+            .map(award => award.auction?.sizeId) // auction이 없는 경우를 대비하여 안전하게 접근
+            .filter(sizeId => sizeId !== undefined); // undefined 값 제거
 
-        const sizeIds = awards.map(award => award.auction.sizeId);
-        console.log("🟢 추출된 sizeIds:", sizeIds);
+        console.log("📌 fetchSizeIdsFromAwards 내부 sizeIds:", sizeIds);
         return sizeIds
     } catch (error) {
         console.error("sizeId를 추출하는 도중 오류 발생: ", error);
         throw new Error("sizeId 추출 실패");
+    }
+}
+
+// 결제 완료되었다면 호출될 updateAwardStatus
+export async function updateAwardStatus(awardId: number): Promise<AwardModel> {
+    try {
+        const options = {
+            params: {awardId: awardId},
+        };
+        return await awardAPI.updateAwardStatus(options);
+    } catch (error) {
+        console.error("Award updateStatus 에러 발생", error)
+        return {} as AwardModel;
     }
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import { getUserToken } from "@/lib/features/user.slice";
+import {getUserToken} from "@/lib/features/user.slice";
 import {useSelector} from "react-redux";
 
 export default function UserToken() {

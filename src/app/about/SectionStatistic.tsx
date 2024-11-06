@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, {FC} from "react";
 import Heading from "@/components/Heading/Heading";
 
 export interface Statistic {
@@ -10,20 +10,20 @@ export interface Statistic {
 const FOUNDER_DEMO: Statistic[] = [
   {
     id: "1",
-    heading: "10 million",
+    heading: "1,000,000",
     subHeading:
-      "Articles have been public around the world (as of Sept. 30, 2021)",
+      "전 세계에서 공개된 기사 수 (2021년 9월 30일 기준)",
   },
   {
     id: "2",
     heading: "100,000",
-    subHeading: "Registered users account (as of Sept. 30, 2021)",
+    subHeading: "등록된 사용자 계정 수 (2021년 9월 30일 기준)",
   },
   {
     id: "3",
     heading: "220+",
     subHeading:
-      "Countries and regions have our presence (as of Sept. 30, 2021)",
+      "진출한 국가 및 지역 수 (2021년 9월 30일 기준)",
   },
 ];
 
@@ -35,8 +35,7 @@ const SectionStatistic: FC<SectionStatisticProps> = ({ className = "" }) => {
   return (
     <div className={`nc-SectionStatistic relative ${className}`}>
       <Heading
-        desc=" We’re impartial and independent, and every day we create distinctive,
-          world-class programmes and content"
+        desc="우리는 독창적이고 뛰어난 프로그램과 콘텐츠를 통해 새로운 경험을 제공합니다."
       >
         🚀 Fast Facts
       </Heading>

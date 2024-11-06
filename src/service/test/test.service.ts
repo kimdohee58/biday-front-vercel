@@ -1,4 +1,4 @@
-import {ProductCardModel, ProductWithImageModel} from "@/model/product/product.model";
+import {ProductCardModel} from "@/model/product/product.model";
 import {fetchImageOne} from "@/service/ftp/image.service";
 import {defaultImage, ImageModel, ImageType} from "@/model/ftp/image.model";
 import {fetchProduct} from "@/service/product/product.service";

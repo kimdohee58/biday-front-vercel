@@ -1,6 +1,6 @@
-import { _getTagNameRd } from "@/contains/fakeData";
+import {_getTagNameRd} from "@/contains/fakeData";
 import Link from "next/link";
-import React, { FC } from "react";
+import React, {FC} from "react";
 
 export interface TagProps {
   className?: string;

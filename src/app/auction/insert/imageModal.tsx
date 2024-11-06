@@ -4,11 +4,11 @@ import React, {ChangeEvent, useEffect, useState} from "react";
 import {
     Button,
     Dialog,
-    DialogHeader,
     DialogBody,
+    DialogFooter,
+    DialogHeader,
     IconButton,
     Typography,
-    DialogFooter,
 } from "@material-tailwind/react";
 import {ArrowUpTrayIcon} from "@heroicons/react/24/outline";
 import {TrashIcon} from "@heroicons/react/24/solid";
@@ -22,36 +22,37 @@ interface MembersProps {
 
 function ImageCard({img, name, size, onDelete}: MembersProps) {
     return (
-        <div className="border p-3 rounded-lg w-full">
+        <div className="border p-3 rounded-lg w-full overflow-hidden">
             <div className="flex items-start justify-between">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-4">
                     {img ? (
                         <img
                             src={img}
-                            alt="dark"
-                            className="w-[70px] h-[50px] rounded-lg"
+                            alt="preview"
+                            className="w-[70px] h-[50px] rounded-lg object-cover"
                         />
                     ) : (
-                        <div className="w-[70px] h-[50px] bg-gray-300 rounded-lg"></div>
+                        <div className="w-[70px] h-[50px] bg-gray-100 rounded-lg"></div>
                     )}
                     <div>
                         <Typography
                             variant="small"
                             color="blue-gray"
-                            className="!font-bold mb-1"
+                            className="!font-bold mb-1 overflow-hidden text-ellipsis whitespace-nowrap"
                         >
                             {name}
                         </Typography>
                         <Typography
                             variant="small"
-                            className="!font-normal text-gray-600"
+                            className="!font-normal text-gray-600 overflow-hidden text-ellipsis whitespace-nowrap"
                         >
                             {size} KB
                         </Typography>
                     </div>
                 </div>
-                <IconButton size="sm" variant="text" onClick={onDelete}>
-                    <TrashIcon className="w-5 h-5 text-gray-500"/>
+                <IconButton size="sm" variant="text" onClick={onDelete}
+                            className="text-red-400 hover:text-red-600 transition-colors">
+                    <TrashIcon className="w-5 h-5"/>
                 </IconButton>
             </div>
         </div>
@@ -166,15 +167,17 @@ export default function ImageModal({isOpen, onClose, onSubmit, files}: ImageModa
                         지원되는 포맷: .png, .jpg, .svg
                     </Typography>
                 </label>
-                <div className="!mt-4 flex flex-col md:flex-row justify-between gap-4">
-                    {tempFile.map((file, index) => (
-                        file && (
-                            <ImageCard key={index} img={URL.createObjectURL(file)} name={file.name}
-                                       size={(file.size / 1024).toFixed(2)}
-                                       onDelete={() => handleDelete(index)}/>
-                        )
-                    ))}
-                </div>
+                {/*<div className="!mt-4 flex flex-col md:flex-row justify-between gap-4">*/}
+                <div
+                    className={`!mt-4 grid gap-4 ${tempFile.length === 1 ? 'grid-cols-1' : tempFile.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
+                        {tempFile.slice(0, 3).map((file, index) => (
+                            file && (
+                                <ImageCard key={index} img={URL.createObjectURL(file)} name={file.name}
+                                           size={(file.size / 1024).toFixed(2)}
+                                           onDelete={() => handleDelete(index)}/>
+                            )
+                        ))}
+                    </div>
             </DialogBody>
             <DialogFooter className="gap-2">
                 <Button onClick={onClose} variant="outlined">

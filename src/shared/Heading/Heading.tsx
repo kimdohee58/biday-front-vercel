@@ -1,5 +1,5 @@
 import NextPrev from "@/shared/NextPrev/NextPrev";
-import React, { HTMLAttributes, ReactNode } from "react";
+import React, {HTMLAttributes, ReactNode} from "react";
 
 export interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {
   fontClass?: string;
@@ -10,7 +10,7 @@ export interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {
 
 const Heading: React.FC<HeadingProps> = ({
   children,
-  desc = "Discover the most trending products in Ciseco.",
+  desc = "Discover the most trending products in BiDay.",
   className = "mb-10 md:mb-12 text-neutral-900 dark:text-neutral-50",
   isCenter = false,
   hasNextPrev = false,

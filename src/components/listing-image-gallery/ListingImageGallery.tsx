@@ -2,20 +2,15 @@
 
 import "./styles/index.css";
 import Image from "next/image";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { FC, Fragment, useEffect, useRef } from "react";
+import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import {FC, Fragment, useEffect, useRef} from "react";
 import Modal from "./components/Modal";
-import type { ListingGalleryImage } from "./utils/types";
-import { useLastViewedPhoto } from "./utils/useLastViewedPhoto";
-import { ArrowSmallLeftIcon } from "@heroicons/react/24/outline";
-import {
-  Dialog,
-  DialogPanel,
-  Transition,
-  TransitionChild,
-} from "@headlessui/react";
+import type {ListingGalleryImage} from "./utils/types";
+import {useLastViewedPhoto} from "./utils/useLastViewedPhoto";
+import {ArrowSmallLeftIcon} from "@heroicons/react/24/outline";
+import {Dialog, DialogPanel, Transition, TransitionChild,} from "@headlessui/react";
 import LikeSaveBtns from "@/components/LikeSaveBtns";
-import { Route } from "next";
+import {Route} from "next";
 
 export const getNewParam = ({
   paramName = "photoId",

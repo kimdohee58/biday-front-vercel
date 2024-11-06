@@ -3,8 +3,7 @@
 // @ts-ignore
 import Glide from "@glidejs/glide/dist/glide.esm";
 import Heading from "@/components/Heading/Heading";
-import React, { FC, useId, useRef, useState } from "react";
-import { useEffect } from "react";
+import React, {FC, useEffect, useRef, useState} from "react";
 import clientSayMain from "@/images/clientSayMain.png";
 import clientSay1 from "@/images/clientSay1.png";
 import clientSay2 from "@/images/clientSay2.png";
@@ -14,9 +13,9 @@ import clientSay5 from "@/images/clientSay5.png";
 import clientSay6 from "@/images/clientSay6.png";
 import quotationImg from "@/images/quotation.png";
 import quotationImg2 from "@/images/quotation2.png";
-import { StarIcon } from "@heroicons/react/24/solid";
+import {StarIcon} from "@heroicons/react/24/solid";
 import Image from "next/image";
-import { DEMO_DATA } from "./data";
+import {DEMO_DATA} from "./data";
 
 export interface SectionClientSayProps {
   className?: string;
@@ -90,8 +89,8 @@ const SectionClientSay: FC<SectionClientSayProps> = ({ className = "" }) => {
       className={`nc-SectionClientSay relative flow-root ${className} `}
       data-nc-id="SectionClientSay"
     >
-      <Heading desc="Let's see what people think of Ciseco" isCenter>
-        Good news from far away 🥇
+      <Heading desc="Let's see what people think of BiDay" isCenter>
+        실제 이용하신 사용자들의 후기 🥇
       </Heading>
       <div className="relative md:mb-16 max-w-2xl mx-auto">
         {renderBg()}
@@ -118,8 +117,12 @@ const SectionClientSay: FC<SectionClientSayProps> = ({ className = "" }) => {
                   key={item.id}
                   className="glide__slide flex flex-col items-center text-center"
                 >
-                  <span className="block text-2xl">{item.content}</span>
-                  <span className="block mt-8 text-2xl font-semibold">
+                  <span
+                      className="block text-2xl"
+                      style={{whiteSpace: 'pre-line'}}
+                      dangerouslySetInnerHTML={{__html: item.content}}
+                  />
+                    <span className="block mt-8 text-2xl font-semibold">
                     {item.clientName}
                   </span>
                   <div className="flex items-center space-x-0.5 mt-3.5 text-yellow-500">
@@ -142,7 +145,7 @@ const SectionClientSay: FC<SectionClientSayProps> = ({ className = "" }) => {
                 key={item.id}
                 className="glide__bullet w-2 h-2 rounded-full bg-neutral-300 mx-1 focus:outline-none"
                 data-glide-dir={`=${index}`}
-              ></button>
+              />
             ))}
           </div>
         </div>

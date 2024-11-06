@@ -1,7 +1,7 @@
 // src/components/RenderAccountOrder.tsx
 import Prices from "@/components/Prices";
 import ImageFetcher from "@/components/ImageFetcher";
-import { format } from "date-fns";
+import {format} from "date-fns";
 
 function findNestedProperty<T = any>(obj: any, keys: string[]): T | undefined {
     if (!obj || typeof obj !== "object") return undefined; // Check for valid object at the start
@@ -20,7 +20,6 @@ function findNestedProperty<T = any>(obj: any, keys: string[]): T | undefined {
 }
 
 
-
 function formatDate(dateString: string): string {
     const date = new Date(dateString);
 
@@ -31,9 +30,8 @@ function formatDate(dateString: string): string {
 }
 
 const renderProductItem = (product: any, index: number, type: string,
-                           onImg?: (auctionId: string)=> void,
+                           onImg?: (auctionId: string) => void,
                            onCheckout?: (awardId: string, productId: string) => void
-
 ) => {
 
 
@@ -91,12 +89,25 @@ const renderProductItem = (product: any, index: number, type: string,
         dateContent = `${startedAt} ~ ${endedAt}`; // Show the range for auction
     }
 
+    // 경매 종료, 결제 불가 버튼 찍기
+    const now = new Date();
+    const endedDate = new Date(formatDate(endedAt));
+    const createdDate = new Date(formatDate(createdAt));
+
+    let isAvailable;
+
+    if (type === 'award') {
+        isAvailable = new Date(createdDate.getTime() + 3 * 24 * 60 * 60 * 1000) < now;
+    } else if (type === 'auction') {
+        isAvailable = new Date(endedDate.getTime() + 3 * 24 * 60 * 60 * 1000) < now;
+    }
+
     return (
         <div key={index} className="flex py-4 sm:py-7 last:pb-0 first:pt-0 mb-2">
 
             <div
                 onClick={['auction', 'bid', 'award'].includes(type) && onImg && auctionId ? () => {
-                    onImg(auctionId, );
+                    onImg(auctionId,);
                 } : undefined}
 
                 style={{cursor: ['auction', 'bid', 'award'].includes(type) && auctionId ? 'pointer' : 'default'}}
@@ -116,11 +127,22 @@ const renderProductItem = (product: any, index: number, type: string,
                             </p>
                         </div>
 
-                        <div
-                            onClick={type === 'award' && onCheckout ? () => onCheckout(awardId, productId) : undefined}
-                            style={{cursor: type === 'award' ? 'pointer' : 'default'}} // Change cursor based on type
-                        >
-                            <Prices className="mt-0.5 ml-2" price={price} contentClass="py-2 px-3"/>
+                        <div>
+                            {isAvailable ? (
+                                <button
+                                    disabled
+                                    className="bg-gray-400 text-gray-700 border border-gray-500 cursor-not-allowed rounded-md py-1 px-3 font-semibold text-base w-32"
+                                >
+                                    {type === 'auction' ? 'Sold Out' : type === 'award' ? 'Unavailable' : 'Not Available'}
+                                </button>
+                            ) : (
+                                <div
+                                    onClick={type === 'award' && onCheckout ? () => onCheckout(awardId, productId) : undefined}
+                                    style={{cursor: type === 'award' ? 'pointer' : 'default'}} // Change cursor based on type
+                                >
+                                    <Prices className="mt-0.5 ml-2" price={price} contentClass="py-2 px-3"/>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -171,7 +193,7 @@ export const renderAuctionHistory = (auctionProductList: any[],
 
 // 입찰 내역 렌더링
 export const renderBidHistory = (bidProductList: any[],
-                                 onImg: (auctionId: string)=> void
+                                 onImg: (auctionId: string) => void
 ) => {
     return (
         <div className="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden z-0">
@@ -195,21 +217,25 @@ export const renderBidHistory = (bidProductList: any[],
 };
 
 // 낙찰 내역 렌더링
+// TODO 낙찰 이후 3일 뒤라면 결제 버튼 막기
+// TODO 결제 완료 되었다면 완료 표시
 export const renderAwardHistory = (
     awardProductList: any[],
-    onImg: (auctionId: string)=> void,
-    onCheckout: (awardId: string, productId: string)=> void
+    onImg: (auctionId: string) => void,
+    onCheckout: (awardId: string, productId: string) => void
 ) => {
     return (
         <div className="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden z-0">
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center p-4 sm:p-8 bg-slate-50 dark:bg-slate-500/5">
+            <div
+                className="flex flex-col sm:flex-row sm:justify-between sm:items-center p-4 sm:p-8 bg-slate-50 dark:bg-slate-500/5">
                 <p className="text-lg font-semibold">낙찰 내역</p>
             </div>
-            <div className="border-t border-slate-200 dark:border-slate-700 p-2 sm:p-8 divide-y divide-y-slate-200 dark:divide-slate-700">
+            <div
+                className="border-t border-slate-200 dark:border-slate-700 p-2 sm:p-8 divide-y divide-y-slate-200 dark:divide-slate-700">
                 {awardProductList && awardProductList.length > 0 ? (
                     <div>
                         <p className="text-lg font-semibold mt-4">낙찰상품 정보</p>
-                        {awardProductList.map((product, index) => renderProductItem(product, index, "award",onImg, onCheckout))}
+                        {awardProductList.map((product, index) => renderProductItem(product, index, "award", onImg, onCheckout))}
                     </div>
                 ) : (
                     <p>내역이 없습니다.</p>
@@ -224,10 +250,12 @@ export const renderAwardHistory = (
 export const renderPaymentHistory = (paymentProductList: any[]) => {
     return (
         <div className="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden z-0">
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center p-4 sm:p-8 bg-slate-50 dark:bg-slate-500/5">
+            <div
+                className="flex flex-col sm:flex-row sm:justify-between sm:items-center p-4 sm:p-8 bg-slate-50 dark:bg-slate-500/5">
                 <p className="text-lg font-semibold">결제 내역</p>
             </div>
-            <div className="border-t border-slate-200 dark:border-slate-700 p-2 sm:p-8 divide-y divide-y-slate-200 dark:divide-slate-700">
+            <div
+                className="border-t border-slate-200 dark:border-slate-700 p-2 sm:p-8 divide-y divide-y-slate-200 dark:divide-slate-700">
                 {paymentProductList && paymentProductList.length > 0 ? (
                     <div>
                         <p className="text-lg font-semibold mt-4">결제상품 정보</p>

@@ -1,5 +1,3 @@
-import { Typography } from "@material-tailwind/react";
-
 export function PhotoPlaceholderSkeleton() {
     return (
         <div className="grid h-full max-h-[300px] min-h-[160px] w-full max-w-xs animate-pulse place-items-center rounded-lg bg-gray-300">

@@ -1,7 +1,7 @@
 // src/lib/features/address.slice.ts
 
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { RootState } from '@/lib/store';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import type {RootState} from '@/lib/store';
 import {AddressModel} from "@/model/user/address.model";
 
 // AddressState 인터페이스 정의

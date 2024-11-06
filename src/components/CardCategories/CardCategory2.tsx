@@ -1,7 +1,7 @@
-import React, { FC } from "react";
+import React, {FC} from "react";
 import NcImage from "@/shared/NcImage/NcImage";
 import Link from "next/link";
-import { StaticImageData } from "next/image";
+import {StaticImageData} from "next/image";
 
 export interface CardCategory2Props {
   className?: string;

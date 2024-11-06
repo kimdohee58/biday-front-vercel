@@ -1,5 +1,5 @@
-import { StarIcon } from "@heroicons/react/24/solid";
-import React, { FC } from "react";
+import {StarIcon} from "@heroicons/react/24/solid";
+import React, {FC} from "react";
 import Avatar from "@/shared/Avatar/Avatar";
 
 interface ReviewItemDataType {

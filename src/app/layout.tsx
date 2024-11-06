@@ -1,5 +1,5 @@
 //src/app/layout.tsx
-import {Poppins, Noto_Sans_KR} from "next/font/google";
+import {Noto_Sans_KR, Poppins} from "next/font/google";
 import "./globals.css";
 import "@/fonts/line-awesome-1.3.0/css/line-awesome.css";
 import "@/styles/index.scss";
@@ -8,11 +8,6 @@ import Footer from "@/shared/Footer/Footer";
 import SiteHeader from "@/app/SiteHeader";
 import CommonClient from "./CommonClient";
 import ReactQueryProvider from "@/components/ReactQueryProvider";
-import "./globals.css";
-import "@/fonts/line-awesome-1.3.0/css/line-awesome.css";
-import "@/styles/index.scss";
-import "rc-slider/assets/index.css";
-import {AuthProvider} from "@/context/AuthContext";
 import ClientReduxProvider from "@/features/auth/ClientReduxProvider";
 import {UserProvider} from "@/utils/userContext";
 

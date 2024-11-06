@@ -1,11 +1,11 @@
 // Header/MainNav2 덮기 완료
 "use client";
 
-import React, { FC, useState } from "react";
+import React, {FC, useState} from "react";
 import Logo from "@/shared/Logo/Logo";
 import MenuBar from "@/shared/MenuBar/MenuBar";
-import { XMarkIcon } from "@heroicons/react/24/outline";
-import { useRouter } from "next/navigation";
+import {XMarkIcon} from "@heroicons/react/24/outline";
+import {useRouter} from "next/navigation";
 import DropdownCategories from "@/components/Header/DropdownCategories";
 import TemplatesDropdown from "@/components/Header/TemplatesDropdown";
 import LangDropdown from "@/components/Header/LangDropdown";

@@ -1,11 +1,11 @@
 import {useEffect, useState} from "react";
 import {AwardModel} from "@/model/auction/award.model";
-import {AuctionDTO, AuctionModel} from "@/model/auction/auction.model";
+import {AuctionDTO} from "@/model/auction/auction.model";
 import {fetchAuction, findByUserAuction} from "@/service/auction/auction.service";
 import {fetchSizeIdsFromAwards, findByUserAward} from "@/service/auction/award.service";
 import {fetchAllPaymentByUserId} from "@/service/order/payment.service";
 import {extractAwardIdsFromBidData, extractAwardIdsFromPaymentData} from "@/utils/extract";
-import {BidLoadModel, BidModel} from "@/model/auction/bid.model";
+import {BidLoadModel} from "@/model/auction/bid.model";
 import {findByUserBid} from "@/service/auction/bid.service";
 import {PaymentRequestModel} from "@/model/order/payment.model";
 

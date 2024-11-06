@@ -1,3 +1,4 @@
+// TODO 이용약관 하나라도 체크 해제되면 모두 동의합니다 체크 해제되기
 "use client";
 
 import React, {useState} from "react";
@@ -37,7 +38,6 @@ export default function PageSignUp() {
     const [isPhoneChecked, setIsPhoneChecked] = useState(false);
     const [termsChecked, setTermsChecked] = useState<string[]>([]);
 
-    // 이메일 도메인 목록
     const emailDomains = [
         "naver.com",
         "gmail.com",

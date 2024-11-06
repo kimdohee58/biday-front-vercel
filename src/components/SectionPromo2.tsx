@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, {FC} from "react";
 import NcImage from "@/shared/NcImage/NcImage";
 import rightImgDemo from "@/images/promo2.png";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";

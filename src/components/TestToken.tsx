@@ -1,9 +1,9 @@
 // src/components/TestToken.tsx (클라이언트 컴포넌트)
 
 'use client';  // 이 부분이 클라이언트 컴포넌트임을 명시함
-import { useEffect } from 'react';
-import { handleReissueToken } from "@/utils/reissue/reissueToken";
-import { getTokenRemainingTime } from "@/utils/cookie/cookie.api";
+import {useEffect} from 'react';
+import {handleReissueToken} from "@/utils/reissue/reissueToken";
+import {getTokenRemainingTime} from "@/utils/cookie/cookie.api";
 import Cookies from 'js-cookie';
 
 const TokenManager = () => {

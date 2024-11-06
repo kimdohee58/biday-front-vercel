@@ -1,7 +1,7 @@
 "use client";
 
 import Label from "@/components/Label/Label";
-import React, { FC, useState } from "react";
+import React, {FC, useState} from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
 import Input from "@/shared/Input/Input";

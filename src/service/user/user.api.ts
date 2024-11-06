@@ -2,6 +2,7 @@ import {UserModel} from "@/model/user/user.model";
 
 
 let baseURL = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/users`;
+let logoutURL = `${process.env.NEXT_PUBLIC_API_SERVER_URL}`;
 
 async function apiRequest(
     endpoint: string,
@@ -90,8 +91,10 @@ export const logoutUser = async (): Promise<void> => {
     const refreshToken = document.cookie.split('; ').find(row => row.startsWith('refresh='));
     const tokenValue = refreshToken ? refreshToken.split('=')[1] : '';
 
+    const logoutEndpoint = `${logoutURL}/logout`;
+
     try {
-        const response = await apiRequest(`/logout`, "POST", {refreshToken: tokenValue});
+        const response = await apiRequest(logoutEndpoint, "POST", {refreshToken: tokenValue});
 
         if (response.ok) {
         } else {
@@ -125,4 +128,3 @@ export async function checkPhoneDuplication(phoneNum: string): Promise<boolean> 
         // TODO error enum
     }
 }
-

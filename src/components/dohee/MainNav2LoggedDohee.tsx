@@ -1,12 +1,12 @@
 // 복붙 완료
 "use client";
 
-import React, { createRef, FC, useState } from "react";
+import React, {createRef, FC, useState} from "react";
 import Logo from "@/shared/Logo/Logo";
 import MenuBar from "@/shared/MenuBar/MenuBar";
 import Navigation from "@/shared/Navigation/Navigation";
-import { XMarkIcon } from "@heroicons/react/24/outline";
-import { useRouter } from "next/navigation";
+import {XMarkIcon} from "@heroicons/react/24/outline";
+import {useRouter} from "next/navigation";
 import AvatarDropdown from "@/components/Header/AvatarDropdown";
 import CartDropdown from "@/components/Header/CartDropdown";
 

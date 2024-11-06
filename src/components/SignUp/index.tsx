@@ -1,6 +1,6 @@
 'use client'
 
-import { useForm, SubmitHandler } from "react-hook-form";
+import {SubmitHandler, useForm} from "react-hook-form";
 
 // 폼 데이터의 타입 정의
 interface IFormInput {

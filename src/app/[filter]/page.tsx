@@ -1,19 +1,17 @@
 "use client";
 
-import React, {useEffect, useState, useMemo} from "react";
+import React, {useEffect, useState} from "react";
 import {ProductCardModel} from "@/model/product/product.model";
 import TabFiltersProduct from "@/components/dohee/TabFiltersProduct";
 import Pagination from "@/shared/Pagination/Pagination";
-import ButtonPrimary from "@/shared/Button/ButtonPrimary";
-import SectionSliderCollections from "@/components/SectionSliderLargeProduct";
 import SectionPromo1 from "@/components/SectionPromo1";
 import ProductCard from "@/components/ProductCard";
 import {useDispatch, useSelector} from "react-redux";
-import {getCategoryProducts, getProductCards, isProductsInRedux, updateIsLiked} from "@/lib/features/productCard.slice";
+import {getCategoryProducts, isProductsInRedux, setProductCards, updateIsLiked} from "@/lib/features/productCard.slice";
 import {useWishlist} from "@/hooks/react-query/useWishlist";
-import {setProductCards} from "@/lib/features/productCard.slice";
 import {useProductCardList} from "@/hooks/react-query/useProductlist";
 import Heading from "@/shared/Heading/Heading";
+import SectionSliderLargeProductDohee from "@/components/dohee/SectionSliderLargeProductDohee";
 
 export default function PageCollection({params}: { params: { filter: string } }) {
     const dispatch = useDispatch();
@@ -133,10 +131,7 @@ export default function PageCollection({params}: { params: { filter: string } })
             <div className="container py-16 lg:pb-28 lg:pt-20 space-y-16 sm:space-y-20 lg:space-y-28">
                 <div className="space-y-10 lg:space-y-14">
                     <div className="max-w-screen-sm">
-                        <Heading>{params.filter ? params.filter.charAt(0).toUpperCase() + params.filter.slice(1) : ""}</Heading>
-                        {/*<h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold">*/}
-                        {/*    {params.filter ? params.filter.charAt(0).toUpperCase() + params.filter.slice(1) : ""}*/}
-                        {/*</h2>*/}
+                        <Heading desc={"BiDay에서 당신만의 개성을 찾아보세요."}>{params.filter ? params.filter.charAt(0).toUpperCase() + params.filter.slice(1) : ""}</Heading>
                     </div>
                     <hr className="border-slate-200 dark:border-slate-700"/>
                     <main>
@@ -149,20 +144,27 @@ export default function PageCollection({params}: { params: { filter: string } })
                         />
                         <div
                             className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-x-8 gap-y-10 mt-8 lg:mt-10">
-                            {selectedProducts.map((productCard) => (
-                                <ProductCard key={productCard.product.id} {...productCard}/>
-                            ))}
+                            {selectedProducts.length === 0 ? (
+                                <p className="text-center font-bold col-span-full text-3xl mt-20">
+                                    현재 필터에 해당하는 상품이 없습니다.
+                                </p>
+                            ) : (
+                                selectedProducts.map((productCard) => (
+                                    <ProductCard key={productCard.product.id} {...productCard} />
+                                ))
+                            )}
                         </div>
                         <div
                             className="flex flex-col mt-12 lg:mt-16 space-y-5 sm:space-y-0 sm:space-x-3 sm:flex-row sm:justify-between sm:items-center">
                             <Pagination currentPage={currentPage} totalPages={totalPages}
                                         onPageChange={handlePageChange}/>
-                            <ButtonPrimary loading>Show me more</ButtonPrimary>
+                            {/*<ButtonPrimary loading>Show me more</ButtonPrimary>*/}
                         </div>
                     </main>
                 </div>
                 <hr className="border-slate-200 dark:border-slate-700"/>
-                <SectionSliderCollections/>
+                {/*<SectionSliderCollections/>*/}
+                <SectionSliderLargeProductDohee/>
                 <hr className="border-slate-200 dark:border-slate-700"/>
                 <SectionPromo1/>
             </div>
