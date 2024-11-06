@@ -30,6 +30,7 @@ export const useFetchAuctionBySizeIdsWithUser = (sizeIds: number[]) => {
     return useQuery({
         queryKey: ["auction", "size", sizeIds],
         queryFn: () => fetchAuctionBySizesWithUser(sizeIds),
+        refetchOnWindowFocus: true,
     })
 }
 

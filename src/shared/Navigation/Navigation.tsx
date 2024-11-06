@@ -25,7 +25,7 @@ function Navigation() {
     };
 
     return (
-        <ul className="nc-Navigation flex items-center">
+        <ul className="nc-Navigation flex items-center whitespace-nowrap">
             {NAVIGATION_DEMO_2.map((item) => {
                 const updatedItem = {...item};
 

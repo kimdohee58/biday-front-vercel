@@ -72,19 +72,13 @@ export default function PageClient(props: ClientComponentProps) {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        if (!productsInRedux && isSuccess && products.length > 0) {
-            dispatch(setProductCards(products));
-            setIsLoading(false);
-        } else {
-            setIsLoading(false);
+        if (!productsInRedux) {
+            if (isSuccess && products && products.length > 0) {
+                dispatch(setProductCards(products));
+            }
         }
-    }, [productsInRedux, products, dispatch]);
-
-    useEffect(() => {
-        if (productsInRedux) {
-            setIsLoading(false);
-        }
-    }, [productsInRedux]);
+        setIsLoading(false);
+    }, [productsInRedux, isSuccess, products, dispatch]);
 
     const {data: wishList, isLoading: isWishLoading, isError} = useWishlist();
 

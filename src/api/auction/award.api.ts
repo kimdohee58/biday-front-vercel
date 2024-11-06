@@ -29,19 +29,17 @@ const findById = async (options: RequestOptions<{awardId: number}, null>): Promi
 
 // 종료된 경매에서 호출될 낙찰 정보(auctionId: number)
 const findByAuctionId = async (options: RequestOptions<{auctionId: number}, null>): Promise<AwardDto> => {
-    console.log("findByAuctionId 확인: ", options)
     return await strategy.GET(`${api.award}/findByAuction`, options);
 }
 
-// 결제가 성공적으로 되었다면 호출될 award updateStatus
-const updateAwardStatus = async (options: RequestOptions<{awardId: number}, null>): Promise<AwardModel> => {
-    console.log("updateAwardStatus 확인: ", options)
+// 결제시 award status 업데이트 (awardId: number)
+const updateStatus = async (options: RequestOptions<{ awardId: number }, null>) => {
     return await strategy.PATCH(`${api.award}/updateStatus`, options);
-}
+};
 
 export const awardAPI= {
     findByUser,
     findById,
     findByAuctionId,
-    updateAwardStatus,
+    updateStatus,
 };

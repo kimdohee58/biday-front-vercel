@@ -281,7 +281,10 @@ export default function AuctionDetailPage() {
             <>
                 <div className="mb-4">
                     {!isEnded && (
-                        <Timer endedTime={auction?.endedAt ? new Date(auction.endedAt).toISOString() : initialTimer}/>
+                        <Timer endedTime={auction.endedAt ?
+                            new Date(new Date(auction.endedAt).getTime() + 9 * 60 * 60 * 1000).toISOString()
+                            : initialTimer}
+                        />
                     )}
                 </div>
                 <div className="listingSectionSidebar__wrap lg:shadow-lg relative">

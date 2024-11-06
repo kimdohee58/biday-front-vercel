@@ -1,6 +1,8 @@
 import {awardAPI} from "@/api/auction/award.api";
 import Cookies from "js-cookie";
 import {AwardDto, AwardModel} from "@/model/auction/award.model";
+import {handleApiError, isApiError} from "@/utils/error/error";
+import {CacheOption} from "@/model/api/RequestOptions";
 
 // awardId: number
 export async function fetchAwardOne(awardId: number): Promise<AwardModel> {
@@ -42,7 +44,7 @@ export async function findByUserAward(): Promise<AwardModel[]> {
 
         const options = {
             userToken: userToken, // 쿠키에서 가져온 userToken을 사용
-            params: {}
+            params: {},
         };
 
         // findByUser API 호출
@@ -104,15 +106,18 @@ export async function fetchSizeIdsFromAwards(awardIds: number[]): Promise<number
     }
 }
 
-// 결제 완료되었다면 호출될 updateAwardStatus
-export async function updateAwardStatus(awardId: number): Promise<AwardModel> {
+export async function updateStatus(awardId: number) {
+    const options = {
+        params: {
+            awardId,
+        }
+    };
+
     try {
-        const options = {
-            params: {awardId: awardId},
-        };
-        return await awardAPI.updateAwardStatus(options);
+        return await awardAPI.updateStatus(options);
     } catch (error) {
-        console.error("Award updateStatus 에러 발생", error)
-        return {} as AwardModel;
+        if (isApiError(error)) {
+            handleApiError(error);
+        }
     }
 }
