@@ -35,12 +35,12 @@ export const handleLogin = async (username: string, password: string): Promise<A
                 // 401 Unauthorized 에러 시 잘못된 자격 증명
                 alert("이메일이나 비밀번호가 잘못되었습니다.");
             } else if (axiosError.response?.status === 500) {
-                alert("서버에 문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
+                console.log("서버에 문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
             } else {
                 alert(`로그인 중 오류가 발생했습니다. (오류 코드: ${axiosError.response?.status})`);
             }
         } else {
-            alert('서버와의 연결에 문제가 발생했습니다. 다시 시도해주세요.');
+            console.log('서버와의 연결에 문제가 발생했습니다. 다시 시도해주세요.');
         }
 
         return null; // 오류 발생 시 null 반환
