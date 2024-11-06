@@ -20,43 +20,6 @@ interface MembersProps {
     onDelete: () => void;
 }
 
-// function ImageCard({img, name, size, onDelete}: MembersProps) {
-//     return (
-//         <div className="border p-3 rounded-lg w-full">
-//             <div className="flex items-start justify-between">
-//                 <div className="flex items-center gap-3">
-//                     {img ? (
-//                         <img
-//                             src={img}
-//                             alt="dark"
-//                             className="w-[70px] h-[50px] rounded-lg"
-//                         />
-//                     ) : (
-//                         <div className="w-[70px] h-[50px] bg-gray-300 rounded-lg"></div>
-//                     )}
-//                     <div>
-//                         <Typography
-//                             variant="small"
-//                             color="blue-gray"
-//                             className="!font-bold mb-1"
-//                         >
-//                             {name}
-//                         </Typography>
-//                         <Typography
-//                             variant="small"
-//                             className="!font-normal text-gray-600"
-//                         >
-//                             {size} KB
-//                         </Typography>
-//                     </div>
-//                 </div>
-//                 <IconButton size="sm" variant="text" onClick={onDelete}>
-//                     <TrashIcon className="w-5 h-5 text-gray-500"/>
-//                 </IconButton>
-//             </div>
-//         </div>
-//     );
-// }
 function ImageCard({img, name, size, onDelete}: MembersProps) {
     return (
         <div className="border p-3 rounded-lg w-full overflow-hidden">
