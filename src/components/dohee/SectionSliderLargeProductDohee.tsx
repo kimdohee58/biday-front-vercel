@@ -10,6 +10,7 @@ import {AuctionDTO, AuctionDTOs} from "@/model/auction/auction.model";
 import {fetchAuctionDetails} from "@/service/auction/auction.service";
 import CollectionCard2Dohee from "@/components/dohee/CollectionCard2Dohee";
 
+// TODO slider 고치기, 제대로 안뜸
 const SectionSliderLargeProductDohee = () => {
     const [auctionData, setAuctionData] = useState<AuctionWithProduct[]>([]);
 
@@ -104,8 +105,8 @@ const SectionSliderLargeProductDohee = () => {
                 </Heading>
 
                 <div className="glide__track" data-glide-el="track">
-                    {/*<ul className="glide__slides">*/}
-                    <ul className="glide__slides flex space-x-4 overflow-x-auto">
+                    <ul className="glide__slides">
+                    {/*<ul className="glide__slides flex space-x-4 overflow-x-auto">*/}
                         {auctionData.slice(0,4).map((item, index) => {
                             const auction = item.auction;
                             const product = item.product;
