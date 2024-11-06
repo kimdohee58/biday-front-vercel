@@ -15,35 +15,35 @@ const FOUNDER_DEMO: People[] = [
     name: `Zero (김영우)`,
     job: "Co-founder and Chief Executive",
     avatar:
-        "/woo_profile.png",
+        "/woo.jpg",
   },
   {
     id: "2",
     name: `Hans (정휘재)`,
     job: "Co-founder, Chairman",
     avatar:
-        "/hwi_profile.jpg",
+        "/hwi.jpg",
   },
   {
     id: "3",
     name: `Michael (송준한)`,
     job: "Co-Founder, Chief Strategy Officer",
     avatar:
-        "/song_profile.png",
+        "/song.jpg",
   },
   {
     id: "4",
     name: `Cathy (설유정)`,
-    job: "Co-founder and Chief Executive",
+    job: "Co-founder, Chief Technology Officer",
     avatar:
-        "/shull_profile.png",
+        "/shull.jpg",
   },
   {
     id: "5",
     name: `Dona (김도희)`,
     job: "Co-Founder, Chief Operating Officer",
     avatar:
-        "/KakaoTalk_20241106_020155000.jpg",
+        "/hee.jpg",
   },
 ];
 
@@ -65,8 +65,8 @@ const SectionFounder = () => {
                   // width={500} // 원하는 너비
                   // height={500} // 원하는 높이
                   containerClassName="relative h-0 aspect-h-1 aspect-w-1 rounded-xl overflow-hidden"
-                  // className="absolute inset-0 object-cover"
-                  className="absolute inset-0 object-contain"
+                  className="absolute inset-0 object-cover"
+                  // className="absolute inset-0 object-contain"
                   src={item.avatar}
               />
               <h3 className="text-lg font-semibold text-neutral-900 mt-4 md:text-xl dark:text-neutral-200">
