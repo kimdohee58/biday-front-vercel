@@ -17,6 +17,7 @@ import {
 import {useWishlist} from "@/hooks/react-query/useWishlist";
 import {ProductCardSkeleton} from "@/components/skeleton/ProductCardSkeleton";
 import {useProductCardList} from "@/hooks/react-query/useProductlist";
+import SectionHero2 from "@/components/SectionHero/SectionHero2";
 
 interface ClientComponentProps {
     authorizationToken: string;
@@ -106,6 +107,7 @@ export default function PageClient(props: ClientComponentProps) {
         <div className="nc-PageCollection">
             <div className="container py-16 lg:pb-28 lg:pt-20 space-y-16 sm:space-y-20 lg:space-y-28">
                 <main>
+                    <SectionHero2/>
                     {categoryArray.map((category) => (
                         <RandomProductsByCategory key={category} category={category}/>
                     ))}
@@ -114,7 +116,7 @@ export default function PageClient(props: ClientComponentProps) {
                 <hr className="border-slate-200 dark:border-slate-700"/>
 
                 {/*<SectionSliderCollections/>*/}
-                <SectionSliderLargeProductDohee/>
+                {/*<SectionSliderLargeProductDohee/>*/}
                 <hr className="border-slate-200 dark:border-slate-700"/>
 
                 <SectionPromo1/>
