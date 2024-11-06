@@ -172,7 +172,7 @@ export async function findByUserAuction(): Promise<AuctionDTO[]> {
 
         const options = {
             userToken : userToken, // 쿠키에서 가져온 userToken을 사용
-            params: {}
+            params: {},
         };
 
         // findByUser API 호출

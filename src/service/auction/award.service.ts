@@ -2,6 +2,7 @@ import {awardAPI} from "@/api/auction/award.api";
 import Cookies from "js-cookie";
 import {AwardDto, AwardModel} from "@/model/auction/award.model";
 import {handleApiError, isApiError} from "@/utils/error/error";
+import {CacheOption} from "@/model/api/RequestOptions";
 
 // awardId: number
 export async function fetchAwardOne(awardId: number): Promise<AwardModel> {
@@ -43,7 +44,8 @@ export async function findByUserAward(): Promise<AwardModel[]> {
 
         const options = {
             userToken: userToken, // 쿠키에서 가져온 userToken을 사용
-            params: {}
+            params: {},
+            cache: CacheOption.NOSTORE,
         };
 
         // findByUser API 호출
