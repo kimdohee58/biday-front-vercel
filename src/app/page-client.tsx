@@ -27,10 +27,8 @@ function RandomProductsByCategory({category, isLoading}: { category: string, isL
     const router = useRouter();
     const products = useSelector(getRandomCategoryProducts(category));
 
-
     useEffect(() => {
-        dispatch(setRandomCategoryProducts(category))
-
+        dispatch(setRandomCategoryProducts(category));
     }, [category, dispatch]);
 
     const handleShowMoreClick = (filter: string) => {
@@ -65,28 +63,30 @@ function RandomProductsByCategory({category, isLoading}: { category: string, isL
 
 export default function PageClient(props: ClientComponentProps) {
     const productsInRedux = useSelector(isProductsInRedux);
-
-    const {data: products, isLoading: isProductLoading, isSuccess} = useProductCardList(productsInRedux);
     const dispatch = useDispatch();
     const categoryArray = ["outer", "top", "bottom", "acc"];
     const [isLoading, setIsLoading] = useState(true);
 
+    const {data: products, isLoading: isProductLoading, isSuccess} = useProductCardList(productsInRedux);
+    const {data: wishList, isLoading: isWishLoading, isError} = useWishlist();
+
     useEffect(() => {
-        if (!productsInRedux) {
-            if (isSuccess && products && products.length > 0) {
-                dispatch(setProductCards(products));
-            }
+        if (!productsInRedux && isSuccess && products && products.length > 0) {
+            dispatch(setProductCards(products));
         }
-        setIsLoading(false);
     }, [productsInRedux, isSuccess, products, dispatch]);
 
-    const {data: wishList, isLoading: isWishLoading, isError} = useWishlist();
+    useEffect(() => {
+        if (productsInRedux) {
+            setIsLoading(false);
+        }
+    }, [productsInRedux]);
 
     useEffect(() => {
         if (wishList && wishList.length > 0 && !isWishLoading && !isError) {
             wishList.forEach((wish) => {
                 dispatch(updateIsLiked(wish.product.id));
-            })
+            });
         }
     }, [wishList, isWishLoading, isError]);
 
@@ -110,4 +110,3 @@ export default function PageClient(props: ClientComponentProps) {
         </div>
     );
 }
-
