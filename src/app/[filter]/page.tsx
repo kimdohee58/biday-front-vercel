@@ -30,7 +30,7 @@ export default function PageCollection({params}: { params: { filter: string } })
     const [products, setProducts] = useState<ProductCardModel[]>([]);
     const [filteredProducts, setFilteredProducts] = useState<ProductCardModel[]>([]);
 
-    const [selectedPrices, setSelectedPrices] = useState<number[]>([100000, 500000]);
+    const [selectedPrices, setSelectedPrices] = useState<number[]>([10000, 500000]);
     const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
     const [selectedColors, setSelectedColors] = useState<string[]>([]);
     const [selectedOrder, setSelectedOrder] = useState<string>("");

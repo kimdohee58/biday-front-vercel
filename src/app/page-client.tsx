@@ -68,7 +68,7 @@ export default function PageClient(props: ClientComponentProps) {
 
     const {data: products, isLoading: isProductLoading, isSuccess} = useProductCardList(productsInRedux);
     const dispatch = useDispatch();
-    const categoryArray = ["outer", "top", "bottom"];
+    const categoryArray = ["outer", "top", "bottom", "acc"];
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
