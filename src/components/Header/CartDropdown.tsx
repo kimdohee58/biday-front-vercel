@@ -91,7 +91,7 @@ export default function CartDropdown() {
     return (
         <div key={index} className="flex py-5 last:pb-0">
           <div className="relative h-24 w-20 flex-shrink-0 overflow-hidden rounded-xl bg-slate-100">
-            <ImageFetcher id={String(id)} altText={sizeProduct.name}/>
+            <ImageFetcher id={String(sizeProduct.id)} altText={sizeProduct.name}/>
             <Link onClick={close} className="absolute inset-0" href={`/auction/${auction.id}`}/>
           </div>
 

@@ -45,7 +45,6 @@ export async function findByUserAward(): Promise<AwardModel[]> {
         const options = {
             userToken: userToken, // 쿠키에서 가져온 userToken을 사용
             params: {},
-            cache: CacheOption.NOSTORE,
         };
 
         // findByUser API 호출
