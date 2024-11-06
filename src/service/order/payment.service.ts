@@ -4,6 +4,7 @@ import {PaymentTempModel} from "@/model/order/paymentTemp.model";
 import {PaymentConfirmModel} from "@/model/order/paymentConfirm.model";
 import {PaymentRequestModel} from "@/model/order/payment.model";
 import {PaymentSaveModel} from "@/model/order/paymentSave.model";
+import {handleApiErrorResponse, handlePaymentErrorResponse, isApiError, isPaymentError} from "@/utils/error/error";
 
 export async function savePaymentTemp(
     paymentTemp: PaymentTempModel
@@ -69,10 +70,19 @@ export async function confirmPayment(payment: PaymentConfirmModel): Promise<Paym
     }
 
     try {
-        return await paymentAPI.savePayment(options);
+        const result = await paymentAPI.savePayment(options);
+        console.log("result", result);
+        return result;
 
     } catch (error) {
-        console.log("confirmPayment 오류", error);
-        throw new Error();
+        if (isPaymentError(error)) {
+            handlePaymentErrorResponse(error.status);
+        } else if (isApiError(error)) {
+            handleApiErrorResponse(error.status);
+        } else {
+            console.error('알 수 없는 에러 발생', error);
+        }
+
+        throw new Error("결제를 처리할 수 없습니다.");
     }
 }
