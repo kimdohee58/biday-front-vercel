@@ -4,8 +4,6 @@ import React, {useEffect, useState} from "react";
 import {ProductCardModel} from "@/model/product/product.model";
 import TabFiltersProduct from "@/components/dohee/TabFiltersProduct";
 import Pagination from "@/shared/Pagination/Pagination";
-import ButtonPrimary from "@/shared/Button/ButtonPrimary";
-import SectionSliderCollections from "@/components/SectionSliderLargeProduct";
 import SectionPromo1 from "@/components/SectionPromo1";
 import ProductCard from "@/components/ProductCard";
 import {useDispatch, useSelector} from "react-redux";

@@ -12,35 +12,35 @@ export interface People {
 const FOUNDER_DEMO: People[] = [
   {
     id: "1",
-    name: `Zero (김영우)`,
+    name: `Gabriel (김영우)`,
     job: "Co-founder and Chief Executive",
     avatar:
         "/woo.jpg",
   },
   {
     id: "2",
-    name: `Hans (정휘재)`,
+    name: `Raphael (정휘재)`,
     job: "Co-founder, Chairman",
     avatar:
         "/hwi.jpg",
   },
   {
     id: "3",
-    name: `Michael (송준한)`,
+    name: `Celestia (송준한)`,
     job: "Co-Founder, Chief Strategy Officer",
     avatar:
         "/song.jpg",
   },
   {
     id: "4",
-    name: `Cathy (설유정)`,
+    name: `Seraphina (설유정)`,
     job: "Co-founder, Chief Technology Officer",
     avatar:
         "/shull.jpg",
   },
   {
     id: "5",
-    name: `Dona (김도희)`,
+    name: `Michael (김도희)`,
     job: "Co-Founder, Chief Operating Officer",
     avatar:
         "/hee.jpg",
