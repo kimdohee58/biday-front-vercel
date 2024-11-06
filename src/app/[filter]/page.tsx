@@ -164,7 +164,7 @@ export default function PageCollection({params}: { params: { filter: string } })
                 </div>
                 <hr className="border-slate-200 dark:border-slate-700"/>
                 {/*<SectionSliderCollections/>*/}
-                {/*<SectionSliderLargeProductDohee/>*/}
+                <SectionSliderLargeProductDohee/>
                 <hr className="border-slate-200 dark:border-slate-700"/>
                 <SectionPromo1/>
             </div>

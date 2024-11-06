@@ -1,23 +1,26 @@
 "use client";
 
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Heading from "@/components/Heading/Heading";
 import Link from "next/link";
 import Glide from "@glidejs/glide";
-import {AuctionWithProduct} from "@/app/auction/last-chance/page";
-import {auctionAPI} from "@/api/auction/auction.api";
-import {AuctionDTO, AuctionDTOs} from "@/model/auction/auction.model";
-import {fetchAuctionDetails} from "@/service/auction/auction.service";
+import { AuctionWithProduct } from "@/app/auction/last-chance/page";
+import { auctionAPI } from "@/api/auction/auction.api";
+import { AuctionDTO, AuctionDTOs } from "@/model/auction/auction.model";
+import { fetchAuctionDetails } from "@/service/auction/auction.service";
 import CollectionCard2Dohee from "@/components/dohee/CollectionCard2Dohee";
 
 const SectionSliderLargeProductDohee = () => {
     const [auctionData, setAuctionData] = useState<AuctionWithProduct[]>([]);
+    const sliderRef = useRef(null);
+    const [isShow, setIsShow] = useState(false);
 
     useEffect(() => {
         const fetchAuctionsWithImages = async () => {
             try {
                 const auctionDTOs = await auctionAPI.findByHeader({}) as AuctionDTOs;
                 const auctionContents = auctionDTOs.content || [];
+                console.log("auctionContents:", auctionContents); // 데이터 확인용 로그
 
                 const auctionsWithImages = await Promise.all(
                     auctionContents.map(async (auction: AuctionDTO) => {
@@ -47,6 +50,7 @@ const SectionSliderLargeProductDohee = () => {
                     .slice(0, 5);
 
                 setAuctionData(filteredAndSortedData);
+                console.log("filteredAndSortedData:", filteredAndSortedData); // 데이터 확인용 로그
             } catch (error) {
                 console.error("fetchAuctionsWithImages 중 오류 발생", error);
                 setAuctionData([]);
@@ -55,65 +59,49 @@ const SectionSliderLargeProductDohee = () => {
 
         fetchAuctionsWithImages();
     }, []);
-    console.log("auctionData", auctionData)
-
-    const sliderRef = useRef(null);
-
-    const [isShow, setIsShow] = useState(false);
 
     useEffect(() => {
         const OPTIONS: Partial<Glide.Options> = {
-            perView: 3,
-            gap: 32,
+            perView: 3, // Display 3 items at a time
+            gap: 16, // Adjust gap between items (optional, can be set to 0 if no gap is desired)
             bound: true,
             breakpoints: {
-                1280: {
-                    gap: 28,
-                    perView: 2.5,
-                },
-                1024: {
-                    gap: 20,
-                    perView: 2.15,
-                },
-                768: {
-                    gap: 20,
-                    perView: 1.5,
-                },
-
-                500: {
-                    gap: 20,
-                    perView: 1,
-                },
+                1280: { gap: 16, perView: 3 }, // Adjust for larger screens
+                1024: { gap: 16, perView: 2 }, // Adjust for medium screens (2 items per view)
+                768: { gap: 16, perView: 1 }, // Adjust for smaller screens (1 item per view)
             },
         };
+
         if (!sliderRef.current) return;
 
         let slider = new Glide(sliderRef.current, OPTIONS);
         slider.mount();
         setIsShow(true);
+        console.log("슬라이더 초기화 완료");
+
         return () => {
             slider.destroy();
+            console.log("슬라이더 해제");
         };
-    }, [sliderRef]);
+    }, [auctionData]); // auctionData가 변경될 때 슬라이더 다시 초기화
 
     return (
-        <div className={`nc-SectionSliderLargeProduct`}>
+        <div className="nc-SectionSliderLargeProduct">
             <div ref={sliderRef} className={`flow-root ${isShow ? "" : "invisible"}`}>
                 <Heading desc={"BiDay에서 원하는 상품을 지금 찾아보세요."} isCenter={false} hasNextPrev>
                     현재 진행 중인 경매
                 </Heading>
 
                 <div className="glide__track" data-glide-el="track">
-                    {/*<ul className="glide__slides">*/}
-                    <ul className="glide__slides flex space-x-4 overflow-x-auto">
-                        {auctionData.slice(0,4).map((item, index) => {
+                    <ul className="glide__slides flex space-x-0 overflow-x-auto">
+                        {auctionData.map((item) => {
                             const auction = item.auction;
                             const product = item.product;
                             const user = item.user;
-                            const combinedImages = [product.image, ...auction.images];
+                            const combinedImages = [product.image]; // 이미지 배열
 
                             return (
-                                <li className="glide__slide flex-none w-[calc(20%_-_0.5rem)]" key={auction.auction.id}>
+                                <li className="glide__slide flex-none w-full" key={auction.auction.id}>
                                     <CollectionCard2Dohee
                                         key={auction.auction.id}
                                         id={auction.auction.id}
@@ -129,12 +117,11 @@ const SectionSliderLargeProductDohee = () => {
                             );
                         })}
 
-                        <li className={`glide__slide   `}>
-                        <Link href={"/ongoing"} className="block relative group">
+                        <li className="glide__slide">
+                            <Link href="/ongoing" className="block relative group">
                                 <div className="relative rounded-2xl overflow-hidden h-[410px]">
                                     <div className="h-[410px] bg-black/5 dark:bg-neutral-800"></div>
-                                    <div
-                                        className="absolute inset-y-6 inset-x-10  flex flex-col items-center justify-center">
+                                    <div className="absolute inset-y-6 inset-x-10 flex flex-col items-center justify-center">
                                         <div className="flex items-center justify-center relative">
                                             <span className="text-xl font-semibold">More items</span>
                                             <svg
