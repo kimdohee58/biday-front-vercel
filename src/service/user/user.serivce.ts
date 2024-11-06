@@ -24,16 +24,7 @@ export async function changePasswordService(password: string, newPassword: strin
     try {
         const response = await userAPI.changePassword(options);
 
-        if (response === "비밀번호 변경이 완료했습니다.") {
-            alert("비밀번호가 성공적으로 변경되었습니다.");
-        } else if (response === "예전 비밀번호가 틀렸습니다.") {
-            alert("예전 비밀번호가 틀렸습니다.");
-        } else if (response === "유저 대상이 없습니다.") {
-            alert("유저 대상이 없습니다.");
-        } else {
-            throw new Error("비밀번호 변경 실패");
-            // TODO error enum
-        }
+        return  response
     } catch (error) {
         console.error("비밀번호 변경 실패:", error);
         alert("비밀번호 변경에 실패했습니다.");
@@ -62,3 +53,47 @@ export async function checkPasswordService(): Promise<boolean> {
     }
 }
 
+export async function emailByPhoneRetrieve(userData: UserModel): Promise<{ email: string | undefined } | null> {
+    try {
+        const options = {
+            data: userData
+        };
+
+        // 응답 타입을 any로 임시 설정 및 JSON 파싱 확인
+        const response: any = await userAPI.emailByPhone(options);
+        const parsedResponse = typeof response === 'string' ? JSON.parse(response) : response;
+
+        // 최상위 수준에서 이메일 추출
+        const email = parsedResponse?.email;
+
+        if (email) {
+            return { email };
+        } else {
+            console.error("응답에 이메일 정보가 없습니다.");
+            throw new Error("응답에 이메일 정보가 없습니다.");
+        }
+    } catch (error) {
+        console.error("emailByPhoneRetrieve 에러 발생:", error);
+        throw new Error("핸드폰으로 이메일 찾기가 불가능합니다.");
+    }
+}
+
+export async function randomPassword(email: string, phoneNum: string): Promise<UserModel> {
+    try {
+        // 요청 데이터 설정 (RequestOptions 형태로 설정)
+        const options: RequestOptions<{}, { email: string; phoneNum: string }> = {
+            data: {
+                email: email,
+                phoneNum: phoneNum, // API에서 예상하는 속성 이름을 맞춤
+            },
+        };
+
+        const response: UserModel = await userAPI.resetPassword(options);
+        console.log("서버에서 들어오는 응답 로그:", response);
+
+        return response; // 성공 시 응답 반환
+    } catch (error) {
+        console.error("randomPassword 호출 실패:", error);
+        throw new Error("비밀번호 초기화에 실패했습니다.");
+    }
+}

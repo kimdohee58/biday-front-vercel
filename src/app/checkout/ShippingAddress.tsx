@@ -1,12 +1,11 @@
 "use client";
 
 import Label from "@/components/Label/Label";
-import React, {ChangeEvent, FC, useState} from "react";
+import React, {ChangeEvent, FC} from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
 import Input from "@/shared/Input/Input";
 import Radio from "@/shared/Radio/Radio";
-import Select from "@/shared/Select/Select";
 import {AddressModel} from "@/model/user/address.model";
 
 interface Props {

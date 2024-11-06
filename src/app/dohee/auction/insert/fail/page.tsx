@@ -1,7 +1,7 @@
 'use client';
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation"; // next/navigation에서 useSearchParams를 가져옵니다.
+import {useSearchParams} from "next/navigation"; // next/navigation에서 useSearchParams를 가져옵니다.
 
 export default function InsertAuctionFailPage() {
     const searchParams = useSearchParams();

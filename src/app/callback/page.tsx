@@ -1,11 +1,11 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { saveAccount } from "@/service/user/account.service";
-import { AccountModel } from "@/model/user/account.model";
-import { Spinner } from "@/shared/Spinner/Spinner";
+import {useRouter, useSearchParams} from "next/navigation";
+import React, {useEffect} from "react";
+import {useMutation} from "@tanstack/react-query";
+import {saveAccount} from "@/service/user/account.service";
+import {AccountModel} from "@/model/user/account.model";
+import {Spinner} from "@/shared/Spinner/Spinner";
 
 export default function AccountSuccessPage() {
     const mutation = useMutation({

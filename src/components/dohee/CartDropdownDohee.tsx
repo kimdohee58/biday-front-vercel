@@ -2,22 +2,16 @@
 //dohee/CartDropdownDohee
 "use client";
 
-import {
-    Popover,
-    PopoverButton,
-    PopoverPanel,
-    Transition,
-} from "@/app/headlessui";
+import {Popover, PopoverButton, PopoverPanel, Transition,} from "@/app/headlessui";
 import Prices from "@/components/Prices";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
 import Link from "next/link";
 import React, {useEffect, useState} from "react";
-import {Spinner} from "@chakra-ui/react";
+import {Spinner} from "@/shared/Spinner/Spinner";
 import {AwardModel} from "@/model/auction/award.model";
 import {findByUserAward} from "@/service/auction/award.service";
 import {useFetchAwardProducts} from "@/components/AccountuseQuery/useQuery";
-import {ProductModel} from "@/model/product/product.model";
 import {mapDataWithAwardModel} from "@/utils/mapDataWithProducts";
 import {useRouter} from "next/navigation";
 import ImageFetcher from "../ImageFetcher";
@@ -197,7 +191,7 @@ export default function CartDropdownDohee() {
                             />
                         </svg>
 
-                        <Link className="block md:hidden absolute inset-0" href={"/cart"}/>
+                        <Link className="block md:hidden absolute inset-0" href={"/account-order"}/>
                     </PopoverButton>
                     <Transition
                         enter="transition ease-out duration-200"

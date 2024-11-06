@@ -1,9 +1,8 @@
 //src/api/api.strategy.ts
-import { fetchAPI } from './fetch';
-import {handleReissueToken} from "@/utils/reissue/reissueToken";
+import {fetchAPI} from './fetch';
 import {RequestOptions} from "@/model/api/RequestOptions";
 import {HTTPRequest} from "@/utils/headers";
-import {ApiErrors, handleApiErrorResponse} from "@/utils/error/error";
+import {ApiErrors, isApiError} from "@/utils/error/error";
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | "PATCH" ;
 
@@ -15,6 +14,27 @@ const apiRequest = async (url: string, method: HttpMethod, {params, data, header
     if (userToken) {
         console.log("token", HTTPRequest(userToken));
     }
+
+    const handleApiErrorResponse = (status: number) => {
+        switch (status) {
+            case 404:
+                throw ApiErrors.NOT_FOUND;
+            case 401:
+                throw ApiErrors.UNAUTHORIZED;
+            case 403:
+                throw ApiErrors.FORBIDDEN;
+            case 409:
+                throw ApiErrors.CONFLICT;
+            case 500:
+                throw ApiErrors.INTERNAL_SERVER_ERROR;
+            case 503:
+                throw ApiErrors.SERVICE_UNAVAILABLE;
+            case 504:
+                throw ApiErrors.GATEWAY_TIMEOUT;
+            default:
+                throw ApiErrors.UNKNOWN;
+        }
+    };
 
     const queryString = params ? `?${new URLSearchParams(params)}` : '';
 
@@ -29,16 +49,12 @@ const apiRequest = async (url: string, method: HttpMethod, {params, data, header
         ...(cache && {cache: {cache}}),
         ...(data && !contentType && {body: JSON.stringify(data)}),
         ...(data && contentType === "multipart/form-data" && {body: data}),
-        signal: controller.signal,
+        // signal: controller.signal,
     };
 
     try {
         let response = await fetchAPI(`${url}${queryString}`, options);
         clearTimeout(id);
-
-        if (!response.ok) {
-            return handleApiErrorResponse(response.status);
-        }
 
         const responseType = response.headers.get("Content-Type");
 
@@ -52,7 +68,7 @@ const apiRequest = async (url: string, method: HttpMethod, {params, data, header
             return response.text();
         }
     } catch (error) {
-        clearTimeout(id);
+        // clearTimeout(id);
 
         if (error instanceof Error) {
             if (error.name === 'AbortError') {
@@ -62,7 +78,9 @@ const apiRequest = async (url: string, method: HttpMethod, {params, data, header
                 throw new Error("상태가 정의되지 않은 에러 발생");
             }
         } else {
-            console.error("알 수 없는 에러", error);
+            if (isApiError(error)) {
+                handleApiErrorResponse(error.status);
+            }
         }
     }
 

@@ -131,7 +131,7 @@ export default function PageSearch() {
                                         totalPages={totalPages}
                                         onPageChange={handlePageChange}
                                     />
-                                    <ButtonPrimary loading>Show me more</ButtonPrimary>
+                                    {/*<ButtonPrimary loading>Show me more</ButtonPrimary>*/}
                                 </div>
                             </>
                         ) : (

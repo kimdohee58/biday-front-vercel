@@ -13,21 +13,21 @@ import AccordionInfo from "@/components/AccordionInfo";
 import ListingImageGallery from "@/components/listing-image-gallery/ListingImageGallery";
 import {useParams, usePathname, useRouter, useSearchParams} from "next/navigation";
 import {Route} from "next";
-import {useMutation, useQuery, useSuspenseQuery} from "@tanstack/react-query";
+import {useMutation} from "@tanstack/react-query";
 import Cookies from "js-cookie";
 import {saveBid} from "@/service/auction/bid.service";
 import {Timer} from "./Timer";
 import {getColor} from "@/utils/productUtils";
-import {useAuctionWithImage, useSuspenseAuctionAndProduct} from "@/hooks/react-query/useAuctionlist";
+import {useSuspenseAuctionAndProduct} from "@/hooks/react-query/useAuctionlist";
 import HighestBid from "./HighestBid";
 import NotifyBid from "./NotifyBid";
 import LikeSaveBtns from "@/components/LikeSaveBtns";
-import {fetchAwardOne, findByAuctionId} from "@/service/auction/award.service";
 import {useSelector} from "react-redux";
 import {getUserToken} from "@/lib/features/user.slice";
-import {differenceInMinutes, isAfter} from "date-fns";
+import {differenceInMinutes} from "date-fns";
 import {CancelAuction} from "@/service/auction/auction.service";
 import {AwardDto} from "@/model/auction/award.model";
+import {useAward} from "@/hooks/react-query/useAward";
 
 export default function AuctionDetailPage() {
     const thisPathname = usePathname();
@@ -57,8 +57,11 @@ export default function AuctionDetailPage() {
 
     const auctionData = useSuspenseAuctionAndProduct(id);
 
+    console.log("auctionData", auctionData);
+
     const {auction, images: auctionImages = []} = auctionData.data.auction || {auction: null, images: []};
     const {product, image: productImage, size} = auctionData.data.product;
+    const {id: userId, name: username} = auctionData.data.user;
 
     // 접속자 판매자 본인인지 여부
     const [isSeller, setIsSeller] = useState(false);
@@ -69,8 +72,8 @@ export default function AuctionDetailPage() {
 
         if (!userToken) return; // userToken이 없을 때 바로 종료
 
-        if (auction?.user) {
-            setIsSeller(auction.user === userToken.userId);
+        if (auctionData.data.user) {
+            setIsSeller(userId === userToken.userId);
         } else {
             setIsSeller(false);
         }
@@ -83,10 +86,7 @@ export default function AuctionDetailPage() {
     const isEnded = auction.status;
     console.log("isEnded", isEnded)
 
-    const { data: awardData } = useSuspenseQuery({
-        queryKey: ["auctionId", auction?.id],
-        queryFn: () => findByAuctionId(Number(auction?.id)),
-    });
+    const {data: awardData} = useAward(auction.id, isEnded)
 
     const [award, setAward] = useState<AwardDto | null>(null);
 
@@ -322,11 +322,23 @@ export default function AuctionDetailPage() {
                                 🪙 : {isEnded ? '---' : adjustBid}
                             </div>
                             <ButtonPrimary
-                                className={`flex-1 flex-shrink-0 ${isEnded ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'hover:bg-blue-600'}`}
+                                className={`flex-1 flex-shrink-0 ${
+                                    isEnded
+                                        ? 'bg-blue-500 text-white hover:bg-blue-600'
+                                        : isSeller && !isCancel
+                                            ? 'bg-yellow-500 text-white'
+                                            : isSeller && isCancel
+                                                ? 'bg-pink-500 text-white'
+                                                : !isSeller && isEnded
+                                                    ? 'bg-blue-500 text-white hover:bg-blue-600'
+                                                    : !isSeller && !isEnded
+                                                        ? 'bg-yellow-500 text-white'
+                                                        : 'bg-yellow-500 text-white'
+                                }`}
                                 onClick={onClickBidButton}
                                 disabled={isEnded || (isSeller && !isCancel)}
                             >
-                                <BagIcon className="hidden sm:inline-block w-5 h-5 mb-0.5"/>
+                                <BagIcon className="hidden sm:inline-block w-5 h-5 mb-0.5" />
                                 <span className="ml-3">
                                     {isEnded ? '경매 종료' : (isSeller ? (isCancel ? '경매 취소' : '취소 불가') : '입찰 참여')}
                                 </span>
@@ -338,15 +350,33 @@ export default function AuctionDetailPage() {
         );
     };
 
+    const maskUsername = (username: string | undefined) => {
+        if (!username) {
+            return '';
+        }
+
+        if (username.length === 1) {
+            return username;
+        }
+        if (username.length === 2) {
+            return username.charAt(0) + '*';
+        }
+
+        const firstChar = username.charAt(0); // 첫 번째 문자
+        const lastChar = username.charAt(username.length - 1);
+        const maskedPart = '*'.repeat(username.length - 2);
+
+        return `${firstChar}${maskedPart}${lastChar}`;
+    };
+
     const section1Data = [
         {
             name: "판매자 정보",
-            content: auction?.user,
+            content: maskUsername(username),
         },
         {
             name: "경매 상품 설명",
             content: auction?.description,
-
         }
     ];
 
@@ -392,11 +422,20 @@ export default function AuctionDetailPage() {
     };
 
     const renderSection2 = () => {
+        const convertNewlinesToBr = (text: string) => {
+            return text.split('\n').map((line, index) => (
+                <React.Fragment key={index}>
+                    {line}
+                    {index < text.split('\n').length - 1 && <br />}
+                </React.Fragment>
+            ));
+        };
+
         return (
             <div className="listingSection__wrap !border-b-0 !pb-0">
                 <h2 className="text-2xl font-semibold">Product details</h2>
                 <div className="prose prose-sm sm:prose dark:prose-invert sm:max-w-4xl">
-                    {auction.description}
+                    <p dangerouslySetInnerHTML={{__html: product.description.replace(/\\n/g, '<br/>')}}/>
                 </div>
             </div>
         );
@@ -521,13 +560,8 @@ export default function AuctionDetailPage() {
             <Suspense>
                 <div>
                     {isEnded && (
-                        // <div
-                        //     className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -rotate-43 text-red-600 border-8 border-red-600 font-bold text-8xl bg-white rounded-md shadow-md w-[700px] h-[200px] flex items-center justify-center text-center leading-none overflow-hidden"
-                        // >
-                        //     <span className="whitespace-nowrap">SOLD OUT</span>
-                        // </div>
                         <div
-                            className="absolute top-[35%] left-1/2 transform -translate-x-1/2 -rotate-40 bg-red-600 border-8 border-white font-bold text-8xl text-white rounded-md shadow-md w-[700px] h-[200px] flex items-center justify-center text-center leading-none overflow-hidden z-10"
+                            className="absolute top-[33%] left-1/2 transform -translate-x-1/2 -rotate-40 bg-red-600 border-8 border-white font-bold text-8xl text-white rounded-md shadow-md w-[700px] h-[200px] flex items-center justify-center text-center leading-none overflow-hidden z-10"
                         >
                             <span className="whitespace-nowrap">SOLD OUT</span>
                         </div>

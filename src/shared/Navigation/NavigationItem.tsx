@@ -1,15 +1,10 @@
 "use client";
 
-import {
-  Popover,
-  PopoverButton,
-  PopoverPanel,
-  Transition,
-} from "@/app/headlessui";
-import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import {Popover, PopoverButton, PopoverPanel, Transition,} from "@/app/headlessui";
+import {ChevronDownIcon} from "@heroicons/react/24/solid";
 import CardCategory3 from "@/components/CardCategories/CardCategory3";
-import React, { FC, Fragment, useState } from "react";
-import { Route } from "@/routers/types";
+import React, {FC, Fragment, useState} from "react";
+import {Route} from "@/routers/types";
 import Link from "next/link";
 
 export interface NavItemType {

@@ -1,6 +1,3 @@
-import {PaymentModel} from "@/model/order/payment.model";
-import exp from "node:constants";
-import PaymentMethod from "@/app/checkout/PaymentMethod";
 /*
 
 interface SellerPaymentModel {

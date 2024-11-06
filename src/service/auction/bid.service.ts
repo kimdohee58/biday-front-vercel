@@ -1,6 +1,8 @@
 import {BidModel} from "@/model/auction/bid.model";
 import Cookies from "js-cookie";
 import {bidAPI} from "@/api/auction/bid.api";
+import {AuctionModel} from "@/model/auction/auction.model";
+import {auctionAPI} from "@/api/auction/auction.api";
 
 
 const link = `${process.env.NEXT_PUBLIC_API_SERVER_URL}/api/bids`

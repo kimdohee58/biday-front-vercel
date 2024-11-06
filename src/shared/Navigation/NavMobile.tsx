@@ -30,8 +30,9 @@ const NavMobile: React.FC<NavMobileProps> = ({data = NAVIGATION_DEMO_2, onClickC
     const router = useRouter();
 
     useEffect(() => {
-        const role = userToken && userToken.userRole ? userToken.userRole[0] : "ROLE_USER";
-        setUserRole(role);
+        if(userToken && userToken.userRole) {
+            setUserRole(userToken.userRole[0]);
+        }
     }, [userToken]);
 
     const _renderMenuChild = (item: NavItemType, itemClass = "pl-3 text-neutral-900 dark:text-neutral-200 font-medium") => {
@@ -81,7 +82,7 @@ const NavMobile: React.FC<NavMobileProps> = ({data = NAVIGATION_DEMO_2, onClickC
             <Disclosure key={index} as="li" className="text-slate-900 dark:text-white">
                 <Link
                     className="flex w-full items-center py-2.5 px-4 font-medium uppercase tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg"
-                    href={{ pathname: href || undefined }}
+                    href={{pathname: href || undefined}}
                 >
                 <span className={!item.children ? "block w-full" : ""} onClick={onClickClose}>
                     {item.name}
@@ -89,7 +90,7 @@ const NavMobile: React.FC<NavMobileProps> = ({data = NAVIGATION_DEMO_2, onClickC
                     {item.children && (
                         <span className="block flex-grow" onClick={(e) => e.preventDefault()}>
                         <Disclosure.Button as="span" className="flex justify-end flex-grow">
-                            <ChevronDownIcon className="ml-2 h-4 w-4 text-neutral-500" aria-hidden="true" />
+                            <ChevronDownIcon className="ml-2 h-4 w-4 text-neutral-500" aria-hidden="true"/>
                         </Disclosure.Button>
                     </span>
                     )}
@@ -167,7 +168,7 @@ const NavMobile: React.FC<NavMobileProps> = ({data = NAVIGATION_DEMO_2, onClickC
                 <Logo/>
                 <div className="flex flex-col mt-5 text-slate-600 dark:text-slate-300 text-sm">
                     <span>
-                        Discover the most outstanding articles on all topics of life. Write your stories and share them
+                        BiDay에서 특별한 경매와 입찰의 기회를 만나보세요. 여러분의 취향을 담은 아이템을 찾아보세요!
                     </span>
                     <div className="flex justify-between items-center mt-4">
                         <SocialsList

@@ -1,5 +1,5 @@
 "use client";
-import React, { FC } from "react";
+import React, {FC} from "react";
 
 export interface NextPrevProps {
   className?: string;

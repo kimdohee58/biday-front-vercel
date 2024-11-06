@@ -1,21 +1,21 @@
 "use client";
 
-import React, { FC, useEffect, useState } from "react";
+import React, {FC, useState} from "react";
 import LikeButton from "./LikeButton";
 import Prices from "./Prices";
-import { ArrowsPointingOutIcon } from "@heroicons/react/24/outline";
-import { StarIcon } from "@heroicons/react/24/solid";
+import {ArrowsPointingOutIcon} from "@heroicons/react/24/outline";
+import {StarIcon} from "@heroicons/react/24/solid";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
 import BagIcon from "./BagIcon";
 import toast from "react-hot-toast";
-import { Transition } from "@/app/headlessui";
+import {Transition} from "@/app/headlessui";
 import ModalQuickView from "./ModalQuickView";
-import { useRouter } from "next/navigation";
+import {useRouter} from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import NcImage from "@/shared/NcImage/NcImage";
-import { ProductModel } from "@/model/product/product.model";
+import {ProductModel} from "@/model/product/product.model";
 
 export interface ProductCardProps {
     className?: string;

@@ -1,13 +1,13 @@
 // 덮기 완료
 "use client";
 
-import React, { FC, useEffect, useState } from "react";
+import React, {FC, useEffect, useState} from "react";
 import Nav from "@/shared/Nav/Nav";
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import {ChevronDownIcon} from "@heroicons/react/24/outline";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
-import { Transition } from "@/app/headlessui";
+import {Transition} from "@/app/headlessui";
 import TabFiltersProduct from "@/components/dohee/TabFiltersProduct";
-import { ProductModel } from "@/model/product/product.model";
+import {ProductModel} from "@/model/product/product.model";
 
 export interface HeaderFilterSearchPageProps {
     className?: string;

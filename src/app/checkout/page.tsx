@@ -2,7 +2,7 @@
 
 import Label from "@/components/Label/Label";
 import Prices from "@/components/Prices";
-import React, {Suspense, useEffect, useState} from "react";
+import React, {useState} from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import Input from "@/shared/Input/Input";
 import ContactInfo from "./ContactInfo";
@@ -10,7 +10,7 @@ import ShippingAddress from "./ShippingAddress";
 import Image from "next/image";
 import Link from "next/link";
 import {PaymentTempModel} from "@/model/order/paymentTemp.model";
-import {useMutation, useQuery, useSuspenseQuery} from "@tanstack/react-query";
+import {useMutation, useSuspenseQuery} from "@tanstack/react-query";
 import {savePaymentTemp} from "@/service/order/payment.service";
 import {useRouter, useSearchParams} from "next/navigation";
 import useRandomId from "@/hooks/useRandomId";
@@ -381,7 +381,7 @@ export default function CheckoutPage() {
                             <div className="flex justify-between py-2.5">
                                 <span>수수료 (판매자부담)</span>
                                 <span className="font-semibold text-slate-900 dark:text-slate-200">
-                  ₩10,000
+                                    ₩{(award.data.currentBid - Math.round(award.data.currentBid - (award.data.currentBid / 1.1))).toLocaleString()}
                 </span>
                             </div>
                             <div className="flex justify-between py-2.5">

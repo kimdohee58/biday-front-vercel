@@ -1,4 +1,4 @@
-import { StaticImageData } from "next/image";
+import {StaticImageData} from "next/image";
 
 /* eslint-disable no-unused-vars */
 export interface ListingGalleryImage {

@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
-import { createGlobalState } from "react-hooks-global-state";
+import {useEffect} from "react";
+import {createGlobalState} from "react-hooks-global-state";
 
 const initialState = { isDarkmode: false };
 const { useGlobalState } = createGlobalState(initialState);

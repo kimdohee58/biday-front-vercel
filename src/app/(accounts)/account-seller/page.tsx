@@ -2,7 +2,7 @@
 
 import React, {Suspense} from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
-import {Input, Typography, InputProps } from "@material-tailwind/react";
+import {Input, Typography} from "@material-tailwind/react";
 import {AccountModel} from "@/model/user/account.model";
 import {useSuspenseQuery} from "@tanstack/react-query";
 import useRandomId from "@/hooks/useRandomId";
@@ -75,7 +75,7 @@ function AccountDetails({user, onClick}: { user: UserModel, onClick: () => void 
                                     className: "hidden",
                                 }}
                                 disabled
-                                value={accountData.data.accountNumber}
+                                value="111-222-3333"
                                 className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
                             />
                         </div>
