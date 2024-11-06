@@ -22,13 +22,15 @@ interface ClientComponentProps {
     authorizationToken: string;
 }
 
-function RandomProductsByCategory({category, isLoading}: { category: string; isLoading: boolean }) {
+function RandomProductsByCategory({category, isLoading}: { category: string, isLoading: boolean }) {
     const dispatch = useDispatch();
     const router = useRouter();
     const products = useSelector(getRandomCategoryProducts(category));
 
+
     useEffect(() => {
-        dispatch(setRandomCategoryProducts(category));
+        dispatch(setRandomCategoryProducts(category))
+
     }, [category, dispatch]);
 
     const handleShowMoreClick = (filter: string) => {
@@ -47,18 +49,14 @@ function RandomProductsByCategory({category, isLoading}: { category: string; isL
             </div>
             <hr className="mt-4 border-slate-200 dark:border-slate-700"/>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-x-8 gap-y-10 mt-8 lg:mt-10">
-                {isLoading ? (
+                {!isLoading ? (
+                    products.map((product) => (
+                        <ProductCard key={product.product.id} {...product} />
+                    ))
+                ) : (
                     [...Array(5)].map((_, index) => (
                         <ProductCardSkeleton key={index}/>
                     ))
-                ) : (
-                    products && products.length > 0 ? (
-                        products.map((product) => (
-                            <ProductCard key={product.product.id} {...product} />
-                        ))
-                    ) : (
-                        <p>No products found</p>
-                    )
                 )}
             </div>
         </div>
@@ -67,6 +65,7 @@ function RandomProductsByCategory({category, isLoading}: { category: string; isL
 
 export default function PageClient(props: ClientComponentProps) {
     const productsInRedux = useSelector(isProductsInRedux);
+
     const {data: products, isLoading: isProductLoading, isSuccess} = useProductCardList(productsInRedux);
     const dispatch = useDispatch();
     const categoryArray = ["outer", "top", "bottom", "acc"];
@@ -87,28 +86,16 @@ export default function PageClient(props: ClientComponentProps) {
         if (wishList && wishList.length > 0 && !isWishLoading && !isError) {
             wishList.forEach((wish) => {
                 dispatch(updateIsLiked(wish.product.id));
-            });
+            })
         }
     }, [wishList, isWishLoading, isError]);
-
-    if (isLoading || isProductLoading || isWishLoading) {
-        return (
-            <div className="container py-16 lg:pb-28 lg:pt-20 space-y-16 sm:space-y-20 lg:space-y-28">
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-x-8 gap-y-10 mt-8 lg:mt-10">
-                    {[...Array(5)].map((_, index) => (
-                        <ProductCardSkeleton key={index}/>
-                    ))}
-                </div>
-            </div>
-        );
-    }
 
     return (
         <div className="nc-PageCollection">
             <div className="container py-16 lg:pb-28 lg:pt-20 space-y-16 sm:space-y-20 lg:space-y-28">
                 <main>
                     {categoryArray.map((category) => (
-                        <RandomProductsByCategory key={category} category={category} isLoading={isLoading || isProductLoading}/>
+                        <RandomProductsByCategory key={category} category={category} isLoading={isLoading}/>
                     ))}
                 </main>
 
@@ -123,3 +110,4 @@ export default function PageClient(props: ClientComponentProps) {
         </div>
     );
 }
+
