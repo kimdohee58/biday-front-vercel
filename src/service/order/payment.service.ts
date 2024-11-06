@@ -76,13 +76,12 @@ export async function confirmPayment(payment: PaymentConfirmModel): Promise<Paym
         return result;
 
     } catch (error) {
-        console.log("catch");
-        if (isApiError(error)) {
+        if (isPaymentError(error)) {
+            handlePaymentErrorResponse(error.status);
+        } else if (isApiError(error)) {
             handleApiErrorResponse(error.status);
-        } else if (isPaymentError(error)) {
-            handlePaymentErrorResponse(error.code);
         } else {
-            console.error("알 수 없는 에러 발생", error);
+            console.error('알 수 없는 에러 발생', error);
         }
 
         throw new Error("결제를 처리할 수 없습니다.");

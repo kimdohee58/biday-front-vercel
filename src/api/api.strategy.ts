@@ -37,6 +37,15 @@ const apiRequest = async (url: string, method: HttpMethod, {params, data, header
     try {
         let response = await fetchAPI(`${url}${queryString}`, options);
 
+        if (!response.ok) {
+            const data = await response.json();
+            throw {
+                status: response.status,
+                code: response.statusText,
+                message: data.message || '정의되지 않은 에러 발생',
+            };
+        }
+
         const responseType = response.headers.get("Content-Type");
 
         const contentLength = response.headers.get("Content-Length");
