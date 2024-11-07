@@ -32,7 +32,6 @@ import {useAward} from "@/hooks/react-query/useAward";
 export default function AuctionDetailPage() {
     const thisPathname = usePathname();
     const [variantActive, setVariantActive] = useState(0);
-    // const [sizeSelected, setSizeSelected] = useState(sizes ? sizes[0] : "");
     const [qualitySelected, setQualitySelected] = useState(1);
     const [isOpenModalViewAllReviews, setIsOpenModalViewAllReviews] = useState(false);
     const initialBid = 15000;
