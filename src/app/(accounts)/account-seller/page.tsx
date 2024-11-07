@@ -109,11 +109,19 @@ export default function Account1() {
     const bankName = getBankName(bankCode);
 
     const AUTH_URL = 'https://testapi.openbanking.or.kr/oauth/2.0/authorize';
+    const CLIENT_ID = 'f046094a-09a0-48c2-b579-23b4277c0cea';
+    const REDIRECT_URI = 'https://www.biday.shop/account-seller/success';
+    const SCOPE = 'login inquiry transfer';
+    const STATE = '12341234123412341234123412341234';
+    const AUTH_TYPE = '0';
+
+
+    /*const AUTH_URL = 'https://testapi.openbanking.or.kr/oauth/2.0/authorize';
     const CLIENT_ID = 'fce251a9-d76a-449c-8024-021ec51dc4eb';
     const REDIRECT_URI = 'http://localhost:3000/callback';
     const SCOPE = 'login inquiry transfer';
     const STATE = '12341234123412341234123412341234';
-    const AUTH_TYPE = '0';
+    const AUTH_TYPE = '0';*/
 
 
     const user: UserModel = useSelector(getUser);
