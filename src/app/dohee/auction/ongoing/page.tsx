@@ -15,7 +15,6 @@ export default function OnGoing() {
     useEffect(() => {
         const fetchAuctionsWithImages = async () => {
             try {
-                // 경매 데이터를 불러오고 각 항목에 대해 fetchAuctionWithImages 호출
                 const auctionDTOs = await auctionAPI.findByHeader({}) as AuctionDTOs;
                 const auctionContents = auctionDTOs.content || [];
 

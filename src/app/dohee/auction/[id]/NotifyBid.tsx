@@ -2,6 +2,7 @@ import React, {FC} from "react";
 import {Transition} from "@/app/headlessui";
 import Prices from "@/components/Prices";
 import Image, {StaticImageData} from "next/image";
+import Link from "next/link";
 
 interface Props {
     show: boolean;
@@ -64,12 +65,14 @@ const NotifyAddTocart: FC<Props> = ({
                         {/* TODO 추후 CSS 수정 */}
 
                         <div className="flex items-center">
-                            <button
+                            <Link
                                 type="button"
                                 className="font-medium text-primary-6000 dark:text-primary-500 border border-primary-6000 dark:border-primary-500 rounded-lg px-4 py-2 hover:bg-primary-100 dark:hover:bg-primary-700 transition duration-200"
+                                onClick={close}
+                                href="/account-order"
                             >
                                 입찰내역 확인
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 </div>

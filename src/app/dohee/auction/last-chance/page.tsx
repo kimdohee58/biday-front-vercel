@@ -15,7 +15,6 @@ export interface AuctionWithProduct {
     user: UserModel
 }
 
-// TODO 경매 임박 페이지
 export default function LastChance() {
     const [auctionData, setAuctionData] = useState<AuctionWithProduct[]>([]);
 
@@ -42,7 +41,7 @@ export default function LastChance() {
                 });
 
                 // 필터링된 경매에 대해 fetchAuctionDetails 호출
-                const auctionsWithImages:AuctionWithProduct[] = await Promise.all(
+                const auctionsWithImages: AuctionWithProduct[] = await Promise.all(
                     filteredContents.map(async (auction: AuctionDTO) => {
                         return await fetchAuctionDetails(String(auction.id));
                     })
