@@ -58,6 +58,11 @@ const cancel = async (options: RequestOptions<{auctionId: number}, null>): Promi
     return await strategy.PATCH(`${api.auction}/cancel`, options);
 };
 
+// 경매 최고가 업데이트 (PATCH 요청)
+const updateCurrentBid = async (auctionData: Partial<AuctionDTO>): Promise<AuctionDTO> => {
+    return await strategy.PATCH(`${api.auction}/updateCurrentBid`, { data: auctionData });
+};
+
 export const auctionAPI = {
     findById,
     findBySize,
@@ -67,5 +72,6 @@ export const auctionAPI = {
     update,
     save,
     delete_, // 키워드 딜리트라는 단억나 키워드여서 _ 언더바를 준거다. 다른 이름으로 아 자바 컨트롤러랑 맞추고 싶은데 에러가 나서 한거.
-    cancel
+    cancel,
+    updateCurrentBid
 };

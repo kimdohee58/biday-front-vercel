@@ -25,7 +25,7 @@ import LikeSaveBtns from "@/components/LikeSaveBtns";
 import {useSelector} from "react-redux";
 import {getUserToken} from "@/lib/features/user.slice";
 import {differenceInMinutes} from "date-fns";
-import {CancelAuction} from "@/service/auction/auction.service";
+import {CancelAuction, UpdateAuctionCurrentBid} from "@/service/auction/auction.service";
 import {AwardDto} from "@/model/auction/award.model";
 import {useAward} from "@/hooks/react-query/useAward";
 
@@ -47,6 +47,10 @@ export default function AuctionDetailPage() {
     const handleBidUpdate = ({highestBid, adjustBid}: { highestBid: number, adjustBid: number }) => {
         setHighestBid(highestBid);
         setAdjustBid(adjustBid);
+
+        if (highestBid !== undefined) {
+            UpdateAuctionCurrentBid(Number(id), highestBid);
+        }
     }
 
     const mutation = useMutation({
@@ -424,15 +428,6 @@ export default function AuctionDetailPage() {
     };
 
     const renderSection2 = () => {
-        const convertNewlinesToBr = (text: string) => {
-            return text.split('\n').map((line, index) => (
-                <React.Fragment key={index}>
-                    {line}
-                    {index < text.split('\n').length - 1 && <br />}
-                </React.Fragment>
-            ));
-        };
-
         return (
             <div className="listingSection__wrap !border-b-0 !pb-0">
                 <h2 className="text-2xl font-semibold">Product details</h2>

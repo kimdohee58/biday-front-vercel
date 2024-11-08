@@ -239,3 +239,15 @@ export async function CancelAuction(auctionId: number): Promise<string> {
         throw new Error("경매를 취소하는 중 에러가 발생했습니다.")
     }
 }
+
+export async function UpdateAuctionCurrentBid(auctionId: number, highestBid: number): Promise<AuctionDTO> {
+    try {
+        const auction = await fetchAuction(String(auctionId));
+        auction.currentBid = highestBid;
+
+        return await auctionAPI.updateCurrentBid(auction);
+    } catch (error) {
+        console.error("UpdateAuctionCurrentBid 에러 발생", error)
+        throw new Error("경매의 최고가를 업데이트 하는 중 에러가 발생했습니다.")
+    }
+}

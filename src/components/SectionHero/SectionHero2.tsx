@@ -1,10 +1,10 @@
 "use client";
 
-import React, {FC, useEffect, useRef, useState} from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import backgroundLineSvg from "@/images/Moon.svg";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import Image from "next/image";
-import {HERO2_DEMO_DATA as DATA} from "./data";
+import { HERO2_DEMO_DATA as DATA } from "./data";
 import useInterval from "beautiful-react-hooks/useInterval";
 import useHorizontalSwipe from "beautiful-react-hooks/useHorizontalSwipe";
 import Link from "next/link";
@@ -15,9 +15,7 @@ export interface SectionHero2Props {
 
 let TIME_OUT: NodeJS.Timeout | null = null;
 
-const SectionHero2: FC<SectionHero2Props> = ({className = ""}) => {
-    // =================
-
+const SectionHero2: FC<SectionHero2Props> = ({ className = "" }) => {
     const ref = useRef<HTMLDivElement>(null);
     const swipeState = useHorizontalSwipe(ref, {
         threshold: 100,
@@ -41,7 +39,6 @@ const SectionHero2: FC<SectionHero2Props> = ({className = ""}) => {
         }
         swipeState.direction === "left" && handleClickNext();
         swipeState.direction === "right" && handleClickPrev();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [swipeState.direction, swipeState.swiping, swipeState.count]);
 
     useInterval(
@@ -89,9 +86,6 @@ const SectionHero2: FC<SectionHero2Props> = ({className = ""}) => {
             toggleIsRunning(true);
         }, 1000);
     };
-    // ================= ================= =================
-
-    // =================
 
     const renderDots = () => {
         return (
@@ -107,14 +101,10 @@ const SectionHero2: FC<SectionHero2Props> = ({className = ""}) => {
                             }}
                             className={`relative px-1 py-1.5 cursor-pointer`}
                         >
-                            <div
-                                className={`relative w-20 h-1 shadow-sm rounded-md bg-white`}
-                            >
+                            <div className={`relative w-20 h-1 shadow-sm rounded-md bg-white`}>
                                 {isActive && (
                                     <div
-                                        className={`nc-SectionHero2Item__dot absolute inset-0 bg-slate-900 rounded-md ${
-                                            isActive ? " " : " "
-                                        }`}
+                                        className={`nc-SectionHero2Item__dot absolute inset-0 bg-slate-900 rounded-md`}
                                     ></div>
                                 )}
                             </div>
@@ -136,18 +126,33 @@ const SectionHero2: FC<SectionHero2Props> = ({className = ""}) => {
                 className={`nc-SectionHero2Item nc-SectionHero2Item--animation flex flex-col-reverse lg:flex-col relative overflow-hidden ${className}`}
                 key={index}
             >
+                {/*<div*/}
+                {/*    className="aspect-h-16 aspect-w-10 relative flex flex-col-reverse overflow-hidden sm:aspect-h-16 sm:aspect-w-13 lg:aspect-h-7 lg:aspect-w-16 2xl:aspect-h-[5.75] 2xl:aspect-w-16 lg:flex-col bg-slate-100"*/}
+                {/*>*/}
+                {/*    <div className="container">*/}
+                {/*        <Link href={item.btnLink} passHref>*/}
+                {/*            <Image*/}
+                {/*                fill*/}
+                {/*                sizes="(max-width: 768px) 100vw, 50vw"*/}
+                {/*                className="w-full h-full object-cover nc-SectionHero2Item__image"*/}
+                {/*                src={item.image}*/}
+                {/*                alt={" "}*/}
+                {/*                unoptimized*/}
+                {/*                priority*/}
+                {/*            />*/}
+                {/*        </Link>*/}
+                {/*    </div>*/}
                 <div
-                    className="aspect-h-16 aspect-w-10 relative flex flex-col-reverse overflow-hidden sm:aspect-h-16 sm:aspect-w-13 lg:aspect-h-7 lg:aspect-w-16 2xl:aspect-h-[5.75] 2xl:aspect-w-16 lg:flex-col bg-slate-100">
-                    <div className="container">
+                    className="aspect-h-16 aspect-w-10 relative flex flex-col-reverse overflow-hidden sm:aspect-h-16 sm:aspect-w-13 lg:aspect-h-7 lg:aspect-w-16 2xl:aspect-h-[5.75] 2xl:aspect-w-16 lg:flex-col bg-slate-100"
+                >
+                    <div className="container w-full">
                         <Link href={item.btnLink} passHref>
-                            {/*<div className="absolute end-0 rtl:-end-28 bottom-0 top-0 w-full max-w-2xl xl:max-w-3xl 2xl:max-w-4xl">*/}
                             <Image
                                 fill
                                 sizes="(max-width: 768px) 100vw, 50vw"
                                 className="w-full h-full object-cover nc-SectionHero2Item__image"
                                 src={item.image}
                                 alt={" "}
-                                // alt={item.heading}
                                 unoptimized
                                 priority
                             />
@@ -159,45 +164,10 @@ const SectionHero2: FC<SectionHero2Props> = ({className = ""}) => {
                             <div
                                 className="relative z-[1] w-full max-w-3xl space-y-8 sm:space-y-14 nc-SectionHero2Item__left">
                                 <div className="space-y-5 sm:space-y-6">
-                  <span
-                      className="nc-SectionHero2Item__subheading block text-base md:text-xl text-slate-700 font-medium">
-                    {/*{item.subHeading}*/}
-                  </span>
-                                    <h2
-                                        className="nc-SectionHero2Item__heading font-semibold text-3xl sm:text-4xl md:text-5xl xl:text-6xl 2xl:text-7xl !leading-[114%] text-slate-900"
-                                        // dangerouslySetInnerHTML={{ __html: item.heading }}
-                                    ></h2>
+                                    <span
+                                        className="nc-SectionHero2Item__subheading block text-base md:text-xl text-slate-700 font-medium"></span>
+                                    <h2 className="nc-SectionHero2Item__heading font-semibold text-3xl sm:text-4xl md:text-5xl xl:text-6xl 2xl:text-7xl !leading-[114%] text-slate-900"></h2>
                                 </div>
-
-                                {/*<ButtonPrimary*/}
-                                {/*  className="nc-SectionHero2Item__button dark:bg-slate-900"*/}
-                                {/*  sizeClass="py-3 px-6 sm:py-5 sm:px-9"*/}
-                                {/*  href={item.btnLink}*/}
-                                {/*>*/}
-                                {/*  <span>{item.btnText}</span>*/}
-                                {/*  <span>*/}
-                                {/*    <svg*/}
-                                {/*      className="w-5 h-5 ms-2.5"*/}
-                                {/*      viewBox="0 0 24 24"*/}
-                                {/*      fill="none"*/}
-                                {/*    >*/}
-                                {/*      <path*/}
-                                {/*        d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z"*/}
-                                {/*        stroke="currentColor"*/}
-                                {/*        strokeWidth="1.5"*/}
-                                {/*        strokeLinecap="round"*/}
-                                {/*        strokeLinejoin="round"*/}
-                                {/*      />*/}
-                                {/*      <path*/}
-                                {/*        d="M22 22L20 20"*/}
-                                {/*        stroke="currentColor"*/}
-                                {/*        strokeWidth="1.5"*/}
-                                {/*        strokeLinecap="round"*/}
-                                {/*        strokeLinejoin="round"*/}
-                                {/*      />*/}
-                                {/*    </svg>*/}
-                                {/*  </span>*/}
-                                {/*</ButtonPrimary>*/}
                             </div>
                         </div>
                     </div>
@@ -250,6 +220,27 @@ const SectionHero2: FC<SectionHero2Props> = ({className = ""}) => {
                     />
                 </svg>
             </button>
+
+            {/* 반응형 스타일 추가 */}
+            <style jsx>{`
+                @media (max-width: 1024px) {
+                    .nc-SectionHero2Item__heading {
+                        font-size: 2rem;
+                    }
+                    .nc-SectionHero2Item__subheading {
+                        font-size: 1rem;
+                    }
+                }
+
+                @media (max-width: 768px) {
+                    .nc-SectionHero2Item__heading {
+                        font-size: 1.5rem;
+                    }
+                    .nc-SectionHero2Item__subheading {
+                        font-size: 0.875rem;
+                    }
+                }
+            `}</style>
         </div>
     );
 };
