@@ -60,6 +60,7 @@ const cancel = async (options: RequestOptions<{auctionId: number}, null>): Promi
 
 // 경매 최고가 업데이트 (PATCH 요청)
 const updateCurrentBid = async (auctionData: Partial<AuctionDTO>): Promise<AuctionDTO> => {
+    console.log(">>>>>>>>>>>>>>>>>>>>updateCurrentBid in auction.api.ts auctionData", auctionData);
     return await strategy.PATCH(`${api.auction}/updateCurrentBid`, { data: auctionData });
 };
 

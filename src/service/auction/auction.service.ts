@@ -240,12 +240,30 @@ export async function CancelAuction(auctionId: number): Promise<string> {
     }
 }
 
+// 입찰마다 경매 currentBid 업데이트
 export async function UpdateAuctionCurrentBid(auctionId: number, highestBid: number): Promise<AuctionDTO> {
     try {
         const auction = await fetchAuction(String(auctionId));
-        auction.currentBid = highestBid;
+        const auctionToUpdate: AuctionDTO = {
+            id: auctionId,
+            userId: auction.user,
+            description: auction.description,
+            startingBid: auction.startingBid,
+            currentBid: highestBid,
+            startedAt: auction.startedAt,
+            endedAt: auction.endedAt,
+            status: auction.status,
+            createdAt: auction.createdAt,
+            updatedAt: auction.updatedAt,
+            sizeId: auction.size,
+        };
+        // const auctionToUpdate: Partial<AuctionDTO> = {
+        //     id: auctionId,
+        //     currentBid: highestBid,
+        // };
+        console.log("auctionToUpdate", auctionToUpdate)
 
-        return await auctionAPI.updateCurrentBid(auction);
+        return await auctionAPI.updateCurrentBid(auctionToUpdate);
     } catch (error) {
         console.error("UpdateAuctionCurrentBid 에러 발생", error)
         throw new Error("경매의 최고가를 업데이트 하는 중 에러가 발생했습니다.")
