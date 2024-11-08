@@ -44,7 +44,7 @@ export default function ProductModal({ onClose, productList, onClick }: ModalPro
         };
     }, []);
 
-    const handleOutSideClick = (e: MouseEvent) => {
+    const handleOutSideClick = (e: React.MouseEvent<HTMLDivElement>) => {
         if (e.target === e.currentTarget) {
             onClose();
         }
