@@ -130,7 +130,8 @@ const NavMobile: React.FC<NavMobileProps> = ({data = NAVIGATION_DEMO_2, onClickC
                     {renderMagnifyingGlassIcon()}
                     <input
                         type="search"
-                        placeholder="Type and press Enter"
+                        placeholder="MainNav2Dohee"
+                        // placeholder="Type and press Enter"
                         className="border-none bg-transparent focus:outline-none focus:ring-0 w-full text-sm"
                         value={keyword}
                         onChange={(e) => setKeyword(e.target.value)}

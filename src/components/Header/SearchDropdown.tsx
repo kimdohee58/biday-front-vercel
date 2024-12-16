@@ -68,7 +68,8 @@ const SearchDropdown: FC<Props> = ({ className = "" }) => {
                     <Input
                       ref={inputRef}
                       type="search"
-                      placeholder="Type and press Enter"
+                      placeholder="MainNav2Dohee"
+                        // placeholder="Type and press Enter"
                     />
                     <input type="submit" hidden value="" />
                   </form>
