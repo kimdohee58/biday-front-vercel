@@ -21,12 +21,12 @@ jobs:
         id: push_directory
         uses: cpina/github-action-push-to-another-repository@main
         env:
-          API_TOKEN_GITHUB: ${{ secrets.AUTO_ACTIONS_SONG }}
+          API_TOKEN_GITHUB: ${{ secrets.AUTO_ACTIONS_HEE }}
         with:
           source-directory: 'output'
-          destination-github-username: jh328
-          destination-repository-name: biday-vercel
-          user-email: ${{ secrets.EMAIL_SONG }}
+          destination-github-username: kimdohee58
+          destination-repository-name: biday-front-vercel
+          user-email: ${{ secrets.EMAIL_HEE }}
           commit-message: ${{ github.event.commits[0].message }}
           target-branch: main
 

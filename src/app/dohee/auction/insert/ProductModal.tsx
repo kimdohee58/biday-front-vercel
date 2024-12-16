@@ -98,7 +98,7 @@ export default function ProductModal({ onClose, productList, onClick }: ModalPro
 
                 {filteredProducts.length === 0 ? (
                     <div className="text-center text-gray-600 mt-4">
-                        "{searchTerm}"에 해당하는 상품이 없습니다.
+                        &quot;{searchTerm}&quot;에 해당하는 상품이 없습니다.
                     </div>
                 ) : (
                     <div style={{height: '300px'}}>
