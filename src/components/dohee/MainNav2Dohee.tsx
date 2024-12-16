@@ -69,8 +69,7 @@ const MainNav2Dohee: FC<MainNav2Props> = ({ className = "" }) => {
                     {renderMagnifyingGlassIcon()}
                     <input
                         type="text"
-                        placeholder="MainNav2Dohee"
-                        // placeholder="Type and press Enter"
+                        placeholder="Type and press Enter"
                         className="border-none bg-transparent focus:outline-none focus:ring-0 w-full text-base"
                         value={keyword}
                         onChange={(e) => setKeyword(e.target.value)}  // keyword 상태 업데이트
